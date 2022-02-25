@@ -330,6 +330,21 @@ color: rgb(220, 220, 220);</string>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>notes</tabstop>
+  <tabstop>save_btn</tabstop>
+  <tabstop>folder_btn</tabstop>
+  <tabstop>taskType</tabstop>
+  <tabstop>autoNaming</tabstop>
+  <tabstop>customNaming</tabstop>
+  <tabstop>version</tabstop>
+  <tabstop>overwrite</tabstop>
+  <tabstop>cancel_btn</tabstop>
+  <tabstop>folder</tabstop>
+  <tabstop>filename</tabstop>
+  <tabstop>existingFile_list</tabstop>
+  <tabstop>existing_notes</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

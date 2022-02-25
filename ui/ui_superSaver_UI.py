@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIgHithL.ui'
+## Form generated from reading UI file 'superSaver_UIfTeJgP.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.0
 ##
@@ -235,6 +235,18 @@ class Ui_SaveAs(object):
         self.naming_label.setBuddy(self.autoNaming)
         self.version_label.setBuddy(self.version)
 #endif // QT_CONFIG(shortcut)
+        QWidget.setTabOrder(self.notes, self.save_btn)
+        QWidget.setTabOrder(self.save_btn, self.folder_btn)
+        QWidget.setTabOrder(self.folder_btn, self.taskType)
+        QWidget.setTabOrder(self.taskType, self.autoNaming)
+        QWidget.setTabOrder(self.autoNaming, self.customNaming)
+        QWidget.setTabOrder(self.customNaming, self.version)
+        QWidget.setTabOrder(self.version, self.overwrite)
+        QWidget.setTabOrder(self.overwrite, self.cancel_btn)
+        QWidget.setTabOrder(self.cancel_btn, self.folder)
+        QWidget.setTabOrder(self.folder, self.filename)
+        QWidget.setTabOrder(self.filename, self.existingFile_list)
+        QWidget.setTabOrder(self.existingFile_list, self.existing_notes)
 
         self.retranslateUi(SaveAs)
 
