@@ -20,6 +20,8 @@ __author__ = 'Adam Benson'
 class super_saver(QWidget):
     def __init__(self, paremt=None):
         QWidget.__init__(self, paremt)
+        pth = cmds.file(q=True, sn=True)
+        self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.ui = Ui_SaveAsForm()
         self.ui.setupUi(self)
         self.show()
