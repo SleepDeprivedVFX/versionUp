@@ -134,6 +134,27 @@ color: rgb(220, 220, 220);</string>
          </property>
         </spacer>
        </item>
+       <item>
+        <widget class="QLabel" name="fileType_label">
+         <property name="text">
+          <string>File Type</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="fileType">
+         <item>
+          <property name="text">
+           <string>ma</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>mb</string>
+          </property>
+         </item>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
@@ -291,11 +312,7 @@ color: rgb(220, 220, 220);</string>
         </widget>
        </item>
        <item>
-        <widget class="QListView" name="existingFile_list">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-        </widget>
+        <widget class="QListWidget" name="existingFile_list"/>
        </item>
       </layout>
      </item>
@@ -342,7 +359,6 @@ color: rgb(220, 220, 220);</string>
   <tabstop>cancel_btn</tabstop>
   <tabstop>folder</tabstop>
   <tabstop>filename</tabstop>
-  <tabstop>existingFile_list</tabstop>
   <tabstop>existing_notes</tabstop>
  </tabstops>
  <resources/>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIfTeJgP.ui'
+## Form generated from reading UI file 'superSaver_UIIDGfvR.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.0
 ##
@@ -78,6 +78,18 @@ class Ui_SaveAs(object):
         self.taksType_spacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.taskType_layout.addItem(self.taksType_spacer)
+
+        self.fileType_label = QLabel(SaveAs)
+        self.fileType_label.setObjectName(u"fileType_label")
+
+        self.taskType_layout.addWidget(self.fileType_label)
+
+        self.fileType = QComboBox(SaveAs)
+        self.fileType.addItem("")
+        self.fileType.addItem("")
+        self.fileType.setObjectName(u"fileType")
+
+        self.taskType_layout.addWidget(self.fileType)
 
 
         self.saveAs_Layout.addLayout(self.taskType_layout)
@@ -200,9 +212,8 @@ class Ui_SaveAs(object):
 
         self.existingFile_layout.addWidget(self.existingFile_label)
 
-        self.existingFile_list = QListView(SaveAs)
+        self.existingFile_list = QListWidget(SaveAs)
         self.existingFile_list.setObjectName(u"existingFile_list")
-        self.existingFile_list.setEnabled(False)
 
         self.existingFile_layout.addWidget(self.existingFile_list)
 
@@ -245,8 +256,7 @@ class Ui_SaveAs(object):
         QWidget.setTabOrder(self.overwrite, self.cancel_btn)
         QWidget.setTabOrder(self.cancel_btn, self.folder)
         QWidget.setTabOrder(self.folder, self.filename)
-        QWidget.setTabOrder(self.filename, self.existingFile_list)
-        QWidget.setTabOrder(self.existingFile_list, self.existing_notes)
+        QWidget.setTabOrder(self.filename, self.existing_notes)
 
         self.retranslateUi(SaveAs)
 
@@ -268,6 +278,10 @@ class Ui_SaveAs(object):
         self.taskType.setItemText(6, QCoreApplication.translate("SaveAs", u"FX", None))
         self.taskType.setItemText(7, QCoreApplication.translate("SaveAs", u"Cloth", None))
         self.taskType.setItemText(8, QCoreApplication.translate("SaveAs", u"Prototype", None))
+
+        self.fileType_label.setText(QCoreApplication.translate("SaveAs", u"File Type", None))
+        self.fileType.setItemText(0, QCoreApplication.translate("SaveAs", u"ma", None))
+        self.fileType.setItemText(1, QCoreApplication.translate("SaveAs", u"mb", None))
 
         self.naming_label.setText(QCoreApplication.translate("SaveAs", u"Naming", None))
         self.autoNaming.setText(QCoreApplication.translate("SaveAs", u"Auto", None))

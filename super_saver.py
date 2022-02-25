@@ -6,25 +6,244 @@ This one will start with a UI that always runs, instead of just as a pop up if t
 no file.
 """
 
-from PySide2.QtCore import (QCoreApplication, QMetaObject,
-                            QSize, Qt)
+from PySide2.QtCore import (QCoreApplication, QMetaObject, QSize, Qt)
 from PySide2.QtWidgets import *
+from PySide2.QtGui import *
 from maya import cmds
 import os
 import sys
 import re
+import json
 
 __version__ = '0.0.1'
 __author__ = 'Adam Benson'
 
+
 class super_saver(QWidget):
     def __init__(self, paremt=None):
         QWidget.__init__(self, paremt)
-        pth = cmds.file(q=True, sn=True)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
+        self.pattern = r'(_v\d+)|(_V\d+)'
+        self.tasks = {
+            "Model": [
+                'MDL',
+                'mdl',
+                'model',
+                'Model',
+                'MODEL'
+                ],
+            "LookDev": [
+                'LKD',
+                'lkd',
+                'lookdev',
+                'LookDev',
+                'Lookdev',
+                'LOOKDEV',
+                'VisDev',
+                'visdev',
+                'vsd',
+                'VSD'
+                ],
+            "Rig": [
+                'RIG',
+                'rig',
+                'Rig',
+                'rigging',
+                'Rigging',
+                'RIGGING'
+                ],
+            "Animation": [
+                'ANIM',
+                'Animation',
+                'animation',
+                'anim',
+                'anm',
+                'ANM',
+                'Anim',
+                ],
+            "Sculpt": [
+                'SCPT',
+                'Sculpt',
+                'sculpt',
+                'scpt',
+                'sclpt',
+                'spt',
+                'scl'
+                'SCLPT',
+                'SPT',
+                'SCL'
+                ],
+            "Groom": [
+                'GRM',
+                'Groom',
+                'groom',
+                'grm',
+                'hair',
+                'Hair',
+                'HAIR',
+                'fur',
+                'FUR',
+                'Fur'
+            ],
+            "FX": [
+                'FX',
+                'fx',
+                'dyn',
+                'DYN',
+                'DYNAMICS',
+                'Dynamics',
+                'dynamics',
+                'Fluids',
+                'Fluid',
+                'FLD',
+                'fld',
+                'fluid',
+                'fluids',
+                'smoke',
+                'Smoke',
+                'SMOKE',
+                'smk',
+                'SMK',
+                'Fire',
+                'fire',
+                'Particles',
+                'particles',
+                'ptl',
+                'PTL',
+                'SIM',
+                'sim'
+                ],
+            "Cloth": [
+                'CLTH',
+                'Cloth',
+                'cloth',
+                'clth',
+                'CTH',
+                'cth'
+                ],
+            "Prototype": [
+                'PROTO',
+                'Prototype',
+                'prototype',
+                'Proto',
+                'prt',
+                'PRT'
+            ]
+        }
         self.ui = Ui_SaveAs()
         self.ui.setupUi(self)
+
+        pth = cmds.file(q=True, sn=True)
+        workspace = cmds.workspace(q=True, act=True)
+        scene_folder = cmds.workspace(fre='scene')
+        if pth:
+            # Check against current project
+            save_path = os.path.dirname(pth)
+            save_file = os.path.basename(pth)
+            for task in self.tasks.keys():
+                for abvr in self.tasks[task]:
+                    if abvr in save_file:
+                        self.ui.taskType.setCurrentText(task)
+            version_info = self.get_version_info(save_file)
+
+            base_filename = version_info['base_filename']
+            version = version_info['version']
+            extension = version_info['extension']
+            v_len = version_info['v_len']
+            v_type = version_info['v_type']
+
+            self.ui.filename.setText(base_filename)
+            all_files = sorted(self.collect_files(save_path), reverse=True)
+            next_version = version
+            while save_file in all_files:
+                next_version += 1
+                save_file = '{basename}{_v}{v:0{l}d}.{ext}'.format(basename=base_filename, _v=v_type, v=next_version,
+                                                                   l=v_len, ext=extension)
+            self.ui.version.setValue(next_version)
+
+        elif workspace:
+            save_path = os.path.join(workspace, scene_folder)
+
+        self.ui.folder.setText(save_path)
+        self.populate_existing_files(folder=save_path)
+        self.ui.cancel_btn.clicked.connect(self.close)
+        self.ui.folder_btn.clicked.connect(self.get_folder)
+
         self.show()
+
+    def get_folder(self):
+        pth = self.ui.folder.text()
+        self.hide()
+        if pth:
+            getFolder = cmds.fileDialog2(dir=pth, fm=3)
+        else:
+            getFolder = cmds.fileDialog2(fm=3)
+        self.show()
+        print(getFolder)
+        if getFolder:
+            self.ui.folder.setText(getFolder[0])
+
+    def get_version_info(self, filename=None, default_len=3, default_version=0):
+        file_info = None
+        if filename:
+            # Get current filename details.
+            filename_parts = filename.split(os.path.extsep)
+            root_filename = filename_parts[0]
+            extension = filename_parts[1]
+            find_version = re.findall(self.pattern, root_filename)
+            if find_version:
+                ver = find_version[0][0]
+                splits = ver.lower().split('_v')
+                if '_v' in root_filename:
+                    base_filename = root_filename.split('_v')[0]
+                    v_type = '_v'
+                elif '_V' in root_filename:
+                    base_filename = root_filename.split('_V')[0]
+                    v_type = '_V'
+                else:
+                    base_filename = root_filename
+                    v_type = '_v'
+                split_v = splits[1]
+                version = int(split_v)
+                v_len = len(split_v)
+            else:
+                base_filename = root_filename
+                version = default_version
+                v_len = default_len
+                v_type = '_v'
+
+            # Add to the details package
+            file_info = {
+                'base_filename': base_filename,
+                'version': version,
+                'v_len': v_len,
+                'extension': extension,
+                'v_type': v_type
+            }
+        return file_info
+
+    def collect_files(self, path=None):
+        files = []
+        if path:
+            if os.path.exists(path):
+                list_files = os.listdir(path)
+                for f in list_files:
+                    if os.path.isfile(os.path.join(path, f)):
+                        files.append(f)
+        return files
+
+    def populate_existing_files(self, folder=None):
+        filetypes = ['ma', 'mb']
+        if folder:
+            if os.path.exists(folder):
+                existing_files = os.listdir(folder)
+                for filename in existing_files:
+                    if os.path.isfile(os.path.join(folder, filename)):
+                        file_separator = filename.split(os.path.extsep)
+                        ext = file_separator[1]
+                        if ext in filetypes:
+                            new_entry = QListWidgetItem(filename)
+                            self.ui.existingFile_list.addItem(new_entry)
 
 
 class Ui_SaveAs(object):
@@ -89,6 +308,18 @@ class Ui_SaveAs(object):
         self.taksType_spacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.taskType_layout.addItem(self.taksType_spacer)
+
+        self.fileType_label = QLabel(SaveAs)
+        self.fileType_label.setObjectName(u"fileType_label")
+
+        self.taskType_layout.addWidget(self.fileType_label)
+
+        self.fileType = QComboBox(SaveAs)
+        self.fileType.addItem("")
+        self.fileType.addItem("")
+        self.fileType.setObjectName(u"fileType")
+
+        self.taskType_layout.addWidget(self.fileType)
 
 
         self.saveAs_Layout.addLayout(self.taskType_layout)
@@ -211,9 +442,8 @@ class Ui_SaveAs(object):
 
         self.existingFile_layout.addWidget(self.existingFile_label)
 
-        self.existingFile_list = QListView(SaveAs)
+        self.existingFile_list = QListWidget(SaveAs)
         self.existingFile_list.setObjectName(u"existingFile_list")
-        self.existingFile_list.setEnabled(False)
 
         self.existingFile_layout.addWidget(self.existingFile_list)
 
@@ -256,8 +486,7 @@ class Ui_SaveAs(object):
         QWidget.setTabOrder(self.overwrite, self.cancel_btn)
         QWidget.setTabOrder(self.cancel_btn, self.folder)
         QWidget.setTabOrder(self.folder, self.filename)
-        QWidget.setTabOrder(self.filename, self.existingFile_list)
-        QWidget.setTabOrder(self.existingFile_list, self.existing_notes)
+        QWidget.setTabOrder(self.filename, self.existing_notes)
 
         self.retranslateUi(SaveAs)
 
@@ -280,6 +509,10 @@ class Ui_SaveAs(object):
         self.taskType.setItemText(7, QCoreApplication.translate("SaveAs", u"Cloth", None))
         self.taskType.setItemText(8, QCoreApplication.translate("SaveAs", u"Prototype", None))
 
+        self.fileType_label.setText(QCoreApplication.translate("SaveAs", u"File Type", None))
+        self.fileType.setItemText(0, QCoreApplication.translate("SaveAs", u"ma", None))
+        self.fileType.setItemText(1, QCoreApplication.translate("SaveAs", u"mb", None))
+
         self.naming_label.setText(QCoreApplication.translate("SaveAs", u"Naming", None))
         self.autoNaming.setText(QCoreApplication.translate("SaveAs", u"Auto", None))
         self.customNaming.setText(QCoreApplication.translate("SaveAs", u"Custom", None))
@@ -300,4 +533,7 @@ if __name__ == '__main__':
     except Exception as e:
         app = QApplication.instance()
     saveas = super_saver()
-    sys.exit(app.exec_())
+    try:
+        sys.exit(app.exec_())
+    except SystemExit as e:
+        print(e)
