@@ -130,6 +130,8 @@ class super_saver(QWidget):
                 'PRT'
             ]
         }
+        self.root_name = None
+        self.task = None
         self.ui = Ui_SaveAs()
         self.ui.setupUi(self)
 
@@ -141,9 +143,16 @@ class super_saver(QWidget):
             save_path = os.path.dirname(pth)
             save_file = os.path.basename(pth)
             for task in self.tasks.keys():
-                for abvr in self.tasks[task]:
-                    if abvr in save_file:
+                for abrv in self.tasks[task]:
+                    if abrv in save_file:
                         self.ui.taskType.setCurrentText(task)
+                        self.root_name = save_file.split(abrv)[0]
+                        self.task = abrv
+                        print('pre:', self.root_name)
+                        if self.root_name.endswith('_'):
+                            self.root_name = self.root_name.rstrip('_')
+                            print('post:', self.root_name)
+                        break
             version_info = self.get_version_info(save_file)
 
             base_filename = version_info['base_filename']
@@ -153,6 +162,7 @@ class super_saver(QWidget):
             v_type = version_info['v_type']
 
             self.ui.filename.setText(base_filename)
+            self.ui.messages.setText('')
             all_files = sorted(self.collect_files(save_path), reverse=True)
             next_version = version
             while save_file in all_files:
@@ -160,16 +170,51 @@ class super_saver(QWidget):
                 save_file = '{basename}{_v}{v:0{l}d}.{ext}'.format(basename=base_filename, _v=v_type, v=next_version,
                                                                    l=v_len, ext=extension)
             self.ui.version.setValue(next_version)
-
+            new_path = self.build_path(path=save_path, rootName=self.root_name, task=self.task, v_type=v_type,
+                                       v_len=v_len, version=next_version, ext=extension)
+            self.ui.output_filename.setText(new_path)
         elif workspace:
             save_path = os.path.join(workspace, scene_folder)
 
         self.ui.folder.setText(save_path)
         self.populate_existing_files(folder=save_path)
+
+        self.set_custom()
+
+        self.ui.customNaming.clicked.connect(self.set_custom)
+        self.ui.autoNaming.clicked.connect(self.set_custom)
         self.ui.cancel_btn.clicked.connect(self.close)
+        self.ui.save_btn.clicked.connect(self.run)
         self.ui.folder_btn.clicked.connect(self.get_folder)
 
         self.show()
+
+    def set_custom(self):
+        auto = self.ui.autoNaming.isChecked()
+        if auto:
+            self.ui.filename.setEnabled(False)
+            self.ui.version.setEnabled(False)
+            self.ui.taskType.setEnabled(False)
+            self.ui.fileType.setEnabled(False)
+            self.ui.folder.setEnabled(False)
+            self.ui.folder_btn.setEnabled(False)
+        else:
+            self.ui.filename.setEnabled(True)
+            self.ui.version.setEnabled(True)
+            self.ui.taskType.setEnabled(True)
+            self.ui.fileType.setEnabled(True)
+            self.ui.folder.setEnabled(True)
+            self.ui.folder_btn.setEnabled(True)
+
+    def build_path(self, path=None, rootName=None, task=None, v_type=None, v_len=None, version=None, ext=None):
+        output_path = None
+        if path and rootName and task and v_type and version and ext:
+            filename = '{base}_{task}{_v}{v:0{l}d}.{ext}'.format(base=rootName, task=task, _v=v_type, l=v_len,
+                                                                         v=version, ext=ext)
+            output_path = os.path.join(path, filename)
+            if '\\' in output_path:
+                output_path = output_path.replace('\\', '/')
+        return output_path
 
     def get_folder(self):
         pth = self.ui.folder.text()
@@ -245,24 +290,106 @@ class super_saver(QWidget):
                             new_entry = QListWidgetItem(filename)
                             self.ui.existingFile_list.addItem(new_entry)
 
+    def run(self):
+        output_file = self.ui.output_filename.text()
+        overwrite = self.ui.overwrite.isChecked()
+        path = os.path.dirname(output_file)
+        if not os.path.exists:
+            os.makedirs(path)
+        print('PATH: %s' % path)
+        if overwrite:
+            cmds.file(rename=output_file)
+            cmds.file(s=True, )
+        else:
+            if os.path.exists(output_file):
+                self.ui.messages.setText('FILE ALREADY EXISTS!  Choose "Overwrite" to save anyway')
+                self.ui.messages.setStyleSheet(
+                    "color: rgba(255, 150, 150);"
+                )
+                return False
+            else:
+                # Make a JSON entry
+                self.ui.messages.setText('Saving File...')
+                self.ui.messages.setStyleSheet(
+                    "color: rgba(150, 255, 150);"
+                )
+            print('OVRWRT: %s' % overwrite)
+        print('OUTPUT: %s' % output_file)
+        # self.close()
+
 
 class Ui_SaveAs(object):
     def setupUi(self, SaveAs):
         if not SaveAs.objectName():
             SaveAs.setObjectName(u"SaveAs")
-        SaveAs.resize(969, 385)
+        SaveAs.resize(1049, 527)
         SaveAs.setMinimumSize(QSize(969, 385))
         SaveAs.setStyleSheet(u"background-color: rgb(110, 110, 110);\n"
 "color: rgb(220, 220, 220);")
-        self.horizontalLayout = QHBoxLayout(SaveAs)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.saveAs_Layout = QVBoxLayout()
-        self.saveAs_Layout.setObjectName(u"saveAs_Layout")
+        self.verticalLayout = QVBoxLayout(SaveAs)
+        self.verticalLayout.setObjectName(u"verticalLayout")
         self.Title = QLabel(SaveAs)
         self.Title.setObjectName(u"Title")
         self.Title.setStyleSheet(u"font: 16pt \"MS Shell Dlg 2\";")
 
-        self.saveAs_Layout.addWidget(self.Title)
+        self.verticalLayout.addWidget(self.Title)
+
+        self.output_filename = QLabel(SaveAs)
+        self.output_filename.setObjectName(u"output_filename")
+        self.output_filename.setStyleSheet(u"font: 12pt \"MS Shell Dlg 2\";")
+
+        self.verticalLayout.addWidget(self.output_filename)
+
+        self.messages = QLabel(SaveAs)
+        self.messages.setObjectName(u"messages")
+        self.messages.setStyleSheet(u"font: 75 9pt \"MS Shell Dlg 2\";\n"
+"color: rgb(255, 150, 150);")
+
+        self.verticalLayout.addWidget(self.messages)
+
+        self.sideBySide_layout = QHBoxLayout()
+        self.sideBySide_layout.setObjectName(u"sideBySide_layout")
+        self.saveAs_Layout = QVBoxLayout()
+        self.saveAs_Layout.setObjectName(u"saveAs_Layout")
+        self.name_layout = QVBoxLayout()
+        self.name_layout.setObjectName(u"name_layout")
+        self.naming_label = QLabel(SaveAs)
+        self.naming_label.setObjectName(u"naming_label")
+
+        self.name_layout.addWidget(self.naming_label)
+
+        self.naming_layout = QHBoxLayout()
+        self.naming_layout.setObjectName(u"naming_layout")
+        self.autoNaming = QRadioButton(SaveAs)
+        self.autoNaming.setObjectName(u"autoNaming")
+        self.autoNaming.setChecked(True)
+
+        self.naming_layout.addWidget(self.autoNaming)
+
+        self.customNaming = QRadioButton(SaveAs)
+        self.customNaming.setObjectName(u"customNaming")
+
+        self.naming_layout.addWidget(self.customNaming)
+
+        self.naming_spacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.naming_layout.addItem(self.naming_spacer)
+
+        self.version_label = QLabel(SaveAs)
+        self.version_label.setObjectName(u"version_label")
+
+        self.naming_layout.addWidget(self.version_label)
+
+        self.version = QSpinBox(SaveAs)
+        self.version.setObjectName(u"version")
+
+        self.naming_layout.addWidget(self.version)
+
+
+        self.name_layout.addLayout(self.naming_layout)
+
+
+        self.saveAs_Layout.addLayout(self.name_layout)
 
         self.folder_layout = QHBoxLayout()
         self.folder_layout.setObjectName(u"folder_layout")
@@ -324,46 +451,6 @@ class Ui_SaveAs(object):
 
         self.saveAs_Layout.addLayout(self.taskType_layout)
 
-        self.name_layout = QVBoxLayout()
-        self.name_layout.setObjectName(u"name_layout")
-        self.naming_label = QLabel(SaveAs)
-        self.naming_label.setObjectName(u"naming_label")
-
-        self.name_layout.addWidget(self.naming_label)
-
-        self.naming_layout = QHBoxLayout()
-        self.naming_layout.setObjectName(u"naming_layout")
-        self.autoNaming = QRadioButton(SaveAs)
-        self.autoNaming.setObjectName(u"autoNaming")
-        self.autoNaming.setChecked(True)
-
-        self.naming_layout.addWidget(self.autoNaming)
-
-        self.customNaming = QRadioButton(SaveAs)
-        self.customNaming.setObjectName(u"customNaming")
-
-        self.naming_layout.addWidget(self.customNaming)
-
-        self.naming_spacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.naming_layout.addItem(self.naming_spacer)
-
-        self.version_label = QLabel(SaveAs)
-        self.version_label.setObjectName(u"version_label")
-
-        self.naming_layout.addWidget(self.version_label)
-
-        self.version = QSpinBox(SaveAs)
-        self.version.setObjectName(u"version")
-
-        self.naming_layout.addWidget(self.version)
-
-
-        self.name_layout.addLayout(self.naming_layout)
-
-
-        self.saveAs_Layout.addLayout(self.name_layout)
-
         self.filename_layout = QHBoxLayout()
         self.filename_layout.setObjectName(u"filename_layout")
         self.filename_label = QLabel(SaveAs)
@@ -383,11 +470,6 @@ class Ui_SaveAs(object):
 
 
         self.saveAs_Layout.addLayout(self.filename_layout)
-
-        self.output_filename = QLabel(SaveAs)
-        self.output_filename.setObjectName(u"output_filename")
-
-        self.saveAs_Layout.addWidget(self.output_filename)
 
         self.notes_seperator = QFrame(SaveAs)
         self.notes_seperator.setObjectName(u"notes_seperator")
@@ -431,7 +513,7 @@ class Ui_SaveAs(object):
         self.saveAs_Layout.addLayout(self.buttons_layout)
 
 
-        self.horizontalLayout.addLayout(self.saveAs_Layout)
+        self.sideBySide_layout.addLayout(self.saveAs_Layout)
 
         self.existingStack_layout = QVBoxLayout()
         self.existingStack_layout.setObjectName(u"existingStack_layout")
@@ -468,13 +550,16 @@ class Ui_SaveAs(object):
         self.existingStack_layout.addItem(self.existingFile_spacer)
 
 
-        self.horizontalLayout.addLayout(self.existingStack_layout)
+        self.sideBySide_layout.addLayout(self.existingStack_layout)
+
+
+        self.verticalLayout.addLayout(self.sideBySide_layout)
 
 #if QT_CONFIG(shortcut)
-        self.folder_label.setBuddy(self.folder)
-        self.taksType_label.setBuddy(self.taskType)
         self.naming_label.setBuddy(self.autoNaming)
         self.version_label.setBuddy(self.version)
+        self.folder_label.setBuddy(self.folder)
+        self.taksType_label.setBuddy(self.taskType)
 #endif // QT_CONFIG(shortcut)
         QWidget.setTabOrder(self.notes, self.save_btn)
         QWidget.setTabOrder(self.save_btn, self.folder_btn)
@@ -496,6 +581,12 @@ class Ui_SaveAs(object):
     def retranslateUi(self, SaveAs):
         SaveAs.setWindowTitle(QCoreApplication.translate("SaveAs", u"Super Saver", None))
         self.Title.setText(QCoreApplication.translate("SaveAs", u"Save As...", None))
+        self.output_filename.setText(QCoreApplication.translate("SaveAs", u"output filename", None))
+        self.messages.setText(QCoreApplication.translate("SaveAs", u"Errors", None))
+        self.naming_label.setText(QCoreApplication.translate("SaveAs", u"Naming", None))
+        self.autoNaming.setText(QCoreApplication.translate("SaveAs", u"Auto", None))
+        self.customNaming.setText(QCoreApplication.translate("SaveAs", u"Custom", None))
+        self.version_label.setText(QCoreApplication.translate("SaveAs", u"Version", None))
         self.folder_label.setText(QCoreApplication.translate("SaveAs", u"Save to Folder", None))
         self.folder_btn.setText(QCoreApplication.translate("SaveAs", u"Browse...", None))
         self.taksType_label.setText(QCoreApplication.translate("SaveAs", u"Task Type", None))
@@ -513,13 +604,8 @@ class Ui_SaveAs(object):
         self.fileType.setItemText(0, QCoreApplication.translate("SaveAs", u"ma", None))
         self.fileType.setItemText(1, QCoreApplication.translate("SaveAs", u"mb", None))
 
-        self.naming_label.setText(QCoreApplication.translate("SaveAs", u"Naming", None))
-        self.autoNaming.setText(QCoreApplication.translate("SaveAs", u"Auto", None))
-        self.customNaming.setText(QCoreApplication.translate("SaveAs", u"Custom", None))
-        self.version_label.setText(QCoreApplication.translate("SaveAs", u"Version", None))
         self.filename_label.setText(QCoreApplication.translate("SaveAs", u"Filename", None))
         self.overwrite.setText(QCoreApplication.translate("SaveAs", u"Overwrite", None))
-        self.output_filename.setText(QCoreApplication.translate("SaveAs", u"output filename", None))
         self.notes_label.setText(QCoreApplication.translate("SaveAs", u"Notes", None))
         self.save_btn.setText(QCoreApplication.translate("SaveAs", u"Save", None))
         self.cancel_btn.setText(QCoreApplication.translate("SaveAs", u"Cancel", None))
