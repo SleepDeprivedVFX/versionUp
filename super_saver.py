@@ -1,10 +1,17 @@
 # Maya Super Saver
 
 """
-This is a new approach to the Maya_VersionUp.py system.
-This one will start with a UI that always runs, instead of just as a pop up if there is
-no file.
+The SUPER SAVER is a pipeline-free versioning and saving system for Maya.
+It is intended to be a stand-alone shelf button for quickly versioning up files and saving notes with them.
+Simple click the button on the shelf or run the script.  A UI will pop up that attempts to name your script based on
+the project folder, but can be customized to save the name as anything.
+Notes can be reviewed on the right side by clicking on existing files.
 """
+
+# FIXME: There are a few issues that I've discovered so far.
+#  1. The version number is not properly changing when the task type is changed.  It still saves the version shown up
+#  top.
+#  2. The Overwrite function won't work due to the issue with the first fix me
 
 from PySide2.QtCore import (QCoreApplication, QMetaObject, QSize, Qt)
 from PySide2.QtWidgets import *
@@ -16,9 +23,17 @@ import re
 import json
 import time
 from datetime import datetime
+import platform
 
-__version__ = '0.0.1'
+__version__ = '0.2.0'
 __author__ = 'Adam Benson'
+
+if platform.system() == 'Windows':
+    env_user = 'USERNAME'
+    computername = 'COMPUTERNAME'
+else:
+    env_user = 'USER'
+    computername = 'HOSTNAME'
 
 
 class super_saver(QWidget):
@@ -160,6 +175,9 @@ class super_saver(QWidget):
             save_path = os.path.join(workspace, scene_folder)
             if '\\' in workspace:
                 workspace = workspace.replace('\\', '/')
+            if '\\' in save_path:
+                save_path = save_path.replace('\\', '/')
+
             if workspace.endswith('/'):
                 rem = -2
             else:
@@ -177,15 +195,20 @@ class super_saver(QWidget):
         else:
             save_path = cmds.file(q=True, dir=True)
             version = 1
-            save_file = self.format_name(basename='default')
+            base_filename = 'default'
+            save_file = self.format_name(basename=base_filename)
+            v_len = 3
+            extension = 'ma'
+            v_type = '_v'
 
         self.ui.filename.setText(self.root_name)
         self.ui.messages.setText('')
-        all_files = sorted(self.collect_files(save_path), reverse=True)
-        next_version = version
-        while save_file in all_files:
-            next_version += 1
-            save_file = self.format_name(basename=base_filename, _v=v_type, v=next_version, l=v_len, ext=extension)
+        get_save = self.get_save_file(save_file=save_file, save_path=save_path, basename=base_filename, _v=v_type,
+                                      l=v_len, ext=extension)
+        save_file = get_save[0]
+        print(save_file)
+        next_version = get_save[1]
+        print(next_version)
 
         self.ui.version.setValue(next_version)
         new_path = self.build_path(path=save_path, rootName=self.root_name, task=self.task, v_type=v_type,
@@ -202,7 +225,7 @@ class super_saver(QWidget):
         self.ui.cancel_btn.clicked.connect(self.close)
 
         self.ui.folder.textChanged.connect(self.update_ui)
-        self.ui.taskType.currentTextChanged.connect(self.update_ui)
+        self.ui.taskType.currentTextChanged.connect(self.reset_version)
         self.ui.version.valueChanged.connect(self.update_ui)
         self.ui.fileType.currentTextChanged.connect(self.update_ui)
         self.ui.filename.textChanged.connect(self.update_ui)
@@ -220,6 +243,12 @@ class super_saver(QWidget):
             return save_file
         return False
 
+    def reset_version(self):
+        self.ui.version.valueChanged.disconnect(self.update_ui)
+        self.ui.version.setValue(1)
+        self.update_ui()
+        self.ui.version.valueChanged.connect(self.update_ui)
+
     def remove_spaces(self):
         root_name = self.ui.filename.text()
         if ' ' in root_name:
@@ -235,6 +264,7 @@ class super_saver(QWidget):
         taskType = self.ui.taskType.currentText()
         task = self.tasks[taskType][0]
         ext = self.ui.fileType.currentText()
+
         new_output_file = self.build_path(path=path, rootName=root_name, task=task, v_type='_v', v_len=3,
                                           version=version, ext=ext)
         if new_output_file:
@@ -280,11 +310,14 @@ class super_saver(QWidget):
             self.ui.folder.setEnabled(True)
             self.ui.folder_btn.setEnabled(True)
 
-    def build_path(self, path=None, rootName=None, task=None, v_type=None, v_len=None, version=None, ext=None):
+    def build_path(self, path=None, rootName=None, task=None, v_type='_v', v_len=3, version=0, ext=None):
         output_path = None
-        if path and rootName and task and v_type and version and ext:
+        if path and rootName and task and ext:
             filename = '{base}_{task}{_v}{v:0{l}d}.{ext}'.format(base=rootName, task=task, _v=v_type, l=v_len,
-                                                                         v=version, ext=ext)
+                                                                 v=version, ext=ext)
+            basename = '{base}_{task}'.format(base=rootName, task=task)
+            check_filename = self.get_save_file(save_file=filename, save_path=path, basename=basename)
+            filename = check_filename[0]
             output_path = os.path.join(path, filename)
             if '\\' in output_path:
                 output_path = output_path.replace('\\', '/')
@@ -298,9 +331,18 @@ class super_saver(QWidget):
         else:
             getFolder = cmds.fileDialog2(fm=3)
         self.show()
-        print(getFolder)
         if getFolder:
             self.ui.folder.setText(getFolder[0])
+
+    def get_save_file(self, save_file=None, save_path=None, basename=None, _v='_v', v=1, l=3, ext='ma'):
+        next_version = v
+        if save_file and save_path and basename:
+            all_files = sorted(self.collect_files(path=save_path))
+            while save_file in all_files:
+                next_version += 1
+                save_file = self.format_name(basename=basename, _v=_v, v=next_version, l=l, ext=ext)
+
+        return save_file, next_version
 
     def get_version_info(self, filename=None, default_len=3, default_version=0):
         file_info = None
@@ -361,12 +403,11 @@ class super_saver(QWidget):
 
     def create_db(self, folder=None):
         if folder:
-            print(folder)
             if not os.path.exists(folder):
                 data = {
                     "Notes": []
                 }
-                save_data = json.dumps(data)
+                save_data = json.dumps(data, indent=4)
                 with open(folder, 'w+') as save:
                     save.write(save_data)
                     save.close()
@@ -375,7 +416,6 @@ class super_saver(QWidget):
         notes_db = None
         if folder:
             notes_db_file = os.path.join(folder, 'notes_db.json')
-            print('notes_db_file: %s' % notes_db_file)
             if not os.path.exists(notes_db_file):
                 # create an empty file
                 self.create_db(folder=notes_db_file)
@@ -387,7 +427,7 @@ class super_saver(QWidget):
     def save_db(self, folder=None, data=None):
         if data and folder:
             notes_file = os.path.join(folder, 'notes_db.json')
-            save_data = json.dumps(data)
+            save_data = json.dumps(data, indent=4)
             with open(notes_file, 'r+') as save:
                 save.write(save_data)
                 save.close()
@@ -396,10 +436,10 @@ class super_saver(QWidget):
         get_filename = self.ui.existingFile_list.currentItem()
         folder = self.make_db_folder(self.ui.folder.text())
         filename = get_filename.text()
-        print(filename)
         notes_db = self.open_db(folder=folder)
         post_note = """FILE: {fn}
 USER: None
+COMP: None
 DATE: None
 
 NOTE: None
@@ -409,12 +449,14 @@ NOTE: None
                 if filename in note['filename']:
                     user = note['user']
                     date = note['date']
+                    computer = note['computer']
                     details = note['details']
                     post_note = """FILE: {filename}
 USER: {user}
+COMP: {computer}
 DATE: {date}
 
-NOTE: {details}""".format(filename=filename, user=user, date=date, details=details)
+NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=date, details=details)
                     break
 
         self.ui.existing_notes.setText(post_note)
@@ -478,12 +520,12 @@ NOTE: {details}""".format(filename=filename, user=user, date=date, details=detai
         date = '{d} | {t}'.format(d=date_now.date(), t=date_now.time())
         new_note = {
             'filename': os.path.basename(output_file),
-            'user': os.environ['username'],
+            'user': os.environ[env_user],
+            'computer': os.environ[computername],
             'date': date,
             'details': notes
         }
         notes_db['Notes'].append(new_note)
-        print(notes_db)
         self.save_db(folder=notes_path, data=notes_db)
         self.message(text='Saved Successfully!!', ok=True)
         print('FILE SAVED: %s' % output_file)
