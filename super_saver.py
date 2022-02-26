@@ -389,8 +389,9 @@ class super_saver(QWidget):
         if not os.path.exists:
             os.makedirs(path)
         if overwrite:
+            self.message(text='Saving...', ok=True)
             cmds.file(rename=output_file)
-            cmds.file(s=True, )
+            cmds.file(s=True)
         else:
             if os.path.exists(output_file):
                 self.message(text='FILE ALREADY EXISTS!  Choose "Overwrite" to save anyway', ok=False)
@@ -398,6 +399,8 @@ class super_saver(QWidget):
             else:
                 # Make a JSON entry
                 self.message(text='Saving...', ok=True)
+                cmds.file(rename=output_file)
+                cmds.file(s=True)
         self.message(text='Saved Successfully!!', ok=True)
         print('FILE SAVED: %s' % output_file)
         time.sleep(1)
