@@ -25,7 +25,7 @@ import time
 from datetime import datetime
 import platform
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -78,6 +78,17 @@ class super_saver(QWidget):
                 'ANM',
                 'Anim',
                 ],
+            "Lighting": [
+                'LGT',
+                'Lighting',
+                'Light',
+                'lgt',
+                'light',
+                'lighting',
+                'LIGHT',
+                'LIGHTING',
+                'Lgt'
+            ],
             "Sculpt": [
                 'SCPT',
                 'Sculpt',
@@ -643,6 +654,7 @@ class Ui_SaveAs(object):
         self.taskType.addItem("")
         self.taskType.addItem("")
         self.taskType.addItem("")
+        self.taskType.addItem("")
         self.taskType.setObjectName(u"taskType")
 
         self.taskType_layout.addWidget(self.taskType)
@@ -809,11 +821,12 @@ class Ui_SaveAs(object):
         self.taskType.setItemText(1, QCoreApplication.translate("SaveAs", u"LookDev", None))
         self.taskType.setItemText(2, QCoreApplication.translate("SaveAs", u"Rig", None))
         self.taskType.setItemText(3, QCoreApplication.translate("SaveAs", u"Animation", None))
-        self.taskType.setItemText(4, QCoreApplication.translate("SaveAs", u"Sculpt", None))
-        self.taskType.setItemText(5, QCoreApplication.translate("SaveAs", u"Groom", None))
-        self.taskType.setItemText(6, QCoreApplication.translate("SaveAs", u"FX", None))
-        self.taskType.setItemText(7, QCoreApplication.translate("SaveAs", u"Cloth", None))
-        self.taskType.setItemText(8, QCoreApplication.translate("SaveAs", u"Prototype", None))
+        self.taskType.setItemText(4, QCoreApplication.translate("SaveAs", u"Lighting", None))
+        self.taskType.setItemText(5, QCoreApplication.translate("SaveAs", u"Sculpt", None))
+        self.taskType.setItemText(6, QCoreApplication.translate("SaveAs", u"Groom", None))
+        self.taskType.setItemText(7, QCoreApplication.translate("SaveAs", u"FX", None))
+        self.taskType.setItemText(8, QCoreApplication.translate("SaveAs", u"Cloth", None))
+        self.taskType.setItemText(9, QCoreApplication.translate("SaveAs", u"Prototype", None))
 
         self.fileType_label.setText(QCoreApplication.translate("SaveAs", u"File Type", None))
         self.fileType.setItemText(0, QCoreApplication.translate("SaveAs", u"ma", None))
