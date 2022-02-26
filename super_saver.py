@@ -156,21 +156,41 @@ class super_saver(QWidget):
             extension = version_info['extension']
             v_len = version_info['v_len']
             v_type = version_info['v_type']
-
-            self.ui.filename.setText(self.root_name)
-            self.ui.messages.setText('')
-            all_files = sorted(self.collect_files(save_path), reverse=True)
-            next_version = version
-            while save_file in all_files:
-                next_version += 1
-                save_file = '{basename}{_v}{v:0{l}d}.{ext}'.format(basename=base_filename, _v=v_type, v=next_version,
-                                                                   l=v_len, ext=extension)
-            self.ui.version.setValue(next_version)
-            new_path = self.build_path(path=save_path, rootName=self.root_name, task=self.task, v_type=v_type,
-                                       v_len=v_len, version=next_version, ext=extension)
-            self.ui.output_filename.setText(new_path)
         elif workspace:
             save_path = os.path.join(workspace, scene_folder)
+            if '\\' in workspace:
+                workspace = workspace.replace('\\', '/')
+            if workspace.endswith('/'):
+                rem = -2
+            else:
+                rem = -1
+            split_project_path = workspace.split('/')
+            project_name = split_project_path[rem]
+            version = 1
+            self.root_name = project_name
+            self.task = self.tasks[self.ui.taskType.currentText()][0]
+            base_filename = '{root_name}_{task}'.format(root_name=project_name, task=self.task)
+            v_type = '_v'
+            v_len = 3
+            extension = self.ui.fileType.currentText()
+            save_file = self.format_name(basename=base_filename, _v=v_type, v=version, l=v_len, ext=extension)
+        else:
+            save_path = cmds.file(q=True, dir=True)
+            version = 1
+            save_file = self.format_name(basename='default')
+
+        self.ui.filename.setText(self.root_name)
+        self.ui.messages.setText('')
+        all_files = sorted(self.collect_files(save_path), reverse=True)
+        next_version = version
+        while save_file in all_files:
+            next_version += 1
+            save_file = self.format_name(basename=base_filename, _v=v_type, v=next_version, l=v_len, ext=extension)
+
+        self.ui.version.setValue(next_version)
+        new_path = self.build_path(path=save_path, rootName=self.root_name, task=self.task, v_type=v_type,
+                                   v_len=v_len, version=next_version, ext=extension)
+        self.ui.output_filename.setText(new_path)
 
         self.ui.folder.setText(save_path)
         self.populate_existing_files(folder=save_path)
@@ -192,6 +212,12 @@ class super_saver(QWidget):
         self.ui.folder_btn.clicked.connect(self.get_folder)
 
         self.show()
+
+    def format_name(self, basename=None, _v='_v', v=1, l=3, ext='ma'):
+        if basename:
+            save_file = '{basename}{_v}{v:0{l}d}.{ext}'.format(basename=basename, _v=_v, v=v, l=l, ext=ext)
+            return save_file
+        return False
 
     def remove_spaces(self):
         root_name = self.ui.filename.text()
@@ -243,14 +269,12 @@ class super_saver(QWidget):
         if auto:
             self.ui.filename.setEnabled(False)
             self.ui.version.setEnabled(False)
-            self.ui.taskType.setEnabled(False)
             self.ui.fileType.setEnabled(False)
             self.ui.folder.setEnabled(False)
             self.ui.folder_btn.setEnabled(False)
         else:
             self.ui.filename.setEnabled(True)
             self.ui.version.setEnabled(True)
-            self.ui.taskType.setEnabled(True)
             self.ui.fileType.setEnabled(True)
             self.ui.folder.setEnabled(True)
             self.ui.folder_btn.setEnabled(True)
