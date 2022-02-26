@@ -14,6 +14,8 @@ import os
 import sys
 import re
 import json
+import time
+from datetime import datetime
 
 __version__ = '0.0.1'
 __author__ = 'Adam Benson'
@@ -142,17 +144,11 @@ class super_saver(QWidget):
             # Check against current project
             save_path = os.path.dirname(pth)
             save_file = os.path.basename(pth)
-            for task in self.tasks.keys():
-                for abrv in self.tasks[task]:
-                    if abrv in save_file:
-                        self.ui.taskType.setCurrentText(task)
-                        self.root_name = save_file.split(abrv)[0]
-                        self.task = abrv
-                        print('pre:', self.root_name)
-                        if self.root_name.endswith('_'):
-                            self.root_name = self.root_name.rstrip('_')
-                            print('post:', self.root_name)
-                        break
+            root_task_data = self.get_root_and_task(save_file)
+            self.root_name = root_task_data['root_name']
+            self.task = root_task_data['task_abbr']
+            task = root_task_data['task_name']
+            self.ui.taskType.setCurrentText(task)
             version_info = self.get_version_info(save_file)
 
             base_filename = version_info['base_filename']
@@ -161,7 +157,7 @@ class super_saver(QWidget):
             v_len = version_info['v_len']
             v_type = version_info['v_type']
 
-            self.ui.filename.setText(base_filename)
+            self.ui.filename.setText(self.root_name)
             self.ui.messages.setText('')
             all_files = sorted(self.collect_files(save_path), reverse=True)
             next_version = version
@@ -184,11 +180,64 @@ class super_saver(QWidget):
         self.ui.customNaming.clicked.connect(self.set_custom)
         self.ui.autoNaming.clicked.connect(self.set_custom)
         self.ui.cancel_btn.clicked.connect(self.close)
+
+        self.ui.folder.textChanged.connect(self.update_ui)
+        self.ui.taskType.currentTextChanged.connect(self.update_ui)
+        self.ui.version.valueChanged.connect(self.update_ui)
+        self.ui.fileType.currentTextChanged.connect(self.update_ui)
+        self.ui.filename.textChanged.connect(self.update_ui)
+        self.ui.filename.textChanged.connect(self.remove_spaces)
+
         self.ui.save_btn.clicked.connect(self.run)
         self.ui.folder_btn.clicked.connect(self.get_folder)
 
         self.show()
 
+    def remove_spaces(self):
+        root_name = self.ui.filename.text()
+        if ' ' in root_name:
+            root_name = root_name.replace(' ', '_')
+            self.ui.filename.setText(root_name)
+
+    def update_ui(self):
+        path = self.ui.folder.text()
+        root_name = self.ui.filename.text()
+        if ' ' in root_name:
+            root_name = root_name.replace(' ', '_')
+        version = self.ui.version.value()
+        taskType = self.ui.taskType.currentText()
+        task = self.tasks[taskType][0]
+        ext = self.ui.fileType.currentText()
+        new_output_file = self.build_path(path=path, rootName=root_name, task=task, v_type='_v', v_len=3,
+                                          version=version, ext=ext)
+        if new_output_file:
+            self.ui.output_filename.setText(new_output_file)
+
+    def get_root_and_task(self, filename=None):
+        root_name = None
+        task_name = None
+        task_abbr = None
+        data = None
+        if filename:
+            # Check against current project
+            save_file = filename
+            for task in self.tasks.keys():
+                for abbr in self.tasks[task]:
+                    if abbr in save_file:
+                        root_name = save_file.split(abbr)[0]
+                        task_abbr = abbr
+                        task_name = task
+                        if root_name.endswith('_'):
+                            root_name = root_name.rstrip('_')
+                        break
+        if root_name and task_name and task_abbr:
+            data = {
+                'root_name': root_name,
+                'task_name': task_name,
+                'task_abbr': task_abbr
+            }
+        return data
+    
     def set_custom(self):
         auto = self.ui.autoNaming.isChecked()
         if auto:
@@ -290,32 +339,45 @@ class super_saver(QWidget):
                             new_entry = QListWidgetItem(filename)
                             self.ui.existingFile_list.addItem(new_entry)
 
+    def message(self, text=None, ok=True):
+        self.ui.messages.setText(text)
+        if ok:
+            self.ui.messages.setStyleSheet(
+                "color: rgb(150, 255, 150);"
+            )
+        else:
+            self.ui.messages.setStyleSheet(
+                "color: rgb(255, 150, 150);"
+            )
+
     def run(self):
         output_file = self.ui.output_filename.text()
         overwrite = self.ui.overwrite.isChecked()
+        notes = self.ui.notes.toPlainText()
+        if not notes:
+            self.message(text='YOU MUST ADD A NOTE!!!', ok=False)
+            return False
+        elif len(notes) < 10:
+            self.message(text='Your note must be more elaborate.', ok=False)
+            return False
+
         path = os.path.dirname(output_file)
         if not os.path.exists:
             os.makedirs(path)
-        print('PATH: %s' % path)
         if overwrite:
             cmds.file(rename=output_file)
             cmds.file(s=True, )
         else:
             if os.path.exists(output_file):
-                self.ui.messages.setText('FILE ALREADY EXISTS!  Choose "Overwrite" to save anyway')
-                self.ui.messages.setStyleSheet(
-                    "color: rgba(255, 150, 150);"
-                )
+                self.message(text='FILE ALREADY EXISTS!  Choose "Overwrite" to save anyway', ok=False)
                 return False
             else:
                 # Make a JSON entry
-                self.ui.messages.setText('Saving File...')
-                self.ui.messages.setStyleSheet(
-                    "color: rgba(150, 255, 150);"
-                )
-            print('OVRWRT: %s' % overwrite)
-        print('OUTPUT: %s' % output_file)
-        # self.close()
+                self.message(text='Saving...', ok=True)
+        self.message(text='Saved Successfully!!', ok=True)
+        print('FILE SAVED: %s' % output_file)
+        time.sleep(1)
+        self.close()
 
 
 class Ui_SaveAs(object):
