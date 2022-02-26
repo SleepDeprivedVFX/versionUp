@@ -350,6 +350,52 @@ class super_saver(QWidget):
                         files.append(f)
         return files
 
+    def make_db_folder(self, folder=None):
+        db_folder = None
+        if folder:
+            db_folder = os.path.join(folder, 'db')
+            if not os.path.exists(db_folder):
+                os.makedirs(db_folder)
+        return db_folder
+
+    def create_db(self, folder=None):
+        if folder:
+            print(folder)
+            if not os.path.exists(folder):
+                data = {
+                    "Notes": []
+                }
+                save_data = json.dumps(data)
+                with open(folder, 'w+') as save:
+                    save.write(save_data)
+                    save.close()
+
+    def open_db(self, folder=None):
+        notes_db = None
+        if folder:
+            notes_db_file = os.path.join(folder, 'notes_db.json')
+            print('notes_db_file: %s' % notes_db_file)
+            if not os.path.exists(notes_db_file):
+                # create an empty file
+                self.create_db(folder=notes_db_file)
+            with open(notes_db_file, 'r+') as open_notes:
+                notes_db = json.load(open_notes)
+                open_notes.close()
+        return notes_db
+
+    def show_existing_note(self, filename=None):
+        if filename:
+            folder =
+            check_db = self.make_db_folder(folder=folder)
+            if check_db:
+                data = self.open_db(folder=check_db)
+                print('opened_data: %s' % data)
+            else:
+                data = {
+                    "Notes": []
+                }
+
+
     def populate_existing_files(self, folder=None):
         filetypes = ['ma', 'mb']
         if folder:
@@ -362,6 +408,18 @@ class super_saver(QWidget):
                         if ext in filetypes:
                             new_entry = QListWidgetItem(filename)
                             self.ui.existingFile_list.addItem(new_entry)
+                            for note in data['Notes']:
+                                if type(note) == dict and 'filename' in note.keys():
+                                    if filename in note['filename']:
+                                        user = note['user']
+                                        date = note['date']
+                                        details = note['details']
+                                        post_note = """
+                                        USER: {user}
+                                        DATE: {date}
+                                        NOTE: {details}
+                                        """.format(user, date, details)
+                                        self.ui.existing_notes.setText(post_note)
 
     def message(self, text=None, ok=True):
         self.ui.messages.setText(text)
