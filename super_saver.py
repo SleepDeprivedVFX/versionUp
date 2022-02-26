@@ -207,6 +207,7 @@ class super_saver(QWidget):
         self.ui.fileType.currentTextChanged.connect(self.update_ui)
         self.ui.filename.textChanged.connect(self.update_ui)
         self.ui.filename.textChanged.connect(self.remove_spaces)
+        self.ui.existingFile_list.clicked.connect(self.show_existing_note)
 
         self.ui.save_btn.clicked.connect(self.run)
         self.ui.folder_btn.clicked.connect(self.get_folder)
@@ -383,18 +384,40 @@ class super_saver(QWidget):
                 open_notes.close()
         return notes_db
 
-    def show_existing_note(self, filename=None):
-        if filename:
-            folder =
-            check_db = self.make_db_folder(folder=folder)
-            if check_db:
-                data = self.open_db(folder=check_db)
-                print('opened_data: %s' % data)
-            else:
-                data = {
-                    "Notes": []
-                }
+    def save_db(self, folder=None, data=None):
+        if data and folder:
+            notes_file = os.path.join(folder, 'notes_db.json')
+            save_data = json.dumps(data)
+            with open(notes_file, 'r+') as save:
+                save.write(save_data)
+                save.close()
 
+    def show_existing_note(self):
+        get_filename = self.ui.existingFile_list.currentItem()
+        folder = self.make_db_folder(self.ui.folder.text())
+        filename = get_filename.text()
+        print(filename)
+        notes_db = self.open_db(folder=folder)
+        post_note = """FILE: {fn}
+USER: None
+DATE: None
+
+NOTE: None
+""".format(fn=filename)
+        for note in notes_db['Notes']:
+            if type(note) == dict and 'filename' in note.keys():
+                if filename in note['filename']:
+                    user = note['user']
+                    date = note['date']
+                    details = note['details']
+                    post_note = """FILE: {filename}
+USER: {user}
+DATE: {date}
+
+NOTE: {details}""".format(filename=filename, user=user, date=date, details=details)
+                    break
+
+        self.ui.existing_notes.setText(post_note)
 
     def populate_existing_files(self, folder=None):
         filetypes = ['ma', 'mb']
@@ -408,18 +431,6 @@ class super_saver(QWidget):
                         if ext in filetypes:
                             new_entry = QListWidgetItem(filename)
                             self.ui.existingFile_list.addItem(new_entry)
-                            for note in data['Notes']:
-                                if type(note) == dict and 'filename' in note.keys():
-                                    if filename in note['filename']:
-                                        user = note['user']
-                                        date = note['date']
-                                        details = note['details']
-                                        post_note = """
-                                        USER: {user}
-                                        DATE: {date}
-                                        NOTE: {details}
-                                        """.format(user, date, details)
-                                        self.ui.existing_notes.setText(post_note)
 
     def message(self, text=None, ok=True):
         self.ui.messages.setText(text)
@@ -444,6 +455,8 @@ class super_saver(QWidget):
             return False
 
         path = os.path.dirname(output_file)
+        notes_path = self.make_db_folder(folder=path)
+        notes_db = self.open_db(folder=notes_path)
         if not os.path.exists:
             os.makedirs(path)
         if overwrite:
@@ -459,6 +472,19 @@ class super_saver(QWidget):
                 self.message(text='Saving...', ok=True)
                 cmds.file(rename=output_file)
                 cmds.file(s=True)
+
+        self.message(text='Writing Notes...', ok=True)
+        date_now = datetime.now()
+        date = '{d} | {t}'.format(d=date_now.date(), t=date_now.time())
+        new_note = {
+            'filename': os.path.basename(output_file),
+            'user': os.environ['username'],
+            'date': date,
+            'details': notes
+        }
+        notes_db['Notes'].append(new_note)
+        print(notes_db)
+        self.save_db(folder=notes_path, data=notes_db)
         self.message(text='Saved Successfully!!', ok=True)
         print('FILE SAVED: %s' % output_file)
         time.sleep(1)
