@@ -158,6 +158,39 @@ class super_saver(QWidget):
                 'PRT'
             ]
         }
+        self.invalidCharacters = [
+            ' ',
+            '+',
+            '=',
+            '@',
+            '-',
+            '&',
+            '*',
+            '!',
+            '#',
+            '$',
+            '%',
+            '^',
+            '(',
+            ')',
+            '|',
+            '\\',
+            '/',
+            '?',
+            ':',
+            ';',
+            '<',
+            '>',
+            ',',
+            '[',
+            ']',
+            '{',
+            '}',
+            '`',
+            '~',
+            '\'',
+            '"'
+        ]
         self.root_name = None
         self.task = None
         self.ui = Ui_SaveAs()
@@ -262,15 +295,19 @@ class super_saver(QWidget):
 
     def remove_spaces(self):
         root_name = self.ui.filename.text()
-        if ' ' in root_name:
-            root_name = root_name.replace(' ', '_')
+        bad_x = [x for x in self.invalidCharacters if x in root_name]
+        if bad_x:
+            bad_x = bad_x[0]
+            root_name = root_name.replace(bad_x, '_')
             self.ui.filename.setText(root_name)
 
     def update_ui(self):
         path = self.ui.folder.text()
         root_name = self.ui.filename.text()
-        if ' ' in root_name:
-            root_name = root_name.replace(' ', '_')
+        bad_x = [x for x in self.invalidCharacters if x in root_name]
+        if bad_x:
+            bad_x = bad_x[0]
+            root_name = root_name.replace(bad_x, '_')
         version = self.ui.version.value()
         taskType = self.ui.taskType.currentText()
         task = self.tasks[taskType][0]
@@ -365,6 +402,11 @@ class super_saver(QWidget):
                 save_file = self.format_name(basename=basename, _v=_v, v=next_version, l=l, ext=ext)
 
         return save_file, next_version
+
+    def check_version(self):
+        # This would partially replace the update_ui() routine.  The idea here being that it would collect the UI
+        # information and get the latest version info and then use that to update the UI.
+        pass
 
     def get_version_info(self, filename=None, default_len=3, default_version=0):
         file_info = None
