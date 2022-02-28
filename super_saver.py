@@ -25,7 +25,7 @@ import time
 from datetime import datetime
 import platform
 
-__version__ = '0.2.1'
+__version__ = '0.2.2'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -304,6 +304,13 @@ class super_saver(QWidget):
                 'task_name': task_name,
                 'task_abbr': task_abbr
             }
+        else:
+            file_data = self.get_version_info(filename=filename)
+            data = {
+                'root_name': file_data['base_filename'],
+                'task_name': None,
+                'task_abbr': None
+            }
         return data
     
     def set_custom(self):
@@ -323,10 +330,14 @@ class super_saver(QWidget):
 
     def build_path(self, path=None, rootName=None, task=None, v_type='_v', v_len=3, version=0, ext=None):
         output_path = None
-        if path and rootName and task and ext:
-            filename = '{base}_{task}{_v}{v:0{l}d}.{ext}'.format(base=rootName, task=task, _v=v_type, l=v_len,
-                                                                 v=version, ext=ext)
-            basename = '{base}_{task}'.format(base=rootName, task=task)
+        if path and rootName and ext:
+            if task:
+                filename = '{base}_{task}{_v}{v:0{l}d}.{ext}'.format(base=rootName, task=task, _v=v_type, l=v_len,
+                                                                     v=version, ext=ext)
+                basename = '{base}_{task}'.format(base=rootName, task=task)
+            else:
+                filename = '{base}{_v}{v:0{l}d}.{ext}'.format(base=rootName, _v=v_type, l=v_len, v=version, ext=ext)
+                basename = '{base}'.format(base=rootName)
             check_filename = self.get_save_file(save_file=filename, save_path=path, basename=basename)
             filename = check_filename[0]
             output_path = os.path.join(path, filename)
@@ -655,6 +666,7 @@ class Ui_SaveAs(object):
         self.taskType.addItem("")
         self.taskType.addItem("")
         self.taskType.addItem("")
+        self.taskType.addItem("")
         self.taskType.setObjectName(u"taskType")
 
         self.taskType_layout.addWidget(self.taskType)
@@ -827,6 +839,7 @@ class Ui_SaveAs(object):
         self.taskType.setItemText(7, QCoreApplication.translate("SaveAs", u"FX", None))
         self.taskType.setItemText(8, QCoreApplication.translate("SaveAs", u"Cloth", None))
         self.taskType.setItemText(9, QCoreApplication.translate("SaveAs", u"Prototype", None))
+        self.taskType.setItemText(10, QCoreApplication.translate("SaveAs", u"", None))
 
         self.fileType_label.setText(QCoreApplication.translate("SaveAs", u"File Type", None))
         self.fileType.setItemText(0, QCoreApplication.translate("SaveAs", u"ma", None))
