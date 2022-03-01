@@ -250,9 +250,7 @@ class super_saver(QWidget):
         get_save = self.get_save_file(save_file=save_file, save_path=save_path, basename=base_filename, _v=v_type,
                                       l=v_len, ext=extension)
         save_file = get_save[0]
-        print(save_file)
         next_version = get_save[1]
-        print(next_version)
 
         self.ui.version.setValue(next_version)
         new_path = self.build_path(path=save_path, rootName=self.root_name, task=self.task, v_type=v_type,
@@ -272,8 +270,8 @@ class super_saver(QWidget):
         self.ui.taskType.currentTextChanged.connect(self.reset_version)
         self.ui.version.valueChanged.connect(self.update_ui)
         self.ui.fileType.currentTextChanged.connect(self.update_ui)
+        self.ui.filename.textChanged.connect(self.remove_bad_characters)
         self.ui.filename.textChanged.connect(self.update_ui)
-        self.ui.filename.textChanged.connect(self.remove_spaces)
         self.ui.existingFile_list.clicked.connect(self.show_existing_note)
 
         self.ui.save_btn.clicked.connect(self.run)
@@ -293,7 +291,7 @@ class super_saver(QWidget):
         self.update_ui()
         self.ui.version.valueChanged.connect(self.update_ui)
 
-    def remove_spaces(self):
+    def remove_bad_characters(self):
         root_name = self.ui.filename.text()
         bad_x = [x for x in self.invalidCharacters if x in root_name]
         if bad_x:
@@ -301,13 +299,24 @@ class super_saver(QWidget):
             root_name = root_name.replace(bad_x, '_')
             self.ui.filename.setText(root_name)
 
+    # def check_version(self):
+    #     # This would partially replace the update_ui() routine.  The idea here being that it would collect the UI
+    #     # information and get the latest version info and then use that to update the UI.
+    #     path = self.ui.folder.text()
+    #     root_name = self.ui.filename.text()
+    #     version = self.ui.version.value()
+    #     taskType = self.ui.taskType.currentText()
+    #     task = self.tasks[taskType][0]
+    #     ext = self.ui.fileType.currentText()
+    #     overwrite = self.ui.overwrite.isChecked()
+    #     get_output_path = self.build_path(path=path, rootName=root_name, task=task, v_type='_v', v_len=3,
+    #                                       version=version, ext=ext)
+    #     save_file = os.path.basename(get_output_path)
+    #     file_info = self.get_save_file(save_file=save_file, save_path=path, basename=)
+
     def update_ui(self):
         path = self.ui.folder.text()
         root_name = self.ui.filename.text()
-        bad_x = [x for x in self.invalidCharacters if x in root_name]
-        if bad_x:
-            bad_x = bad_x[0]
-            root_name = root_name.replace(bad_x, '_')
         version = self.ui.version.value()
         taskType = self.ui.taskType.currentText()
         task = self.tasks[taskType][0]
@@ -402,11 +411,6 @@ class super_saver(QWidget):
                 save_file = self.format_name(basename=basename, _v=_v, v=next_version, l=l, ext=ext)
 
         return save_file, next_version
-
-    def check_version(self):
-        # This would partially replace the update_ui() routine.  The idea here being that it would collect the UI
-        # information and get the latest version info and then use that to update the UI.
-        pass
 
     def get_version_info(self, filename=None, default_len=3, default_version=0):
         file_info = None
