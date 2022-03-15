@@ -43,17 +43,25 @@ class super_saver(QWidget):
         self.pattern = r'(_v\d+)|(_V\d+)'
         self.tasks = {
             "Model": [
+                'Model',
                 'MDL',
                 'mdl',
                 'model',
-                'Model',
                 'MODEL'
                 ],
-            "LookDev": [
+            "Surfacing": [
+                'Surfacing',
+                'SRF',
+                'surface',
+                'surfacing',
+                'Surface',
+                'SUR',
+                'srf',
+                'sur',
+                'LookDev',
                 'LKD',
                 'lkd',
                 'lookdev',
-                'LookDev',
                 'Lookdev',
                 'LOOKDEV',
                 'VisDev',
@@ -62,16 +70,16 @@ class super_saver(QWidget):
                 'VSD'
                 ],
             "Rig": [
+                'Rig',
                 'RIG',
                 'rig',
-                'Rig',
                 'rigging',
                 'Rigging',
                 'RIGGING'
                 ],
             "Animation": [
-                'ANIM',
                 'Animation',
+                'ANIM',
                 'animation',
                 'anim',
                 'anm',
@@ -79,8 +87,8 @@ class super_saver(QWidget):
                 'Anim',
                 ],
             "Lighting": [
-                'LGT',
                 'Lighting',
+                'LGT',
                 'Light',
                 'lgt',
                 'light',
@@ -90,8 +98,8 @@ class super_saver(QWidget):
                 'Lgt'
             ],
             "Sculpt": [
-                'SCPT',
                 'Sculpt',
+                'SCPT',
                 'sculpt',
                 'scpt',
                 'sclpt',
@@ -102,8 +110,8 @@ class super_saver(QWidget):
                 'SCL'
                 ],
             "Groom": [
-                'GRM',
                 'Groom',
+                'GRM',
                 'groom',
                 'grm',
                 'hair',
@@ -114,12 +122,12 @@ class super_saver(QWidget):
                 'Fur'
             ],
             "FX": [
+                'Dynamics',
                 'FX',
                 'fx',
                 'dyn',
                 'DYN',
                 'DYNAMICS',
-                'Dynamics',
                 'dynamics',
                 'Fluids',
                 'Fluid',
@@ -142,16 +150,16 @@ class super_saver(QWidget):
                 'sim'
                 ],
             "Cloth": [
-                'CLTH',
                 'Cloth',
+                'CLTH',
                 'cloth',
                 'clth',
                 'CTH',
                 'cth'
                 ],
             "Prototype": [
-                'PROTO',
                 'Prototype',
+                'PROTO',
                 'prototype',
                 'Proto',
                 'prt',
