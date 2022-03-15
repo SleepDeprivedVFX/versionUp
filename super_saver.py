@@ -978,7 +978,7 @@ class Ui_SaveAs(object):
         self.folder_btn.setText(QCoreApplication.translate("SaveAs", u"Browse...", None))
         self.taksType_label.setText(QCoreApplication.translate("SaveAs", u"Task Type", None))
         self.taskType.setItemText(0, QCoreApplication.translate("SaveAs", u"Model", None))
-        self.taskType.setItemText(1, QCoreApplication.translate("SaveAs", u"LookDev", None))
+        self.taskType.setItemText(1, QCoreApplication.translate("SaveAs", u"Surfacing", None))
         self.taskType.setItemText(2, QCoreApplication.translate("SaveAs", u"Rig", None))
         self.taskType.setItemText(3, QCoreApplication.translate("SaveAs", u"Animation", None))
         self.taskType.setItemText(4, QCoreApplication.translate("SaveAs", u"Sculpt", None))
