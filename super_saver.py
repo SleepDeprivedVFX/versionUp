@@ -880,25 +880,6 @@ class Ui_SaveAs(object):
 
         self.saveAs_Layout.addLayout(self.notes_layout)
 
-        self.buttons_layout = QHBoxLayout()
-        self.buttons_layout.setObjectName(u"buttons_layout")
-        self.buttons_spacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.buttons_layout.addItem(self.buttons_spacer)
-
-        self.save_btn = QPushButton(SaveAs)
-        self.save_btn.setObjectName(u"save_btn")
-
-        self.buttons_layout.addWidget(self.save_btn)
-
-        self.cancel_btn = QPushButton(SaveAs)
-        self.cancel_btn.setObjectName(u"cancel_btn")
-
-        self.buttons_layout.addWidget(self.cancel_btn)
-
-
-        self.saveAs_Layout.addLayout(self.buttons_layout)
-
 
         self.sideBySide_layout.addLayout(self.saveAs_Layout)
 
@@ -915,6 +896,20 @@ class Ui_SaveAs(object):
         self.existingFile_list.setObjectName(u"existingFile_list")
 
         self.existingFile_layout.addWidget(self.existingFile_list)
+
+        self.open_btn_layout = QHBoxLayout()
+        self.open_btn_layout.setObjectName(u"open_btn_layout")
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.open_btn_layout.addItem(self.horizontalSpacer_2)
+
+        self.open_btn = QPushButton(SaveAs)
+        self.open_btn.setObjectName(u"open_btn")
+
+        self.open_btn_layout.addWidget(self.open_btn)
+
+
+        self.existingFile_layout.addLayout(self.open_btn_layout)
 
 
         self.existingStack_layout.addLayout(self.existingFile_layout)
@@ -941,6 +936,25 @@ class Ui_SaveAs(object):
 
 
         self.verticalLayout.addLayout(self.sideBySide_layout)
+
+        self.buttons_layout = QHBoxLayout()
+        self.buttons_layout.setObjectName(u"buttons_layout")
+        self.buttons_spacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.buttons_layout.addItem(self.buttons_spacer)
+
+        self.save_btn = QPushButton(SaveAs)
+        self.save_btn.setObjectName(u"save_btn")
+
+        self.buttons_layout.addWidget(self.save_btn)
+
+        self.cancel_btn = QPushButton(SaveAs)
+        self.cancel_btn.setObjectName(u"cancel_btn")
+
+        self.buttons_layout.addWidget(self.cancel_btn)
+
+
+        self.verticalLayout.addLayout(self.buttons_layout)
 
 #if QT_CONFIG(shortcut)
         self.naming_label.setBuddy(self.autoNaming)
@@ -978,7 +992,7 @@ class Ui_SaveAs(object):
         self.folder_btn.setText(QCoreApplication.translate("SaveAs", u"Browse...", None))
         self.taksType_label.setText(QCoreApplication.translate("SaveAs", u"Task Type", None))
         self.taskType.setItemText(0, QCoreApplication.translate("SaveAs", u"Model", None))
-        self.taskType.setItemText(1, QCoreApplication.translate("SaveAs", u"Surfacing", None))
+        self.taskType.setItemText(1, QCoreApplication.translate("SaveAs", u"LookDev", None))
         self.taskType.setItemText(2, QCoreApplication.translate("SaveAs", u"Rig", None))
         self.taskType.setItemText(3, QCoreApplication.translate("SaveAs", u"Animation", None))
         self.taskType.setItemText(4, QCoreApplication.translate("SaveAs", u"Sculpt", None))
@@ -997,9 +1011,10 @@ class Ui_SaveAs(object):
         self.showCode.setPlaceholderText(QCoreApplication.translate("SaveAs", u"GCY", None))
         self.artistName_label.setText(QCoreApplication.translate("SaveAs", u"Artist Name", None))
         self.notes_label.setText(QCoreApplication.translate("SaveAs", u"Notes", None))
+        self.existingFile_label.setText(QCoreApplication.translate("SaveAs", u"Existing Files", None))
+        self.open_btn.setText(QCoreApplication.translate("SaveAs", u"Open", None))
         self.save_btn.setText(QCoreApplication.translate("SaveAs", u"Save", None))
         self.cancel_btn.setText(QCoreApplication.translate("SaveAs", u"Cancel", None))
-        self.existingFile_label.setText(QCoreApplication.translate("SaveAs", u"Existing Files", None))
     # retranslateUi
 
 
