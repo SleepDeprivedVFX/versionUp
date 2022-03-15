@@ -220,16 +220,17 @@ class super_saver(QWidget):
             # Check against current project
             save_path = os.path.dirname(pth)
             save_file = os.path.basename(pth)
+
+            show_code = self.try_to_get_show_code(path=save_path)
+            if show_code:
+                self.ui.showCode.setText(show_code)
+                show_code = '{show_code}_'.format(show_code=show_code)
             root_task_data = self.get_root_and_task(save_file)
             self.root_name = root_task_data['root_name']
             self.task = root_task_data['task_abbr']
             task = root_task_data['task_name']
             self.ui.taskType.setCurrentText(task)
             version_info = self.get_version_info(save_file)
-
-            show_code = self.try_to_get_show_code(path=save_path)
-            if show_code:
-                self.ui.showCode.setText(show_code)
 
             base_filename = '{bfn}_{artist}'.format(bfn=version_info['base_filename'], artist=artist)
             print('base_filename path exists: {}'.format(base_filename))
@@ -309,12 +310,32 @@ class super_saver(QWidget):
         self.ui.fileType.currentTextChanged.connect(self.update_ui)
         self.ui.filename.textChanged.connect(self.remove_bad_characters)
         self.ui.filename.textChanged.connect(self.update_ui)
+        self.ui.showCode.textChanged.connect(self.update_ui)
+        self.ui.artistName.textChanged.connect(self.update_ui)
         self.ui.existingFile_list.clicked.connect(self.show_existing_note)
+        self.ui.open_btn.clicked.connect(self.open_file)
+        self.ui.open_btn.setEnabled(False)
+        self.ui.open_btn.setStyleSheet(
+            'color: rgb(140, 140, 140);'
+        )
 
         self.ui.save_btn.clicked.connect(self.run)
         self.ui.folder_btn.clicked.connect(self.get_folder)
 
         self.show()
+
+    def open_file(self):
+        get_filename = self.ui.existingFile_list.currentItem()
+        folder = self.ui.folder.text()
+        filename = get_filename.text()
+        open_file = os.path.join(folder, filename)
+        print('open_file: {}'.format(open_file))
+        try:
+            cmds.file(open_file, o=True)
+            self.close()
+        except RuntimeError as e:
+            msg = str(e)
+            self.message(text=msg, ok=False)
 
     def format_name(self, basename=None, _v='_v', v=1, l=3, ext='ma'):
         if basename:
@@ -372,6 +393,10 @@ class super_saver(QWidget):
         show_code = self.ui.showCode.text()
         artist = self.ui.artistName.text()
 
+        if show_code:
+            if not show_code.endswith('_'):
+                show_code = '{show_code}_'.format(show_code=show_code)
+
         new_output_file = self.build_path(path=path, rootName=root_name, task=task, v_type='_v', v_len=3,
                                           version=version, ext=ext, show=show_code, artist=artist)
         if new_output_file:
@@ -383,6 +408,8 @@ class super_saver(QWidget):
         task_name = None
         task_abbr = None
         data = None
+        show_code = self.ui.showCode.text()
+        artist = self.ui.artistName.text()
         if filename:
             # Check against current project
             save_file = filename
@@ -393,7 +420,22 @@ class super_saver(QWidget):
                         task_abbr = abbr
                         task_name = task
                         if root_name.endswith('_'):
+                            print('stripping bad _ at end...')
                             root_name = root_name.rstrip('_')
+                            print('root: {}'.format(root_name))
+                        if root_name.startswith(show_code):
+                            print('removing show code {}...'.format(show_code))
+                            root_name = root_name.replace(show_code, '')
+                            print('root: {}'.format(root_name))
+                        if root_name.startswith('_'):
+                            print('Stripping bad _ at start...')
+                            root_name = root_name.lstrip('_')
+                            print('root: {}'.format(root_name))
+                        artist_ = '{artist}_'.format(artist=artist)
+                        if artist_ in root_name:
+                            print('removing artist...')
+                            root_name = root_name.replace(artist_, '')
+                            print('root: {}'.format(root_name))
                         break
         if root_name and task_name and task_abbr:
             # EXAMPLE:
@@ -422,12 +464,16 @@ class super_saver(QWidget):
             self.ui.fileType.setEnabled(False)
             self.ui.folder.setEnabled(False)
             self.ui.folder_btn.setEnabled(False)
+            self.ui.showCode.setEnabled(False)
+            self.ui.artistName.setEnabled(False)
         else:
             self.ui.filename.setEnabled(True)
             self.ui.version.setEnabled(True)
             self.ui.fileType.setEnabled(True)
             self.ui.folder.setEnabled(True)
             self.ui.folder_btn.setEnabled(True)
+            self.ui.showCode.setEnabled(True)
+            self.ui.artistName.setEnabled(True)
 
     def build_path(self, path=None, rootName=None, task=None, v_type='_v', v_len=3, version=0, ext=None, show=None,
                    artist=None):
@@ -575,6 +621,11 @@ class super_saver(QWidget):
                 save.close()
 
     def show_existing_note(self):
+        if not self.ui.open_btn.isEnabled():
+            self.ui.open_btn.setEnabled(True)
+            self.ui.open_btn.setStyleSheet(
+                'color: rgb(220, 220, 220);'
+            )
         get_filename = self.ui.existingFile_list.currentItem()
         folder = self.make_db_folder(self.ui.folder.text())
         filename = get_filename.text()
@@ -620,11 +671,11 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         self.ui.messages.setText(text)
         if ok:
             self.ui.messages.setStyleSheet(
-                "color: rgb(150, 255, 150);"
+                "color: rgb(150, 255, 150);\nfont: 9pt \"MS Shell Dlg 2;\""
             )
         else:
             self.ui.messages.setStyleSheet(
-                "color: rgb(255, 150, 150);"
+                "color: rgb(255, 150, 150);\nfont: 12pt \"MS Shell Dlg 2;\""
             )
 
     def run(self):
@@ -699,7 +750,7 @@ class Ui_SaveAs(object):
 
         self.messages = QLabel(SaveAs)
         self.messages.setObjectName(u"messages")
-        self.messages.setStyleSheet(u"font: 75 9pt \"MS Shell Dlg 2\";\n"
+        self.messages.setStyleSheet(u"font: 75 12pt \"MS Shell Dlg 2\";\n"
 "color: rgb(255, 150, 150);")
 
         self.verticalLayout.addWidget(self.messages)
@@ -992,7 +1043,7 @@ class Ui_SaveAs(object):
         self.folder_btn.setText(QCoreApplication.translate("SaveAs", u"Browse...", None))
         self.taksType_label.setText(QCoreApplication.translate("SaveAs", u"Task Type", None))
         self.taskType.setItemText(0, QCoreApplication.translate("SaveAs", u"Model", None))
-        self.taskType.setItemText(1, QCoreApplication.translate("SaveAs", u"LookDev", None))
+        self.taskType.setItemText(1, QCoreApplication.translate("SaveAs", u"Surfacing", None))
         self.taskType.setItemText(2, QCoreApplication.translate("SaveAs", u"Rig", None))
         self.taskType.setItemText(3, QCoreApplication.translate("SaveAs", u"Animation", None))
         self.taskType.setItemText(4, QCoreApplication.translate("SaveAs", u"Sculpt", None))

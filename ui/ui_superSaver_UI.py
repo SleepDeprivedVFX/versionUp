@@ -40,7 +40,7 @@ class Ui_SaveAs(object):
 
         self.messages = QLabel(SaveAs)
         self.messages.setObjectName(u"messages")
-        self.messages.setStyleSheet(u"font: 75 9pt \"MS Shell Dlg 2\";\n"
+        self.messages.setStyleSheet(u"font: 75 12pt \"MS Shell Dlg 2\";\n"
 "color: rgb(255, 150, 150);")
 
         self.verticalLayout.addWidget(self.messages)
@@ -333,7 +333,7 @@ class Ui_SaveAs(object):
         self.folder_btn.setText(QCoreApplication.translate("SaveAs", u"Browse...", None))
         self.taksType_label.setText(QCoreApplication.translate("SaveAs", u"Task Type", None))
         self.taskType.setItemText(0, QCoreApplication.translate("SaveAs", u"Model", None))
-        self.taskType.setItemText(1, QCoreApplication.translate("SaveAs", u"LookDev", None))
+        self.taskType.setItemText(1, QCoreApplication.translate("SaveAs", u"Surfacing", None))
         self.taskType.setItemText(2, QCoreApplication.translate("SaveAs", u"Rig", None))
         self.taskType.setItemText(3, QCoreApplication.translate("SaveAs", u"Animation", None))
         self.taskType.setItemText(4, QCoreApplication.translate("SaveAs", u"Sculpt", None))
