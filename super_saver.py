@@ -223,8 +223,7 @@ class super_saver(QWidget):
             if show_code:
                 self.ui.showCode.setText(show_code)
 
-            base_filename = '{show}{bfn}_{artist}'.format(show=show_code, bfn=version_info['base_filename'],
-                                                          artist=artist)
+            base_filename = '{bfn}_{artist}'.format(bfn=version_info['base_filename'], artist=artist)
             print('base_filename path exists: {}'.format(base_filename))
             version = version_info['version']
             extension = version_info['extension']
@@ -297,7 +296,7 @@ class super_saver(QWidget):
         self.ui.cancel_btn.clicked.connect(self.close)
 
         self.ui.folder.textChanged.connect(self.update_ui)
-        self.ui.taskType.currentTextChanged.connect(self.reset_version)
+        self.ui.taskType.currentTextChanged.connect(lambda: self.reset_version(v=1))
         self.ui.version.valueChanged.connect(self.update_ui)
         self.ui.fileType.currentTextChanged.connect(self.update_ui)
         self.ui.filename.textChanged.connect(self.remove_bad_characters)
@@ -362,9 +361,11 @@ class super_saver(QWidget):
         taskType = self.ui.taskType.currentText()
         task = self.tasks[taskType][0]
         ext = self.ui.fileType.currentText()
+        show_code = self.ui.showCode.text()
+        artist = self.ui.artistName.text()
 
         new_output_file = self.build_path(path=path, rootName=root_name, task=task, v_type='_v', v_len=3,
-                                          version=version, ext=ext)
+                                          version=version, ext=ext, show=show_code, artist=artist)
         if new_output_file:
             self.ui.output_filename.setText(new_output_file)
             # self.reset_version(v=version)
@@ -424,6 +425,8 @@ class super_saver(QWidget):
                    artist=None):
         output_path = None
         if path and rootName and ext:
+            if rootName.startswith(show):
+                show = ''
             if task:
                 filename = '{show}{base}_{task}_{artist}{_v}{v:0{l}d}.{ext}'.format(base=rootName, task=task, _v=v_type,
                                                                                     l=v_len, v=version, ext=ext,
