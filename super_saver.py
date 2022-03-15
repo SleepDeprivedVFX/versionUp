@@ -199,6 +199,15 @@ class super_saver(QWidget):
         pth = cmds.file(q=True, sn=True)
         workspace = cmds.workspace(q=True, act=True)
         scene_folder = cmds.workspace(fre='scene')
+
+        # Set initial artist field
+        artist = os.environ[env_user]
+        first_initials = artist[0:2]
+        first_initials = first_initials.upper()
+        last_name = artist[2:]
+        artist = first_initials + last_name
+        self.ui.artistName.setText(artist)
+
         if pth:
             # Check against current project
             save_path = os.path.dirname(pth)
@@ -210,11 +219,18 @@ class super_saver(QWidget):
             self.ui.taskType.setCurrentText(task)
             version_info = self.get_version_info(save_file)
 
-            base_filename = version_info['base_filename']
+            show_code = self.try_to_get_show_code(path=save_path)
+            if show_code:
+                self.ui.showCode.setText(show_code)
+
+            base_filename = '{show}{bfn}_{artist}'.format(show=show_code, bfn=version_info['base_filename'],
+                                                          artist=artist)
+            print('base_filename path exists: {}'.format(base_filename))
             version = version_info['version']
             extension = version_info['extension']
             v_len = version_info['v_len']
             v_type = version_info['v_type']
+            print('save_file path exists: {}'.format(save_file))
         elif workspace:
             save_path = os.path.join(workspace, scene_folder)
             if '\\' in workspace:
@@ -229,13 +245,22 @@ class super_saver(QWidget):
             split_project_path = workspace.split('/')
             project_name = split_project_path[rem]
             version = 1
+
+            show_code = self.try_to_get_show_code(path=save_path)
+            if show_code:
+                self.ui.showCode.setText(show_code)
+                show_code = '%s_' % show_code
+
             self.root_name = project_name
             self.task = self.tasks[self.ui.taskType.currentText()][0]
-            base_filename = '{root_name}_{task}'.format(root_name=project_name, task=self.task)
+            base_filename = '{show}{root_name}_{task}_{artist}'.format(show=show_code, root_name=project_name,
+                                                                       task=self.task, artist=artist)
+            print('base_filename: {}'.format(base_filename))
             v_type = '_v'
             v_len = 3
             extension = self.ui.fileType.currentText()
             save_file = self.format_name(basename=base_filename, _v=v_type, v=version, l=v_len, ext=extension)
+            print('save_file: {}'.format(save_file))
         else:
             save_path = cmds.file(q=True, dir=True)
             version = 1
@@ -252,10 +277,13 @@ class super_saver(QWidget):
                                       l=v_len, ext=extension)
         save_file = get_save[0]
         next_version = get_save[1]
+        print('save_file 2: {}'.format(save_file))
+        print('version 2: {}'.format(next_version))
 
         self.ui.version.setValue(next_version)
         new_path = self.build_path(path=save_path, rootName=self.root_name, task=self.task, v_type=v_type,
-                                   v_len=v_len, version=next_version, ext=extension)
+                                   v_len=v_len, version=next_version, ext=extension, show=show_code, artist=artist)
+        print('new_path: {}'.format(new_path))
         self.ui.output_filename.setText(new_path)
         # self.reset_version(v=next_version)
 
@@ -300,6 +328,17 @@ class super_saver(QWidget):
             bad_x = bad_x[0]
             root_name = root_name.replace(bad_x, '_')
             self.ui.filename.setText(root_name)
+
+    def try_to_get_show_code(self, path=None):
+        show_code = None
+        if path:
+            checked_path = path.replace('\\', '/')
+            split_path = checked_path.split('/')
+            for seg in split_path:
+                if len(seg) == 3:
+                    show_code = seg
+                    break
+        return show_code
 
     # def check_version(self):
     #     # This would partially replace the update_ui() routine.  The idea here being that it would collect the UI
@@ -381,16 +420,20 @@ class super_saver(QWidget):
             self.ui.folder.setEnabled(True)
             self.ui.folder_btn.setEnabled(True)
 
-    def build_path(self, path=None, rootName=None, task=None, v_type='_v', v_len=3, version=0, ext=None):
+    def build_path(self, path=None, rootName=None, task=None, v_type='_v', v_len=3, version=0, ext=None, show=None,
+                   artist=None):
         output_path = None
         if path and rootName and ext:
             if task:
-                filename = '{base}_{task}{_v}{v:0{l}d}.{ext}'.format(base=rootName, task=task, _v=v_type, l=v_len,
-                                                                     v=version, ext=ext)
-                basename = '{base}_{task}'.format(base=rootName, task=task)
+                filename = '{show}{base}_{task}_{artist}{_v}{v:0{l}d}.{ext}'.format(base=rootName, task=task, _v=v_type,
+                                                                                    l=v_len, v=version, ext=ext,
+                                                                                    show=show, artist=artist)
+                basename = '{show}{base}_{task}_{artist}'.format(base=rootName, task=task, show=show, artist=artist)
             else:
-                filename = '{base}{_v}{v:0{l}d}.{ext}'.format(base=rootName, _v=v_type, l=v_len, v=version, ext=ext)
-                basename = '{base}'.format(base=rootName)
+                filename = '{show}{base}_{artist}{_v}{v:0{l}d}.{ext}'.format(base=rootName, _v=v_type, l=v_len,
+                                                                             v=version, ext=ext, show=show,
+                                                                             artist=artist)
+                basename = '{show}{base}_{artist}'.format(base=rootName, show=show, artist=artist)
             check_filename = self.get_save_file(save_file=filename, save_path=path, basename=basename)
             filename = check_filename[0]
             # Do I add the version update here?  Nope
