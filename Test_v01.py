@@ -1,27 +1,64 @@
-# -*- coding: utf-8 -*-
 
-################################################################################
-## Form generated from reading UI file 'superSaver_UIzIHNbI.ui'
-##
-## Created by: Qt User Interface Compiler version 5.15.0
-##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
-################################################################################
-
-from PySide2.QtCore import (QCoreApplication, QDate, QDateTime, QMetaObject,
-    QObject, QPoint, QRect, QSize, QTime, QUrl, Qt)
-from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
-    QFontDatabase, QIcon, QKeySequence, QLinearGradient, QPalette, QPainter,
-    QPixmap, QRadialGradient)
+from PySide2.QtCore import (QCoreApplication, QMetaObject, QSize, Qt)
 from PySide2.QtWidgets import *
+from PySide2.QtGui import *
+# from maya import cmds
+import os
+import sys
+import re
+import json
+import time
+from datetime import datetime
+import platform
+
+
+class test_saver(QWidget):
+    def __init__(self, parent=None):
+        QWidget.__init__(self, parent)
+        self.setWindowFlags(Qt.WindowStaysOnTopHint)
+        self.pattern = r'(_v\d+)|(_V\d+)'
+        self.ui = Ui_SaveAs()
+        self.ui.setupUi(self)
+        self.ui.cancel_btn.clicked.connect(self.close)
+
+        self.path = r'C:\Users\sleep\OneDrive\Documents\Clients\Marvel\GCY\assets\characters\memnon\scenes'
+        # print(self.path)
+        self.ui.folder.setText(self.path)
+        latest_folder = self.get_latest_local_files(folder=self.path)
+        print(latest_folder)
+
+        self.show()
+
+    def get_latest_local_files(self, folder=None):
+        if folder:
+            if not os.path.exists(folder):
+                return False
+        else:
+            folder = self.path
+
+        get_files = os.listdir(folder)
+        get_files = sorted(get_files, reverse=True)
+        ext_ui = self.ui.fileType.currentText()
+        shortList = []
+        for x in get_files:
+            test = re.findall(self.pattern, x)
+            if test:
+                if x.endswith(ext_ui):
+                    split_version = x.split(test[0][0])
+                    v_name = split_version
+                    if v_name not in shortList:
+                        shortList.append(x)
+
+        # print(v_name)
+        return shortList[0]
 
 
 class Ui_SaveAs(object):
     def setupUi(self, SaveAs):
         if not SaveAs.objectName():
             SaveAs.setObjectName(u"SaveAs")
-        SaveAs.resize(969, 476)
-        SaveAs.setMinimumSize(QSize(969, 476))
+        SaveAs.resize(1049, 527)
+        SaveAs.setMinimumSize(QSize(969, 385))
         SaveAs.setStyleSheet(u"background-color: rgb(110, 110, 110);\n"
 "color: rgb(220, 220, 220);")
         self.verticalLayout = QVBoxLayout(SaveAs)
@@ -126,6 +163,8 @@ class Ui_SaveAs(object):
         self.taskType.addItem("")
         self.taskType.addItem("")
         self.taskType.addItem("")
+        self.taskType.addItem("")
+        self.taskType.addItem("")
         self.taskType.setObjectName(u"taskType")
 
         self.taskType_layout.addWidget(self.taskType)
@@ -168,36 +207,6 @@ class Ui_SaveAs(object):
 
 
         self.saveAs_Layout.addLayout(self.filename_layout)
-
-        self.showArtist_layout = QHBoxLayout()
-        self.showArtist_layout.setObjectName(u"showArtist_layout")
-        self.showCode_label = QLabel(SaveAs)
-        self.showCode_label.setObjectName(u"showCode_label")
-
-        self.showArtist_layout.addWidget(self.showCode_label)
-
-        self.showCode = QLineEdit(SaveAs)
-        self.showCode.setObjectName(u"showCode")
-        self.showCode.setMaximumSize(QSize(35, 16777215))
-
-        self.showArtist_layout.addWidget(self.showCode)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.showArtist_layout.addItem(self.horizontalSpacer)
-
-        self.artistName_label = QLabel(SaveAs)
-        self.artistName_label.setObjectName(u"artistName_label")
-
-        self.showArtist_layout.addWidget(self.artistName_label)
-
-        self.artistName = QLineEdit(SaveAs)
-        self.artistName.setObjectName(u"artistName")
-
-        self.showArtist_layout.addWidget(self.artistName)
-
-
-        self.saveAs_Layout.addLayout(self.showArtist_layout)
 
         self.notes_seperator = QFrame(SaveAs)
         self.notes_seperator.setObjectName(u"notes_seperator")
@@ -311,7 +320,6 @@ class Ui_SaveAs(object):
         self.Title.setText(QCoreApplication.translate("SaveAs", u"Save As...", None))
         self.output_filename.setText(QCoreApplication.translate("SaveAs", u"output filename", None))
         self.messages.setText(QCoreApplication.translate("SaveAs", u"Errors", None))
-        self.naming_label.setText(QCoreApplication.translate("SaveAs", u"Naming", None))
         self.autoNaming.setText(QCoreApplication.translate("SaveAs", u"Auto", None))
         self.customNaming.setText(QCoreApplication.translate("SaveAs", u"Custom", None))
         self.version_label.setText(QCoreApplication.translate("SaveAs", u"Version", None))
@@ -322,11 +330,13 @@ class Ui_SaveAs(object):
         self.taskType.setItemText(1, QCoreApplication.translate("SaveAs", u"LookDev", None))
         self.taskType.setItemText(2, QCoreApplication.translate("SaveAs", u"Rig", None))
         self.taskType.setItemText(3, QCoreApplication.translate("SaveAs", u"Animation", None))
-        self.taskType.setItemText(4, QCoreApplication.translate("SaveAs", u"Sculpt", None))
-        self.taskType.setItemText(5, QCoreApplication.translate("SaveAs", u"Groom", None))
-        self.taskType.setItemText(6, QCoreApplication.translate("SaveAs", u"FX", None))
-        self.taskType.setItemText(7, QCoreApplication.translate("SaveAs", u"Cloth", None))
-        self.taskType.setItemText(8, QCoreApplication.translate("SaveAs", u"Prototype", None))
+        self.taskType.setItemText(4, QCoreApplication.translate("SaveAs", u"Lighting", None))
+        self.taskType.setItemText(5, QCoreApplication.translate("SaveAs", u"Sculpt", None))
+        self.taskType.setItemText(6, QCoreApplication.translate("SaveAs", u"Groom", None))
+        self.taskType.setItemText(7, QCoreApplication.translate("SaveAs", u"FX", None))
+        self.taskType.setItemText(8, QCoreApplication.translate("SaveAs", u"Cloth", None))
+        self.taskType.setItemText(9, QCoreApplication.translate("SaveAs", u"Prototype", None))
+        self.taskType.setItemText(10, QCoreApplication.translate("SaveAs", u"", None))
 
         self.fileType_label.setText(QCoreApplication.translate("SaveAs", u"File Type", None))
         self.fileType.setItemText(0, QCoreApplication.translate("SaveAs", u"ma", None))
@@ -334,12 +344,20 @@ class Ui_SaveAs(object):
 
         self.filename_label.setText(QCoreApplication.translate("SaveAs", u"Filename", None))
         self.overwrite.setText(QCoreApplication.translate("SaveAs", u"Overwrite", None))
-        self.showCode_label.setText(QCoreApplication.translate("SaveAs", u"Show Code", None))
-        self.showCode.setPlaceholderText(QCoreApplication.translate("SaveAs", u"GCY", None))
-        self.artistName_label.setText(QCoreApplication.translate("SaveAs", u"Artist Name", None))
         self.notes_label.setText(QCoreApplication.translate("SaveAs", u"Notes", None))
         self.save_btn.setText(QCoreApplication.translate("SaveAs", u"Save", None))
         self.cancel_btn.setText(QCoreApplication.translate("SaveAs", u"Cancel", None))
         self.existingFile_label.setText(QCoreApplication.translate("SaveAs", u"Existing Files", None))
     # retranslateUi
 
+
+if __name__ == '__main__':
+    try:
+        app = QApplication(sys.argv)
+    except Exception as e:
+        app = QApplication.instance()
+    saveas = test_saver()
+    try:
+        sys.exit(app.exec_())
+    except SystemExit as e:
+        print(e)

@@ -37,8 +37,8 @@ else:
 
 
 class super_saver(QWidget):
-    def __init__(self, paremt=None):
-        QWidget.__init__(self, paremt)
+    def __init__(self, parent=None):
+        QWidget.__init__(self, parent)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.pattern = r'(_v\d+)|(_V\d+)'
         self.tasks = {
@@ -247,6 +247,7 @@ class super_saver(QWidget):
 
         self.ui.filename.setText(self.root_name)
         self.ui.messages.setText('')
+        # The following get_save_file() also needs to be double checked if the overwrite checckbox become active
         get_save = self.get_save_file(save_file=save_file, save_path=save_path, basename=base_filename, _v=v_type,
                                       l=v_len, ext=extension)
         save_file = get_save[0]
@@ -256,6 +257,7 @@ class super_saver(QWidget):
         new_path = self.build_path(path=save_path, rootName=self.root_name, task=self.task, v_type=v_type,
                                    v_len=v_len, version=next_version, ext=extension)
         self.ui.output_filename.setText(new_path)
+        # self.reset_version(v=next_version)
 
         self.ui.folder.setText(save_path)
         self.populate_existing_files(folder=save_path)
@@ -285,9 +287,9 @@ class super_saver(QWidget):
             return save_file
         return False
 
-    def reset_version(self):
+    def reset_version(self, v=1):
         self.ui.version.valueChanged.disconnect(self.update_ui)
-        self.ui.version.setValue(1)
+        self.ui.version.setValue(v)
         self.update_ui()
         self.ui.version.valueChanged.connect(self.update_ui)
 
@@ -326,6 +328,7 @@ class super_saver(QWidget):
                                           version=version, ext=ext)
         if new_output_file:
             self.ui.output_filename.setText(new_output_file)
+            # self.reset_version(v=version)
 
     def get_root_and_task(self, filename=None):
         root_name = None
@@ -345,6 +348,10 @@ class super_saver(QWidget):
                             root_name = root_name.rstrip('_')
                         break
         if root_name and task_name and task_abbr:
+            # EXAMPLE:
+            # root_name = Asset1
+            # task_name = Model
+            # task_abbr = MDL
             data = {
                 'root_name': root_name,
                 'task_name': task_name,
@@ -386,6 +393,12 @@ class super_saver(QWidget):
                 basename = '{base}'.format(base=rootName)
             check_filename = self.get_save_file(save_file=filename, save_path=path, basename=basename)
             filename = check_filename[0]
+            # Do I add the version update here?  Nope
+
+            next_version = int(check_filename[1])
+            print('shit', next_version)
+
+            # self.reset_version(v=next_version)
             output_path = os.path.join(path, filename)
             if '\\' in output_path:
                 output_path = output_path.replace('\\', '/')
@@ -403,16 +416,22 @@ class super_saver(QWidget):
             self.ui.folder.setText(getFolder[0])
 
     def get_save_file(self, save_file=None, save_path=None, basename=None, _v='_v', v=1, l=3, ext='ma'):
+        # This finds the next available version.  It needs to have the overwrite check in it
         next_version = v
-        if save_file and save_path and basename:
-            all_files = sorted(self.collect_files(path=save_path))
-            while save_file in all_files:
-                next_version += 1
-                save_file = self.format_name(basename=basename, _v=_v, v=next_version, l=l, ext=ext)
+        overwrite = self.ui.overwrite.isChecked()
+        if not overwrite:
+            if save_file and save_path and basename:
+                all_files = sorted(self.collect_files(path=save_path))
+                while save_file in all_files:
+                    next_version += 1
+                    save_file = self.format_name(basename=basename, _v=_v, v=next_version, l=l, ext=ext)
+        else:
+            save_file = self.format_name(basename=basename, _v=_v, v=next_version, l=l, ext=ext)
 
         return save_file, next_version
 
     def get_version_info(self, filename=None, default_len=3, default_version=0):
+        # This function gets the version in an existing filename, or creates a default version
         file_info = None
         if filename:
             # Get current filename details.
@@ -423,6 +442,7 @@ class super_saver(QWidget):
             if find_version:
                 ver = find_version[0][0]
                 splits = ver.lower().split('_v')
+                # splits outputs: ('', '001')
                 if '_v' in root_filename:
                     base_filename = root_filename.split('_v')[0]
                     v_type = '_v'
@@ -605,8 +625,8 @@ class Ui_SaveAs(object):
     def setupUi(self, SaveAs):
         if not SaveAs.objectName():
             SaveAs.setObjectName(u"SaveAs")
-        SaveAs.resize(1049, 527)
-        SaveAs.setMinimumSize(QSize(969, 385))
+        SaveAs.resize(969, 476)
+        SaveAs.setMinimumSize(QSize(969, 476))
         SaveAs.setStyleSheet(u"background-color: rgb(110, 110, 110);\n"
 "color: rgb(220, 220, 220);")
         self.verticalLayout = QVBoxLayout(SaveAs)
@@ -711,8 +731,6 @@ class Ui_SaveAs(object):
         self.taskType.addItem("")
         self.taskType.addItem("")
         self.taskType.addItem("")
-        self.taskType.addItem("")
-        self.taskType.addItem("")
         self.taskType.setObjectName(u"taskType")
 
         self.taskType_layout.addWidget(self.taskType)
@@ -755,6 +773,36 @@ class Ui_SaveAs(object):
 
 
         self.saveAs_Layout.addLayout(self.filename_layout)
+
+        self.showArtist_layout = QHBoxLayout()
+        self.showArtist_layout.setObjectName(u"showArtist_layout")
+        self.showCode_label = QLabel(SaveAs)
+        self.showCode_label.setObjectName(u"showCode_label")
+
+        self.showArtist_layout.addWidget(self.showCode_label)
+
+        self.showCode = QLineEdit(SaveAs)
+        self.showCode.setObjectName(u"showCode")
+        self.showCode.setMaximumSize(QSize(35, 16777215))
+
+        self.showArtist_layout.addWidget(self.showCode)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.showArtist_layout.addItem(self.horizontalSpacer)
+
+        self.artistName_label = QLabel(SaveAs)
+        self.artistName_label.setObjectName(u"artistName_label")
+
+        self.showArtist_layout.addWidget(self.artistName_label)
+
+        self.artistName = QLineEdit(SaveAs)
+        self.artistName.setObjectName(u"artistName")
+
+        self.showArtist_layout.addWidget(self.artistName)
+
+
+        self.saveAs_Layout.addLayout(self.showArtist_layout)
 
         self.notes_seperator = QFrame(SaveAs)
         self.notes_seperator.setObjectName(u"notes_seperator")
@@ -879,13 +927,11 @@ class Ui_SaveAs(object):
         self.taskType.setItemText(1, QCoreApplication.translate("SaveAs", u"LookDev", None))
         self.taskType.setItemText(2, QCoreApplication.translate("SaveAs", u"Rig", None))
         self.taskType.setItemText(3, QCoreApplication.translate("SaveAs", u"Animation", None))
-        self.taskType.setItemText(4, QCoreApplication.translate("SaveAs", u"Lighting", None))
-        self.taskType.setItemText(5, QCoreApplication.translate("SaveAs", u"Sculpt", None))
-        self.taskType.setItemText(6, QCoreApplication.translate("SaveAs", u"Groom", None))
-        self.taskType.setItemText(7, QCoreApplication.translate("SaveAs", u"FX", None))
-        self.taskType.setItemText(8, QCoreApplication.translate("SaveAs", u"Cloth", None))
-        self.taskType.setItemText(9, QCoreApplication.translate("SaveAs", u"Prototype", None))
-        self.taskType.setItemText(10, QCoreApplication.translate("SaveAs", u"", None))
+        self.taskType.setItemText(4, QCoreApplication.translate("SaveAs", u"Sculpt", None))
+        self.taskType.setItemText(5, QCoreApplication.translate("SaveAs", u"Groom", None))
+        self.taskType.setItemText(6, QCoreApplication.translate("SaveAs", u"FX", None))
+        self.taskType.setItemText(7, QCoreApplication.translate("SaveAs", u"Cloth", None))
+        self.taskType.setItemText(8, QCoreApplication.translate("SaveAs", u"Prototype", None))
 
         self.fileType_label.setText(QCoreApplication.translate("SaveAs", u"File Type", None))
         self.fileType.setItemText(0, QCoreApplication.translate("SaveAs", u"ma", None))
@@ -893,6 +939,9 @@ class Ui_SaveAs(object):
 
         self.filename_label.setText(QCoreApplication.translate("SaveAs", u"Filename", None))
         self.overwrite.setText(QCoreApplication.translate("SaveAs", u"Overwrite", None))
+        self.showCode_label.setText(QCoreApplication.translate("SaveAs", u"Show Code", None))
+        self.showCode.setPlaceholderText(QCoreApplication.translate("SaveAs", u"GCY", None))
+        self.artistName_label.setText(QCoreApplication.translate("SaveAs", u"Artist Name", None))
         self.notes_label.setText(QCoreApplication.translate("SaveAs", u"Notes", None))
         self.save_btn.setText(QCoreApplication.translate("SaveAs", u"Save", None))
         self.cancel_btn.setText(QCoreApplication.translate("SaveAs", u"Cancel", None))

@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1049</width>
-    <height>527</height>
+    <width>969</width>
+    <height>476</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>969</width>
-    <height>385</height>
+    <height>476</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -259,6 +259,53 @@ color: rgb(255, 150, 150);</string>
             <string>Overwrite</string>
            </property>
           </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="showArtist_layout">
+         <item>
+          <widget class="QLabel" name="showCode_label">
+           <property name="text">
+            <string>Show Code</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="showCode">
+           <property name="maximumSize">
+            <size>
+             <width>35</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="placeholderText">
+            <string>GCY</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="artistName_label">
+           <property name="text">
+            <string>Artist Name</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="artistName"/>
          </item>
         </layout>
        </item>
