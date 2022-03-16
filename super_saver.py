@@ -25,7 +25,7 @@ import time
 from datetime import datetime
 import platform
 
-__version__ = '0.3.1'
+__version__ = '0.3.2'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -320,17 +320,32 @@ class super_saver(QWidget):
 
         self.show()
 
-    def open_file(self):
+    def open_file(self, f=False):
         get_filename = self.ui.existingFile_list.currentItem()
         folder = self.ui.folder.text()
         filename = get_filename.text()
         open_file = os.path.join(folder, filename)
         try:
-            cmds.file(open_file, o=True)
+            cmds.file(open_file, o=True, f=f)
             self.close()
         except RuntimeError as e:
             msg = str(e)
             self.message(text=msg, ok=False)
+            self.hide()
+            pop_up = QMessageBox()
+            pop_up.setProperty('Save Error', True)
+            pop_up.setWindowTitle(msg)
+            pop_up.setText('Unsaved Changes detected!  Save before opening a new file?')
+            pop_up.setStandardButtons(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
+            pop_up.setDefaultButton(QMessageBox.Yes)
+            ret = pop_up.exec_()
+            if ret == pop_up.Yes:
+                cmds.file(s=True)
+                self.open_file(f=False)
+            elif ret == pop_up.No:
+                self.open_file(f=True)
+            else:
+                self.show()
 
     def format_name(self, basename=None, _v='_v', v=1, l=3, ext='ma'):
         if basename:
