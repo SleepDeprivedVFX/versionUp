@@ -233,12 +233,10 @@ class super_saver(QWidget):
             version_info = self.get_version_info(save_file)
 
             base_filename = '{bfn}_{artist}'.format(bfn=version_info['base_filename'], artist=artist)
-            print('base_filename path exists: {}'.format(base_filename))
             version = version_info['version']
             extension = version_info['extension']
             v_len = version_info['v_len']
             v_type = version_info['v_type']
-            print('save_file path exists: {}'.format(save_file))
         elif workspace:
             save_path = os.path.join(workspace, scene_folder)
             if '\\' in workspace:
@@ -263,12 +261,12 @@ class super_saver(QWidget):
             self.task = self.tasks[self.ui.taskType.currentText()][0]
             base_filename = '{show}{root_name}_{task}_{artist}'.format(show=show_code, root_name=project_name,
                                                                        task=self.task, artist=artist)
-            print('base_filename: {}'.format(base_filename))
+
             v_type = '_v'
             v_len = 3
             extension = self.ui.fileType.currentText()
             save_file = self.format_name(basename=base_filename, _v=v_type, v=version, l=v_len, ext=extension)
-            print('save_file: {}'.format(save_file))
+
         else:
             save_path = cmds.file(q=True, dir=True)
             version = 1
@@ -285,13 +283,11 @@ class super_saver(QWidget):
                                       l=v_len, ext=extension)
         save_file = get_save[0]
         next_version = get_save[1]
-        print('save_file 2: {}'.format(save_file))
-        print('version 2: {}'.format(next_version))
 
         self.ui.version.setValue(next_version)
         new_path = self.build_path(path=save_path, rootName=self.root_name, task=self.task, v_type=v_type,
                                    v_len=v_len, version=next_version, ext=extension, show=show_code, artist=artist)
-        print('new_path: {}'.format(new_path))
+
         self.ui.output_filename.setText(new_path)
         # self.reset_version(v=next_version)
 
@@ -329,7 +325,6 @@ class super_saver(QWidget):
         folder = self.ui.folder.text()
         filename = get_filename.text()
         open_file = os.path.join(folder, filename)
-        print('open_file: {}'.format(open_file))
         try:
             cmds.file(open_file, o=True)
             self.close()
@@ -420,22 +415,14 @@ class super_saver(QWidget):
                         task_abbr = abbr
                         task_name = task
                         if root_name.endswith('_'):
-                            print('stripping bad _ at end...')
                             root_name = root_name.rstrip('_')
-                            print('root: {}'.format(root_name))
                         if root_name.startswith(show_code):
-                            print('removing show code {}...'.format(show_code))
                             root_name = root_name.replace(show_code, '')
-                            print('root: {}'.format(root_name))
                         if root_name.startswith('_'):
-                            print('Stripping bad _ at start...')
                             root_name = root_name.lstrip('_')
-                            print('root: {}'.format(root_name))
                         artist_ = '{artist}_'.format(artist=artist)
                         if artist_ in root_name:
-                            print('removing artist...')
                             root_name = root_name.replace(artist_, '')
-                            print('root: {}'.format(root_name))
                         break
         if root_name and task_name and task_abbr:
             # EXAMPLE:
