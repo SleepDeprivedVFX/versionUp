@@ -25,7 +25,7 @@ import time
 from datetime import datetime
 import platform
 
-__version__ = '0.2.2'
+__version__ = '0.3.1'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
