@@ -206,6 +206,7 @@ class super_saver(QWidget):
 
         self.settings = QSettings(__author__, 'Super Saver')
         self.position = self.settings.value('geometry', None)
+        self.restoreGeometry(self.position)
 
         pth = cmds.file(q=True, sn=True)
         workspace = cmds.workspace(q=True, act=True)
