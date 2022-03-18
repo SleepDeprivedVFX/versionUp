@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIkEfPoX.ui'
+## Form generated from reading UI file 'superSaver_UIFLkxon.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.0
 ##
@@ -34,13 +34,13 @@ class Ui_SaveAs(object):
 
         self.output_filename = QLabel(SaveAs)
         self.output_filename.setObjectName(u"output_filename")
-        self.output_filename.setStyleSheet(u"font: 12pt \"MS Shell Dlg 2\";")
+        self.output_filename.setStyleSheet(u"font: 10pt \"MS Shell Dlg 2\";")
 
         self.verticalLayout.addWidget(self.output_filename)
 
         self.messages = QLabel(SaveAs)
         self.messages.setObjectName(u"messages")
-        self.messages.setStyleSheet(u"font: 75 12pt \"MS Shell Dlg 2\";\n"
+        self.messages.setStyleSheet(u"font: 75 9pt \"MS Shell Dlg 2\";\n"
 "color: rgb(255, 150, 150);")
 
         self.verticalLayout.addWidget(self.messages)
@@ -178,7 +178,7 @@ class Ui_SaveAs(object):
 
         self.showCode = QLineEdit(SaveAs)
         self.showCode.setObjectName(u"showCode")
-        self.showCode.setMaximumSize(QSize(35, 16777215))
+        self.showCode.setMaximumSize(QSize(60, 16777215))
 
         self.showArtist_layout.addWidget(self.showCode)
 
@@ -215,6 +215,7 @@ class Ui_SaveAs(object):
 
         self.notes = QTextEdit(SaveAs)
         self.notes.setObjectName(u"notes")
+        self.notes.setMinimumSize(QSize(0, 150))
 
         self.notes_layout.addWidget(self.notes)
 
@@ -265,6 +266,7 @@ class Ui_SaveAs(object):
         self.existing_notes = QTextEdit(SaveAs)
         self.existing_notes.setObjectName(u"existing_notes")
         self.existing_notes.setEnabled(False)
+        self.existing_notes.setMinimumSize(QSize(0, 150))
 
         self.existingStack_layout.addWidget(self.existing_notes)
 
@@ -297,6 +299,9 @@ class Ui_SaveAs(object):
 
         self.verticalLayout.addLayout(self.buttons_layout)
 
+        self.output_filename.raise_()
+        self.Title.raise_()
+        self.messages.raise_()
 #if QT_CONFIG(shortcut)
         self.naming_label.setBuddy(self.autoNaming)
         self.version_label.setBuddy(self.version)
