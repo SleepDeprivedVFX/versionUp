@@ -687,6 +687,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
     def run(self):
         output_file = self.ui.output_filename.text()
         overwrite = self.ui.overwrite.isChecked()
+        fileType = self.ui.fileType.currentText()
         notes = self.ui.notes.toPlainText()
         if not notes:
             self.message(text='YOU MUST ADD A NOTE!!!', ok=False)
@@ -694,6 +695,11 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         elif len(notes) < 10:
             self.message(text='Your note must be more elaborate.', ok=False)
             return False
+
+        if fileType == 'ma':
+            fileType = 'mayaAscii'
+        else:
+            fileType = 'mayaBinary'
 
         path = os.path.dirname(output_file)
         notes_path = self.make_db_folder(folder=path)
@@ -703,7 +709,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         if overwrite:
             self.message(text='Saving...', ok=True)
             cmds.file(rename=output_file)
-            cmds.file(s=True)
+            cmds.file(s=True, type=fileType, options='v=0;')
         else:
             if os.path.exists(output_file):
                 self.message(text='FILE ALREADY EXISTS!  Choose "Overwrite" to save anyway', ok=False)
@@ -712,7 +718,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                 # Make a JSON entry
                 self.message(text='Saving...', ok=True)
                 cmds.file(rename=output_file)
-                cmds.file(s=True)
+                cmds.file(s=True, type=fileType, options='v=0;')
 
         self.message(text='Writing Notes...', ok=True)
         date_now = datetime.now()
