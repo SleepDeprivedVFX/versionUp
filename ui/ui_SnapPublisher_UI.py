@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'SnapPublisher_UINAMwqL.ui'
+## Form generated from reading UI file 'SnapPublisher_UIvRJneq.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.0
 ##
@@ -37,6 +37,16 @@ class Ui_SnapPublisher(object):
         self.output_filename.setStyleSheet(u"font: 10pt \"MS Shell Dlg 2\";")
 
         self.verticalLayout_2.addWidget(self.output_filename)
+
+        self.snapshot_filename = QLabel(SnapPublisher)
+        self.snapshot_filename.setObjectName(u"snapshot_filename")
+
+        self.verticalLayout_2.addWidget(self.snapshot_filename)
+
+        self.publish_filename = QLabel(SnapPublisher)
+        self.publish_filename.setObjectName(u"publish_filename")
+
+        self.verticalLayout_2.addWidget(self.publish_filename)
 
         self.messages = QLabel(SnapPublisher)
         self.messages.setObjectName(u"messages")
@@ -332,6 +342,8 @@ class Ui_SnapPublisher(object):
         self.label.raise_()
         self.listWidget.raise_()
         self.load_pub_btn.raise_()
+        self.snapshot_filename.raise_()
+        self.publish_filename.raise_()
 #if QT_CONFIG(shortcut)
         self.naming_label.setBuddy(self.autoNaming)
         self.version_label.setBuddy(self.version)
@@ -359,6 +371,8 @@ class Ui_SnapPublisher(object):
         SnapPublisher.setWindowTitle(QCoreApplication.translate("SnapPublisher", u"Snap Publisher", None))
         self.Title.setText(QCoreApplication.translate("SnapPublisher", u"Snap Publisher", None))
         self.output_filename.setText(QCoreApplication.translate("SnapPublisher", u"output filename", None))
+        self.snapshot_filename.setText(QCoreApplication.translate("SnapPublisher", u"Snapshot Filename", None))
+        self.publish_filename.setText(QCoreApplication.translate("SnapPublisher", u"Publish Filename", None))
         self.messages.setText(QCoreApplication.translate("SnapPublisher", u"Errors", None))
         self.naming_label.setText(QCoreApplication.translate("SnapPublisher", u"Naming", None))
         self.autoNaming.setText(QCoreApplication.translate("SnapPublisher", u"Auto", None))

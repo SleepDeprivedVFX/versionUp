@@ -45,6 +45,20 @@ color: rgb(220, 220, 220);</string>
     </widget>
    </item>
    <item>
+    <widget class="QLabel" name="snapshot_filename">
+     <property name="text">
+      <string>Snapshot Filename</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="publish_filename">
+     <property name="text">
+      <string>Publish Filename</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QLabel" name="messages">
      <property name="styleSheet">
       <string notr="true">font: 75 9pt &quot;MS Shell Dlg 2&quot;;
@@ -494,6 +508,8 @@ color: rgb(255, 150, 150);</string>
   <zorder>load_pub_btn</zorder>
   <zorder>horizontalSpacer_3</zorder>
   <zorder>horizontalSpacer_4</zorder>
+  <zorder>snapshot_filename</zorder>
+  <zorder>publish_filename</zorder>
  </widget>
  <tabstops>
   <tabstop>notes</tabstop>

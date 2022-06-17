@@ -201,10 +201,10 @@ class super_saver(QWidget):
         ]
         self.root_name = None
         self.task = None
-        self.ui = Ui_SaveAs()
+        self.ui = Ui_SnapPublisher()
         self.ui.setupUi(self)
 
-        self.settings = QSettings(__author__, 'Super Saver')
+        self.settings = QSettings(__author__, 'Snap Publisher')
         self.position = self.settings.value('geometry', None)
         self.restoreGeometry(self.position)
 
@@ -225,6 +225,9 @@ class super_saver(QWidget):
             save_path = os.path.dirname(pth)
             save_file = os.path.basename(pth)
 
+            snapshot_folder = os.path.join(save_path, 'snapshots')
+            publish_folder = os.path.join(save_path, 'publish')
+
             show_code = self.try_to_get_show_code(path=save_path)
             if show_code:
                 self.ui.showCode.setText(show_code)
@@ -241,12 +244,19 @@ class super_saver(QWidget):
             extension = version_info['extension']
             v_len = version_info['v_len']
             v_type = version_info['v_type']
+
+            snapshot_file = self.format_name(basename=base_filename, _v=v_type, v=version, l=v_len, ext=extension,
+                                             snap=True)
+            print(snapshot_file)
         elif workspace:
             save_path = os.path.join(workspace, scene_folder)
             if '\\' in workspace:
                 workspace = workspace.replace('\\', '/')
             if '\\' in save_path:
                 save_path = save_path.replace('\\', '/')
+
+            snapshot_folder = os.path.join(save_path, 'snapshots')
+            publish_folder = os.path.join(save_path, 'publish')
 
             if workspace.endswith('/'):
                 rem = -2
@@ -270,12 +280,26 @@ class super_saver(QWidget):
             v_len = 3
             extension = self.ui.fileType.currentText()
             save_file = self.format_name(basename=base_filename, _v=v_type, v=version, l=v_len, ext=extension)
+            snapshot_file = self.format_name(basename=base_filename, _v=v_type, v=version, l=v_len, ext=extension,
+                                             snap=True)
+            publish_file = self.format_name(basename=base_filename, _v=v_type, v=version, l=v_len, ext=extension,
+                                             pub=True)
+            print(snapshot_file)
+            print(publish_file)
 
         else:
             save_path = cmds.file(q=True, dir=True)
+
+            snapshot_folder = os.path.join(save_path, 'snapshots')
+            publish_folder = os.path.join(save_path, 'publish')
+
             version = 1
             base_filename = 'default'
             save_file = self.format_name(basename=base_filename)
+            snapshot_file = self.format_name(basename=base_filename, snap=True)
+            publish_file = self.format_name(basename=base_filename, pub=True)
+            print(snapshot_file)
+            print(publish_file)
             v_len = 3
             extension = 'ma'
             v_type = '_v'
@@ -351,10 +375,20 @@ class super_saver(QWidget):
             else:
                 self.show()
 
-    def format_name(self, basename=None, _v='_v', v=1, l=3, ext='ma'):
+    def format_name(self, basename=None, _v='_v', v=1, l=3, ext='ma', snap=False, pub=False):
         if basename:
-            save_file = '{basename}{_v}{v:0{l}d}.{ext}'.format(basename=basename, _v=_v, v=v, l=l, ext=ext)
-            return save_file
+            if not snap or pub:
+                save_file = '{basename}{_v}{v:0{l}d}.{ext}'.format(basename=basename, _v=_v, v=v, l=l, ext=ext)
+                return save_file
+            elif snap:
+                dt = datetime.now()
+                adjusted_dt = dt.strftime("%m%d%y%H%M%S")
+                save_file = '{basename}{_v}{v:0{l}d}_{stamp}.{ext}'.format(basename=basename, _v=_v, v=v, l=l,
+                                                                           stamp=adjusted_dt, ext=ext)
+                return save_file
+            elif pub:
+                save_file = '{basename}{_v}{v:0{l}d}.{ext}'.format(basename=basename, _v=_v, v=v, l=l, ext=ext)
+                return save_file
         return False
 
     def reset_version(self, v=1):
@@ -741,55 +775,65 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         self.settings.setValue('geometry', self.saveGeometry())
 
 
-class Ui_SaveAs(object):
-    def setupUi(self, SaveAs):
-        if not SaveAs.objectName():
-            SaveAs.setObjectName(u"SaveAs")
-        SaveAs.resize(969, 476)
-        SaveAs.setMinimumSize(QSize(969, 476))
-        SaveAs.setStyleSheet(u"background-color: rgb(110, 110, 110);\n"
+class Ui_SnapPublisher(object):
+    def setupUi(self, SnapPublisher):
+        if not SnapPublisher.objectName():
+            SnapPublisher.setObjectName(u"SnapPublisher")
+        SnapPublisher.resize(969, 476)
+        SnapPublisher.setMinimumSize(QSize(969, 476))
+        SnapPublisher.setStyleSheet(u"background-color: rgb(110, 110, 110);\n"
 "color: rgb(220, 220, 220);")
-        self.verticalLayout = QVBoxLayout(SaveAs)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.Title = QLabel(SaveAs)
+        self.verticalLayout_2 = QVBoxLayout(SnapPublisher)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.Title = QLabel(SnapPublisher)
         self.Title.setObjectName(u"Title")
         self.Title.setStyleSheet(u"font: 16pt \"MS Shell Dlg 2\";")
 
-        self.verticalLayout.addWidget(self.Title)
+        self.verticalLayout_2.addWidget(self.Title)
 
-        self.output_filename = QLabel(SaveAs)
+        self.output_filename = QLabel(SnapPublisher)
         self.output_filename.setObjectName(u"output_filename")
         self.output_filename.setStyleSheet(u"font: 10pt \"MS Shell Dlg 2\";")
 
-        self.verticalLayout.addWidget(self.output_filename)
+        self.verticalLayout_2.addWidget(self.output_filename)
 
-        self.messages = QLabel(SaveAs)
+        self.snapshot_filename = QLabel(SnapPublisher)
+        self.snapshot_filename.setObjectName(u"snapshot_filename")
+
+        self.verticalLayout_2.addWidget(self.snapshot_filename)
+
+        self.publish_filename = QLabel(SnapPublisher)
+        self.publish_filename.setObjectName(u"publish_filename")
+
+        self.verticalLayout_2.addWidget(self.publish_filename)
+
+        self.messages = QLabel(SnapPublisher)
         self.messages.setObjectName(u"messages")
         self.messages.setStyleSheet(u"font: 75 9pt \"MS Shell Dlg 2\";\n"
 "color: rgb(255, 150, 150);")
 
-        self.verticalLayout.addWidget(self.messages)
+        self.verticalLayout_2.addWidget(self.messages)
 
-        self.sideBySide_layout = QHBoxLayout()
-        self.sideBySide_layout.setObjectName(u"sideBySide_layout")
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.saveAs_Layout = QVBoxLayout()
         self.saveAs_Layout.setObjectName(u"saveAs_Layout")
         self.name_layout = QVBoxLayout()
         self.name_layout.setObjectName(u"name_layout")
-        self.naming_label = QLabel(SaveAs)
+        self.naming_label = QLabel(SnapPublisher)
         self.naming_label.setObjectName(u"naming_label")
 
         self.name_layout.addWidget(self.naming_label)
 
         self.naming_layout = QHBoxLayout()
         self.naming_layout.setObjectName(u"naming_layout")
-        self.autoNaming = QRadioButton(SaveAs)
+        self.autoNaming = QRadioButton(SnapPublisher)
         self.autoNaming.setObjectName(u"autoNaming")
         self.autoNaming.setChecked(True)
 
         self.naming_layout.addWidget(self.autoNaming)
 
-        self.customNaming = QRadioButton(SaveAs)
+        self.customNaming = QRadioButton(SnapPublisher)
         self.customNaming.setObjectName(u"customNaming")
 
         self.naming_layout.addWidget(self.customNaming)
@@ -798,12 +842,12 @@ class Ui_SaveAs(object):
 
         self.naming_layout.addItem(self.naming_spacer)
 
-        self.version_label = QLabel(SaveAs)
+        self.version_label = QLabel(SnapPublisher)
         self.version_label.setObjectName(u"version_label")
 
         self.naming_layout.addWidget(self.version_label)
 
-        self.version = QSpinBox(SaveAs)
+        self.version = QSpinBox(SnapPublisher)
         self.version.setObjectName(u"version")
 
         self.naming_layout.addWidget(self.version)
@@ -816,17 +860,17 @@ class Ui_SaveAs(object):
 
         self.folder_layout = QHBoxLayout()
         self.folder_layout.setObjectName(u"folder_layout")
-        self.folder_label = QLabel(SaveAs)
+        self.folder_label = QLabel(SnapPublisher)
         self.folder_label.setObjectName(u"folder_label")
 
         self.folder_layout.addWidget(self.folder_label)
 
-        self.folder = QLineEdit(SaveAs)
+        self.folder = QLineEdit(SnapPublisher)
         self.folder.setObjectName(u"folder")
 
         self.folder_layout.addWidget(self.folder)
 
-        self.folder_btn = QPushButton(SaveAs)
+        self.folder_btn = QPushButton(SnapPublisher)
         self.folder_btn.setObjectName(u"folder_btn")
 
         self.folder_layout.addWidget(self.folder_btn)
@@ -836,12 +880,12 @@ class Ui_SaveAs(object):
 
         self.taskType_layout = QHBoxLayout()
         self.taskType_layout.setObjectName(u"taskType_layout")
-        self.taksType_label = QLabel(SaveAs)
+        self.taksType_label = QLabel(SnapPublisher)
         self.taksType_label.setObjectName(u"taksType_label")
 
         self.taskType_layout.addWidget(self.taksType_label)
 
-        self.taskType = QComboBox(SaveAs)
+        self.taskType = QComboBox(SnapPublisher)
         self.taskType.addItem("")
         self.taskType.addItem("")
         self.taskType.addItem("")
@@ -859,12 +903,12 @@ class Ui_SaveAs(object):
 
         self.taskType_layout.addItem(self.taksType_spacer)
 
-        self.fileType_label = QLabel(SaveAs)
+        self.fileType_label = QLabel(SnapPublisher)
         self.fileType_label.setObjectName(u"fileType_label")
 
         self.taskType_layout.addWidget(self.fileType_label)
 
-        self.fileType = QComboBox(SaveAs)
+        self.fileType = QComboBox(SnapPublisher)
         self.fileType.addItem("")
         self.fileType.addItem("")
         self.fileType.setObjectName(u"fileType")
@@ -876,17 +920,17 @@ class Ui_SaveAs(object):
 
         self.filename_layout = QHBoxLayout()
         self.filename_layout.setObjectName(u"filename_layout")
-        self.filename_label = QLabel(SaveAs)
+        self.filename_label = QLabel(SnapPublisher)
         self.filename_label.setObjectName(u"filename_label")
 
         self.filename_layout.addWidget(self.filename_label)
 
-        self.filename = QLineEdit(SaveAs)
+        self.filename = QLineEdit(SnapPublisher)
         self.filename.setObjectName(u"filename")
 
         self.filename_layout.addWidget(self.filename)
 
-        self.overwrite = QCheckBox(SaveAs)
+        self.overwrite = QCheckBox(SnapPublisher)
         self.overwrite.setObjectName(u"overwrite")
 
         self.filename_layout.addWidget(self.overwrite)
@@ -896,12 +940,12 @@ class Ui_SaveAs(object):
 
         self.showArtist_layout = QHBoxLayout()
         self.showArtist_layout.setObjectName(u"showArtist_layout")
-        self.showCode_label = QLabel(SaveAs)
+        self.showCode_label = QLabel(SnapPublisher)
         self.showCode_label.setObjectName(u"showCode_label")
 
         self.showArtist_layout.addWidget(self.showCode_label)
 
-        self.showCode = QLineEdit(SaveAs)
+        self.showCode = QLineEdit(SnapPublisher)
         self.showCode.setObjectName(u"showCode")
         self.showCode.setMaximumSize(QSize(60, 16777215))
 
@@ -911,12 +955,12 @@ class Ui_SaveAs(object):
 
         self.showArtist_layout.addItem(self.horizontalSpacer)
 
-        self.artistName_label = QLabel(SaveAs)
+        self.artistName_label = QLabel(SnapPublisher)
         self.artistName_label.setObjectName(u"artistName_label")
 
         self.showArtist_layout.addWidget(self.artistName_label)
 
-        self.artistName = QLineEdit(SaveAs)
+        self.artistName = QLineEdit(SnapPublisher)
         self.artistName.setObjectName(u"artistName")
 
         self.showArtist_layout.addWidget(self.artistName)
@@ -924,7 +968,7 @@ class Ui_SaveAs(object):
 
         self.saveAs_Layout.addLayout(self.showArtist_layout)
 
-        self.notes_seperator = QFrame(SaveAs)
+        self.notes_seperator = QFrame(SnapPublisher)
         self.notes_seperator.setObjectName(u"notes_seperator")
         self.notes_seperator.setFrameShape(QFrame.HLine)
         self.notes_seperator.setFrameShadow(QFrame.Sunken)
@@ -933,33 +977,40 @@ class Ui_SaveAs(object):
 
         self.notes_layout = QVBoxLayout()
         self.notes_layout.setObjectName(u"notes_layout")
-        self.notes_label = QLabel(SaveAs)
+        self.notes_label = QLabel(SnapPublisher)
         self.notes_label.setObjectName(u"notes_label")
 
         self.notes_layout.addWidget(self.notes_label)
 
-        self.notes = QTextEdit(SaveAs)
+        self.notes = QTextEdit(SnapPublisher)
         self.notes.setObjectName(u"notes")
         self.notes.setMinimumSize(QSize(0, 150))
 
         self.notes_layout.addWidget(self.notes)
 
+        self.existing_notes = QTextEdit(SnapPublisher)
+        self.existing_notes.setObjectName(u"existing_notes")
+        self.existing_notes.setEnabled(False)
+        self.existing_notes.setMinimumSize(QSize(0, 150))
+
+        self.notes_layout.addWidget(self.existing_notes)
+
 
         self.saveAs_Layout.addLayout(self.notes_layout)
 
 
-        self.sideBySide_layout.addLayout(self.saveAs_Layout)
+        self.horizontalLayout_3.addLayout(self.saveAs_Layout)
 
-        self.existingStack_layout = QVBoxLayout()
-        self.existingStack_layout.setObjectName(u"existingStack_layout")
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.existingFile_layout = QVBoxLayout()
         self.existingFile_layout.setObjectName(u"existingFile_layout")
-        self.existingFile_label = QLabel(SaveAs)
+        self.existingFile_label = QLabel(SnapPublisher)
         self.existingFile_label.setObjectName(u"existingFile_label")
 
         self.existingFile_layout.addWidget(self.existingFile_label)
 
-        self.existingFile_list = QListWidget(SaveAs)
+        self.existingFile_list = QListWidget(SnapPublisher)
         self.existingFile_list.setObjectName(u"existingFile_list")
 
         self.existingFile_layout.addWidget(self.existingFile_list)
@@ -970,40 +1021,55 @@ class Ui_SaveAs(object):
 
         self.open_btn_layout.addItem(self.horizontalSpacer_2)
 
-        self.open_btn = QPushButton(SaveAs)
-        self.open_btn.setObjectName(u"open_btn")
+        self.load_snap_btn = QPushButton(SnapPublisher)
+        self.load_snap_btn.setObjectName(u"load_snap_btn")
 
-        self.open_btn_layout.addWidget(self.open_btn)
+        self.open_btn_layout.addWidget(self.load_snap_btn)
 
 
         self.existingFile_layout.addLayout(self.open_btn_layout)
 
 
-        self.existingStack_layout.addLayout(self.existingFile_layout)
+        self.horizontalLayout_2.addLayout(self.existingFile_layout)
 
-        self.existingFIle_separator = QFrame(SaveAs)
-        self.existingFIle_separator.setObjectName(u"existingFIle_separator")
-        self.existingFIle_separator.setFrameShape(QFrame.HLine)
-        self.existingFIle_separator.setFrameShadow(QFrame.Sunken)
+        self.horizontalSpacer_4 = QSpacerItem(15, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.existingStack_layout.addWidget(self.existingFIle_separator)
+        self.horizontalLayout_2.addItem(self.horizontalSpacer_4)
 
-        self.existing_notes = QTextEdit(SaveAs)
-        self.existing_notes.setObjectName(u"existing_notes")
-        self.existing_notes.setEnabled(False)
-        self.existing_notes.setMinimumSize(QSize(0, 150))
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.label = QLabel(SnapPublisher)
+        self.label.setObjectName(u"label")
 
-        self.existingStack_layout.addWidget(self.existing_notes)
+        self.verticalLayout.addWidget(self.label)
 
-        self.existingFile_spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.listWidget = QListWidget(SnapPublisher)
+        self.listWidget.setObjectName(u"listWidget")
 
-        self.existingStack_layout.addItem(self.existingFile_spacer)
+        self.verticalLayout.addWidget(self.listWidget)
+
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer_3)
+
+        self.load_pub_btn = QPushButton(SnapPublisher)
+        self.load_pub_btn.setObjectName(u"load_pub_btn")
+
+        self.horizontalLayout.addWidget(self.load_pub_btn)
 
 
-        self.sideBySide_layout.addLayout(self.existingStack_layout)
+        self.verticalLayout.addLayout(self.horizontalLayout)
 
 
-        self.verticalLayout.addLayout(self.sideBySide_layout)
+        self.horizontalLayout_2.addLayout(self.verticalLayout)
+
+
+        self.horizontalLayout_3.addLayout(self.horizontalLayout_2)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout_3)
 
         self.buttons_layout = QHBoxLayout()
         self.buttons_layout.setObjectName(u"buttons_layout")
@@ -1011,30 +1077,40 @@ class Ui_SaveAs(object):
 
         self.buttons_layout.addItem(self.buttons_spacer)
 
-        self.save_btn = QPushButton(SaveAs)
-        self.save_btn.setObjectName(u"save_btn")
+        self.snapshot_btn = QPushButton(SnapPublisher)
+        self.snapshot_btn.setObjectName(u"snapshot_btn")
 
-        self.buttons_layout.addWidget(self.save_btn)
+        self.buttons_layout.addWidget(self.snapshot_btn)
 
-        self.cancel_btn = QPushButton(SaveAs)
+        self.publish_btn = QPushButton(SnapPublisher)
+        self.publish_btn.setObjectName(u"publish_btn")
+
+        self.buttons_layout.addWidget(self.publish_btn)
+
+        self.cancel_btn = QPushButton(SnapPublisher)
         self.cancel_btn.setObjectName(u"cancel_btn")
 
         self.buttons_layout.addWidget(self.cancel_btn)
 
 
-        self.verticalLayout.addLayout(self.buttons_layout)
+        self.verticalLayout_2.addLayout(self.buttons_layout)
 
         self.output_filename.raise_()
         self.Title.raise_()
         self.messages.raise_()
+        self.label.raise_()
+        self.listWidget.raise_()
+        self.load_pub_btn.raise_()
+        self.snapshot_filename.raise_()
+        self.publish_filename.raise_()
 #if QT_CONFIG(shortcut)
         self.naming_label.setBuddy(self.autoNaming)
         self.version_label.setBuddy(self.version)
         self.folder_label.setBuddy(self.folder)
         self.taksType_label.setBuddy(self.taskType)
 #endif // QT_CONFIG(shortcut)
-        QWidget.setTabOrder(self.notes, self.save_btn)
-        QWidget.setTabOrder(self.save_btn, self.folder_btn)
+        QWidget.setTabOrder(self.notes, self.publish_btn)
+        QWidget.setTabOrder(self.publish_btn, self.folder_btn)
         QWidget.setTabOrder(self.folder_btn, self.taskType)
         QWidget.setTabOrder(self.taskType, self.autoNaming)
         QWidget.setTabOrder(self.autoNaming, self.customNaming)
@@ -1045,47 +1121,52 @@ class Ui_SaveAs(object):
         QWidget.setTabOrder(self.folder, self.filename)
         QWidget.setTabOrder(self.filename, self.existing_notes)
 
-        self.retranslateUi(SaveAs)
+        self.retranslateUi(SnapPublisher)
 
-        QMetaObject.connectSlotsByName(SaveAs)
+        QMetaObject.connectSlotsByName(SnapPublisher)
     # setupUi
 
-    def retranslateUi(self, SaveAs):
-        SaveAs.setWindowTitle(QCoreApplication.translate("SaveAs", u"Super Saver", None))
-        self.Title.setText(QCoreApplication.translate("SaveAs", u"Save As...", None))
-        self.output_filename.setText(QCoreApplication.translate("SaveAs", u"output filename", None))
-        self.messages.setText(QCoreApplication.translate("SaveAs", u"Errors", None))
-        self.naming_label.setText(QCoreApplication.translate("SaveAs", u"Naming", None))
-        self.autoNaming.setText(QCoreApplication.translate("SaveAs", u"Auto", None))
-        self.customNaming.setText(QCoreApplication.translate("SaveAs", u"Custom", None))
-        self.version_label.setText(QCoreApplication.translate("SaveAs", u"Version", None))
-        self.folder_label.setText(QCoreApplication.translate("SaveAs", u"Save to Folder", None))
-        self.folder_btn.setText(QCoreApplication.translate("SaveAs", u"Browse...", None))
-        self.taksType_label.setText(QCoreApplication.translate("SaveAs", u"Task Type", None))
-        self.taskType.setItemText(0, QCoreApplication.translate("SaveAs", u"Model", None))
-        self.taskType.setItemText(1, QCoreApplication.translate("SaveAs", u"Surfacing", None))
-        self.taskType.setItemText(2, QCoreApplication.translate("SaveAs", u"Rig", None))
-        self.taskType.setItemText(3, QCoreApplication.translate("SaveAs", u"Animation", None))
-        self.taskType.setItemText(4, QCoreApplication.translate("SaveAs", u"Sculpt", None))
-        self.taskType.setItemText(5, QCoreApplication.translate("SaveAs", u"Groom", None))
-        self.taskType.setItemText(6, QCoreApplication.translate("SaveAs", u"FX", None))
-        self.taskType.setItemText(7, QCoreApplication.translate("SaveAs", u"Cloth", None))
-        self.taskType.setItemText(8, QCoreApplication.translate("SaveAs", u"Prototype", None))
+    def retranslateUi(self, SnapPublisher):
+        SnapPublisher.setWindowTitle(QCoreApplication.translate("SnapPublisher", u"Snap Publisher", None))
+        self.Title.setText(QCoreApplication.translate("SnapPublisher", u"Snap Publisher", None))
+        self.output_filename.setText(QCoreApplication.translate("SnapPublisher", u"output filename", None))
+        self.snapshot_filename.setText(QCoreApplication.translate("SnapPublisher", u"Snapshot Filename", None))
+        self.publish_filename.setText(QCoreApplication.translate("SnapPublisher", u"Publish Filename", None))
+        self.messages.setText(QCoreApplication.translate("SnapPublisher", u"Errors", None))
+        self.naming_label.setText(QCoreApplication.translate("SnapPublisher", u"Naming", None))
+        self.autoNaming.setText(QCoreApplication.translate("SnapPublisher", u"Auto", None))
+        self.customNaming.setText(QCoreApplication.translate("SnapPublisher", u"Custom", None))
+        self.version_label.setText(QCoreApplication.translate("SnapPublisher", u"Version", None))
+        self.folder_label.setText(QCoreApplication.translate("SnapPublisher", u"Save to Folder", None))
+        self.folder_btn.setText(QCoreApplication.translate("SnapPublisher", u"Browse...", None))
+        self.taksType_label.setText(QCoreApplication.translate("SnapPublisher", u"Task Type", None))
+        self.taskType.setItemText(0, QCoreApplication.translate("SnapPublisher", u"Model", None))
+        self.taskType.setItemText(1, QCoreApplication.translate("SnapPublisher", u"Surfacing", None))
+        self.taskType.setItemText(2, QCoreApplication.translate("SnapPublisher", u"Rig", None))
+        self.taskType.setItemText(3, QCoreApplication.translate("SnapPublisher", u"Animation", None))
+        self.taskType.setItemText(4, QCoreApplication.translate("SnapPublisher", u"Sculpt", None))
+        self.taskType.setItemText(5, QCoreApplication.translate("SnapPublisher", u"Groom", None))
+        self.taskType.setItemText(6, QCoreApplication.translate("SnapPublisher", u"FX", None))
+        self.taskType.setItemText(7, QCoreApplication.translate("SnapPublisher", u"Cloth", None))
+        self.taskType.setItemText(8, QCoreApplication.translate("SnapPublisher", u"Prototype", None))
 
-        self.fileType_label.setText(QCoreApplication.translate("SaveAs", u"File Type", None))
-        self.fileType.setItemText(0, QCoreApplication.translate("SaveAs", u"ma", None))
-        self.fileType.setItemText(1, QCoreApplication.translate("SaveAs", u"mb", None))
+        self.fileType_label.setText(QCoreApplication.translate("SnapPublisher", u"File Type", None))
+        self.fileType.setItemText(0, QCoreApplication.translate("SnapPublisher", u"ma", None))
+        self.fileType.setItemText(1, QCoreApplication.translate("SnapPublisher", u"mb", None))
 
-        self.filename_label.setText(QCoreApplication.translate("SaveAs", u"Filename", None))
-        self.overwrite.setText(QCoreApplication.translate("SaveAs", u"Overwrite", None))
-        self.showCode_label.setText(QCoreApplication.translate("SaveAs", u"Show Code", None))
-        self.showCode.setPlaceholderText(QCoreApplication.translate("SaveAs", u"GCY", None))
-        self.artistName_label.setText(QCoreApplication.translate("SaveAs", u"Artist Name", None))
-        self.notes_label.setText(QCoreApplication.translate("SaveAs", u"Notes", None))
-        self.existingFile_label.setText(QCoreApplication.translate("SaveAs", u"Existing Files", None))
-        self.open_btn.setText(QCoreApplication.translate("SaveAs", u"Open", None))
-        self.save_btn.setText(QCoreApplication.translate("SaveAs", u"Save", None))
-        self.cancel_btn.setText(QCoreApplication.translate("SaveAs", u"Cancel", None))
+        self.filename_label.setText(QCoreApplication.translate("SnapPublisher", u"Filename", None))
+        self.overwrite.setText(QCoreApplication.translate("SnapPublisher", u"Overwrite", None))
+        self.showCode_label.setText(QCoreApplication.translate("SnapPublisher", u"Show Code", None))
+        self.showCode.setPlaceholderText(QCoreApplication.translate("SnapPublisher", u"GCY", None))
+        self.artistName_label.setText(QCoreApplication.translate("SnapPublisher", u"Artist Name", None))
+        self.notes_label.setText(QCoreApplication.translate("SnapPublisher", u"Notes", None))
+        self.existingFile_label.setText(QCoreApplication.translate("SnapPublisher", u"Snapshots", None))
+        self.load_snap_btn.setText(QCoreApplication.translate("SnapPublisher", u"Load Snapshot", None))
+        self.label.setText(QCoreApplication.translate("SnapPublisher", u"Publishes", None))
+        self.load_pub_btn.setText(QCoreApplication.translate("SnapPublisher", u"Load Publish", None))
+        self.snapshot_btn.setText(QCoreApplication.translate("SnapPublisher", u"Snapshot", None))
+        self.publish_btn.setText(QCoreApplication.translate("SnapPublisher", u"Publish", None))
+        self.cancel_btn.setText(QCoreApplication.translate("SnapPublisher", u"Cancel", None))
     # retranslateUi
 
 
