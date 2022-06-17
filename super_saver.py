@@ -502,7 +502,7 @@ class super_saver(QWidget):
             # Do I add the version update here?  Nope
 
             next_version = int(check_filename[1])
-            # print('shit', next_version)
+            print('shit', next_version)
 
             # self.reset_version(v=next_version)
             output_path = os.path.join(path, filename)
