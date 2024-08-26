@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>969</width>
-    <height>476</height>
+    <width>1027</width>
+    <height>536</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -93,7 +93,7 @@ color: rgb(255, 150, 150);</string>
            <item>
             <spacer name="naming_spacer">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -160,47 +160,52 @@ color: rgb(255, 150, 150);</string>
           <widget class="QComboBox" name="taskType">
            <item>
             <property name="text">
-             <string>Model</string>
+             <string>model</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Surfacing</string>
+             <string>lookdev</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Rig</string>
+             <string>rig</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Animation</string>
+             <string>anim</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Sculpt</string>
+             <string>sculpt</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Groom</string>
+             <string>groom</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>FX</string>
+             <string>fx</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Cloth</string>
+             <string>cloth</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Prototype</string>
+             <string>prototype</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>previs</string>
             </property>
            </item>
           </widget>
@@ -208,7 +213,7 @@ color: rgb(255, 150, 150);</string>
          <item>
           <spacer name="taksType_spacer">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -287,7 +292,7 @@ color: rgb(255, 150, 150);</string>
          <item>
           <spacer name="horizontalSpacer">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -296,6 +301,16 @@ color: rgb(255, 150, 150);</string>
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="AppendArtist">
+           <property name="layoutDirection">
+            <enum>Qt::LayoutDirection::RightToLeft</enum>
+           </property>
+           <property name="text">
+            <string>Append Artist</string>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QLabel" name="artistName_label">
@@ -312,7 +327,7 @@ color: rgb(255, 150, 150);</string>
        <item>
         <widget class="Line" name="notes_seperator">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
         </widget>
        </item>
@@ -358,7 +373,7 @@ color: rgb(255, 150, 150);</string>
            <item>
             <spacer name="horizontalSpacer_2">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -382,7 +397,7 @@ color: rgb(255, 150, 150);</string>
        <item>
         <widget class="Line" name="existingFIle_separator">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
         </widget>
        </item>
@@ -402,7 +417,7 @@ color: rgb(255, 150, 150);</string>
        <item>
         <spacer name="existingFile_spacer">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -421,7 +436,7 @@ color: rgb(255, 150, 150);</string>
      <item>
       <spacer name="buttons_spacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>

@@ -13,9 +13,9 @@ Notes can be reviewed on the right side by clicking on existing files.
 #  top.
 #  2. The Overwrite function won't work due to the issue with the first fix me
 
-from PySide2.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings)
-from PySide2.QtWidgets import *
-from PySide2.QtGui import *
+from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings)
+from PySide6.QtWidgets import *
+from PySide6.QtGui import *
 from maya import cmds
 import os
 import sys
@@ -25,7 +25,7 @@ import time
 from datetime import datetime
 import platform
 
-__version__ = '0.3.2'
+__version__ = '0.4.0'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -313,8 +313,11 @@ class super_saver(QWidget):
         next_version = get_save[1]
 
         self.ui.version.setValue(next_version)
-        new_path = self.build_path(path=save_path, rootName=self.root_name, task=self.task, v_type=v_type,
-                                   v_len=v_len, version=next_version, ext=extension, show=show_code, artist=artist)
+        new_path = self.build_path(path=save_path, rootName=self.root_name, task=self.task, v_type=v_type, snp=False,
+                                   v_len=v_len, version=next_version, ext=extension, show=show_code, artist=artist,
+                                   pub=False)
+        snap_path = get_save
+        print('SNAP:', snap_path)
 
         self.ui.output_filename.setText(new_path)
         # self.reset_version(v=next_version)
@@ -337,13 +340,14 @@ class super_saver(QWidget):
         self.ui.showCode.textChanged.connect(self.update_ui)
         self.ui.artistName.textChanged.connect(self.update_ui)
         self.ui.existingFile_list.clicked.connect(self.show_existing_note)
-        self.ui.open_btn.clicked.connect(self.open_file)
-        self.ui.open_btn.setEnabled(False)
-        self.ui.open_btn.setStyleSheet(
+        self.ui.load_snap_btn.clicked.connect(self.open_file)
+        self.ui.load_snap_btn.setEnabled(False)
+        self.ui.load_snap_btn.setStyleSheet(
             'color: rgb(140, 140, 140);'
         )
 
-        self.ui.save_btn.clicked.connect(self.run)
+        # TODO: This should be a publish function - not snapshot_btn.  It was save_btn originally
+        self.ui.snapshot_btn.clicked.connect(self.run)
         self.ui.folder_btn.clicked.connect(self.get_folder)
 
         self.show()
@@ -516,16 +520,26 @@ class super_saver(QWidget):
             self.ui.artistName.setEnabled(True)
 
     def build_path(self, path=None, rootName=None, task=None, v_type='_v', v_len=3, version=0, ext=None, show=None,
-                   artist=None):
+                   artist=None, snp=False, pub=False):
         output_path = None
         if path and rootName and ext:
             if rootName.startswith(show):
                 show = ''
-            if task:
+            if task and not snp and not pub:
                 filename = '{show}{base}_{task}_{artist}{_v}{v:0{l}d}.{ext}'.format(base=rootName, task=task, _v=v_type,
                                                                                     l=v_len, v=version, ext=ext,
                                                                                     show=show, artist=artist)
                 basename = '{show}{base}_{task}_{artist}'.format(base=rootName, task=task, show=show, artist=artist)
+            elif task and snp and not pub:
+                dt = datetime.now()
+                adjusted_dt = dt.strftime("%m%d%y%H%M%S")
+                filename = '{show}{base}_{task}_{artist}{_v}{v:0{l}d}_{stamp}.{ext}'.format(base=rootName, task=task,
+                                                                                            _v=v_type, l=v_len,
+                                                                                            v=version, ext=ext,
+                                                                                            show=show, artist=artist,
+                                                                                            stamp=adjusted_dt)
+                basename = '{show}{base}_{task}_{artist}'.format(base=rootName, task=task, show=show, artist=artist)
+                print('bn:', basename)
             else:
                 filename = '{show}{base}_{artist}{_v}{v:0{l}d}.{ext}'.format(base=rootName, _v=v_type, l=v_len,
                                                                              v=version, ext=ext, show=show,

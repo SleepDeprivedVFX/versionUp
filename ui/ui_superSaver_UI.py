@@ -1,26 +1,31 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIFLkxon.ui'
+## Form generated from reading UI file 'superSaver_UIOPXmJH.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.0
+## Created by: Qt User Interface Compiler version 6.7.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import (QCoreApplication, QDate, QDateTime, QMetaObject,
-    QObject, QPoint, QRect, QSize, QTime, QUrl, Qt)
-from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
-    QFontDatabase, QIcon, QKeySequence, QLinearGradient, QPalette, QPainter,
-    QPixmap, QRadialGradient)
-from PySide2.QtWidgets import *
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
+    QHBoxLayout, QLabel, QLineEdit, QListWidget,
+    QListWidgetItem, QPushButton, QRadioButton, QSizePolicy,
+    QSpacerItem, QSpinBox, QTextEdit, QVBoxLayout,
+    QWidget)
 
 class Ui_SaveAs(object):
     def setupUi(self, SaveAs):
         if not SaveAs.objectName():
             SaveAs.setObjectName(u"SaveAs")
-        SaveAs.resize(969, 476)
+        SaveAs.resize(1027, 536)
         SaveAs.setMinimumSize(QSize(969, 476))
         SaveAs.setStyleSheet(u"background-color: rgb(110, 110, 110);\n"
 "color: rgb(220, 220, 220);")
@@ -69,7 +74,7 @@ class Ui_SaveAs(object):
 
         self.naming_layout.addWidget(self.customNaming)
 
-        self.naming_spacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.naming_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.naming_layout.addItem(self.naming_spacer)
 
@@ -126,11 +131,12 @@ class Ui_SaveAs(object):
         self.taskType.addItem("")
         self.taskType.addItem("")
         self.taskType.addItem("")
+        self.taskType.addItem("")
         self.taskType.setObjectName(u"taskType")
 
         self.taskType_layout.addWidget(self.taskType)
 
-        self.taksType_spacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.taksType_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.taskType_layout.addItem(self.taksType_spacer)
 
@@ -182,9 +188,15 @@ class Ui_SaveAs(object):
 
         self.showArtist_layout.addWidget(self.showCode)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.showArtist_layout.addItem(self.horizontalSpacer)
+
+        self.AppendArtist = QCheckBox(SaveAs)
+        self.AppendArtist.setObjectName(u"AppendArtist")
+        self.AppendArtist.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
+
+        self.showArtist_layout.addWidget(self.AppendArtist)
 
         self.artistName_label = QLabel(SaveAs)
         self.artistName_label.setObjectName(u"artistName_label")
@@ -201,8 +213,8 @@ class Ui_SaveAs(object):
 
         self.notes_seperator = QFrame(SaveAs)
         self.notes_seperator.setObjectName(u"notes_seperator")
-        self.notes_seperator.setFrameShape(QFrame.HLine)
-        self.notes_seperator.setFrameShadow(QFrame.Sunken)
+        self.notes_seperator.setFrameShape(QFrame.Shape.HLine)
+        self.notes_seperator.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.saveAs_Layout.addWidget(self.notes_seperator)
 
@@ -241,7 +253,7 @@ class Ui_SaveAs(object):
 
         self.open_btn_layout = QHBoxLayout()
         self.open_btn_layout.setObjectName(u"open_btn_layout")
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.open_btn_layout.addItem(self.horizontalSpacer_2)
 
@@ -258,8 +270,8 @@ class Ui_SaveAs(object):
 
         self.existingFIle_separator = QFrame(SaveAs)
         self.existingFIle_separator.setObjectName(u"existingFIle_separator")
-        self.existingFIle_separator.setFrameShape(QFrame.HLine)
-        self.existingFIle_separator.setFrameShadow(QFrame.Sunken)
+        self.existingFIle_separator.setFrameShape(QFrame.Shape.HLine)
+        self.existingFIle_separator.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.existingStack_layout.addWidget(self.existingFIle_separator)
 
@@ -270,7 +282,7 @@ class Ui_SaveAs(object):
 
         self.existingStack_layout.addWidget(self.existing_notes)
 
-        self.existingFile_spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.existingFile_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.existingStack_layout.addItem(self.existingFile_spacer)
 
@@ -282,7 +294,7 @@ class Ui_SaveAs(object):
 
         self.buttons_layout = QHBoxLayout()
         self.buttons_layout.setObjectName(u"buttons_layout")
-        self.buttons_spacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.buttons_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.buttons_layout.addItem(self.buttons_spacer)
 
@@ -337,15 +349,16 @@ class Ui_SaveAs(object):
         self.folder_label.setText(QCoreApplication.translate("SaveAs", u"Save to Folder", None))
         self.folder_btn.setText(QCoreApplication.translate("SaveAs", u"Browse...", None))
         self.taksType_label.setText(QCoreApplication.translate("SaveAs", u"Task Type", None))
-        self.taskType.setItemText(0, QCoreApplication.translate("SaveAs", u"Model", None))
-        self.taskType.setItemText(1, QCoreApplication.translate("SaveAs", u"Surfacing", None))
-        self.taskType.setItemText(2, QCoreApplication.translate("SaveAs", u"Rig", None))
-        self.taskType.setItemText(3, QCoreApplication.translate("SaveAs", u"Animation", None))
-        self.taskType.setItemText(4, QCoreApplication.translate("SaveAs", u"Sculpt", None))
-        self.taskType.setItemText(5, QCoreApplication.translate("SaveAs", u"Groom", None))
-        self.taskType.setItemText(6, QCoreApplication.translate("SaveAs", u"FX", None))
-        self.taskType.setItemText(7, QCoreApplication.translate("SaveAs", u"Cloth", None))
-        self.taskType.setItemText(8, QCoreApplication.translate("SaveAs", u"Prototype", None))
+        self.taskType.setItemText(0, QCoreApplication.translate("SaveAs", u"model", None))
+        self.taskType.setItemText(1, QCoreApplication.translate("SaveAs", u"lookdev", None))
+        self.taskType.setItemText(2, QCoreApplication.translate("SaveAs", u"rig", None))
+        self.taskType.setItemText(3, QCoreApplication.translate("SaveAs", u"anim", None))
+        self.taskType.setItemText(4, QCoreApplication.translate("SaveAs", u"sculpt", None))
+        self.taskType.setItemText(5, QCoreApplication.translate("SaveAs", u"groom", None))
+        self.taskType.setItemText(6, QCoreApplication.translate("SaveAs", u"fx", None))
+        self.taskType.setItemText(7, QCoreApplication.translate("SaveAs", u"cloth", None))
+        self.taskType.setItemText(8, QCoreApplication.translate("SaveAs", u"prototype", None))
+        self.taskType.setItemText(9, QCoreApplication.translate("SaveAs", u"previs", None))
 
         self.fileType_label.setText(QCoreApplication.translate("SaveAs", u"File Type", None))
         self.fileType.setItemText(0, QCoreApplication.translate("SaveAs", u"ma", None))
@@ -355,6 +368,7 @@ class Ui_SaveAs(object):
         self.overwrite.setText(QCoreApplication.translate("SaveAs", u"Overwrite", None))
         self.showCode_label.setText(QCoreApplication.translate("SaveAs", u"Show Code", None))
         self.showCode.setPlaceholderText(QCoreApplication.translate("SaveAs", u"GCY", None))
+        self.AppendArtist.setText(QCoreApplication.translate("SaveAs", u"Append Artist", None))
         self.artistName_label.setText(QCoreApplication.translate("SaveAs", u"Artist Name", None))
         self.notes_label.setText(QCoreApplication.translate("SaveAs", u"Notes", None))
         self.existingFile_label.setText(QCoreApplication.translate("SaveAs", u"Existing Files", None))
