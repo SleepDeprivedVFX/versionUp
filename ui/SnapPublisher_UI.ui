@@ -107,7 +107,7 @@ color: rgb(255, 150, 150);</string>
            <item>
             <spacer name="naming_spacer">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -174,47 +174,52 @@ color: rgb(255, 150, 150);</string>
           <widget class="QComboBox" name="taskType">
            <item>
             <property name="text">
-             <string>Model</string>
+             <string>model</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Surfacing</string>
+             <string>lookdev</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Rig</string>
+             <string>rig</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Animation</string>
+             <string>anim</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Sculpt</string>
+             <string>sculpt</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Groom</string>
+             <string>groom</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>FX</string>
+             <string>fx</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Cloth</string>
+             <string>cloth</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Prototype</string>
+             <string>prototype</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>previs</string>
             </property>
            </item>
           </widget>
@@ -222,7 +227,7 @@ color: rgb(255, 150, 150);</string>
          <item>
           <spacer name="taksType_spacer">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -301,7 +306,7 @@ color: rgb(255, 150, 150);</string>
          <item>
           <spacer name="horizontalSpacer">
            <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -310,6 +315,16 @@ color: rgb(255, 150, 150);</string>
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="appendArtist">
+           <property name="layoutDirection">
+            <enum>Qt::LayoutDirection::RightToLeft</enum>
+           </property>
+           <property name="text">
+            <string>Append Artist</string>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QLabel" name="artistName_label">
@@ -326,7 +341,7 @@ color: rgb(255, 150, 150);</string>
        <item>
         <widget class="Line" name="notes_seperator">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
         </widget>
        </item>
@@ -369,23 +384,23 @@ color: rgb(255, 150, 150);</string>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <layout class="QVBoxLayout" name="existingFile_layout">
+        <layout class="QVBoxLayout" name="existingSnapshots_layout">
          <item>
-          <widget class="QLabel" name="existingFile_label">
+          <widget class="QLabel" name="existingSnapshotsLabel">
            <property name="text">
             <string>Snapshots</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QListWidget" name="existingFile_list"/>
+          <widget class="QListWidget" name="existingSnapshots"/>
          </item>
          <item>
           <layout class="QHBoxLayout" name="open_btn_layout">
            <item>
             <spacer name="horizontalSpacer_2">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -409,7 +424,7 @@ color: rgb(255, 150, 150);</string>
        <item>
         <spacer name="horizontalSpacer_4">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -422,21 +437,27 @@ color: rgb(255, 150, 150);</string>
        <item>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="existingPubsLabel">
            <property name="text">
             <string>Publishes</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QListWidget" name="listWidget"/>
+          <widget class="QTreeWidget" name="existingPublishes">
+           <column>
+            <property name="text">
+             <string notr="true">1</string>
+            </property>
+           </column>
+          </widget>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
             <spacer name="horizontalSpacer_3">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -466,7 +487,7 @@ color: rgb(255, 150, 150);</string>
      <item>
       <spacer name="buttons_spacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -503,11 +524,6 @@ color: rgb(255, 150, 150);</string>
   <zorder>output_filename</zorder>
   <zorder>Title</zorder>
   <zorder>messages</zorder>
-  <zorder>label</zorder>
-  <zorder>listWidget</zorder>
-  <zorder>load_pub_btn</zorder>
-  <zorder>horizontalSpacer_3</zorder>
-  <zorder>horizontalSpacer_4</zorder>
   <zorder>snapshot_filename</zorder>
   <zorder>publish_filename</zorder>
  </widget>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UINszkcm.ui'
+## Form generated from reading UI file 'superSaver_UIKLCwMC.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -16,16 +16,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
-    QHBoxLayout, QLabel, QLineEdit, QListWidget,
-    QListWidgetItem, QPushButton, QRadioButton, QSizePolicy,
-    QSpacerItem, QSpinBox, QTextEdit, QVBoxLayout,
-    QWidget)
+    QHBoxLayout, QHeaderView, QLabel, QLineEdit,
+    QPushButton, QRadioButton, QSizePolicy, QSpacerItem,
+    QSpinBox, QTextEdit, QTreeWidget, QTreeWidgetItem,
+    QVBoxLayout, QWidget)
 
 class Ui_SaveAs(object):
     def setupUi(self, SaveAs):
         if not SaveAs.objectName():
             SaveAs.setObjectName(u"SaveAs")
-        SaveAs.resize(1027, 536)
+        SaveAs.resize(1027, 654)
         SaveAs.setMinimumSize(QSize(969, 476))
         SaveAs.setStyleSheet(u"background-color: rgb(110, 110, 110);\n"
 "color: rgb(220, 220, 220);")
@@ -246,7 +246,10 @@ class Ui_SaveAs(object):
 
         self.existingFile_layout.addWidget(self.existingFile_label)
 
-        self.existingFile_list = QListWidget(SaveAs)
+        self.existingFile_list = QTreeWidget(SaveAs)
+        __qtreewidgetitem = QTreeWidgetItem()
+        __qtreewidgetitem.setText(0, u"1");
+        self.existingFile_list.setHeaderItem(__qtreewidgetitem)
         self.existingFile_list.setObjectName(u"existingFile_list")
 
         self.existingFile_layout.addWidget(self.existingFile_list)
@@ -294,10 +297,10 @@ class Ui_SaveAs(object):
 
         self.buttons_layout = QHBoxLayout()
         self.buttons_layout.setObjectName(u"buttons_layout")
-        self.publish_btn = QPushButton(SaveAs)
-        self.publish_btn.setObjectName(u"publish_btn")
+        self.snap_pub_btn = QPushButton(SaveAs)
+        self.snap_pub_btn.setObjectName(u"snap_pub_btn")
 
-        self.buttons_layout.addWidget(self.publish_btn)
+        self.buttons_layout.addWidget(self.snap_pub_btn)
 
         self.buttons_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
@@ -378,7 +381,7 @@ class Ui_SaveAs(object):
         self.notes_label.setText(QCoreApplication.translate("SaveAs", u"Notes", None))
         self.existingFile_label.setText(QCoreApplication.translate("SaveAs", u"Existing Files", None))
         self.open_btn.setText(QCoreApplication.translate("SaveAs", u"Open", None))
-        self.publish_btn.setText(QCoreApplication.translate("SaveAs", u"Publish", None))
+        self.snap_pub_btn.setText(QCoreApplication.translate("SaveAs", u"Snap / Publish", None))
         self.save_btn.setText(QCoreApplication.translate("SaveAs", u"Save", None))
         self.cancel_btn.setText(QCoreApplication.translate("SaveAs", u"Cancel", None))
     # retranslateUi
