@@ -739,34 +739,55 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
     def populate_existing_files(self, root_directory=None, current_folder=None):
         allowed_extensions = ['ma', 'mb', 'obj', 'fbx', 'abc']
         excluded_folders = ['db', 'edits', '.mayaSwatches']
+
         if root_directory:
             if os.path.exists(root_directory):
-                for folder_name, subfolder, files in os.walk(root_directory):
+                # Dictionary to hold the parent items for each folder path
+                folder_items = {}
+
+                for folder_name, subfolders, files in os.walk(root_directory):
+                    # Remove the root folder path from the display
                     relative_folder_name = os.path.relpath(folder_name, root_directory)
 
-                    if any(excluded_folder in relative_folder_name.split(os.sep)
-                           for excluded_folder in excluded_folders):
+                    # Skip adding excluded folders
+                    if any(excluded_folder in relative_folder_name.split(os.sep) for excluded_folder in
+                           excluded_folders):
                         continue
-                    if relative_folder_name == '.':
+
+                    # Determine the parent folder item
+                    if relative_folder_name == ".":
                         parent_item = self.ui.existingFile_list
                     else:
-                        parent_item = QTreeWidgetItem(self.ui.existingFile_list)
-                        parent_item.setExpanded(True)
+                        parent_item = folder_items.get(os.path.dirname(relative_folder_name), self.ui.existingFile_list)
 
+                    # Create a tree item for the current folder
+                    if relative_folder_name != ".":
+                        folder_item = QTreeWidgetItem(parent_item)
+                        folder_item.setText(0, os.path.basename(folder_name))
+                        folder_items[relative_folder_name] = folder_item
+
+                        # Expand the current folder or the folder of the currently opened file
+                        if self.root_name.startswith(os.path.join(root_directory, relative_folder_name)):
+                            folder_item.setExpanded(True)
+                    else:
+                        folder_item = parent_item
+
+                    # Add files to the folder, filtering by allowed extensions
                     for file_name in files:
                         file_extension = file_name.split('.')[-1].lower()
                         if file_extension not in allowed_extensions:
                             continue
 
                         file_path = os.path.normpath(os.path.join(folder_name, file_name))
-                        file_item = QTreeWidgetItem(parent_item)
+                        file_item = QTreeWidgetItem(folder_item)
                         file_item.setText(0, file_name)
                         file_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": file_name})
 
+                        # Highlight the currently opened file
                         if file_path == self.root_name:
                             file_item.setSelected(True)
                             self.ui.existingFile_list.scrollToItem(file_item)
-                            parent_item.setExpanded(True)
+                            folder_item.setExpanded(True)
 
     def message(self, text=None, ok=True):
         self.ui.messages.setText(text)
