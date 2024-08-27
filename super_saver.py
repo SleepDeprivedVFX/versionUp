@@ -232,9 +232,12 @@ class super_saver(QWidget):
         self.restoreGeometry(self.position)
 
         pth = cmds.file(q=True, sn=True)
+        print('scene path: %s' % pth)
+        self.current_file_path = pth
+
         workspace = cmds.workspace(q=True, act=True)
         scene_folder = cmds.workspace(fre='scene')
-        scene_folder_path = os.path.join(workspace, scene_folder)
+        self.scene_folder_path = os.path.join(workspace, scene_folder)
         print(scene_folder)
 
         # Set initial artist field
@@ -334,7 +337,7 @@ class super_saver(QWidget):
         self.ui.folder.setText(save_path)
 
         self.ui.existingFile_list.setHeaderHidden(True)
-        self.populate_existing_files(root_directory=scene_folder_path, current_folder=os.path.dirname(save_path))
+        self.populate_existing_files(root_directory=self.scene_folder_path, current_folder=os.path.dirname(save_path))
 
         self.set_custom()
 
@@ -772,19 +775,29 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                     else:
                         folder_item = parent_item
 
-                    # Add files to the folder, filtering by allowed extensions
+                    # Add folders first
+                    for subfolder in subfolders:
+                        subfolder_path = os.path.join(folder_name, subfolder)
+                        relative_subfolder_name = os.path.relpath(subfolder_path, root_directory)
+
+                        subfolder_item = QTreeWidgetItem(folder_item)
+                        subfolder_item.setText(0, os.path.basename(subfolder))
+                        folder_items[relative_subfolder_name] = subfolder_item
+
+                    # Add files after folders, filtering by allowed extensions
                     for file_name in files:
                         file_extension = file_name.split('.')[-1].lower()
                         if file_extension not in allowed_extensions:
                             continue
 
                         file_path = os.path.normpath(os.path.join(folder_name, file_name))
+                        file_path = file_path.replace('\\', '/')
                         file_item = QTreeWidgetItem(folder_item)
                         file_item.setText(0, file_name)
                         file_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": file_name})
 
                         # Highlight the currently opened file
-                        if file_path == self.root_name:
+                        if file_path == self.current_file_path:
                             file_item.setSelected(True)
                             self.ui.existingFile_list.scrollToItem(file_item)
                             folder_item.setExpanded(True)
