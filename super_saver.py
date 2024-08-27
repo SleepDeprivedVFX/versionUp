@@ -342,6 +342,7 @@ class super_saver(QWidget):
         self.ui.folder.setText(save_path)
 
         self.ui.existingFile_list.setHeaderHidden(True)
+        self.ui.existingFile_list.itemClicked.connect(self.show_existing_note)
         self.populate_existing_files(root_directory=self.scene_folder_path, current_folder=os.path.dirname(save_path))
 
         self.set_custom()
@@ -359,7 +360,6 @@ class super_saver(QWidget):
         self.ui.filename.textChanged.connect(self.update_ui)
         self.ui.showCode.textChanged.connect(self.update_ui)
         self.ui.artistName.textChanged.connect(self.update_ui)
-        self.ui.existingFile_list.itemClicked.connect(self.show_existing_note)
         self.ui.open_btn.clicked.connect(self.open_file)
         self.ui.open_btn.setEnabled(False)
         self.ui.open_btn.setStyleSheet(
@@ -810,6 +810,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             file_item.setSelected(True)
                             self.ui.existingFile_list.scrollToItem(file_item)
                             folder_items[relative_folder_name].setExpanded(True)
+                            self.ui.existingFile_list.itemClicked.emit(file_item, 0)
 
     def message(self, text=None, ok=True):
         self.ui.messages.setText(text)
