@@ -753,7 +753,8 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                 # Dictionary to hold the parent items for each folder path
                 folder_items = {}
 
-                for folder_name, subfolders, files in os.walk(root_directory):
+                # Sort folders and files first to ensure the correct order
+                for folder_name, subfolders, files in os.walk(root_directory, topdown=True):
                     # Remove the root folder path from the display
                     relative_folder_name = os.path.relpath(folder_name, root_directory)
 
@@ -768,8 +769,8 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                     else:
                         parent_item = folder_items.get(os.path.dirname(relative_folder_name), self.ui.existingFile_list)
 
-                    # Create a tree item for the current folder
-                    if relative_folder_name != ".":
+                    # Create a tree item for the current folder, avoid adding the same folder twice
+                    if relative_folder_name not in folder_items:
                         folder_item = QTreeWidgetItem(parent_item)
                         folder_item.setText(0, os.path.basename(folder_name))
                         folder_items[relative_folder_name] = folder_item
@@ -777,23 +778,22 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                         # Expand the current folder or the folder of the currently opened file
                         if self.root_name.startswith(os.path.join(root_directory, relative_folder_name)):
                             folder_item.setExpanded(True)
-                    else:
-                        folder_item = parent_item
 
                     # Sort subfolders and files naturally before adding them
                     subfolders.sort(key=natural_sort_key)
                     files.sort(key=natural_sort_key)
 
-                    # Add folders first
+                    # Add subfolders first
                     for subfolder in subfolders:
                         subfolder_path = os.path.join(folder_name, subfolder)
                         relative_subfolder_name = os.path.relpath(subfolder_path, root_directory)
 
-                        subfolder_item = QTreeWidgetItem(folder_item)
-                        subfolder_item.setText(0, os.path.basename(subfolder))
-                        folder_items[relative_subfolder_name] = subfolder_item
+                        if relative_subfolder_name not in folder_items:
+                            subfolder_item = QTreeWidgetItem(folder_items[relative_folder_name])
+                            subfolder_item.setText(0, os.path.basename(subfolder))
+                            folder_items[relative_subfolder_name] = subfolder_item
 
-                    # Add files after folders, filtering by allowed extensions
+                    # Add files after subfolders, filtering by allowed extensions
                     for file_name in files:
                         file_extension = file_name.split('.')[-1].lower()
                         if file_extension not in allowed_extensions:
@@ -801,7 +801,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
                         file_path = os.path.normpath(os.path.join(folder_name, file_name))
                         file_path = file_path.replace('\\', '/')
-                        file_item = QTreeWidgetItem(folder_item)
+                        file_item = QTreeWidgetItem(folder_items[relative_folder_name])
                         file_item.setText(0, file_name)
                         file_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": file_name})
 
@@ -809,7 +809,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                         if file_path == self.current_file_path:
                             file_item.setSelected(True)
                             self.ui.existingFile_list.scrollToItem(file_item)
-                            folder_item.setExpanded(True)
+                            folder_items[relative_folder_name].setExpanded(True)
 
     def message(self, text=None, ok=True):
         self.ui.messages.setText(text)
