@@ -48,6 +48,11 @@ else:
     computername = 'HOSTNAME'
 
 
+def natural_sort_key(s):
+    """Sort key for natural sorting, handling both numbers and letters."""
+    return [int(text) if text.isdigit() else text.lower() for text in re.split('(\d+)', s)]
+
+
 class super_saver(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
@@ -774,6 +779,10 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             folder_item.setExpanded(True)
                     else:
                         folder_item = parent_item
+
+                    # Sort subfolders and files naturally before adding them
+                    subfolders.sort(key=natural_sort_key)
+                    files.sort(key=natural_sort_key)
 
                     # Add folders first
                     for subfolder in subfolders:
