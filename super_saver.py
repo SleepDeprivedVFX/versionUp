@@ -716,25 +716,26 @@ class super_saver(QWidget):
             )
         # get_filename = self.ui.existingFile_list.currentItem()
         file_info = item.data(0, Qt.UserRole)
-        folder_name = file_info['folder']
-        filename = file_info['file']
-        folder = self.make_db_folder(folder_name)
-        notes_db = self.open_db(folder=folder)
-        post_note = """FILE: {fn}
+        if file_info:
+            folder_name = file_info['folder']
+            filename = file_info['file']
+            folder = self.make_db_folder(folder_name)
+            notes_db = self.open_db(folder=folder)
+            post_note = """FILE: {fn}
 USER: None
 COMP: None
 DATE: None
 
 NOTE: None
 """.format(fn=filename)
-        for note in notes_db['Notes']:
-            if type(note) == dict and 'filename' in note.keys():
-                if filename in note['filename']:
-                    user = note['user']
-                    date = note['date']
-                    computer = note['computer']
-                    details = note['details']
-                    post_note = """FILE: {filename}
+            for note in notes_db['Notes']:
+                if type(note) == dict and 'filename' in note.keys():
+                    if filename in note['filename']:
+                        user = note['user']
+                        date = note['date']
+                        computer = note['computer']
+                        details = note['details']
+                        post_note = """FILE: {filename}
 USER: {user}
 COMP: {computer}
 DATE: {date}
@@ -742,7 +743,7 @@ DATE: {date}
 NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=date, details=details)
                     break
 
-        self.ui.existing_notes.setText(post_note)
+            self.ui.existing_notes.setText(post_note)
 
     def populate_existing_files(self, root_directory=None, current_folder=None):
         allowed_extensions = ['ma', 'mb', 'obj', 'fbx', 'abc']
