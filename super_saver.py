@@ -742,17 +742,31 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         if root_directory:
             if os.path.exists(root_directory):
                 for folder_name, subfolder, files in os.walk(root_directory):
-                    folder_item = QTreeWidgetItem(self.ui.existingFile_list)
-                    folder_item.setText(0, folder_name)
-                    if folder_name.endswith(current_folder):
-                        folder_item.setExpanded(True)
+                    relative_folder_name = os.path.relpath(folder_name, root_directory)
+
+                    if any(excluded_folder in relative_folder_name.split(os.sep)
+                           for excluded_folder in excluded_folders):
+                        continue
+                    if relative_folder_name == '.':
+                        parent_item = self.ui.existingFile_list
                     else:
-                        folder_item.setExpanded(False)
+                        parent_item = QTreeWidgetItem(self.ui.existingFile_list)
+                        parent_item.setExpanded(True)
+
                     for file_name in files:
-                        file_item = QTreeWidgetItem(folder_item)
+                        file_extension = file_name.split('.')[-1].lower()
+                        if file_extension not in allowed_extensions:
+                            continue
+
+                        file_path = os.path.normpath(os.path.join(folder_name, file_name))
+                        file_item = QTreeWidgetItem(parent_item)
                         file_item.setText(0, file_name)
                         file_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": file_name})
 
+                        if file_path == self.root_name:
+                            file_item.setSelected(True)
+                            self.ui.existingFile_list.scrollToItem(file_item)
+                            parent_item.setExpanded(True)
 
     def message(self, text=None, ok=True):
         self.ui.messages.setText(text)
