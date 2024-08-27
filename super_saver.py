@@ -243,10 +243,10 @@ class super_saver(QWidget):
         workspace = cmds.workspace(q=True, act=True)
         scene_folder = cmds.workspace(fre='scene')
         self.scene_folder_path = os.path.join(workspace, scene_folder)
-        print(scene_folder)
+        asset_folder = cmds.workspace(fre='templates')
+        self.asset_folder_path = os.path.join(workspace, asset_folder)
 
         # Set initial artist field
-        print(self.appendartist)
         if self.appendartist == 'true':
             self.appendartist = True
         else:
@@ -264,7 +264,7 @@ class super_saver(QWidget):
             save_path = os.path.dirname(pth)
             save_file = os.path.basename(pth)
 
-            show_code = self.try_to_get_show_code(path=save_path)
+            show_code = self.try_to_get_show_code(path=workspace)
             if show_code:
                 self.ui.showCode.setText(show_code)
                 show_code = '{show_code}_'.format(show_code=show_code)
@@ -343,7 +343,8 @@ class super_saver(QWidget):
 
         self.ui.existingFile_list.setHeaderHidden(True)
         self.ui.existingFile_list.itemClicked.connect(self.show_existing_note)
-        self.populate_existing_files(root_directory=self.scene_folder_path, current_folder=os.path.dirname(save_path))
+        self.populate_existing_files(current_directory=self.scene_folder_path)
+        self.populate_existing_files(current_directory=self.asset_folder_path)
 
         self.set_custom()
 
@@ -745,19 +746,19 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
             self.ui.existing_notes.setText(post_note)
 
-    def populate_existing_files(self, root_directory=None, current_folder=None):
+    def populate_existing_files(self, current_directory=None):
         allowed_extensions = ['ma', 'mb', 'obj', 'fbx', 'abc']
         excluded_folders = ['db', 'edits', '.mayaSwatches']
 
-        if root_directory:
-            if os.path.exists(root_directory):
+        if current_directory:
+            if os.path.exists(current_directory):
                 # Dictionary to hold the parent items for each folder path
                 folder_items = {}
 
                 # Sort folders and files first to ensure the correct order
-                for folder_name, subfolders, files in os.walk(root_directory, topdown=True):
+                for folder_name, subfolders, files in os.walk(current_directory, topdown=True):
                     # Remove the root folder path from the display
-                    relative_folder_name = os.path.relpath(folder_name, root_directory)
+                    relative_folder_name = os.path.relpath(folder_name, current_directory)
 
                     # Skip adding excluded folders
                     if any(excluded_folder in relative_folder_name.split(os.sep) for excluded_folder in
@@ -777,7 +778,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                         folder_items[relative_folder_name] = folder_item
 
                         # Expand the current folder or the folder of the currently opened file
-                        if self.root_name.startswith(os.path.join(root_directory, relative_folder_name)):
+                        if self.root_name.startswith(os.path.join(current_directory, relative_folder_name)):
                             folder_item.setExpanded(True)
 
                     # Sort subfolders and files naturally before adding them
@@ -787,7 +788,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                     # Add subfolders first
                     for subfolder in subfolders:
                         subfolder_path = os.path.join(folder_name, subfolder)
-                        relative_subfolder_name = os.path.relpath(subfolder_path, root_directory)
+                        relative_subfolder_name = os.path.relpath(subfolder_path, current_directory)
 
                         if relative_subfolder_name not in folder_items:
                             subfolder_item = QTreeWidgetItem(folder_items[relative_folder_name])
