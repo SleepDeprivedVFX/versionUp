@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1027</width>
-    <height>536</height>
+    <height>654</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -433,6 +433,13 @@ color: rgb(255, 150, 150);</string>
    </item>
    <item>
     <layout class="QHBoxLayout" name="buttons_layout">
+     <item>
+      <widget class="QPushButton" name="publish_btn">
+       <property name="text">
+        <string>Publish</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <spacer name="buttons_spacer">
        <property name="orientation">

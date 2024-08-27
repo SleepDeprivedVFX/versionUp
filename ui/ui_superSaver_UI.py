@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIOPXmJH.ui'
+## Form generated from reading UI file 'superSaver_UINszkcm.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -294,6 +294,11 @@ class Ui_SaveAs(object):
 
         self.buttons_layout = QHBoxLayout()
         self.buttons_layout.setObjectName(u"buttons_layout")
+        self.publish_btn = QPushButton(SaveAs)
+        self.publish_btn.setObjectName(u"publish_btn")
+
+        self.buttons_layout.addWidget(self.publish_btn)
+
         self.buttons_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.buttons_layout.addItem(self.buttons_spacer)
@@ -373,6 +378,7 @@ class Ui_SaveAs(object):
         self.notes_label.setText(QCoreApplication.translate("SaveAs", u"Notes", None))
         self.existingFile_label.setText(QCoreApplication.translate("SaveAs", u"Existing Files", None))
         self.open_btn.setText(QCoreApplication.translate("SaveAs", u"Open", None))
+        self.publish_btn.setText(QCoreApplication.translate("SaveAs", u"Publish", None))
         self.save_btn.setText(QCoreApplication.translate("SaveAs", u"Save", None))
         self.cancel_btn.setText(QCoreApplication.translate("SaveAs", u"Cancel", None))
     # retranslateUi

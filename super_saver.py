@@ -230,6 +230,7 @@ class super_saver(QWidget):
         pth = cmds.file(q=True, sn=True)
         workspace = cmds.workspace(q=True, act=True)
         scene_folder = cmds.workspace(fre='scene')
+        print(scene_folder)
 
         # Set initial artist field
         print(self.appendartist)
