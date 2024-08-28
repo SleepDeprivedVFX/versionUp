@@ -342,7 +342,10 @@ class super_saver(QWidget):
         self.ui.folder.setText(save_path)
 
         self.ui.existingFile_list.setHeaderHidden(True)
+        self.ui.snapshots.setHeaderHidden(True)
+        self.ui.snapshots.itemDoubleClicked.connect(self.import_snapshot)
         self.ui.existingFile_list.itemClicked.connect(self.show_existing_note)
+        self.ui.existingFile_list.itemClicked.connect(self.populate_snapshots)
         self.populate_existing_files(current_directory=self.scene_folder_path)
         self.populate_existing_files(current_directory=self.asset_folder_path)
 
@@ -776,6 +779,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                     if relative_folder_name not in folder_items:
                         folder_item = QTreeWidgetItem(parent_item)
                         folder_item.setText(0, os.path.basename(folder_name))
+                        folder_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": ""})
                         folder_items[relative_folder_name] = folder_item
 
                         # Expand the current folder or the folder of the currently opened file
@@ -794,6 +798,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                         if relative_subfolder_name not in folder_items:
                             subfolder_item = QTreeWidgetItem(folder_items[relative_folder_name])
                             subfolder_item.setText(0, os.path.basename(subfolder))
+                            subfolder_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": ""})
                             folder_items[relative_subfolder_name] = subfolder_item
 
                     # Add files after subfolders, filtering by allowed extensions
@@ -880,6 +885,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         self.close()
 
     def snapshot(self):
+        current_file_item = self.ui.existingFile_list.currentItem()
         notes = self.ui.notes.toPlainText()
         if not notes:
             self.message(text='YOU MUST ADD A NOTE!!!', ok=False)
@@ -943,6 +949,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                 'datestamp': datetime.now().isoformat(),
                 'filename': snapshot_filename,
                 'root_path': snapshot_folder,
+                'original_file': cmds.file(q=True, sn=True),
                 'notes': notes
             }
             snap_data['Snapshots'].append(new_data)
@@ -952,6 +959,46 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         else:
             self.message(text='UNABLE TO SAVE SNAPSHOT!!', ok=False)
         self.ui.notes.clear()
+        self.ui.existingFile_list.itemClicked.emit(current_file_item, 0)
+
+    def populate_snapshots(self, item, column):
+        self.ui.snapshots.clear()
+        file_info = item.data(0, Qt.UserRole)
+        if file_info:
+            root_path = file_info['folder']
+            snap_path = os.path.join(root_path, 'snapshots')
+            if os.path.exists(snap_path):
+                # Look for the database
+                snap_file = os.path.join(snap_path, 'snapshots.json')
+                if os.path.exists(snap_file):
+                    with open(snap_file, 'r') as snaps:
+                        get_snap_data = snaps.read()
+                        snap_data = json.loads(get_snap_data)
+                        snapshots = snap_data['Snapshots']
+                        for snapshot in snapshots:
+                            datestamp = snapshot['datestamp']
+                            filename = snapshot['filename']
+                            _root_path = snapshot['root_path']
+                            notes = snapshot['notes']
+                            orig_file = snapshot['original_file']
+                            snapshot_path = os.path.join(_root_path, filename)
+                            short_original_file = os.path.basename(orig_file)
+
+                            base_snap = QTreeWidgetItem(self.ui.snapshots)
+                            base_snap.setText(0, str(datestamp))
+                            base_snap.setData(0, Qt.UserRole, snapshot_path)
+                            sub_file = QTreeWidgetItem(base_snap)
+                            sub_file.setText(0, filename)
+                            sub_file.setData(0, Qt.UserRole, snapshot_path)
+                            sub_orig = QTreeWidgetItem(base_snap)
+                            sub_orig.setText(0, short_original_file)
+                            sub_orig.setData(0, Qt.UserRole, snapshot_path)
+                            sub_notes = QTreeWidgetItem(base_snap)
+                            sub_notes.setText(0, notes)
+                            sub_notes.setData(0, Qt.UserRole, snapshot_path)
+
+    def import_snapshot(self, item, column):
+        print(item)
 
     def publish(self):
         pass

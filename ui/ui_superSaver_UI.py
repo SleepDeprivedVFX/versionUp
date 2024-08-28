@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIaPXdsk.ui'
+## Form generated from reading UI file 'superSaver_UICbNqTm.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -29,26 +29,26 @@ class Ui_SaveAs(object):
         SaveAs.setMinimumSize(QSize(969, 476))
         SaveAs.setStyleSheet(u"background-color: rgb(110, 110, 110);\n"
 "color: rgb(220, 220, 220);")
-        self.verticalLayout = QVBoxLayout(SaveAs)
-        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout_2 = QVBoxLayout(SaveAs)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.Title = QLabel(SaveAs)
         self.Title.setObjectName(u"Title")
         self.Title.setStyleSheet(u"font: 16pt \"MS Shell Dlg 2\";")
 
-        self.verticalLayout.addWidget(self.Title)
+        self.verticalLayout_2.addWidget(self.Title)
 
         self.output_filename = QLabel(SaveAs)
         self.output_filename.setObjectName(u"output_filename")
         self.output_filename.setStyleSheet(u"font: 10pt \"MS Shell Dlg 2\";")
 
-        self.verticalLayout.addWidget(self.output_filename)
+        self.verticalLayout_2.addWidget(self.output_filename)
 
         self.messages = QLabel(SaveAs)
         self.messages.setObjectName(u"messages")
         self.messages.setStyleSheet(u"font: 75 9pt \"MS Shell Dlg 2\";\n"
 "color: rgb(255, 150, 150);")
 
-        self.verticalLayout.addWidget(self.messages)
+        self.verticalLayout_2.addWidget(self.messages)
 
         self.sideBySide_layout = QHBoxLayout()
         self.sideBySide_layout.setObjectName(u"sideBySide_layout")
@@ -276,29 +276,43 @@ class Ui_SaveAs(object):
 
         self.existingStack_layout.addLayout(self.existingFile_layout)
 
+
+        self.sideBySide_layout.addLayout(self.existingStack_layout)
+
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.snapshots_label = QLabel(SaveAs)
+        self.snapshots_label.setObjectName(u"snapshots_label")
+
+        self.verticalLayout.addWidget(self.snapshots_label)
+
+        self.snapshots = QTreeWidget(SaveAs)
+        __qtreewidgetitem1 = QTreeWidgetItem()
+        __qtreewidgetitem1.setText(0, u"1");
+        self.snapshots.setHeaderItem(__qtreewidgetitem1)
+        self.snapshots.setObjectName(u"snapshots")
+
+        self.verticalLayout.addWidget(self.snapshots)
+
         self.existingFIle_separator = QFrame(SaveAs)
         self.existingFIle_separator.setObjectName(u"existingFIle_separator")
         self.existingFIle_separator.setFrameShape(QFrame.Shape.HLine)
         self.existingFIle_separator.setFrameShadow(QFrame.Shadow.Sunken)
 
-        self.existingStack_layout.addWidget(self.existingFIle_separator)
+        self.verticalLayout.addWidget(self.existingFIle_separator)
 
         self.existing_notes = QTextEdit(SaveAs)
         self.existing_notes.setObjectName(u"existing_notes")
         self.existing_notes.setEnabled(False)
         self.existing_notes.setMinimumSize(QSize(0, 150))
 
-        self.existingStack_layout.addWidget(self.existing_notes)
-
-        self.existingFile_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.existingStack_layout.addItem(self.existingFile_spacer)
+        self.verticalLayout.addWidget(self.existing_notes)
 
 
-        self.sideBySide_layout.addLayout(self.existingStack_layout)
+        self.sideBySide_layout.addLayout(self.verticalLayout)
 
 
-        self.verticalLayout.addLayout(self.sideBySide_layout)
+        self.verticalLayout_2.addLayout(self.sideBySide_layout)
 
         self.buttons_layout = QHBoxLayout()
         self.buttons_layout.setObjectName(u"buttons_layout")
@@ -327,7 +341,7 @@ class Ui_SaveAs(object):
         self.buttons_layout.addWidget(self.cancel_btn)
 
 
-        self.verticalLayout.addLayout(self.buttons_layout)
+        self.verticalLayout_2.addLayout(self.buttons_layout)
 
         self.output_filename.raise_()
         self.Title.raise_()
@@ -348,7 +362,6 @@ class Ui_SaveAs(object):
         QWidget.setTabOrder(self.overwrite, self.cancel_btn)
         QWidget.setTabOrder(self.cancel_btn, self.folder)
         QWidget.setTabOrder(self.folder, self.filename)
-        QWidget.setTabOrder(self.filename, self.existing_notes)
 
         self.retranslateUi(SaveAs)
 
@@ -392,6 +405,7 @@ class Ui_SaveAs(object):
         self.existingFile_label.setText(QCoreApplication.translate("SaveAs", u"Existing Files", None))
         self.load_btn.setText(QCoreApplication.translate("SaveAs", u"Load Ref", None))
         self.open_btn.setText(QCoreApplication.translate("SaveAs", u"Open", None))
+        self.snapshots_label.setText(QCoreApplication.translate("SaveAs", u"Snapshots", None))
         self.publish_btn.setText(QCoreApplication.translate("SaveAs", u"Publish", None))
         self.snap_btn.setText(QCoreApplication.translate("SaveAs", u"Snapshot", None))
         self.save_btn.setText(QCoreApplication.translate("SaveAs", u"Version Up", None))
