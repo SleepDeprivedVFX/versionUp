@@ -345,7 +345,8 @@ class super_saver(QWidget):
         self.ui.snapshots.setHeaderHidden(True)
         self.ui.snapshots.itemDoubleClicked.connect(self.import_snapshot)
         self.ui.existingFile_list.itemClicked.connect(self.show_existing_note)
-        self.ui.existingFile_list.itemClicked.connect(self.populate_snapshots)
+        # self.ui.existingFile_list.itemClicked.connect(self.populate_snapshots)
+        self.ui.existingFile_list.itemDoubleClicked.connect(lambda: self.open_file(f=True))
         self.populate_existing_files(current_directory=self.scene_folder_path)
         self.populate_existing_files(current_directory=self.asset_folder_path)
 
@@ -747,9 +748,9 @@ COMP: {computer}
 DATE: {date}
 
 NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=date, details=details)
-                    break
-
+                        break
             self.ui.existing_notes.setText(post_note)
+        self.populate_snapshots(item, column)
 
     def populate_existing_files(self, current_directory=None):
         allowed_extensions = ['ma', 'mb', 'obj', 'fbx', 'abc']
