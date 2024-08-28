@@ -37,7 +37,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '0.4.1'
+__version__ = '0.4.2'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -357,6 +357,7 @@ class super_saver(QWidget):
         self.ui.cancel_btn.clicked.connect(self.close)
         self.ui.snap_btn.clicked.connect(self.snapshot)
         self.ui.publish_btn.clicked.connect(self.publish)
+        self.ui.load_btn.clicked.connect(self.load_ref)
 
         self.ui.folder.textChanged.connect(self.update_ui)
         self.ui.taskType.currentTextChanged.connect(lambda: self.reset_version(v=1))
@@ -833,7 +834,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                 "color: rgb(255, 150, 150);\nfont: 12pt \"MS Shell Dlg 2;\""
             )
 
-    def run(self):
+    def run(self, close=True):
         output_file = self.ui.output_filename.text()
         overwrite = self.ui.overwrite.isChecked()
         fileType = self.ui.fileType.currentText()
@@ -844,6 +845,8 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         elif len(notes) < 10:
             self.message(text='Your note must be more elaborate.', ok=False)
             return False
+        else:
+            self.message(text='Version up save in progress', ok=True)
 
         if fileType == 'ma':
             fileType = 'mayaAscii'
@@ -882,9 +885,12 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         notes_db['Notes'].append(new_note)
         self.save_db(folder=notes_path, data=notes_db)
         self.message(text='Saved Successfully!!', ok=True)
-        print('FILE SAVED: %s' % output_file)
         time.sleep(1)
-        self.close()
+        if close:
+            self.close()
+        else:
+            return output_file
+        return True
 
     def snapshot(self, note=None):
         if note:
@@ -897,6 +903,8 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         elif len(notes) < 10:
             self.message(text='Your note must be more elaborate.', ok=False)
             return False
+        else:
+            self.message(text='Snapshot in progress', ok=True)
 
         current_file_path = self.current_file_path
         current_root = os.path.dirname(current_file_path)
@@ -962,6 +970,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         else:
             self.message(text='UNABLE TO SAVE SNAPSHOT!!', ok=False)
         self.ui.notes.clear()
+        self.message(text='File snapshot --> %s' % datetime_stamp, ok=True)
         current_file_item = self.ui.existingFile_list.currentItem()
         self.ui.existingFile_list.itemClicked.emit(current_file_item, 0)
 
@@ -1033,7 +1042,96 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         cmds.file(save=True, type=ext)
 
     def publish(self):
-        pass
+        print('Publisher has been checked.')
+        '''
+        What it needs to do:
+        1. Take the current file and version up with a PUB note, but keep the original filename
+        2. Save the file out to the Publishes folder with a PUB tag in it.
+        3. Remove references and namespaces for the published file
+        4. Reopen the new versioned up working file.
+        '''
+        notes = self.ui.notes.toPlainText()
+        if not notes:
+            self.message(text='YOU MUST ADD A NOTE!!!', ok=False)
+            return False
+        elif len(notes) < 10:
+            self.message(text='Your note must be more elaborate.', ok=False)
+            return False
+        else:
+            self.message(text='Publish in progress', ok=True)
+
+        current_file = self.current_file_path
+
+        # Do the version up first
+        new_version = self.run(close=False)
+        print('new_version: %s' % new_version)
+
+        # Create the publish version
+        root_path = os.path.dirname(current_file)
+        base_name = os.path.basename(current_file)
+        if '_v' in base_name:
+            split_version = base_name.split('_v')
+            v = '_v'
+        else:
+            split_version = os.path.splitext(base_name)
+            v = ''
+
+        ext = os.path.splitext(base_name)[1]
+        if ext == '.ma':
+            file_type = 'mayaAscii'
+        else:
+            file_type = 'mayaBinary'
+        root_name = split_version[0]
+        end_name = split_version[1]
+        pub_name = root_name + '_PUB' + v + end_name
+        print('pub_name: %s' % pub_name)
+        pub_folder = os.path.join(root_path, 'Publishes')
+        if not os.path.exists(pub_folder):
+            os.makedirs(pub_folder)
+        publish_file = os.path.join(pub_folder, pub_name)
+        self.message(text='Publishing file...', ok=True)
+        print('publish_file: %s' % publish_file)
+
+        # Save out the publish file
+        cmds.file(rename=publish_file)
+        cmds.file(s=True, type=file_type, options='v=0;')
+
+        # Clean out the references
+        clean_refs = self.import_and_clean_references()
+        print('clean_refs: %s' % clean_refs)
+
+        # Save publish file
+        cmds.file(s=True, type=file_type, options='v=0;')
+
+        # Reopen the versioned up file
+        cmds.file(new_version, o=True)
+
+    def import_and_clean_references(self):
+        references = cmds.file(q=True, reference=True)
+        is_clean = []
+        for ref in references:
+            check_clean = (self.do_reference_cleanup(reference_file=ref))
+
+        return is_clean
+
+    def do_reference_cleanup(self, reference_file=None):
+        cleaned = None
+        if reference_file:
+            all_refs = cmds.file(q=True, reference=True)
+            same_references = [ref for ref in all_refs if cmds.referenceQuery(ref, filename=True) == reference_file]
+            print('same_reference: %s' % same_references)
+            namespace = cmds.referenceQuery(reference_file, namespace=True)
+            if len(same_references) == 1:
+                cmds.file(reference_file, importReference=True)
+                cmds.namespace(removeNamespace=namespace, mergeNamespaceWithRoot=True)
+                cleaned = {'ref': reference_file, 'namespace': namespace, 'removed': True}
+            else:
+                cmds.file(reference_file, importReference=True)
+                cleaned = {'ref': reference_file, 'namespace': namespace, 'removed': False}
+        return cleaned
+
+    def load_ref(self):
+        print('Load reference')
 
     def closeEvent(self, event):
         self.settings.setValue('appendArtist', self.ui.AppendArtist.isChecked())
