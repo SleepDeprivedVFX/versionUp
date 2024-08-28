@@ -24,7 +24,6 @@ import json
 import time
 from datetime import datetime
 import platform
-import subprocess
 
 # FIXME: Add garbage for the UI to work in Maya.
 script_path = "C:/Users/sleep/OneDrive/Documents/Scripts/Python/Maya/Utilities/versionUp"
@@ -37,7 +36,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '0.4.2'
+__version__ = '1.0.1'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -1191,7 +1190,22 @@ References Imported and Cleaned:
         return cleaned
 
     def load_ref(self):
-        print('Load reference')
+        current_item = self.ui.existingFile_list.currentItem()
+        data = current_item.data(0, Qt.UserRole)
+        file_name = data['file']
+        file_root = os.path.splitext(file_name)[0]
+        path = data['folder']
+        path = path.replace('\\', '/')
+        file_path = os.path.join(path, file_name)
+        if os.path.exists(file_path):
+            if cmds.file(file_path, q=True, exists=True):
+                cmds.file(file_path, reference=True, ignoreVersion=True, gl=True, mergeNamespacesOnClash=False,
+                          namespace=file_root, options='v=0;')
+                self.message(text='Reference Loaded: %s' % file_name, ok=True)
+            else:
+                self.message(text='Maya could not find the reference: %s' % file_name)
+        else:
+            self.message(text='File could not be found: %s' % file_name)
 
     def closeEvent(self, event):
         self.settings.setValue('appendArtist', self.ui.AppendArtist.isChecked())
