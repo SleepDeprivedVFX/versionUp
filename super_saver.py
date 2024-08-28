@@ -1108,26 +1108,62 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
     def import_and_clean_references(self):
         references = cmds.file(q=True, reference=True)
+        reference_info = {}
+        pattern = r'{\d+}'
+
+        # First, gather all reference information
+        for ref in references:
+            ref_file = cmds.referenceQuery(ref, filename=True)
+            namespace = cmds.referenceQuery(ref, namespace=True)
+            print('ref_file: %s' % ref_file)
+            find_extensions = re.findall(pattern, ref_file)
+            if find_extensions:
+                ref_file = ref_file.replace(find_extensions[0], '')
+            print(reference_info.keys())
+            if ref_file in reference_info.keys():
+                print('ref_file found in keys!')
+                reference_info[ref_file]['count'] += 1
+            else:
+                print('ref_file not found.......')
+                reference_info[ref_file] = {
+                    'filename': ref_file,
+                    'namespace': namespace,
+                    'count': 1
+                }
+            print('reference_info: %s' % reference_info)
+
         is_clean = []
         for ref in references:
-            check_clean = (self.do_reference_cleanup(reference_file=ref))
+            ref_file = cmds.referenceQuery(ref, filename=True)
+
+            find_extensions = re.findall(pattern, ref_file)
+            if find_extensions:
+                key_file = ref_file.replace(find_extensions[0], '')
+            else:
+                key_file = ref_file
+            info = reference_info[key_file]
+            result = self.do_reference_cleanup(reference_file=ref_file, namespace=info['namespace'],
+                                               count=info['count'])
+            if result:
+                is_clean.append(result)
 
         return is_clean
 
-    def do_reference_cleanup(self, reference_file=None):
+    def do_reference_cleanup(self, reference_file=None, namespace=None, count=None):
         cleaned = None
         if reference_file:
-            all_refs = cmds.file(q=True, reference=True)
-            same_references = [ref for ref in all_refs if cmds.referenceQuery(ref, filename=True) == reference_file]
-            print('same_reference: %s' % same_references)
-            namespace = cmds.referenceQuery(reference_file, namespace=True)
-            if len(same_references) == 1:
-                cmds.file(reference_file, importReference=True)
+            # Import the reference
+            cmds.file(reference_file, importReference=True)
+
+            # Check if there is more than one instance of the reference
+            if count == 1:
+                # Remove the namespace if there's only one instance
                 cmds.namespace(removeNamespace=namespace, mergeNamespaceWithRoot=True)
                 cleaned = {'ref': reference_file, 'namespace': namespace, 'removed': True}
             else:
-                cmds.file(reference_file, importReference=True)
+                # Keep the namespace if there are multiple instances
                 cleaned = {'ref': reference_file, 'namespace': namespace, 'removed': False}
+
         return cleaned
 
     def load_ref(self):
