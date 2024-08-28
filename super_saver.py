@@ -716,6 +716,29 @@ class super_saver(QWidget):
                 save.write(save_data)
                 save.close()
 
+    def create_note(self, notes=None, output_file=None):
+        if notes and output_file:
+            path = os.path.dirname(output_file)
+            notes_path = self.make_db_folder(folder=path)
+            notes_db = self.open_db(folder=notes_path)
+            if not os.path.exists:
+                os.makedirs(path)
+            self.message(text='Writing Notes...', ok=True)
+            date_now = datetime.now()
+            date = '{d} | {t}'.format(d=date_now.date(), t=date_now.time())
+            new_note = {
+                'filename': os.path.basename(output_file),
+                'user': os.environ[env_user],
+                'computer': os.environ[computername],
+                'date': date,
+                'details': notes
+            }
+            notes_db['Notes'].append(new_note)
+            self.save_db(folder=notes_path, data=notes_db)
+            self.message(text='Saved Successfully!!', ok=True)
+        else:
+            return False
+
     def show_existing_note(self, item, column):
         if not self.ui.open_btn.isEnabled():
             self.ui.open_btn.setEnabled(True)
@@ -853,11 +876,6 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         else:
             fileType = 'mayaBinary'
 
-        path = os.path.dirname(output_file)
-        notes_path = self.make_db_folder(folder=path)
-        notes_db = self.open_db(folder=notes_path)
-        if not os.path.exists:
-            os.makedirs(path)
         if overwrite:
             self.message(text='Saving...', ok=True)
             cmds.file(rename=output_file)
@@ -872,20 +890,10 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                 cmds.file(rename=output_file)
                 cmds.file(s=True, type=fileType, options='v=0;')
 
-        self.message(text='Writing Notes...', ok=True)
-        date_now = datetime.now()
-        date = '{d} | {t}'.format(d=date_now.date(), t=date_now.time())
-        new_note = {
-            'filename': os.path.basename(output_file),
-            'user': os.environ[env_user],
-            'computer': os.environ[computername],
-            'date': date,
-            'details': notes
-        }
-        notes_db['Notes'].append(new_note)
-        self.save_db(folder=notes_path, data=notes_db)
-        self.message(text='Saved Successfully!!', ok=True)
-        time.sleep(1)
+        # Create Note
+        self.create_note(notes=notes, output_file=output_file)
+
+        time.sleep(3)
         if close:
             self.close()
         else:
@@ -1042,7 +1050,6 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         cmds.file(save=True, type=ext)
 
     def publish(self):
-        print('Publisher has been checked.')
         '''
         What it needs to do:
         1. Take the current file and version up with a PUB note, but keep the original filename
@@ -1064,7 +1071,6 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
         # Do the version up first
         new_version = self.run(close=False)
-        print('new_version: %s' % new_version)
 
         # Create the publish version
         root_path = os.path.dirname(current_file)
@@ -1084,13 +1090,12 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         root_name = split_version[0]
         end_name = split_version[1]
         pub_name = root_name + '_PUB' + v + end_name
-        print('pub_name: %s' % pub_name)
+
         pub_folder = os.path.join(root_path, 'Publishes')
         if not os.path.exists(pub_folder):
             os.makedirs(pub_folder)
         publish_file = os.path.join(pub_folder, pub_name)
         self.message(text='Publishing file...', ok=True)
-        print('publish_file: %s' % publish_file)
 
         # Save out the publish file
         cmds.file(rename=publish_file)
@@ -1099,12 +1104,34 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         # Clean out the references
         clean_refs = self.import_and_clean_references()
         print('clean_refs: %s' % clean_refs)
+        print('notes: %s' % notes)
+        if clean_refs:
+            new_notes = """{notes}
 
+References Imported and Cleaned:
+""".format(notes=notes)
+            for ref in clean_refs:
+                ref_item = ref['ref']
+                namespace = ref['namespace']
+                removed = ref['removed']
+                if removed:
+                    namespace = ''
+                ref_filename = os.path.basename(ref_item)
+                new_notes = """{new_notes}
+{namespace}: {ref_filename}
+""".format(new_notes=new_notes, namespace=namespace, ref_filename=ref_filename)
+            notes = new_notes
+
+        # create new note
+        self.create_note(notes=notes, output_file=publish_file)
         # Save publish file
         cmds.file(s=True, type=file_type, options='v=0;')
 
         # Reopen the versioned up file
         cmds.file(new_version, o=True)
+        self.message(text='File Published Successfully!')
+        time.sleep(3)
+        self.close()
 
     def import_and_clean_references(self):
         references = cmds.file(q=True, reference=True)
@@ -1115,22 +1142,19 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         for ref in references:
             ref_file = cmds.referenceQuery(ref, filename=True)
             namespace = cmds.referenceQuery(ref, namespace=True)
-            print('ref_file: %s' % ref_file)
+
             find_extensions = re.findall(pattern, ref_file)
             if find_extensions:
                 ref_file = ref_file.replace(find_extensions[0], '')
-            print(reference_info.keys())
+
             if ref_file in reference_info.keys():
-                print('ref_file found in keys!')
                 reference_info[ref_file]['count'] += 1
             else:
-                print('ref_file not found.......')
                 reference_info[ref_file] = {
                     'filename': ref_file,
                     'namespace': namespace,
                     'count': 1
                 }
-            print('reference_info: %s' % reference_info)
 
         is_clean = []
         for ref in references:
