@@ -400,10 +400,10 @@ class super_saver(QWidget):
                     pop_up.setStandardButtons(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
                     pop_up.setDefaultButton(QMessageBox.Yes)
                     ret = pop_up.exec_()
-                    if ret == pop_up.Yes:
+                    if ret == QMessageBox.Yes:
                         cmds.file(s=True)
                         self.open_file(f=False)
-                    elif ret == pop_up.No:
+                    elif ret == QMessageBox.No:
                         self.open_file(f=True)
                     else:
                         self.show()
@@ -694,6 +694,7 @@ class super_saver(QWidget):
                     save.close()
 
     def open_db(self, folder=None):
+        print('opening DB')
         notes_db = None
         if folder:
             notes_db_file = os.path.join(folder, 'notes_db.json')
@@ -835,7 +836,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         output_file = self.ui.output_filename.text()
         overwrite = self.ui.overwrite.isChecked()
         fileType = self.ui.fileType.currentText()
-        notes = self.ui.notes.toPlainText()
+        notes = self.ui.notes.toPlainText() 
         if not notes:
             self.message(text='YOU MUST ADD A NOTE!!!', ok=False)
             return False
@@ -884,9 +885,11 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         time.sleep(1)
         self.close()
 
-    def snapshot(self):
-        current_file_item = self.ui.existingFile_list.currentItem()
-        notes = self.ui.notes.toPlainText()
+    def snapshot(self, note=None):
+        if note:
+            notes = 'Automatic snapshot - update from replacement snapshot: %s' % note
+        else:
+            notes = self.ui.notes.toPlainText()
         if not notes:
             self.message(text='YOU MUST ADD A NOTE!!!', ok=False)
             return False
@@ -923,7 +926,6 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             file_ext_text = 'mayaAscii'
 
         snapshot = os.path.join(snapshot_folder, snapshot_filename)
-        print('snapshot: %s' % snapshot)
 
         new_snap = cmds.file(snapshot, f=True, options='v=0;', type=file_ext_text, pr=True, ea=True)
         if new_snap:
@@ -959,6 +961,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         else:
             self.message(text='UNABLE TO SAVE SNAPSHOT!!', ok=False)
         self.ui.notes.clear()
+        current_file_item = self.ui.existingFile_list.currentItem()
         self.ui.existingFile_list.itemClicked.emit(current_file_item, 0)
 
     def populate_snapshots(self, item, column):
@@ -996,9 +999,37 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             sub_notes = QTreeWidgetItem(base_snap)
                             sub_notes.setText(0, notes)
                             sub_notes.setData(0, Qt.UserRole, snapshot_path)
+                            base_snap.setExpanded(True)
 
     def import_snapshot(self, item, column):
-        print(item)
+        snapshot_path = item.data(0, Qt.UserRole)
+        snapshot_file_date = os.path.getmtime(snapshot_path)
+        current_file_path = cmds.file(q=True, sn=True)
+        print('isp: %s' % current_file_path)
+        current_file_date = os.path.getmtime(current_file_path)
+        if current_file_date > snapshot_file_date:
+            self.hide()
+            message = QMessageBox()
+            message.setProperty('Do Quick Snapshot', True)
+            message.setWindowTitle('Do Snapshot?')
+            message.setText('Do you want to snapshot your current file?')
+            message.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            message.setDefaultButton(QMessageBox.Yes)
+            get_message = message.exec()
+            if get_message == QMessageBox.Yes:
+                self.snapshot(note='AUTO')
+                self.show()
+        current_file = os.path.basename(current_file_path)
+        print('isp: current_file: %s' % current_file)
+        current_ext = os.path.splitext(current_file)[-1]
+        if current_ext == '.ma':
+            ext = 'mayaAscii'
+        else:
+            ext = 'mayaBinary'
+        cmds.file(save=True)
+        cmds.file(snapshot_path, open=True)
+        cmds.file(rename=current_file_path)
+        cmds.file(save=True, type=ext)
 
     def publish(self):
         pass
