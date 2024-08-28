@@ -351,7 +351,8 @@ class super_saver(QWidget):
         self.ui.customNaming.clicked.connect(self.set_custom)
         self.ui.autoNaming.clicked.connect(self.set_custom)
         self.ui.cancel_btn.clicked.connect(self.close)
-        self.ui.snap_pub_btn.clicked.connect(self.open_snapub)
+        self.ui.snap_btn.clicked.connect(self.snapshot)
+        self.ui.publish_btn.clicked.connect(self.publish)
 
         self.ui.folder.textChanged.connect(self.update_ui)
         self.ui.taskType.currentTextChanged.connect(lambda: self.reset_version(v=1))
@@ -748,7 +749,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
     def populate_existing_files(self, current_directory=None):
         allowed_extensions = ['ma', 'mb', 'obj', 'fbx', 'abc']
-        excluded_folders = ['db', 'edits', '.mayaSwatches']
+        excluded_folders = ['db', 'edits', '.mayaSwatches', 'snapshots']
 
         if current_directory:
             if os.path.exists(current_directory):
@@ -878,12 +879,82 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         time.sleep(1)
         self.close()
 
-    def open_snapub(self):
-        # attempt to open the snap publisher
-        snapub_path = os.path.join(script_path, 'snap_publisher.py')
-        with open(snapub_path) as snp:
-            code = snp.read()
-            exec(code)
+    def snapshot(self):
+        notes = self.ui.notes.toPlainText()
+        if not notes:
+            self.message(text='YOU MUST ADD A NOTE!!!', ok=False)
+            return False
+        elif len(notes) < 10:
+            self.message(text='Your note must be more elaborate.', ok=False)
+            return False
+
+        current_file_path = self.current_file_path
+        current_root = os.path.dirname(current_file_path)
+
+        base_filename = os.path.basename(current_file_path)
+
+        get_root_file_name = os.path.splitext(base_filename)
+        root_file_name = get_root_file_name[0]
+        file_extention = get_root_file_name[1]
+
+        snapshot_folder = os.path.join(current_root, 'snapshots')
+        if not os.path.exists(snapshot_folder):
+            os.makedirs(snapshot_folder)
+        date = str(datetime.date(datetime.now()))
+        date_stamp = date.replace('-', '')
+
+        hour = str(datetime.time(datetime.now()).hour)
+        minute = str(datetime.time(datetime.now()).minute)
+        second = str(datetime.time(datetime.now()).second)
+        time_stamp = hour + minute + second
+        datetime_stamp = date_stamp + time_stamp
+        snapshot_filename = '%s_%s%s' % (root_file_name, datetime_stamp, file_extention)
+        if file_extention == '.mb':
+            file_ext_text = 'mayaBinary'
+        elif file_extention == '.ma':
+            file_ext_text = 'mayaAscii'
+        else:
+            file_ext_text = 'mayaAscii'
+
+        snapshot = os.path.join(snapshot_folder, snapshot_filename)
+        print('snapshot: %s' % snapshot)
+
+        new_snap = cmds.file(snapshot, f=True, options='v=0;', type=file_ext_text, pr=True, ea=True)
+        if new_snap:
+            snapshots_db = os.path.join(snapshot_folder, 'snapshots.json')
+            if not os.path.exists(snapshots_db) or os.path.getsize(snapshots_db) == 0:
+                snap_data = {
+                    'Snapshots': []
+                }
+                with open(snapshots_db, 'w') as snaps:
+                    snap_load = json.dumps(snap_data, indent=4)
+                    snaps.write(snap_load)
+            else:
+                with open(snapshots_db, 'r') as snaps:
+                    get_snap_data = snaps.read()
+                    if get_snap_data.strip() == "":
+                        snap_data = {'Snapshots': []}  # Handle empty file
+                    else:
+                        try:
+                            snap_data = json.loads(get_snap_data)
+                        except json.JSONDecodeError:
+                            snap_data = {'Snapshots': []}
+            new_data = {
+                'datestamp': datetime.now().isoformat(),
+                'filename': snapshot_filename,
+                'root_path': snapshot_folder,
+                'notes': notes
+            }
+            snap_data['Snapshots'].append(new_data)
+            with open(snapshots_db, 'w') as snaps:
+                snap_load = json.dumps(snap_data, indent=4)
+                snaps.write(snap_load)
+        else:
+            self.message(text='UNABLE TO SAVE SNAPSHOT!!', ok=False)
+        self.ui.notes.clear()
+
+    def publish(self):
+        pass
 
     def closeEvent(self, event):
         self.settings.setValue('appendArtist', self.ui.AppendArtist.isChecked())

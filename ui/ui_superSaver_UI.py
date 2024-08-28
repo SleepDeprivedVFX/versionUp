@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIKLCwMC.ui'
+## Form generated from reading UI file 'superSaver_UIaPXdsk.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -260,6 +260,11 @@ class Ui_SaveAs(object):
 
         self.open_btn_layout.addItem(self.horizontalSpacer_2)
 
+        self.load_btn = QPushButton(SaveAs)
+        self.load_btn.setObjectName(u"load_btn")
+
+        self.open_btn_layout.addWidget(self.load_btn)
+
         self.open_btn = QPushButton(SaveAs)
         self.open_btn.setObjectName(u"open_btn")
 
@@ -297,14 +302,19 @@ class Ui_SaveAs(object):
 
         self.buttons_layout = QHBoxLayout()
         self.buttons_layout.setObjectName(u"buttons_layout")
-        self.snap_pub_btn = QPushButton(SaveAs)
-        self.snap_pub_btn.setObjectName(u"snap_pub_btn")
-
-        self.buttons_layout.addWidget(self.snap_pub_btn)
-
         self.buttons_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.buttons_layout.addItem(self.buttons_spacer)
+
+        self.publish_btn = QPushButton(SaveAs)
+        self.publish_btn.setObjectName(u"publish_btn")
+
+        self.buttons_layout.addWidget(self.publish_btn)
+
+        self.snap_btn = QPushButton(SaveAs)
+        self.snap_btn.setObjectName(u"snap_btn")
+
+        self.buttons_layout.addWidget(self.snap_btn)
 
         self.save_btn = QPushButton(SaveAs)
         self.save_btn.setObjectName(u"save_btn")
@@ -380,9 +390,11 @@ class Ui_SaveAs(object):
         self.artistName_label.setText(QCoreApplication.translate("SaveAs", u"Artist Name", None))
         self.notes_label.setText(QCoreApplication.translate("SaveAs", u"Notes", None))
         self.existingFile_label.setText(QCoreApplication.translate("SaveAs", u"Existing Files", None))
+        self.load_btn.setText(QCoreApplication.translate("SaveAs", u"Load Ref", None))
         self.open_btn.setText(QCoreApplication.translate("SaveAs", u"Open", None))
-        self.snap_pub_btn.setText(QCoreApplication.translate("SaveAs", u"Snap / Publish", None))
-        self.save_btn.setText(QCoreApplication.translate("SaveAs", u"Save", None))
+        self.publish_btn.setText(QCoreApplication.translate("SaveAs", u"Publish", None))
+        self.snap_btn.setText(QCoreApplication.translate("SaveAs", u"Snapshot", None))
+        self.save_btn.setText(QCoreApplication.translate("SaveAs", u"Version Up", None))
         self.cancel_btn.setText(QCoreApplication.translate("SaveAs", u"Cancel", None))
     # retranslateUi
 
