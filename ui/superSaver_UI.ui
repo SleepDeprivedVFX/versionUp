@@ -467,6 +467,13 @@ color: rgb(255, 150, 150);</string>
       </spacer>
      </item>
      <item>
+      <widget class="QPushButton" name="bakeCam_btn">
+       <property name="text">
+        <string>Bake Camera</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="publish_btn">
        <property name="text">
         <string>Publish</string>

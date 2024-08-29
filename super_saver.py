@@ -36,7 +36,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -224,6 +224,18 @@ class super_saver(QWidget):
             '\'',
             '"'
         ]
+        self.cameraNames = [
+            'shotcam',
+            'camera',
+            'shot',
+            'scenecamera',
+            'scenecam',
+            'cam',
+            'shot_cam',
+            'shot_camera',
+            'scene_cam',
+            'scene_camera'
+        ]
         self.root_name = None
         self.task = None
         self.ui = ssui.Ui_SaveAs()
@@ -357,6 +369,7 @@ class super_saver(QWidget):
         self.ui.snap_btn.clicked.connect(self.snapshot)
         self.ui.publish_btn.clicked.connect(self.publish)
         self.ui.load_btn.clicked.connect(self.load_ref)
+        self.ui.bakeCam_btn.clicked.connect(self.start_cam_bake)
 
         self.ui.folder.textChanged.connect(self.update_ui)
         self.ui.taskType.currentTextChanged.connect(lambda: self.reset_version(v=1))
@@ -1206,6 +1219,69 @@ References Imported and Cleaned:
                 self.message(text='Maya could not find the reference: %s' % file_name)
         else:
             self.message(text='File could not be found: %s' % file_name)
+
+    def start_cam_bake(self):
+        self.message(text='Baking Camera...', ok=True)
+        bake_camera = self.cam_bake()
+        if bake_camera:
+            get_scene_name = cmds.file(q=True, sn=True)
+            data = self.get_root_and_task(filename=get_scene_name)
+            scene_name = os.path.splitext(os.path.basename(get_scene_name))[0]
+            get_root_path = cmds.workspace(q=True, rd=True)
+            task = data['task_name']
+            if task in scene_name:
+                cam_name = scene_name.replace(task, 'cam')
+                cam_name = cam_name + '.fbx'
+            else:
+                cam_name = 'shot_cam'
+
+            cmds.select(bake_camera, r=True)
+            output_path = os.path.join(get_root_path, 'assets/Shot_Cams')
+            output_file = os.path.join(output_path, cam_name)
+            cmds.file(output_file, f=True,
+                      options=";exportUVs=1;exportSkels=none;exportSkin=none;exportBlendShapes=0;exportDisplayColor=0;;exportColorSets=1;exportComponentTags=1;defaultMeshScheme=catmullClark;animation=0;eulerFilter=0;staticSingleSample=0;startTime=1;endTime=1;frameStride=1;frameSample=0.0;defaultUSDFormat=usdc;rootPrim=;rootPrimType=scope;defaultPrim=shotCam_baked;shadingMode=useRegistry;convertMaterialsTo=[UsdPreviewSurface];exportRelativeTextures=automatic;exportInstances=1;exportVisibility=1;mergeTransformAndShape=1;stripNamespaces=0;worldspace=0;excludeExportTypes=[]",
+                      type='FBX Export', pr=True, es=True, ex=False)
+            cmds.select(bake_camera, r=True)
+            cmds.delete()
+            self.message(text='Camera baked successfully: %s' % cam_name, ok=True)
+        else:
+            self.message(text='Camera could not be baked!', ok=False)
+
+    def cam_bake(self):
+        cam_transform = None
+        all_cams = cmds.ls(ca=True)
+        for cam in all_cams:
+            pattern = cam.lower()
+            for name in self.cameraNames:
+                if name in cam:
+                    cmds.select(cam, r=True)
+                    find_trans = cmds.listRelatives(cam, p=True)
+                    if find_trans:
+                        check_trans = cmds.objectType(find_trans[0])
+                        if check_trans == 'transform':
+                            cam_transform = find_trans[0]
+                            break
+                        else:
+                            return False
+                    else:
+                        return False
+        if cam_transform:
+            cmds.select(cam_transform, r=True)
+            cmds.duplicate(n='%s_baked' % cam_transform)
+            dup_cam = cmds.ls(sl=True)
+            cmds.Unparent()
+            cmds.select(cam_transform, r=True)
+            cmds.select(dup_cam, tgl=True)
+            do_constraint = cmds.parentConstraint(mo=True, weight=1)
+            constraint = do_constraint[0]
+            cmds.select(dup_cam, r=True)
+            startFrame = cmds.playbackOptions(query=True, minTime=True)
+            endFrame = cmds.playbackOptions(query=True, maxTime=True)
+            cmds.bakeResults(dup_cam, sm=True, time=(startFrame, endFrame), sb=1, osr=1, dic=True, pok=True, sac=True,
+                             rba=False, ral=False, bol=False, mr=True, cp=False, s=True)
+            cmds.delete(constraint)
+            return dup_cam
+        return False
 
     def closeEvent(self, event):
         self.settings.setValue('appendArtist', self.ui.AppendArtist.isChecked())

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UICbNqTm.ui'
+## Form generated from reading UI file 'superSaver_UIDEptjB.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -320,6 +320,11 @@ class Ui_SaveAs(object):
 
         self.buttons_layout.addItem(self.buttons_spacer)
 
+        self.bakeCam_btn = QPushButton(SaveAs)
+        self.bakeCam_btn.setObjectName(u"bakeCam_btn")
+
+        self.buttons_layout.addWidget(self.bakeCam_btn)
+
         self.publish_btn = QPushButton(SaveAs)
         self.publish_btn.setObjectName(u"publish_btn")
 
@@ -406,6 +411,7 @@ class Ui_SaveAs(object):
         self.load_btn.setText(QCoreApplication.translate("SaveAs", u"Load Ref", None))
         self.open_btn.setText(QCoreApplication.translate("SaveAs", u"Open", None))
         self.snapshots_label.setText(QCoreApplication.translate("SaveAs", u"Snapshots", None))
+        self.bakeCam_btn.setText(QCoreApplication.translate("SaveAs", u"Bake Camera", None))
         self.publish_btn.setText(QCoreApplication.translate("SaveAs", u"Publish", None))
         self.snap_btn.setText(QCoreApplication.translate("SaveAs", u"Snapshot", None))
         self.save_btn.setText(QCoreApplication.translate("SaveAs", u"Version Up", None))
