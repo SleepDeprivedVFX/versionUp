@@ -36,7 +36,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '1.0.5'
+__version__ = '1.0.6'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -828,6 +828,11 @@ NOTE: None
                         date = note['date']
                         computer = note['computer']
                         details = note['details']
+
+                        # Set pretty date
+                        d_date = datetime.strptime(date, '%Y-%m-%d | %H:%M:%S.%f')
+                        date = d_date.strftime('%m/%d/%Y - %I:%M:%S%p')
+
                         post_note = """FILE: {filename}
 USER: {user}
 COMP: {computer}
@@ -1027,8 +1032,12 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             snap_data = json.loads(get_snap_data)
                         except json.JSONDecodeError:
                             snap_data = {'Snapshots': []}
+
+            # Set pretty date
+            d_date = datetime.now()
+            date = d_date.strftime('%m/%d/%Y - %I:%M:%S%p')
             new_data = {
-                'datestamp': datetime.now().isoformat(),
+                'datestamp': date,
                 'filename': snapshot_filename,
                 'root_path': snapshot_folder,
                 'original_file': cmds.file(q=True, sn=True),
