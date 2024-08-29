@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIDEptjB.ui'
+## Form generated from reading UI file 'superSaver_UIkafWCU.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -122,6 +122,7 @@ class Ui_SaveAs(object):
         self.taskType_layout.addWidget(self.taksType_label)
 
         self.taskType = QComboBox(SaveAs)
+        self.taskType.addItem("")
         self.taskType.addItem("")
         self.taskType.addItem("")
         self.taskType.addItem("")
@@ -386,15 +387,16 @@ class Ui_SaveAs(object):
         self.folder_btn.setText(QCoreApplication.translate("SaveAs", u"Browse...", None))
         self.taksType_label.setText(QCoreApplication.translate("SaveAs", u"Task Type", None))
         self.taskType.setItemText(0, QCoreApplication.translate("SaveAs", u"model", None))
-        self.taskType.setItemText(1, QCoreApplication.translate("SaveAs", u"lookdev", None))
-        self.taskType.setItemText(2, QCoreApplication.translate("SaveAs", u"rig", None))
-        self.taskType.setItemText(3, QCoreApplication.translate("SaveAs", u"anim", None))
-        self.taskType.setItemText(4, QCoreApplication.translate("SaveAs", u"sculpt", None))
-        self.taskType.setItemText(5, QCoreApplication.translate("SaveAs", u"groom", None))
-        self.taskType.setItemText(6, QCoreApplication.translate("SaveAs", u"fx", None))
-        self.taskType.setItemText(7, QCoreApplication.translate("SaveAs", u"cloth", None))
-        self.taskType.setItemText(8, QCoreApplication.translate("SaveAs", u"prototype", None))
-        self.taskType.setItemText(9, QCoreApplication.translate("SaveAs", u"previs", None))
+        self.taskType.setItemText(1, QCoreApplication.translate("SaveAs", u"sculpt", None))
+        self.taskType.setItemText(2, QCoreApplication.translate("SaveAs", u"lookdev", None))
+        self.taskType.setItemText(3, QCoreApplication.translate("SaveAs", u"rig", None))
+        self.taskType.setItemText(4, QCoreApplication.translate("SaveAs", u"groom", None))
+        self.taskType.setItemText(5, QCoreApplication.translate("SaveAs", u"layout", None))
+        self.taskType.setItemText(6, QCoreApplication.translate("SaveAs", u"previs", None))
+        self.taskType.setItemText(7, QCoreApplication.translate("SaveAs", u"anim", None))
+        self.taskType.setItemText(8, QCoreApplication.translate("SaveAs", u"fx", None))
+        self.taskType.setItemText(9, QCoreApplication.translate("SaveAs", u"cloth", None))
+        self.taskType.setItemText(10, QCoreApplication.translate("SaveAs", u"prototype", None))
 
         self.fileType_label.setText(QCoreApplication.translate("SaveAs", u"File Type", None))
         self.fileType.setItemText(0, QCoreApplication.translate("SaveAs", u"ma", None))

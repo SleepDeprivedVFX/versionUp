@@ -36,7 +36,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '1.0.2'
+__version__ = '1.0.3'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -189,6 +189,14 @@ class super_saver(QWidget):
                 'PRV',
                 'PVS',
                 'pre'
+            ],
+            "layout": [
+                'layout',
+                'Layout',
+                'LayOut',
+                'LAY',
+                'LYO',
+                'lay'
             ]
         }
         self.invalidCharacters = [
