@@ -256,7 +256,6 @@ class super_saver(QWidget):
         self.restoreGeometry(self.position)
 
         pth = cmds.file(q=True, sn=True)
-        print('scene path: %s' % pth)
         self.current_file_path = pth
 
         workspace = cmds.workspace(q=True, act=True)
@@ -722,7 +721,6 @@ class super_saver(QWidget):
                     save.close()
 
     def open_db(self, folder=None):
-        print('opening DB')
         notes_db = None
         if folder:
             notes_db_file = os.path.join(folder, 'notes_db.json')
@@ -781,10 +779,8 @@ DATE: None
 
 NOTE: None
 """.format(fn=filename)
-            print('sfsi: filename: %s' % filename)
-            print('sfsi: folder: %s' % folder_name)
-            print('sfsi: file_text: %s' % file_text)
 
+            # Make sure it's a file, not a folder
             if filename:
                 # Make button decisions.
                 if not self.ui.open_btn.isEnabled():
@@ -960,7 +956,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         self.create_note(notes=notes, output_file=output_file)
 
         time.sleep(3)
-        print('close: %s' % close)
+        print('run: close: %s' % close)
         if close:
             self.close()
         else:
@@ -1090,7 +1086,6 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         snapshot_path = item.data(0, Qt.UserRole)
         snapshot_file_date = os.path.getmtime(snapshot_path)
         current_file_path = cmds.file(q=True, sn=True)
-        print('isp: %s' % current_file_path)
         current_file_date = os.path.getmtime(current_file_path)
         if current_file_date > snapshot_file_date:
             self.hide()
@@ -1105,7 +1100,6 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                 self.snapshot(note='AUTO')
                 self.show()
         current_file = os.path.basename(current_file_path)
-        print('isp: current_file: %s' % current_file)
         current_ext = os.path.splitext(current_file)[-1]
         if current_ext == '.ma':
             ext = 'mayaAscii'
