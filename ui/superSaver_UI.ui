@@ -165,6 +165,11 @@ color: rgb(255, 150, 150);</string>
            </item>
            <item>
             <property name="text">
+             <string>sculpt</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
              <string>lookdev</string>
             </property>
            </item>
@@ -175,17 +180,22 @@ color: rgb(255, 150, 150);</string>
            </item>
            <item>
             <property name="text">
-             <string>anim</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>sculpt</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
              <string>groom</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>layout</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>previs</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>anim</string>
             </property>
            </item>
            <item>
@@ -201,11 +211,6 @@ color: rgb(255, 150, 150);</string>
            <item>
             <property name="text">
              <string>prototype</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>previs</string>
             </property>
            </item>
           </widget>
@@ -390,6 +395,13 @@ color: rgb(255, 150, 150);</string>
             </spacer>
            </item>
            <item>
+            <widget class="QPushButton" name="import_btn">
+             <property name="text">
+              <string>Import</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="load_btn">
              <property name="text">
               <string>Load Ref</string>
@@ -490,7 +502,7 @@ color: rgb(255, 150, 150);</string>
      <item>
       <widget class="QPushButton" name="save_btn">
        <property name="text">
-        <string>Version Up</string>
+        <string>Save V Up</string>
        </property>
       </widget>
      </item>

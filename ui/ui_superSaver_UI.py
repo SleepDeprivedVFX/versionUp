@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIkafWCU.ui'
+## Form generated from reading UI file 'superSaver_UIWEjjmy.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -261,6 +261,11 @@ class Ui_SaveAs(object):
 
         self.open_btn_layout.addItem(self.horizontalSpacer_2)
 
+        self.import_btn = QPushButton(SaveAs)
+        self.import_btn.setObjectName(u"import_btn")
+
+        self.open_btn_layout.addWidget(self.import_btn)
+
         self.load_btn = QPushButton(SaveAs)
         self.load_btn.setObjectName(u"load_btn")
 
@@ -410,13 +415,14 @@ class Ui_SaveAs(object):
         self.artistName_label.setText(QCoreApplication.translate("SaveAs", u"Artist Name", None))
         self.notes_label.setText(QCoreApplication.translate("SaveAs", u"Notes", None))
         self.existingFile_label.setText(QCoreApplication.translate("SaveAs", u"Existing Files", None))
+        self.import_btn.setText(QCoreApplication.translate("SaveAs", u"Import", None))
         self.load_btn.setText(QCoreApplication.translate("SaveAs", u"Load Ref", None))
         self.open_btn.setText(QCoreApplication.translate("SaveAs", u"Open", None))
         self.snapshots_label.setText(QCoreApplication.translate("SaveAs", u"Snapshots", None))
         self.bakeCam_btn.setText(QCoreApplication.translate("SaveAs", u"Bake Camera", None))
         self.publish_btn.setText(QCoreApplication.translate("SaveAs", u"Publish", None))
         self.snap_btn.setText(QCoreApplication.translate("SaveAs", u"Snapshot", None))
-        self.save_btn.setText(QCoreApplication.translate("SaveAs", u"Version Up", None))
+        self.save_btn.setText(QCoreApplication.translate("SaveAs", u"Save V Up", None))
         self.cancel_btn.setText(QCoreApplication.translate("SaveAs", u"Cancel", None))
     # retranslateUi
 

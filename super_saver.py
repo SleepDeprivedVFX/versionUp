@@ -36,7 +36,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '1.0.3'
+__version__ = '1.0.5'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -363,7 +363,7 @@ class super_saver(QWidget):
         self.ui.existingFile_list.setHeaderHidden(True)
         self.ui.snapshots.setHeaderHidden(True)
         self.ui.snapshots.itemDoubleClicked.connect(self.import_snapshot)
-        self.ui.existingFile_list.itemClicked.connect(self.show_existing_note)
+        self.ui.existingFile_list.itemClicked.connect(self.show_file_selection_info)
         # self.ui.existingFile_list.itemClicked.connect(self.populate_snapshots)
         self.ui.existingFile_list.itemDoubleClicked.connect(lambda: self.open_file(f=True))
         self.populate_existing_files(current_directory=self.scene_folder_path)
@@ -378,6 +378,7 @@ class super_saver(QWidget):
         self.ui.publish_btn.clicked.connect(self.publish)
         self.ui.load_btn.clicked.connect(self.load_ref)
         self.ui.bakeCam_btn.clicked.connect(self.start_cam_bake)
+        self.ui.import_btn.clicked.connect(self.import_object)
 
         self.ui.folder.textChanged.connect(self.update_ui)
         self.ui.taskType.currentTextChanged.connect(lambda: self.reset_version(v=1))
@@ -390,6 +391,14 @@ class super_saver(QWidget):
         self.ui.open_btn.clicked.connect(self.open_file)
         self.ui.open_btn.setEnabled(False)
         self.ui.open_btn.setStyleSheet(
+            'color: rgb(140, 140, 140);'
+        )
+        self.ui.load_btn.setEnabled(False)
+        self.ui.load_btn.setStyleSheet(
+            'color: rgb(140, 140, 140);'
+        )
+        self.ui.import_btn.setEnabled(False)
+        self.ui.import_btn.setStyleSheet(
             'color: rgb(140, 140, 140);'
         )
 
@@ -610,9 +619,6 @@ class super_saver(QWidget):
             filename = check_filename[0]
             # Do I add the version update here?  Nope
 
-            next_version = int(check_filename[1])
-            print('shit', next_version)  # What is this for?
-
             # self.reset_version(v=next_version)
             output_path = os.path.join(path, filename)
             if '\\' in output_path:
@@ -759,14 +765,10 @@ class super_saver(QWidget):
         else:
             return False
 
-    def show_existing_note(self, item, column):
-        if not self.ui.open_btn.isEnabled():
-            self.ui.open_btn.setEnabled(True)
-            self.ui.open_btn.setStyleSheet(
-                'color: rgb(220, 220, 220);'
-            )
-        # get_filename = self.ui.existingFile_list.currentItem()
+    def show_file_selection_info(self, item, column):
+        # Load selection info
         file_info = item.data(0, Qt.UserRole)
+        file_text = item.text(0)
         if file_info:
             folder_name = file_info['folder']
             filename = file_info['file']
@@ -779,6 +781,50 @@ DATE: None
 
 NOTE: None
 """.format(fn=filename)
+            print('sfsi: filename: %s' % filename)
+            print('sfsi: folder: %s' % folder_name)
+            print('sfsi: file_text: %s' % file_text)
+
+            if filename:
+                # Make button decisions.
+                if not self.ui.open_btn.isEnabled():
+                    self.ui.open_btn.setEnabled(True)
+                    self.ui.open_btn.setStyleSheet(
+                        'color: rgb(220, 220, 220);'
+                    )
+                if any(pubass in folder_name for pubass in ['Publishes', 'assets']):
+                    if not self.ui.load_btn.isEnabled() and not self.ui.import_btn.isEnabled():
+                        self.ui.load_btn.setEnabled(True)
+                        self.ui.load_btn.setStyleSheet(
+                            'color: rgb(220, 220, 220);'
+                        )
+                        self.ui.import_btn.setEnabled(True)
+                        self.ui.import_btn.setStyleSheet(
+                            'color: rgb(220, 220, 220);'
+                        )
+                else:
+                    self.ui.load_btn.setEnabled(False)
+                    self.ui.load_btn.setStyleSheet(
+                        'color: rgb(140, 140, 140);'
+                    )
+                    self.ui.import_btn.setEnabled(False)
+                    self.ui.import_btn.setStyleSheet(
+                        'color: rgb(140, 140, 140);'
+                    )
+            else:
+                self.ui.open_btn.setEnabled(False)
+                self.ui.open_btn.setStyleSheet(
+                    'color: rgb(140, 140, 140);'
+                )
+                self.ui.load_btn.setEnabled(False)
+                self.ui.load_btn.setStyleSheet(
+                    'color: rgb(140, 140, 140);'
+                )
+                self.ui.import_btn.setEnabled(False)
+                self.ui.import_btn.setStyleSheet(
+                    'color: rgb(140, 140, 140);'
+                )
+
             for note in notes_db['Notes']:
                 if type(note) == dict and 'filename' in note.keys():
                     if filename in note['filename']:
@@ -794,7 +840,7 @@ DATE: {date}
 NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=date, details=details)
                         break
             self.ui.existing_notes.setText(post_note)
-        self.populate_snapshots(item, column)
+            self.populate_snapshots(item, column)
 
     def populate_existing_files(self, current_directory=None):
         allowed_extensions = ['ma', 'mb', 'obj', 'fbx', 'abc']
@@ -914,6 +960,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         self.create_note(notes=notes, output_file=output_file)
 
         time.sleep(3)
+        print('close: %s' % close)
         if close:
             self.close()
         else:
@@ -1123,8 +1170,6 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
         # Clean out the references
         clean_refs = self.import_and_clean_references()
-        print('clean_refs: %s' % clean_refs)
-        print('notes: %s' % notes)
         if clean_refs:
             new_notes = """{notes}
 
@@ -1228,6 +1273,23 @@ References Imported and Cleaned:
         else:
             self.message(text='File could not be found: %s' % file_name)
 
+    def import_object(self):
+        current_item = self.ui.existingFile_list.currentItem()
+        data = current_item.data(0, Qt.UserRole)
+        file_name = data['file']
+        file_root = os.path.splitext(file_name)[0]
+        path = data['folder']
+        path = path.replace('\\', '/')
+        file_path = os.path.join(path, file_name)
+        if os.path.exists(file_path):
+            if cmds.file(file_path, q=True, exists=True):
+                cmds.file(file_path, i=True, mergeNamespaceWithRoot=True)
+                self.message(text='%s imported into scene' % file_root, ok=True)
+            else:
+                self.message(text='Maya could not import the file: %s' % file_name, ok=False)
+        else:
+            self.message(text='The file could not be found!', ok=False)
+
     def start_cam_bake(self):
         self.message(text='Baking Camera...', ok=True)
         bake_camera = self.cam_bake()
@@ -1306,4 +1368,4 @@ if __name__ == '__main__':
     try:
         sys.exit(app.exec())
     except SystemExit as e:
-        print(e)
+        print('system exit code', e)
