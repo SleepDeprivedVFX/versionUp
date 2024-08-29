@@ -1068,6 +1068,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                         get_snap_data = snaps.read()
                         snap_data = json.loads(get_snap_data)
                         snapshots = snap_data['Snapshots']
+                        last_item = None
                         for snapshot in snapshots:
                             datestamp = snapshot['datestamp']
                             filename = snapshot['filename']
@@ -1089,7 +1090,11 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             sub_notes = QTreeWidgetItem(base_snap)
                             sub_notes.setText(0, notes)
                             sub_notes.setData(0, Qt.UserRole, snapshot_path)
-                            base_snap.setExpanded(True)
+
+                            last_item = base_snap  # Keep track of the last item created
+
+                        if last_item:
+                            last_item.setExpanded(True)  # Expand only the last item
 
     def import_snapshot(self, item, column):
         snapshot_path = item.data(0, Qt.UserRole)
