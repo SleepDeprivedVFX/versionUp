@@ -401,7 +401,7 @@ class super_saver(QWidget):
             'color: rgb(140, 140, 140);'
         )
 
-        self.ui.save_btn.clicked.connect(self.run)
+        self.ui.save_btn.clicked.connect(lambda: self.run(close=True))
         self.ui.folder_btn.clicked.connect(self.get_folder)
 
         self.show()
