@@ -244,6 +244,8 @@ class super_saver(QWidget):
             'scene_cam',
             'scene_camera'
         ]
+        self.cameraAttributes = ['translateX', 'translateY', 'translateZ', 'rotateX', 'rotateY', 'rotateZ',
+                                 'scaleX', 'scaleY', 'scaleZ', 'visibility', 'centerOfInterest']
         self.root_name = None
         self.task = None
         self.ui = ssui.Ui_SaveAs()
@@ -1321,6 +1323,8 @@ References Imported and Cleaned:
                       type='FBX Export', pr=True, es=True, ex=False)
             cmds.select(bake_camera, r=True)
             cmds.delete()
+            notes = f'Automatic camera bake for {scene_name}.  Camera name: {bake_camera}'
+            self.create_note(notes=notes, output_file=output_file)
             self.message(text='Camera baked successfully: %s' % cam_name, ok=True)
         else:
             self.message(text='Camera could not be baked!', ok=False)
@@ -1345,6 +1349,11 @@ References Imported and Cleaned:
                         return False
         if cam_transform:
             cmds.select(cam_transform, r=True)
+            # Unlock the camera
+            for attr in self.cameraAttributes:
+                cmds.setAttr(f'{cam_transform}.{attr}', lock=False)
+
+            # Duplicate and bake
             cmds.duplicate(n='%s_baked' % cam_transform)
             dup_cam = cmds.ls(sl=True)
             cmds.Unparent()
@@ -1358,6 +1367,12 @@ References Imported and Cleaned:
             cmds.bakeResults(dup_cam, sm=True, time=(startFrame, endFrame), sb=1, osr=1, dic=True, pok=True, sac=True,
                              rba=False, ral=False, bol=False, mr=True, cp=False, s=True)
             cmds.delete(constraint)
+
+            # Relock the main cam
+            for attr in self.cameraAttributes:
+                cmds.setAttr(f'{cam_transform}.{attr}', lock=True)
+
+            # Return the duplicate
             return dup_cam
         return False
 
