@@ -1323,7 +1323,8 @@ References Imported and Cleaned:
                       type='FBX Export', pr=True, es=True, ex=False)
             cmds.select(bake_camera, r=True)
             cmds.delete()
-            notes = f'Automatic camera bake for {scene_name}.  Camera name: {bake_camera}'
+            notes = (f'Automatic camera bake for {scene_name}.  Camera name: {bake_camera[0]}  '
+                     f'Output filename: {os.path.basename(output_file)}')
             self.create_note(notes=notes, output_file=output_file)
             self.message(text='Camera baked successfully: %s' % cam_name, ok=True)
         else:
