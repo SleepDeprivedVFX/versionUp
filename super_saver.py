@@ -289,7 +289,7 @@ class super_saver(QWidget):
         self.scene_folder_path = os.path.join(workspace, scene_folder)
         asset_folder = cmds.workspace(fre='templates')
         self.asset_folder_path = os.path.join(workspace, asset_folder)
-        self.project_name = os.path.basename(os.path.normpath(cmds.workspace(q=True, rd=True)))
+        # self.project_name = os.path.basename(os.path.normpath(cmds.workspace(q=True, rd=True)))
 
         # Set window title
         self.setWindowTitle('Sans Pipe Super Saver - v%s' % __version__)
@@ -297,13 +297,7 @@ class super_saver(QWidget):
         # Check for and load config file
         self.config_path = os.path.join(workspace, 'show_config.cfg')
         if not os.path.exists(self.config_path):
-            get_config_default = os.path.join(script_path, 'show_config.cfg')
-            if os.path.exists(get_config_default):
-                config_destination = self.config_path
-                shutil.copy2(get_config_default, config_destination)
-            else:
-                print('Config template could not be found!')
-                self.build_config_file(path=self.config_path)
+            self.build_config_file(path=self.config_path)
 
         self.settings = QSettings(__author__, 'Sans Pipe Super Saver')
         self.position = self.settings.value('geometry', None)
@@ -337,20 +331,35 @@ class super_saver(QWidget):
         artist = first_initials + last_name
         self.ui.artistName.setText(artist)
 
+        # Get the configurations
+        config = configparser.ConfigParser()
+        config.read(self.config_path)
+        # show_code = self.try_to_get_show_code(path=workspace)
+        self.show_code = config['Project']['Show_Code']
+        show_code = self.show_code
+        self.project_name = config['Project']['Show_Name']
+        self.res_width = config['Camera']['resolution_width']
+        self.res_height = config['Camera']['resolution_height']
+        self.filmback_width = config['Camera']['filmback_width']
+        self.filmback_height = config['Camera']['filmback_height']
+        self.scene_scale = config['Scene']['scene_scale']
+
+        self.ui.showName.setText(self.project_name)
+        self.ui.resolutionWidth.setText(self.res_width)
+        self.ui.resolutionHeight.setText(self.res_height)
+        self.ui.filmback_width.setText(self.filmback_width)
+        self.ui.filmback_height.setText(self.filmback_height)
+        self.ui.sceneScale.setText(self.scene_scale)
+
         if pth:
             # Check against current project
             save_path = os.path.dirname(pth)
             save_file = os.path.basename(pth)
 
-            # FIXME: This all needs to get reworked from the config file
-            config = configparser.ConfigParser()
-            config.read(self.config_path)
-            # show_code = self.try_to_get_show_code(path=workspace)
-            show_code = config['Project']['Show_Code']
-            print('SHOW CODE: %s' % show_code)
-            if show_code:
-                self.ui.showCode.setText(show_code)
-                show_code = '{show_code}_'.format(show_code=show_code)
+            if self.show_code:
+                self.ui.showCode.setText(self.show_code)
+                self.ui.showCodeSet.setText(self.show_code)
+                show_code = '{show_code}_'.format(show_code=self.show_code)
             root_task_data = self.get_root_and_task(save_file)
             self.root_name = root_task_data['root_name']
             self.task = root_task_data['task_abbr']
@@ -381,11 +390,10 @@ class super_saver(QWidget):
             project_name = split_project_path[rem]
             version = 1
 
-            # FIXME: this should be a self.show_code and it should become a global var set by the config file.
-            show_code = self.try_to_get_show_code(path=save_path)
-            if show_code:
-                self.ui.showCode.setText(show_code)
-                show_code = '%s_' % show_code
+            if self.show_code:
+                self.ui.showCode.setText(self.show_code)
+                self.ui.showCodeSet.setText(self.show_code)
+                show_code = '%s_' % self.show_code
 
             self.root_name = project_name
             self.task = self.tasks[self.ui.taskType.currentText()][0]
@@ -470,6 +478,7 @@ class super_saver(QWidget):
 
         self.ui.save_btn.clicked.connect(lambda: self.run(close=True))
         self.ui.folder_btn.clicked.connect(self.get_folder)
+        self.ui.save_config_btn.clicked.connect(self.save_config)
 
         self.show()
 
@@ -547,7 +556,7 @@ class super_saver(QWidget):
                 'Show_Code': self.try_to_get_show_code(path=path)
             }
             with open(path, 'w') as configfile:
-                configfile.write(config)
+                config.write(configfile)
 
     def try_to_get_show_code(self, path=None):
         # This method returns a 3 letter show code either from the path, or from the workspace name.
@@ -567,10 +576,32 @@ class super_saver(QWidget):
                     show_code += char
                 if len(show_code) == 3:
                     break
-            if len(show_code < 3):
+            if len(show_code) < 3:
                 remaining_chars = [char for char in self.project_nam[1:] if char.lower() not in show_code.lower()]
                 show_code += ''.join(remaining_chars)[:3-len(show_code)]
         return show_code
+
+    def save_config(self):
+        if os.path.exists(self.config_path):
+            config = configparser.ConfigParser()
+            config.read(self.config_path)
+            project_name = self.ui.showName.text()
+            show_code = self.ui.showCodeSet.text()
+            res_width = self.ui.resolutionWidth.text()
+            res_height = self.ui.resolutionHeight.text()
+            fb_width = self.ui.filmback_width.text()
+            fb_height = self.ui.filmback_height.text()
+            scale = self.ui.sceneScale.text()
+            config.set('Camera', 'resolution_width', res_width)
+            config.set('Camera', 'resolution_height', res_height)
+            config.set('Camera', 'resolution_width', fb_width)
+            config.set('Camera', 'resolution_width', fb_height)
+            config.set('Scene', 'scene_scale', scale)
+            config.set('Project', 'show_name', project_name)
+            config.set('Project', 'show_code', show_code)
+
+            with open(self.config_path, 'w') as configpath:
+                config.write(configpath)
 
     # def check_version(self):
     #     # This would partially replace the update_ui() routine.  The idea here being that it would collect the UI
