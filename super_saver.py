@@ -20,13 +20,13 @@ TODO: List - Upgrades needed
     2. Build in an "update references" right-click utility.
                     3. Improve headers for UI boxes.  Font size increase for "Existing Files, Snapshots, Notes" et cetera
     4. Add right-click context menu for load-ref, import, update and others.
-                5. Add a Scene default setting.  Things like:
-                    a. Camera film back
-                    b. Resolution
-                    c. Scene Scale
-                6. Recently opened files - Set with a QSettings variable.  A list of the last 10.
+                    5. Add a Scene default setting.  Things like:
+                        a. Camera film back
+                        b. Resolution
+                        c. Scene Scale
+                    6. Recently opened files - Set with a QSettings variable.  A list of the last 10.
     7. Add hotkeys for Snapshot, Publish and Save.
-    8. Give the option for the Camera Bake to include the shot/asset name
+                    8. Give the option for the Camera Bake to include the shot/asset name
                     9. Rebuild the UI to include tabs.  Maybe like:
                         a. Main - Save and notes.
                         b. Snapshots or Tools?  Maybe - Might could be combine with Publish Tracking.
@@ -38,6 +38,7 @@ TODO: List - Upgrades needed
             same folder functionality of Update #1 would override the current file save up action, forcing a new filename.
     13. Make an FBX / OBJ / ABC publisher
                     14. Add a config file?  For Update #5
+    15. Make incorrect things, like missing notes, highlight red.
 """
 
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings)
@@ -301,8 +302,6 @@ class super_saver(QWidget):
 
         self.settings = QSettings(__author__, 'Sans Pipe Super Saver')
         self.position = self.settings.value('geometry', None)
-        # FIXME: Does the showcode still need to be there with the config file?
-        # self.showcode = self.settings.value('showcode', None)
         self.appendartist = self.settings.value('appendArtist', None)
         self.recent_files = self.settings.value('recent_files', [])
         self.bakeCamSceneName = self.settings.value('bake_cam_scene_name', None)
@@ -1516,9 +1515,8 @@ References Imported and Cleaned:
         cam_transform = None
         all_cams = cmds.ls(ca=True)
         for cam in all_cams:
-            pattern = cam.lower()
-            for name in self.cameraNames:
-                if name in cam:
+            if self.ui.bakeCamSceneName.isChecked():
+                if self.root_name in cam:
                     cmds.select(cam, r=True)
                     find_trans = cmds.listRelatives(cam, p=True)
                     if find_trans:
@@ -1530,6 +1528,34 @@ References Imported and Cleaned:
                             return False
                     else:
                         return False
+                else:
+                    for name in self.cameraNames:
+                        if name in cam:
+                            cmds.select(cam, r=True)
+                            find_trans = cmds.listRelatives(cam, p=True)
+                            if find_trans:
+                                check_trans = cmds.objectType(find_trans[0])
+                                if check_trans == 'transform':
+                                    cam_transform = find_trans[0]
+                                    break
+                                else:
+                                    return False
+                            else:
+                                return False
+            else:
+                for name in self.cameraNames:
+                    if name in cam:
+                        cmds.select(cam, r=True)
+                        find_trans = cmds.listRelatives(cam, p=True)
+                        if find_trans:
+                            check_trans = cmds.objectType(find_trans[0])
+                            if check_trans == 'transform':
+                                cam_transform = find_trans[0]
+                                break
+                            else:
+                                return False
+                        else:
+                            return False
         if cam_transform:
             cmds.select(cam_transform, r=True)
             # Unlock the camera
@@ -1537,7 +1563,11 @@ References Imported and Cleaned:
                 cmds.setAttr(f'{cam_transform}.{attr}', lock=False)
 
             # Duplicate and bake
-            cmds.duplicate(n='%s_baked' % cam_transform)
+            if cam_transform and self.root_name not in cam_transform:
+                new_cam_name = '%s_%s' % (self.root_name, cam_transform)
+            else:
+                new_cam_name = cam_transform
+            cmds.duplicate(n='%s_baked' % new_cam_name)
             dup_cam = cmds.ls(sl=True)
             cmds.Unparent()
             cmds.select(cam_transform, r=True)
