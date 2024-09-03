@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1027</width>
-    <height>654</height>
+    <width>969</width>
+    <height>722</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>969</width>
-    <height>476</height>
+    <height>629</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -23,75 +23,636 @@
    <string notr="true">background-color: rgb(110, 110, 110);
 color: rgb(220, 220, 220);</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
-    <widget class="QLabel" name="Title">
-     <property name="styleSheet">
-      <string notr="true">font: 16pt &quot;MS Shell Dlg 2&quot;;</string>
+    <widget class="QTabWidget" name="saverTabs">
+     <property name="currentIndex">
+      <number>0</number>
      </property>
-     <property name="text">
-      <string>Save As...</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="output_filename">
-     <property name="styleSheet">
-      <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
-     </property>
-     <property name="text">
-      <string>output filename</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="messages">
-     <property name="styleSheet">
-      <string notr="true">font: 75 9pt &quot;MS Shell Dlg 2&quot;;
-color: rgb(255, 150, 150);</string>
-     </property>
-     <property name="text">
-      <string>Errors</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="sideBySide_layout">
-     <item>
-      <layout class="QVBoxLayout" name="saveAs_Layout">
+     <widget class="QWidget" name="MainTab">
+      <attribute name="title">
+       <string>Save - Publish - Snap</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <layout class="QVBoxLayout" name="name_layout">
+        <widget class="QLabel" name="Title">
+         <property name="styleSheet">
+          <string notr="true">font: 16pt &quot;MS Shell Dlg 2&quot;;</string>
+         </property>
+         <property name="text">
+          <string>Save As...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="output_filename">
+         <property name="styleSheet">
+          <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
+         </property>
+         <property name="text">
+          <string>output filename</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="messages">
+         <property name="styleSheet">
+          <string notr="true">font: 75 9pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(255, 150, 150);</string>
+         </property>
+         <property name="text">
+          <string>Errors</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="sideBySide_layout">
          <item>
-          <widget class="QLabel" name="naming_label">
-           <property name="text">
-            <string>Naming</string>
+          <layout class="QVBoxLayout" name="saveAs_Layout">
+           <item>
+            <layout class="QVBoxLayout" name="name_layout">
+             <item>
+              <widget class="QLabel" name="naming_label">
+               <property name="text">
+                <string>Naming</string>
+               </property>
+               <property name="buddy">
+                <cstring>autoNaming</cstring>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="naming_layout">
+               <item>
+                <widget class="QRadioButton" name="autoNaming">
+                 <property name="text">
+                  <string>Auto</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="customNaming">
+                 <property name="text">
+                  <string>Custom</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="naming_spacer">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLabel" name="version_label">
+                 <property name="text">
+                  <string>Version</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>version</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="version"/>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="allowFileCopy">
+             <property name="layoutDirection">
+              <enum>Qt::LayoutDirection::RightToLeft</enum>
+             </property>
+             <property name="text">
+              <string>Allow File Copy From --&gt; To</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="folder_layout">
+             <item>
+              <widget class="QLabel" name="folder_label">
+               <property name="text">
+                <string>Save to Folder</string>
+               </property>
+               <property name="buddy">
+                <cstring>folder</cstring>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="folder"/>
+             </item>
+             <item>
+              <widget class="QPushButton" name="folder_btn">
+               <property name="text">
+                <string>Browse...</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="taskType_layout">
+             <item>
+              <widget class="QLabel" name="taksType_label">
+               <property name="text">
+                <string>Task Type</string>
+               </property>
+               <property name="buddy">
+                <cstring>taskType</cstring>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="taskType">
+               <item>
+                <property name="text">
+                 <string>model</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>sculpt</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>lookdev</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>rig</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>groom</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>layout</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>previs</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>anim</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>fx</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>cloth</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>prototype</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item>
+              <spacer name="taksType_spacer">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="fileType_label">
+               <property name="text">
+                <string>File Type</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="fileType">
+               <item>
+                <property name="text">
+                 <string>ma</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>mb</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="filename_layout">
+             <item>
+              <widget class="QLabel" name="filename_label">
+               <property name="text">
+                <string>Filename</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="filename"/>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="overwrite">
+               <property name="text">
+                <string>Overwrite</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="showArtist_layout">
+             <item>
+              <widget class="QLabel" name="showCode_label">
+               <property name="text">
+                <string>Show Code</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="showCode">
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="placeholderText">
+                <string>ABC</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="AppendArtist">
+               <property name="layoutDirection">
+                <enum>Qt::LayoutDirection::RightToLeft</enum>
+               </property>
+               <property name="text">
+                <string>Append Artist</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="artistName_label">
+               <property name="text">
+                <string>Artist Name</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="artistName"/>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="Line" name="notes_seperator">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="notes_layout">
+             <item>
+              <widget class="QLabel" name="notes_label">
+               <property name="styleSheet">
+                <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
+               </property>
+               <property name="text">
+                <string>Notes</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QTextEdit" name="notes">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>150</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="recentFilesLabel">
+               <property name="styleSheet">
+                <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
+               </property>
+               <property name="text">
+                <string>Recent Files</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QListWidget" name="recentFilesList"/>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="existingStack_layout">
+           <item>
+            <layout class="QVBoxLayout" name="existingFile_layout">
+             <item>
+              <widget class="QLabel" name="existingFile_label">
+               <property name="styleSheet">
+                <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
+               </property>
+               <property name="text">
+                <string>Existing Files</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QTreeWidget" name="existingFile_list">
+               <column>
+                <property name="text">
+                 <string notr="true">1</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="open_btn_layout">
+               <item>
+                <spacer name="horizontalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="import_btn">
+                 <property name="text">
+                  <string>Import</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="load_btn">
+                 <property name="text">
+                  <string>Load Ref</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="open_btn">
+                 <property name="text">
+                  <string>Open</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QLabel" name="snapshots_label">
+             <property name="styleSheet">
+              <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
+             </property>
+             <property name="text">
+              <string>Snapshots</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTreeWidget" name="snapshots">
+             <column>
+              <property name="text">
+               <string notr="true">1</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item>
+            <widget class="Line" name="existingFIle_separator">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="version_notes_label">
+             <property name="styleSheet">
+              <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
+             </property>
+             <property name="text">
+              <string>Version Note</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTextEdit" name="existing_notes">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>150</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="buttons_layout">
+         <item>
+          <spacer name="buttons_spacer">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
            </property>
-           <property name="buddy">
-            <cstring>autoNaming</cstring>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="publish_btn">
+           <property name="text">
+            <string>Publish</string>
            </property>
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="naming_layout">
+          <widget class="QPushButton" name="snap_btn">
+           <property name="text">
+            <string>Snapshot</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="save_btn">
+           <property name="text">
+            <string>Save V Up</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="cancel_btn">
+           <property name="text">
+            <string>Cancel</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="ToolsTab">
+      <attribute name="title">
+       <string>Tools - Reference - Publish Tracking</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QGroupBox" name="toolsGroup">
+         <property name="title">
+          <string>Tools</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QPushButton" name="bakeCam_btn">
+            <property name="text">
+             <string>Bake Camera</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="bakeCamSceneName">
+            <property name="layoutDirection">
+             <enum>Qt::LayoutDirection::RightToLeft</enum>
+            </property>
+            <property name="text">
+             <string>Use Shot/Asset as Cam Name</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="fbxPub_btn">
+            <property name="text">
+             <string>Publish Selection as FBX</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="objPub_btn">
+            <property name="text">
+             <string>Publish Selection as OBJ</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="abcPub_btn">
+            <property name="text">
+             <string>Publish Selection as Alembic</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="playblast_btn">
+            <property name="text">
+             <string>Playblaster</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <widget class="QLabel" name="referenceListLabel">
+           <property name="styleSheet">
+            <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
+           </property>
+           <property name="text">
+            <string>Loaded References</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTableWidget" name="referenceList"/>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="QRadioButton" name="autoNaming">
-             <property name="text">
-              <string>Auto</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="customNaming">
-             <property name="text">
-              <string>Custom</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="naming_spacer">
+            <spacer name="horizontalSpacer_3">
              <property name="orientation">
               <enum>Qt::Orientation::Horizontal</enum>
              </property>
@@ -104,274 +665,37 @@ color: rgb(255, 150, 150);</string>
             </spacer>
            </item>
            <item>
-            <widget class="QLabel" name="version_label">
+            <widget class="QPushButton" name="updateAllRefs_btn">
              <property name="text">
-              <string>Version</string>
-             </property>
-             <property name="buddy">
-              <cstring>version</cstring>
+              <string>Update All</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="version"/>
+            <widget class="QPushButton" name="updateRefs_btn">
+             <property name="text">
+              <string>Update Selected</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="folder_layout">
+        <layout class="QVBoxLayout" name="verticalLayout_6">
          <item>
-          <widget class="QLabel" name="folder_label">
-           <property name="text">
-            <string>Save to Folder</string>
-           </property>
-           <property name="buddy">
-            <cstring>folder</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="folder"/>
-         </item>
-         <item>
-          <widget class="QPushButton" name="folder_btn">
-           <property name="text">
-            <string>Browse...</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="taskType_layout">
-         <item>
-          <widget class="QLabel" name="taksType_label">
-           <property name="text">
-            <string>Task Type</string>
-           </property>
-           <property name="buddy">
-            <cstring>taskType</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="taskType">
-           <item>
-            <property name="text">
-             <string>model</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>sculpt</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>lookdev</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>rig</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>groom</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>layout</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>previs</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>anim</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>fx</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>cloth</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>prototype</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item>
-          <spacer name="taksType_spacer">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QLabel" name="fileType_label">
-           <property name="text">
-            <string>File Type</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="fileType">
-           <item>
-            <property name="text">
-             <string>ma</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>mb</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="filename_layout">
-         <item>
-          <widget class="QLabel" name="filename_label">
-           <property name="text">
-            <string>Filename</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="filename"/>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="overwrite">
-           <property name="text">
-            <string>Overwrite</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="showArtist_layout">
-         <item>
-          <widget class="QLabel" name="showCode_label">
-           <property name="text">
-            <string>Show Code</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="showCode">
-           <property name="maximumSize">
-            <size>
-             <width>60</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="placeholderText">
-            <string>GCY</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="AppendArtist">
-           <property name="layoutDirection">
-            <enum>Qt::LayoutDirection::RightToLeft</enum>
+          <widget class="QLabel" name="assetTreeLabel">
+           <property name="styleSheet">
+            <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
            </property>
            <property name="text">
-            <string>Append Artist</string>
+            <string>Assets</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="artistName_label">
-           <property name="text">
-            <string>Artist Name</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="artistName"/>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="Line" name="notes_seperator">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="notes_layout">
-         <item>
-          <widget class="QLabel" name="notes_label">
-           <property name="text">
-            <string>Notes</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QTextEdit" name="notes">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>150</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="existingStack_layout">
-       <item>
-        <layout class="QVBoxLayout" name="existingFile_layout">
-         <item>
-          <widget class="QLabel" name="existingFile_label">
-           <property name="text">
-            <string>Existing Files</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QTreeWidget" name="existingFile_list">
+          <widget class="QTreeWidget" name="assetTree">
            <column>
             <property name="text">
              <string notr="true">1</string>
@@ -380,9 +704,9 @@ color: rgb(255, 150, 150);</string>
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="open_btn_layout">
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <spacer name="horizontalSpacer_2">
+            <spacer name="horizontalSpacer_4">
              <property name="orientation">
               <enum>Qt::Orientation::Horizontal</enum>
              </property>
@@ -395,23 +719,16 @@ color: rgb(255, 150, 150);</string>
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="import_btn">
-             <property name="text">
-              <string>Import</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="load_btn">
+            <widget class="QPushButton" name="loadRef_2_btn">
              <property name="text">
               <string>Load Ref</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="open_btn">
+            <widget class="QPushButton" name="import_2_btn">
              <property name="text">
-              <string>Open</string>
+              <string>Import</string>
              </property>
             </widget>
            </item>
@@ -420,105 +737,265 @@ color: rgb(255, 150, 150);</string>
         </layout>
        </item>
       </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
+     </widget>
+     <widget class="QWidget" name="SettingsTab">
+      <attribute name="title">
+       <string>Settings - Configuration</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_7">
        <item>
-        <widget class="QLabel" name="snapshots_label">
-         <property name="text">
-          <string>Snapshots</string>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="showName_label">
+           <property name="text">
+            <string>Show Name</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="showName"/>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_10">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </item>
        <item>
-        <widget class="QTreeWidget" name="snapshots">
-         <column>
-          <property name="text">
-           <string notr="true">1</string>
-          </property>
-         </column>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLabel" name="showCodeSet_label">
+           <property name="text">
+            <string>Show Code</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="showCodeSet">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </item>
        <item>
-        <widget class="Line" name="existingFIle_separator">
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QLabel" name="defaultResolution_label">
+           <property name="text">
+            <string>Default Resolution:  </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="resolutionWidth_label">
+           <property name="text">
+            <string>Width</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="resolutionWidth">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="resolutionHeight_label">
+           <property name="text">
+            <string>Height</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="resolutionHeight">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <item>
+          <widget class="QLabel" name="filmbackLabel">
+           <property name="text">
+            <string>Default Filmback:  </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="filmback_width_label">
+           <property name="text">
+            <string>width (mm)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="filmback_width">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="filmback_height_label">
+           <property name="text">
+            <string>height (mm)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="filmback_height">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <item>
+          <widget class="QLabel" name="SceneScale_Label">
+           <property name="text">
+            <string>Scene Scale</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="sceneScale">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_8">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <item>
+          <spacer name="horizontalSpacer_9">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="save_config_btn">
+           <property name="text">
+            <string>Save Configuration</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
          <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QTextEdit" name="existing_notes">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="minimumSize">
+         <property name="sizeHint" stdset="0">
           <size>
-           <width>0</width>
-           <height>150</height>
+           <width>20</width>
+           <height>477</height>
           </size>
          </property>
-        </widget>
+        </spacer>
        </item>
       </layout>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="buttons_layout">
-     <item>
-      <spacer name="buttons_spacer">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bakeCam_btn">
-       <property name="text">
-        <string>Bake Camera</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="publish_btn">
-       <property name="text">
-        <string>Publish</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="snap_btn">
-       <property name="text">
-        <string>Snapshot</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="save_btn">
-       <property name="text">
-        <string>Save V Up</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancel_btn">
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+     </widget>
+    </widget>
    </item>
   </layout>
-  <zorder>output_filename</zorder>
-  <zorder>Title</zorder>
-  <zorder>messages</zorder>
  </widget>
  <tabstops>
   <tabstop>notes</tabstop>

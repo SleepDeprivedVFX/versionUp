@@ -17,25 +17,26 @@ Notes can be reviewed on the right side by clicking on existing files.
 TODO: List - Upgrades needed
     1. Make it so that an unsaved file will auto-build a future filename based on the folder and task selection
     2. Build in an "update references" right-click utility.
-    3. Improve headers for UI boxes.  Font size increase for "Existing Files, Snapshots, Notes" et cetera
+                    3. Improve headers for UI boxes.  Font size increase for "Existing Files, Snapshots, Notes" et cetera
     4. Add right-click context menu for load-ref, import, update and others.
-    5. Add a Scene default setting.  Things like:
-        a. Camera film back
-        b. Resolution
-        c. Scene Scale
+        5. Add a Scene default setting.  Things like:
+            a. Camera film back
+            b. Resolution
+            c. Scene Scale
     6. Recently opened files - Set with a QSettings variable.  A list of the last 10.
     7. Add hotkeys for Snapshot, Publish and Save.
     8. Give the option for the Camera Bake to include the shot/asset name
-    9. Rebuild the UI to include tabs.  Maybe like:
-        a. Main - Save and notes.
-        b. Snapshots
-        c. Publish tracking
-        d. Settings.
+                    9. Rebuild the UI to include tabs.  Maybe like:
+                        a. Main - Save and notes.
+                        b. Snapshots or Tools?  Maybe - Might could be combine with Publish Tracking.
+                        c. Publish tracking
+                        d. Settings.
     10. Add a playblast feature
     11. Integrate into Maya startup routine or module
-    12. Add option to save version as new shot/asset.  This should either be a check box or a button that utilizes the 
-    same folder functionality of Update #1 would override the current file save up action, forcing a new filename.
+            12. Add option to save version as new shot/asset.  This should either be a check box or a button that utilizes the 
+            same folder functionality of Update #1 would override the current file save up action, forcing a new filename.
     13. Make an FBX / OBJ / ABC publisher
+    14. Add a config file?  For Update #5
 """
 
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings)
@@ -61,7 +62,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '1.0.6'
+__version__ = '1.1.0'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -280,7 +281,11 @@ class super_saver(QWidget):
         self.position = self.settings.value('geometry', None)
         self.showcode = self.settings.value('showcode', None)
         self.appendartist = self.settings.value('appendArtist', None)
+        self.recent_files = self.settings.value('recent_files', [])
         self.restoreGeometry(self.position)
+
+        if self.recent_files:
+            self.populate_recent_files()
 
         pth = cmds.file(q=True, sn=True)
         self.current_file_path = pth
@@ -391,9 +396,10 @@ class super_saver(QWidget):
         self.ui.snapshots.itemDoubleClicked.connect(self.import_snapshot)
         self.ui.existingFile_list.itemClicked.connect(self.show_file_selection_info)
         # self.ui.existingFile_list.itemClicked.connect(self.populate_snapshots)
-        self.ui.existingFile_list.itemDoubleClicked.connect(lambda: self.open_file(f=True))
+        self.ui.existingFile_list.itemDoubleClicked.connect(lambda: self.open_file(f=False))
         self.populate_existing_files(current_directory=self.scene_folder_path)
         self.populate_existing_files(current_directory=self.asset_folder_path)
+        self.ui.recentFilesList.itemDoubleClicked.connect(lambda: self.open_recent_file(f=False))
 
         self.set_custom()
 
@@ -1098,6 +1104,54 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         current_file_item = self.ui.existingFile_list.currentItem()
         self.ui.existingFile_list.itemClicked.emit(current_file_item, 0)
 
+    def open_recent_file(self, f=False):
+        current_item = self.ui.recentFilesList.currentItem()
+        file_text = current_item.text()
+        open_file = current_item.data(Qt.UserRole)
+        try:
+            self.hide()
+            cmds.file(open_file, o=True, f=f)
+            recent_file = {
+                'filename': file_text,
+                'path': open_file
+            }
+            self.current_file_path = open_file
+            if recent_file in self.recent_files:
+                recent_file_index = self.recent_files.index(recent_file)
+                if recent_file_index:
+                    self.recent_files.pop(recent_file_index)
+            self.close()
+        except RuntimeError as e:
+            msg = str(e)
+            self.message(text=msg, ok=False)
+            self.hide()
+            pop_up = QMessageBox()
+            pop_up.setProperty('Save Error', True)
+            pop_up.setWindowTitle(msg)
+            pop_up.setText('Unsaved Changes detected!  Save before opening a new file?')
+            pop_up.setStandardButtons(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
+            pop_up.setDefaultButton(QMessageBox.Yes)
+            ret = pop_up.exec_()
+            if ret == QMessageBox.Yes:
+                cmds.file(s=True)
+                self.open_recent_file(f=False)
+            elif ret == QMessageBox.No:
+                self.open_recent_file(f=True)
+            else:
+                self.show()
+
+    def populate_recent_files(self):
+        recent_files = self.recent_files
+        print('recent_files: %s' % recent_files)
+        for this_file in recent_files:
+            filename = this_file['filename']
+            file_path = this_file['path']
+            new_entry = QListWidgetItem()
+            new_entry.setText(filename)
+            new_entry.setData(Qt.UserRole, file_path)
+            self.ui.recentFilesList.addItem(new_entry)
+
+
     def populate_snapshots(self, item, column):
         self.ui.snapshots.clear()
         file_info = item.data(0, Qt.UserRole)
@@ -1423,6 +1477,15 @@ References Imported and Cleaned:
         self.settings.setValue('appendArtist', self.ui.AppendArtist.isChecked())
         self.settings.setValue('showcode', self.ui.showCode.text())
         self.settings.setValue('geometry', self.saveGeometry())
+        if len(self.recent_files) >= 5:
+            self.recent_files.pop(4)
+        this_file_data = {
+            'filename': os.path.basename(self.current_file_path),
+            'path': self.current_file_path
+        }
+        if this_file_data not in self.recent_files:
+            self.recent_files.insert(0, this_file_data)
+        self.settings.setValue('recent_files', self.recent_files)
 
 
 if __name__ == '__main__':
