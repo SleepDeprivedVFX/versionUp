@@ -50,9 +50,10 @@ import json
 import time
 from datetime import datetime
 import platform
+import configparser
 
 # FIXME: Add garbage for the UI to work in Maya.
-script_path = "C:/Users/sleep/OneDrive/Documents/Scripts/Python/Maya/Utilities/versionUp"
+script_path = "C:/Users/sleep/OneDrive/Documents/Scripts/Python/Maya/Utilities/sansPipe"
 ui_path = os.path.join(script_path, 'ui')
 ui_path = ui_path.replace('\\', '/')
 if script_path not in sys.path:
@@ -62,7 +63,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '1.1.0'
+__version__ = '1.1.1'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -277,7 +278,9 @@ class super_saver(QWidget):
         self.ui = ssui.Ui_SaveAs()
         self.ui.setupUi(self)
 
-        self.settings = QSettings(__author__, 'Super Saver')
+        self.setWindowTitle('Sans Pipe Super Saver - v%s' % __version__)
+
+        self.settings = QSettings(__author__, 'Sans Pipe Super Saver')
         self.position = self.settings.value('geometry', None)
         self.showcode = self.settings.value('showcode', None)
         self.appendartist = self.settings.value('appendArtist', None)
@@ -451,6 +454,7 @@ class super_saver(QWidget):
                 try:
                     self.hide()
                     cmds.file(open_file, o=True, f=f)
+                    self.current_file_path = open_file
                     self.close()
                 except RuntimeError as e:
                     msg = str(e)
@@ -1149,8 +1153,8 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             new_entry = QListWidgetItem()
             new_entry.setText(filename)
             new_entry.setData(Qt.UserRole, file_path)
+            new_entry.setToolTip(file_path)
             self.ui.recentFilesList.addItem(new_entry)
-
 
     def populate_snapshots(self, item, column):
         self.ui.snapshots.clear()
