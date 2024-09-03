@@ -7,6 +7,7 @@ Simple click the button on the shelf or run the script.  A UI will pop up that a
 the project folder, but can be customized to save the name as anything.
 Notes can be reviewed on the right side by clicking on existing files.
 """
+import shutil
 
 # FIXME: There are a few issues that I've discovered so far.
 #  1. The version number is not properly changing when the task type is changed.  It still saves the version shown up
@@ -84,6 +85,7 @@ class super_saver(QWidget):
         QWidget.__init__(self, parent)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.pattern = r'(_v\d+)|(_V\d+)'
+        # TODO: The self.tasks should probably find their way into the config files, BUT for now, I'm leaving them here.
         self.tasks = {
             "model": [
                 'model',
@@ -259,6 +261,7 @@ class super_saver(QWidget):
             '\'',
             '"'
         ]
+        # TODO: The cameraNames should probably find their way into the config files as well.
         self.cameraNames = [
             'shotcam',
             'camera',
@@ -278,33 +281,55 @@ class super_saver(QWidget):
         self.ui = ssui.Ui_SaveAs()
         self.ui.setupUi(self)
 
-        self.setWindowTitle('Sans Pipe Super Saver - v%s' % __version__)
-
-        self.settings = QSettings(__author__, 'Sans Pipe Super Saver')
-        self.position = self.settings.value('geometry', None)
-        self.showcode = self.settings.value('showcode', None)
-        self.appendartist = self.settings.value('appendArtist', None)
-        self.recent_files = self.settings.value('recent_files', [])
-        self.restoreGeometry(self.position)
-
-        if self.recent_files:
-            self.populate_recent_files()
-
+        # Get basic scene information - File path, Workspace, Scene and Asset folders.
         pth = cmds.file(q=True, sn=True)
         self.current_file_path = pth
-
         workspace = cmds.workspace(q=True, act=True)
         scene_folder = cmds.workspace(fre='scene')
         self.scene_folder_path = os.path.join(workspace, scene_folder)
         asset_folder = cmds.workspace(fre='templates')
         self.asset_folder_path = os.path.join(workspace, asset_folder)
+        self.project_name = os.path.basename(os.path.normpath(cmds.workspace(q=True, rd=True)))
 
-        # Set initial artist field
+        # Set window title
+        self.setWindowTitle('Sans Pipe Super Saver - v%s' % __version__)
+
+        # Check for and load config file
+        self.config_path = os.path.join(workspace, 'show_config.cfg')
+        if not os.path.exists(self.config_path):
+            get_config_default = os.path.join(script_path, 'show_config.cfg')
+            if os.path.exists(get_config_default):
+                config_destination = self.config_path
+                shutil.copy2(get_config_default, config_destination)
+            else:
+                print('Config template could not be found!')
+                self.build_config_file(path=self.config_path)
+
+        self.settings = QSettings(__author__, 'Sans Pipe Super Saver')
+        self.position = self.settings.value('geometry', None)
+        # FIXME: Does the showcode still need to be there with the config file?
+        # self.showcode = self.settings.value('showcode', None)
+        self.appendartist = self.settings.value('appendArtist', None)
+        self.recent_files = self.settings.value('recent_files', [])
+        self.bakeCamSceneName = self.settings.value('bake_cam_scene_name', None)
+        self.restoreGeometry(self.position)
+
+        if self.recent_files:
+            self.populate_recent_files()
+
+        # Fix boolean checkboxes.
         if self.appendartist == 'true':
             self.appendartist = True
         else:
             self.appendartist = False
+        if self.bakeCamSceneName == 'true':
+            self.bakeCamSceneName = True
+        else:
+            self.bakeCamSceneName = False
         self.ui.AppendArtist.setChecked(self.appendartist)
+        self.ui.bakeCamSceneName.setChecked(self.bakeCamSceneName)
+
+        # Set initial artist field
         artist = os.environ[env_user]
         first_initials = artist[0:2]
         first_initials = first_initials.upper()
@@ -317,7 +342,12 @@ class super_saver(QWidget):
             save_path = os.path.dirname(pth)
             save_file = os.path.basename(pth)
 
-            show_code = self.try_to_get_show_code(path=workspace)
+            # FIXME: This all needs to get reworked from the config file
+            config = configparser.ConfigParser()
+            config.read(self.config_path)
+            # show_code = self.try_to_get_show_code(path=workspace)
+            show_code = config['Project']['Show_Code']
+            print('SHOW CODE: %s' % show_code)
             if show_code:
                 self.ui.showCode.setText(show_code)
                 show_code = '{show_code}_'.format(show_code=show_code)
@@ -351,6 +381,7 @@ class super_saver(QWidget):
             project_name = split_project_path[rem]
             version = 1
 
+            # FIXME: this should be a self.show_code and it should become a global var set by the config file.
             show_code = self.try_to_get_show_code(path=save_path)
             if show_code:
                 self.ui.showCode.setText(show_code)
@@ -495,10 +526,32 @@ class super_saver(QWidget):
             root_name = root_name.replace(bad_x, '_')
             self.ui.filename.setText(root_name)
 
+    def get_config(self, path=None):
+        if path:
+            pass
+
+    def build_config_file(self, path=None):
+        if path:
+            config = configparser.ConfigParser()
+            config['Camera'] = {
+                'Resolution_Width': '2048',
+                'Resolution_Height': '1152',
+                'Filmback_Width': '23.1',
+                'Filmback_Height': '12.99'
+            }
+            config['Scene'] = {
+                'Scene_Scale': '10'
+            }
+            config['Project'] = {
+                'Show_Name': '%s' % self.project_name,
+                'Show_Code': self.try_to_get_show_code(path=path)
+            }
+            with open(path, 'w') as configfile:
+                configfile.write(config)
+
     def try_to_get_show_code(self, path=None):
-        # FIXME: I'm going to add a sort of show data config file as an option here.  It needs to be secondary, but
-        #  look for a config file if show_code returns false.  Only then, if it still can't find the config, will it
-        #  return an empty string.  Now, since Maya's python doesn't have configuration built in, I'll use a simple txt
+        # This method returns a 3 letter show code either from the path, or from the workspace name.
+        # It can be overridden in the configuration file.
         show_code = None
         if path:
             checked_path = path.replace('\\', '/')
@@ -508,17 +561,15 @@ class super_saver(QWidget):
                     show_code = seg
                     break
         if not show_code:
-            project_root = cmds.workspace(q=True, rd=True)
-            config_path = os.path.join(project_root, 'config.txt')
-            if os.path.exists(config_path):
-                with open(config_path, "r") as config:
-                    data = config.readlines()
-                    for line in data:
-                        if 'show_code' in line:
-                            break_line = line.split(':')
-                            code = str(break_line[1]).strip()
-                            show_code = code
-                            break
+            show_code = self.project_name[0]
+            for char in self.project_name[1:]:
+                if char.isupper():
+                    show_code += char
+                if len(show_code) == 3:
+                    break
+            if len(show_code < 3):
+                remaining_chars = [char for char in self.project_nam[1:] if char.lower() not in show_code.lower()]
+                show_code += ''.join(remaining_chars)[:3-len(show_code)]
         return show_code
 
     # def check_version(self):
@@ -1479,7 +1530,8 @@ References Imported and Cleaned:
 
     def closeEvent(self, event):
         self.settings.setValue('appendArtist', self.ui.AppendArtist.isChecked())
-        self.settings.setValue('showcode', self.ui.showCode.text())
+        # self.settings.setValue('showcode', self.ui.showCode.text())
+        self.settings.setValue('bake_cam_scene_name', self.ui.bakeCamSceneName.isChecked())
         self.settings.setValue('geometry', self.saveGeometry())
         if len(self.recent_files) >= 5:
             self.recent_files.pop(4)
