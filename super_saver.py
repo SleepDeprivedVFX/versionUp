@@ -20,11 +20,11 @@ TODO: List - Upgrades needed
     2. Build in an "update references" right-click utility.
                     3. Improve headers for UI boxes.  Font size increase for "Existing Files, Snapshots, Notes" et cetera
     4. Add right-click context menu for load-ref, import, update and others.
-        5. Add a Scene default setting.  Things like:
-            a. Camera film back
-            b. Resolution
-            c. Scene Scale
-    6. Recently opened files - Set with a QSettings variable.  A list of the last 10.
+                5. Add a Scene default setting.  Things like:
+                    a. Camera film back
+                    b. Resolution
+                    c. Scene Scale
+                6. Recently opened files - Set with a QSettings variable.  A list of the last 10.
     7. Add hotkeys for Snapshot, Publish and Save.
     8. Give the option for the Camera Bake to include the shot/asset name
                     9. Rebuild the UI to include tabs.  Maybe like:
@@ -37,7 +37,7 @@ TODO: List - Upgrades needed
             12. Add option to save version as new shot/asset.  This should either be a check box or a button that utilizes the 
             same folder functionality of Update #1 would override the current file save up action, forcing a new filename.
     13. Make an FBX / OBJ / ABC publisher
-    14. Add a config file?  For Update #5
+                    14. Add a config file?  For Update #5
 """
 
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings)
