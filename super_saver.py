@@ -13,6 +13,31 @@ Notes can be reviewed on the right side by clicking on existing files.
 #  top.
 #  2. The Overwrite function won't work due to the issue with the first fix me
 
+"""
+TODO: List - Upgrades needed
+    1. Make it so that an unsaved file will auto-build a future filename based on the folder and task selection
+    2. Build in an "update references" right-click utility.
+    3. Improve headers for UI boxes.  Font size increase for "Existing Files, Snapshots, Notes" et cetera
+    4. Add right-click context menu for load-ref, import, update and others.
+    5. Add a Scene default setting.  Things like:
+        a. Camera film back
+        b. Resolution
+        c. Scene Scale
+    6. Recently opened files - Set with a QSettings variable.  A list of the last 10.
+    7. Add hotkeys for Snapshot, Publish and Save.
+    8. Give the option for the Camera Bake to include the shot/asset name
+    9. Rebuild the UI to include tabs.  Maybe like:
+        a. Main - Save and notes.
+        b. Snapshots
+        c. Publish tracking
+        d. Settings.
+    10. Add a playblast feature
+    11. Integrate into Maya startup routine or module
+    12. Add option to save version as new shot/asset.  This should either be a check box or a button that utilizes the 
+    same folder functionality of Update #1 would override the current file save up action, forcing a new filename.
+    13. Make an FBX / OBJ / ABC publisher
+"""
+
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings)
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
@@ -781,6 +806,23 @@ DATE: None
 
 NOTE: None
 """.format(fn=filename)
+
+            # TODO: The purpose of this print test is to develop a system that will allow the user to rename a file
+            #  based on the folder that is selected.  I need to be careful with this, since I don't want to
+            #  accidentally write files to the wrong folder simply because I selected something to load in.  It
+            #  probably needs to be something that occurs if a scene has never been saved, or perhaps as a right-click
+            #  function once I setup the context menu.
+            print('file_text: %s' % file_text)
+            print('folder_name: %s' % folder_name)
+            print('filename: %s' % filename)
+            if file_text != 'scenes' and file_text != 'assets':
+                if not filename:
+                    selected_folder = os.path.join(folder_name, file_text)
+                else:
+                    selected_folder = folder_name
+            else:
+                selected_folder = folder_name
+            print(selected_folder)
 
             # Make sure it's a file, not a folder
             if filename:
