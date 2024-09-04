@@ -12,31 +12,15 @@ Notes can be reviewed on the right side by clicking on existing files.
 #  1. The version number is not properly changing when the task type is changed.  It still saves the version shown up
 #  top.
 #  2. The Overwrite function won't work due to the issue with the first fix me
+#  3. The Recent Files menu is doubling up on files
 
 """
 TODO: List - Upgrades needed
-                    1. Make it so that an unsaved file will auto-build a future filename based on the folder and task selection
-                    2. Build in an "update references" right-click utility.
-                    3. Improve headers for UI boxes.  Font size increase for "Existing Files, Snapshots, Notes" et cetera
     4. Add right-click context menu for load-ref, import, update and others.
-                    5. Add a Scene default setting.  Things like:
-                        a. Camera film back
-                        b. Resolution
-                        c. Scene Scale
-                    6. Recently opened files - Set with a QSettings variable.  A list of the last 10.
     7. Add hotkeys for Snapshot, Publish and Save.
-                    8. Give the option for the Camera Bake to include the shot/asset name
-                    9. Rebuild the UI to include tabs.  Maybe like:
-                        a. Main - Save and notes.
-                        b. Snapshots or Tools?  Maybe - Might could be combine with Publish Tracking.
-                        c. Publish tracking
-                        d. Settings.
     10. Add a playblast feature
     11. Integrate into Maya startup routine or module
-                    12. Add option to save version as new shot/asset.  This should either be a check box or a button that utilizes the 
-                    same folder functionality of Update #1 would override the current file save up action, forcing a new filename.
     13. Make an FBX / OBJ / ABC publisher
-                    14. Add a config file?  For Update #5
     15. Make incorrect things, like missing notes, highlight red.
 """
 
@@ -64,7 +48,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '1.1.4'
+__version__ = '1.1.5'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -457,9 +441,11 @@ class super_saver(QWidget):
         self.ui.cancel_btn.clicked.connect(self.close)
         self.ui.snap_btn.clicked.connect(self.snapshot)
         self.ui.publish_btn.clicked.connect(self.publish)
-        self.ui.load_btn.clicked.connect(self.load_ref)
+        self.ui.load_btn.clicked.connect(lambda: self.load_ref(element=self.ui.existingFile_list))
         self.ui.bakeCam_btn.clicked.connect(self.start_cam_bake)
-        self.ui.import_btn.clicked.connect(self.import_object)
+        self.ui.import_btn.clicked.connect(lambda: self.import_object(element=self.ui.existingFile_list))
+        self.ui.import_2_btn.clicked.connect(lambda: self.import_object(element=self.ui.assetTree))
+        self.ui.loadRef_2_btn.clicked.connect(lambda: self.load_ref(element=self.ui.assetTree))
 
         self.ui.folder.textChanged.connect(self.update_ui)
         self.ui.taskType.currentTextChanged.connect(lambda: self.reset_version(v=1))
@@ -608,8 +594,8 @@ class super_saver(QWidget):
             recent_file_count = self.ui.recent_file_count.value()
             config.set('Camera', 'resolution_width', res_width)
             config.set('Camera', 'resolution_height', res_height)
-            config.set('Camera', 'resolution_width', fb_width)
-            config.set('Camera', 'resolution_width', fb_height)
+            config.set('Camera', 'filmback_width', fb_width)
+            config.set('Camera', 'filmback_height', fb_height)
             config.set('Scene', 'scene_scale', scale)
             config.set('Project', 'show_name', project_name)
             config.set('Project', 'show_code', show_code)
@@ -1134,6 +1120,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         allowed_folders = ['assets', 'Publishes']
 
         if current_directory:
+            self.ui.assetTree.clear()
             if os.path.exists(current_directory):
                 folder_items = {}
 
@@ -1682,8 +1669,10 @@ References Imported and Cleaned:
 
         return cleaned
 
-    def load_ref(self):
-        current_item = self.ui.existingFile_list.currentItem()
+    def load_ref(self, element=None):
+        if not element:
+            element = self.ui.existingFile_list
+        current_item = element.currentItem()
         data = current_item.data(0, Qt.UserRole)
         file_name = data['file']
         file_root = os.path.splitext(file_name)[0]
@@ -1699,9 +1688,12 @@ References Imported and Cleaned:
                 self.message(text='Maya could not find the reference: %s' % file_name)
         else:
             self.message(text='File could not be found: %s' % file_name)
+        self.reference_tracker()
 
-    def import_object(self):
-        current_item = self.ui.existingFile_list.currentItem()
+    def import_object(self, element=None):
+        if not element:
+            element = self.ui.existingFile_list
+        current_item = element.currentItem()
         data = current_item.data(0, Qt.UserRole)
         file_name = data['file']
         file_root = os.path.splitext(file_name)[0]
