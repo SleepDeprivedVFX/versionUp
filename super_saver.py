@@ -48,7 +48,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '1.1.5'
+__version__ = '1.1.6'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -550,7 +550,7 @@ class super_saver(QWidget):
                 'Scene_Scale': '10'
             }
             config['Project'] = {
-                'Show_Name': '%s' % self.project_name,
+                'Show_Name': '%s' % self.try_to_get_project_name(),
                 'Show_Code': self.try_to_get_show_code(path=path),
                 'recent_file_count': '5'
             }
@@ -576,9 +576,17 @@ class super_saver(QWidget):
                 if len(show_code) == 3:
                     break
             if len(show_code) < 3:
-                remaining_chars = [char for char in self.project_nam[1:] if char.lower() not in show_code.lower()]
+                remaining_chars = [char for char in self.project_name[1:] if char.lower() not in show_code.lower()]
                 show_code += ''.join(remaining_chars)[:3-len(show_code)]
+        show_code = show_code.upper()
         return show_code
+
+    def try_to_get_project_name(self):
+        workspace = cmds.workspace(q=True, act=True)
+        workspace = workspace.replace('\\', '/')
+        split_ws = workspace.split('/')
+        self.project_name = split_ws[-1]
+        return self.project_name
 
     def save_config(self):
         if os.path.exists(self.config_path):
