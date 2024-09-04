@@ -285,6 +285,7 @@ class super_saver(QWidget):
         pth = cmds.file(q=True, sn=True)
         self.current_file_path = pth
         workspace = cmds.workspace(q=True, act=True)
+        self.workspace = workspace
         scene_folder = cmds.workspace(fre='scene')
         self.scene_folder_path = os.path.join(workspace, scene_folder)
         asset_folder = cmds.workspace(fre='templates')
@@ -436,13 +437,16 @@ class super_saver(QWidget):
         self.ui.folder.setText(save_path)
 
         self.ui.existingFile_list.setHeaderHidden(True)
+        self.ui.assetTree.setHeaderHidden(True)
         self.ui.snapshots.setHeaderHidden(True)
         self.ui.snapshots.itemDoubleClicked.connect(self.import_snapshot)
         self.ui.existingFile_list.itemClicked.connect(self.show_file_selection_info)
         # self.ui.existingFile_list.itemClicked.connect(self.populate_snapshots)
         self.ui.existingFile_list.itemDoubleClicked.connect(lambda: self.open_file(f=False))
         self.populate_existing_files(current_directory=self.scene_folder_path)
-        self.populate_existing_files(current_directory=self.asset_folder_path)
+        # self.populate_existing_files(current_directory=self.asset_folder_path)
+        self.populate_publish_assets(current_directory=self.scene_folder_path)
+        self.populate_publish_assets(current_directory=self.asset_folder_path)
         self.ui.recentFilesList.itemDoubleClicked.connect(lambda: self.open_recent_file(f=False))
         self.reference_tracker()
 
@@ -1123,6 +1127,65 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             self.ui.existingFile_list.scrollToItem(file_item)
                             folder_items[relative_folder_name].setExpanded(True)
                             self.ui.existingFile_list.itemClicked.emit(file_item, 0)
+
+    def populate_publish_assets(self, current_directory=None):
+        allowed_extensions = ['ma', 'mb', 'obj', 'fbx', 'abc']
+        excluded_folders = ['db', 'edits', '.mayaSwatches', 'snapshots']
+        allowed_folders = ['assets', 'Publishes']
+        if current_directory:
+            if os.path.exists(current_directory):
+                folder_items = {}
+
+                for folder_name, subfolders, files in os.walk(current_directory, topdown=True):
+                    relative_folder_name = os.path.relpath(folder_name, current_directory)
+
+                    if any(excluded_folder in relative_folder_name.split(os.sep) for excluded_folder in
+                           excluded_folders):
+                        continue
+                    if relative_folder_name == '.':
+                        parent_item = self.ui.assetTree
+                    else:
+                        parent_item = folder_items.get(os.path.dirname(relative_folder_name), self.ui.assetTree)
+
+                    if relative_folder_name not in folder_items:
+                        folder_item = QTreeWidgetItem(parent_item)
+                        folder_item.setText(0, os.path.basename(folder_name))
+                        folder_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": ""})
+                        folder_items[relative_folder_name] = folder_item
+
+                        if self.root_name.startswith(os.path.join(current_directory, relative_folder_name)):
+                            folder_item.setExpanded(True)
+
+                    subfolders.sort(key=natural_sort_key)
+                    files.sort(key=natural_sort_key)
+
+                    for subfolder in subfolders:
+                        subfolder_path = os.path.join(folder_name, subfolder)
+                        relative_subfolder_name = os.path.relpath(subfolder_path, current_directory)
+
+                        if any(excluded_folder in relative_subfolder_name.split(os.sep) for excluded_folder in
+                               excluded_folders):
+                            continue
+                        if relative_subfolder_name not in folder_items:
+                            subfolder_item = QTreeWidgetItem(folder_items[relative_folder_name])
+                            subfolder_item.setText(0, os.path.basename(subfolder))
+                            subfolder_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": ""})
+                            folder_items[relative_subfolder_name] = subfolder_item
+
+                    for file_name in files:
+                        file_extension = file_name.split('.')[-1].lower()
+                        if file_extension not in allowed_extensions:
+                            continue
+
+                        file_root = os.path.relpath(subfolder_path, self.workspace)
+                        if any(allowed in file_root.split(os.sep) for allowed in allowed_folders):
+                            file_path = os.path.normpath(os.path.join(folder_name, file_name))
+                            file_path = file_path.replace('\\', '/')
+                            file_item = QTreeWidgetItem(folder_items[relative_folder_name])
+                            file_item.setText(0, file_name)
+                            file_item.setData(0, Qt.UserRole, {'folder': folder_name, 'file': file_name})
+                        else:
+                            continue
 
     def message(self, text=None, ok=True):
         self.ui.messages.setText(text)
