@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIuaiweJ.ui'
+## Form generated from reading UI file 'superSaver_UIDORqfc.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -19,9 +19,8 @@ from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QCheckBox, QCombo
     QFrame, QGroupBox, QHBoxLayout, QHeaderView,
     QLabel, QLineEdit, QListWidget, QListWidgetItem,
     QPushButton, QRadioButton, QSizePolicy, QSpacerItem,
-    QSpinBox, QTabWidget, QTableWidget, QTableWidgetItem,
-    QTextEdit, QTreeWidget, QTreeWidgetItem, QVBoxLayout,
-    QWidget)
+    QSpinBox, QTabWidget, QTextEdit, QTreeWidget,
+    QTreeWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_SaveAs(object):
     def setupUi(self, SaveAs):
@@ -438,7 +437,7 @@ class Ui_SaveAs(object):
 
         self.verticalLayout_5.addWidget(self.referenceListLabel)
 
-        self.referenceList = QTableWidget(self.ToolsTab)
+        self.referenceList = QListWidget(self.ToolsTab)
         self.referenceList.setObjectName(u"referenceList")
 
         self.verticalLayout_5.addWidget(self.referenceList)

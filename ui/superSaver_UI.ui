@@ -647,7 +647,7 @@ color: rgb(255, 150, 150);</string>
           </widget>
          </item>
          <item>
-          <widget class="QTableWidget" name="referenceList"/>
+          <widget class="QListWidget" name="referenceList"/>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">

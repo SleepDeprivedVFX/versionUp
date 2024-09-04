@@ -7,7 +7,6 @@ Simple click the button on the shelf or run the script.  A UI will pop up that a
 the project folder, but can be customized to save the name as anything.
 Notes can be reviewed on the right side by clicking on existing files.
 """
-import shutil
 
 # FIXME: There are a few issues that I've discovered so far.
 #  1. The version number is not properly changing when the task type is changed.  It still saves the version shown up
@@ -16,7 +15,7 @@ import shutil
 
 """
 TODO: List - Upgrades needed
-    1. Make it so that an unsaved file will auto-build a future filename based on the folder and task selection
+                    1. Make it so that an unsaved file will auto-build a future filename based on the folder and task selection
     2. Build in an "update references" right-click utility.
                     3. Improve headers for UI boxes.  Font size increase for "Existing Files, Snapshots, Notes" et cetera
     4. Add right-click context menu for load-ref, import, update and others.
@@ -34,8 +33,8 @@ TODO: List - Upgrades needed
                         d. Settings.
     10. Add a playblast feature
     11. Integrate into Maya startup routine or module
-            12. Add option to save version as new shot/asset.  This should either be a check box or a button that utilizes the 
-            same folder functionality of Update #1 would override the current file save up action, forcing a new filename.
+                    12. Add option to save version as new shot/asset.  This should either be a check box or a button that utilizes the 
+                    same folder functionality of Update #1 would override the current file save up action, forcing a new filename.
     13. Make an FBX / OBJ / ABC publisher
                     14. Add a config file?  For Update #5
     15. Make incorrect things, like missing notes, highlight red.
@@ -65,7 +64,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '1.1.2'
+__version__ = '1.1.3'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -445,6 +444,7 @@ class super_saver(QWidget):
         self.populate_existing_files(current_directory=self.scene_folder_path)
         self.populate_existing_files(current_directory=self.asset_folder_path)
         self.ui.recentFilesList.itemDoubleClicked.connect(lambda: self.open_recent_file(f=False))
+        self.reference_tracker()
 
         self.set_custom()
 
@@ -814,6 +814,33 @@ class super_saver(QWidget):
                 'v_type': v_type
             }
         return file_info
+
+    def check_for_latest_version(self, filename=None):
+        if filename:
+            # Parse the file's main info
+            root_folder = os.path.dirname(filename)
+            file_name = os.path.basename(filename)
+            file_info = self.get_version_info(file_name)
+            base_filename = file_info['base_filename']
+            version = file_info['version']
+            ext = file_info['extension']
+            v_type = file_info['v_type']
+
+            # make the pattern
+            pattern = re.compile(rf"{base_filename}{v_type}(\d+)\.{ext}")
+
+            latest_file = file_name
+
+            for file in os.listdir(root_folder):
+                match = pattern.match(file)
+                if match:
+                    # Extract the version number and convert to int
+                    this_version = int(match.group(1))
+                    if this_version > version:
+                        latest_file = file
+            latest_file = os.path.join(root_folder, latest_file)
+            latest_file = latest_file.replace('\\', '/')
+            return latest_file
 
     def collect_files(self, path=None):
         files = []
@@ -1424,19 +1451,75 @@ References Imported and Cleaned:
         time.sleep(3)
         self.close()
 
+    def reference_tracker(self):
+        """
+        This function collects all the references in a scene.  It then checks each file to see if it is the most recent
+        version of the reference.  If it is not, the reference is flagged as being out of date.
+        The function should then populate the self.ui.referenceList with multi-select capabilities.  If a reference is
+        flagged as out of date, it should be styled with a red background, and automatically selected.
+        :return:
+        """
+        references = cmds.file(q=True, reference=True)
+        reference_info = {}
+
+        light_red = QColor(255, 102, 102)
+        light_green = QColor(144, 238, 144)
+
+        # Gathering all references
+        for ref in references:
+            # Get the path and namespace of the reference
+            out_of_date = False
+            ref_file = cmds.referenceQuery(ref, filename=True, wcn=True)
+            namespace = cmds.referenceQuery(ref, namespace=True)
+
+            NS_basename = cmds.namespaceInfo(namespace, bn=True)
+            NS_IsRoot = cmds.namespaceInfo(namespace, ir=True)
+
+            # Count the duplicate entries
+            if ref_file in reference_info.keys():
+                reference_info[ref_file]['count'] += 1
+            else:
+                reference_info[ref_file] = {
+                    'filename': ref_file,
+                    'namespace': namespace,
+                    'count': 1
+                }
+
+            # get the latest version
+            latest_file = self.check_for_latest_version(filename=ref_file)
+            if not latest_file == ref_file:
+                print(f'{ref_file} is out of date!  Latest file is {latest_file}')
+                out_of_date = True
+
+            base_name = os.path.basename(ref_file)
+            root_dir = os.path.dirname(ref_file)
+            new_entry = QListWidgetItem()
+            new_entry.setText(f'{NS_basename}:{base_name}')
+            new_entry.setData(Qt.UserRole, root_dir)
+
+            # Set checkable
+            new_entry.setFlags(new_entry.flags() | Qt.ItemIsUserCheckable)
+            if out_of_date:
+                new_entry.setCheckState(Qt.Checked)
+                new_entry.setBackground(light_red)
+                new_entry.setForeground(Qt.white)
+                new_entry.setToolTip(f'Out of date! Latest version: {os.path.basename(latest_file)}')
+            else:
+                new_entry.setCheckState(Qt.Unchecked)
+                new_entry.setBackground(light_green)
+                new_entry.setForeground(Qt.black)
+                new_entry.setToolTip(f'Up to Date!')
+
+            self.ui.referenceList.addItem(new_entry)
+
     def import_and_clean_references(self):
         references = cmds.file(q=True, reference=True)
         reference_info = {}
-        pattern = r'{\d+}'
 
         # First, gather all reference information
         for ref in references:
-            ref_file = cmds.referenceQuery(ref, filename=True)
+            ref_file = cmds.referenceQuery(ref, filename=True, wcn=True)
             namespace = cmds.referenceQuery(ref, namespace=True)
-
-            find_extensions = re.findall(pattern, ref_file)
-            if find_extensions:
-                ref_file = ref_file.replace(find_extensions[0], '')
 
             if ref_file in reference_info.keys():
                 reference_info[ref_file]['count'] += 1
@@ -1449,14 +1532,9 @@ References Imported and Cleaned:
 
         is_clean = []
         for ref in references:
-            ref_file = cmds.referenceQuery(ref, filename=True)
+            ref_file = cmds.referenceQuery(ref, filename=True, wcn=True)
 
-            find_extensions = re.findall(pattern, ref_file)
-            if find_extensions:
-                key_file = ref_file.replace(find_extensions[0], '')
-            else:
-                key_file = ref_file
-            info = reference_info[key_file]
+            info = reference_info[ref_file]
             result = self.do_reference_cleanup(reference_file=ref_file, namespace=info['namespace'],
                                                count=info['count'])
             if result:
