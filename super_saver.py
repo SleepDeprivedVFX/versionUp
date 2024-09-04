@@ -484,6 +484,11 @@ class super_saver(QWidget):
         self.ui.save_config_btn.clicked.connect(self.save_config)
         self.ui.updateRefs_btn.clicked.connect(self.update_references)
 
+        title_font = QFont()
+        title_font.setPointSize(12)
+        title_font.setBold(True)
+        self.ui.toolsGroup.setFont(title_font)
+
         self.show()
 
     def open_file(self, f=False):
@@ -688,7 +693,7 @@ class super_saver(QWidget):
                 'task_abbr': None
             }
         return data
-    
+
     def set_custom(self):
         auto = self.ui.autoNaming.isChecked()
         if auto:
