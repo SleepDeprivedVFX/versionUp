@@ -1051,7 +1051,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
     def populate_existing_files(self, current_directory=None):
         allowed_extensions = ['ma', 'mb', 'obj', 'fbx', 'abc']
-        excluded_folders = ['db', 'edits', '.mayaSwatches', 'snapshots']
+        excluded_folders = ['db', 'edits', '.mayaSwatches', 'snapshots', 'Publishes']
 
         if current_directory:
             if os.path.exists(current_directory):
@@ -1093,6 +1093,11 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                     for subfolder in subfolders:
                         subfolder_path = os.path.join(folder_name, subfolder)
                         relative_subfolder_name = os.path.relpath(subfolder_path, current_directory)
+
+                        # Skip adding excluded folders
+                        if any(excluded_folder in relative_subfolder_name.split(os.sep) for excluded_folder in
+                               excluded_folders):
+                            continue
 
                         if relative_subfolder_name not in folder_items:
                             subfolder_item = QTreeWidgetItem(folder_items[relative_folder_name])
