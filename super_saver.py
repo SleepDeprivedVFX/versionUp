@@ -482,6 +482,7 @@ class super_saver(QWidget):
         self.ui.save_btn.clicked.connect(lambda: self.run(close=True))
         self.ui.folder_btn.clicked.connect(self.get_folder)
         self.ui.save_config_btn.clicked.connect(self.save_config)
+        self.ui.updateRefs_btn.clicked.connect(self.update_references)
 
         self.show()
 
@@ -1459,6 +1460,7 @@ References Imported and Cleaned:
         flagged as out of date, it should be styled with a red background, and automatically selected.
         :return:
         """
+        self.ui.referenceList.clear()
         references = cmds.file(q=True, reference=True)
         reference_info = {}
 
@@ -1471,9 +1473,9 @@ References Imported and Cleaned:
             out_of_date = False
             ref_file = cmds.referenceQuery(ref, filename=True, wcn=True)
             namespace = cmds.referenceQuery(ref, namespace=True)
+            ref_node = cmds.referenceQuery(ref, rfn=True)
 
             NS_basename = cmds.namespaceInfo(namespace, bn=True)
-            NS_IsRoot = cmds.namespaceInfo(namespace, ir=True)
 
             # Count the duplicate entries
             if ref_file in reference_info.keys():
@@ -1493,9 +1495,15 @@ References Imported and Cleaned:
 
             base_name = os.path.basename(ref_file)
             root_dir = os.path.dirname(ref_file)
+            data = {
+                'namespace': namespace,
+                'path': root_dir,
+                'reference_node': ref_node,
+                'latest_file': latest_file
+            }
             new_entry = QListWidgetItem()
             new_entry.setText(f'{NS_basename}:{base_name}')
-            new_entry.setData(Qt.UserRole, root_dir)
+            new_entry.setData(Qt.UserRole, data)
 
             # Set checkable
             new_entry.setFlags(new_entry.flags() | Qt.ItemIsUserCheckable)
@@ -1511,6 +1519,38 @@ References Imported and Cleaned:
                 new_entry.setToolTip(f'Up to Date!')
 
             self.ui.referenceList.addItem(new_entry)
+
+    def update_references(self):
+        update_items = self.get_checked_refs()
+
+        # get references and start updating.
+        for item, data in update_items.items():
+            i = int(item)
+            latest_file = data['latest_file']
+            ref_node = data['reference_node']
+            ext = os.path.splitext(latest_file)[1]
+            if ext == '.ma':
+                r_type = 'mayaAscii'
+            elif ext == '.mb':
+                r_type = 'mayaBinary'
+            elif ext == '.fbx':
+                r_type = 'FBX'
+            elif ext == '.obj':
+                r_type = 'OBJ'
+            else:
+                r_type = 'mayaAscii'
+
+            if self.ui.referenceList.item(i).checkState() == Qt.Checked:
+                cmds.file(latest_file, loadReference=ref_node, type=r_type, options="v=0;")
+        self.reference_tracker()
+
+    def get_checked_refs(self):
+        checked_items = {}
+        for i in range(self.ui.referenceList.count()):
+            item = self.ui.referenceList.item(i)
+            if item.checkState() == Qt.Checked:
+                checked_items[i] = item.data(Qt.UserRole)
+        return checked_items
 
     def import_and_clean_references(self):
         references = cmds.file(q=True, reference=True)

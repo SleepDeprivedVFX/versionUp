@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIDORqfc.ui'
+## Form generated from reading UI file 'superSaver_UISlHoSd.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -448,11 +448,6 @@ class Ui_SaveAs(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer_3)
 
-        self.updateAllRefs_btn = QPushButton(self.ToolsTab)
-        self.updateAllRefs_btn.setObjectName(u"updateAllRefs_btn")
-
-        self.horizontalLayout.addWidget(self.updateAllRefs_btn)
-
         self.updateRefs_btn = QPushButton(self.ToolsTab)
         self.updateRefs_btn.setObjectName(u"updateRefs_btn")
 
@@ -770,7 +765,6 @@ class Ui_SaveAs(object):
         self.abcPub_btn.setText(QCoreApplication.translate("SaveAs", u"Publish Selection as Alembic", None))
         self.playblast_btn.setText(QCoreApplication.translate("SaveAs", u"Playblaster", None))
         self.referenceListLabel.setText(QCoreApplication.translate("SaveAs", u"Loaded References", None))
-        self.updateAllRefs_btn.setText(QCoreApplication.translate("SaveAs", u"Update All", None))
         self.updateRefs_btn.setText(QCoreApplication.translate("SaveAs", u"Update Selected", None))
         self.assetTreeLabel.setText(QCoreApplication.translate("SaveAs", u"Assets", None))
         self.loadRef_2_btn.setText(QCoreApplication.translate("SaveAs", u"Load Ref", None))

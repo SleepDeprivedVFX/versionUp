@@ -665,13 +665,6 @@ color: rgb(255, 150, 150);</string>
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="updateAllRefs_btn">
-             <property name="text">
-              <string>Update All</string>
-             </property>
-            </widget>
-           </item>
-           <item>
             <widget class="QPushButton" name="updateRefs_btn">
              <property name="text">
               <string>Update Selected</string>
