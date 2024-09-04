@@ -16,7 +16,7 @@ Notes can be reviewed on the right side by clicking on existing files.
 """
 TODO: List - Upgrades needed
                     1. Make it so that an unsaved file will auto-build a future filename based on the folder and task selection
-    2. Build in an "update references" right-click utility.
+                    2. Build in an "update references" right-click utility.
                     3. Improve headers for UI boxes.  Font size increase for "Existing Files, Snapshots, Notes" et cetera
     4. Add right-click context menu for load-ref, import, update and others.
                     5. Add a Scene default setting.  Things like:
@@ -64,7 +64,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '1.1.3'
+__version__ = '1.1.4'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -718,6 +718,10 @@ class super_saver(QWidget):
             except TypeError as e:
                 print('ERROR: %s' % e)
                 show = ''
+
+            if not show.endswith('_'):
+                show = f'{show}_'
+            print(f'bp: show: {show}')
             if task:
                 if self.appendartist:
                     filename = '{show}{base}_{task}_{artist}{_v}{v:0{l}d}.{ext}'.format(base=rootName, task=task, _v=v_type,
@@ -976,7 +980,6 @@ NOTE: None
                     selected_folder = folder_name
             else:
                 selected_folder = folder_name
-            print(selected_folder)
 
             # Make sure it's a file, not a folder
             if filename:
