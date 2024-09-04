@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIdhafPF.ui'
+## Form generated from reading UI file 'superSaver_UIuaiweJ.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -15,12 +15,13 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
-    QGroupBox, QHBoxLayout, QHeaderView, QLabel,
-    QLineEdit, QListWidget, QListWidgetItem, QPushButton,
-    QRadioButton, QSizePolicy, QSpacerItem, QSpinBox,
-    QTabWidget, QTableWidget, QTableWidgetItem, QTextEdit,
-    QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QCheckBox, QComboBox,
+    QFrame, QGroupBox, QHBoxLayout, QHeaderView,
+    QLabel, QLineEdit, QListWidget, QListWidgetItem,
+    QPushButton, QRadioButton, QSizePolicy, QSpacerItem,
+    QSpinBox, QTabWidget, QTableWidget, QTableWidgetItem,
+    QTextEdit, QTreeWidget, QTreeWidgetItem, QVBoxLayout,
+    QWidget)
 
 class Ui_SaveAs(object):
     def setupUi(self, SaveAs):
@@ -507,86 +508,29 @@ class Ui_SaveAs(object):
         self.SettingsTab.setObjectName(u"SettingsTab")
         self.verticalLayout_7 = QVBoxLayout(self.SettingsTab)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.showName_label = QLabel(self.SettingsTab)
-        self.showName_label.setObjectName(u"showName_label")
+        self.horizontalLayout_8 = QHBoxLayout()
+        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+        self.SceneScale_Label = QLabel(self.SettingsTab)
+        self.SceneScale_Label.setObjectName(u"SceneScale_Label")
 
-        self.horizontalLayout_4.addWidget(self.showName_label)
+        self.horizontalLayout_8.addWidget(self.SceneScale_Label)
 
-        self.showName = QLineEdit(self.SettingsTab)
-        self.showName.setObjectName(u"showName")
-
-        self.horizontalLayout_4.addWidget(self.showName)
-
-        self.horizontalSpacer_10 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_4.addItem(self.horizontalSpacer_10)
-
-
-        self.verticalLayout_7.addLayout(self.horizontalLayout_4)
-
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.showCodeSet_label = QLabel(self.SettingsTab)
-        self.showCodeSet_label.setObjectName(u"showCodeSet_label")
-
-        self.horizontalLayout_5.addWidget(self.showCodeSet_label)
-
-        self.showCodeSet = QLineEdit(self.SettingsTab)
-        self.showCodeSet.setObjectName(u"showCodeSet")
+        self.sceneScale = QLineEdit(self.SettingsTab)
+        self.sceneScale.setObjectName(u"sceneScale")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.showCodeSet.sizePolicy().hasHeightForWidth())
-        self.showCodeSet.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.sceneScale.sizePolicy().hasHeightForWidth())
+        self.sceneScale.setSizePolicy(sizePolicy)
 
-        self.horizontalLayout_5.addWidget(self.showCodeSet)
+        self.horizontalLayout_8.addWidget(self.sceneScale)
 
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_8 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_5.addItem(self.horizontalSpacer_5)
-
-
-        self.verticalLayout_7.addLayout(self.horizontalLayout_5)
-
-        self.horizontalLayout_6 = QHBoxLayout()
-        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.defaultResolution_label = QLabel(self.SettingsTab)
-        self.defaultResolution_label.setObjectName(u"defaultResolution_label")
-
-        self.horizontalLayout_6.addWidget(self.defaultResolution_label)
-
-        self.resolutionWidth_label = QLabel(self.SettingsTab)
-        self.resolutionWidth_label.setObjectName(u"resolutionWidth_label")
-
-        self.horizontalLayout_6.addWidget(self.resolutionWidth_label)
-
-        self.resolutionWidth = QLineEdit(self.SettingsTab)
-        self.resolutionWidth.setObjectName(u"resolutionWidth")
-        sizePolicy.setHeightForWidth(self.resolutionWidth.sizePolicy().hasHeightForWidth())
-        self.resolutionWidth.setSizePolicy(sizePolicy)
-
-        self.horizontalLayout_6.addWidget(self.resolutionWidth)
-
-        self.resolutionHeight_label = QLabel(self.SettingsTab)
-        self.resolutionHeight_label.setObjectName(u"resolutionHeight_label")
-
-        self.horizontalLayout_6.addWidget(self.resolutionHeight_label)
-
-        self.resolutionHeight = QLineEdit(self.SettingsTab)
-        self.resolutionHeight.setObjectName(u"resolutionHeight")
-        sizePolicy.setHeightForWidth(self.resolutionHeight.sizePolicy().hasHeightForWidth())
-        self.resolutionHeight.setSizePolicy(sizePolicy)
-
-        self.horizontalLayout_6.addWidget(self.resolutionHeight)
-
-        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_6.addItem(self.horizontalSpacer_6)
+        self.horizontalLayout_8.addItem(self.horizontalSpacer_8)
 
 
-        self.verticalLayout_7.addLayout(self.horizontalLayout_6)
+        self.verticalLayout_7.addLayout(self.horizontalLayout_8)
 
         self.horizontalLayout_7 = QHBoxLayout()
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
@@ -626,26 +570,103 @@ class Ui_SaveAs(object):
 
         self.verticalLayout_7.addLayout(self.horizontalLayout_7)
 
-        self.horizontalLayout_8 = QHBoxLayout()
-        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
-        self.SceneScale_Label = QLabel(self.SettingsTab)
-        self.SceneScale_Label.setObjectName(u"SceneScale_Label")
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.defaultResolution_label = QLabel(self.SettingsTab)
+        self.defaultResolution_label.setObjectName(u"defaultResolution_label")
 
-        self.horizontalLayout_8.addWidget(self.SceneScale_Label)
+        self.horizontalLayout_6.addWidget(self.defaultResolution_label)
 
-        self.sceneScale = QLineEdit(self.SettingsTab)
-        self.sceneScale.setObjectName(u"sceneScale")
-        sizePolicy.setHeightForWidth(self.sceneScale.sizePolicy().hasHeightForWidth())
-        self.sceneScale.setSizePolicy(sizePolicy)
+        self.resolutionWidth_label = QLabel(self.SettingsTab)
+        self.resolutionWidth_label.setObjectName(u"resolutionWidth_label")
 
-        self.horizontalLayout_8.addWidget(self.sceneScale)
+        self.horizontalLayout_6.addWidget(self.resolutionWidth_label)
 
-        self.horizontalSpacer_8 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.resolutionWidth = QLineEdit(self.SettingsTab)
+        self.resolutionWidth.setObjectName(u"resolutionWidth")
+        sizePolicy.setHeightForWidth(self.resolutionWidth.sizePolicy().hasHeightForWidth())
+        self.resolutionWidth.setSizePolicy(sizePolicy)
 
-        self.horizontalLayout_8.addItem(self.horizontalSpacer_8)
+        self.horizontalLayout_6.addWidget(self.resolutionWidth)
+
+        self.resolutionHeight_label = QLabel(self.SettingsTab)
+        self.resolutionHeight_label.setObjectName(u"resolutionHeight_label")
+
+        self.horizontalLayout_6.addWidget(self.resolutionHeight_label)
+
+        self.resolutionHeight = QLineEdit(self.SettingsTab)
+        self.resolutionHeight.setObjectName(u"resolutionHeight")
+        sizePolicy.setHeightForWidth(self.resolutionHeight.sizePolicy().hasHeightForWidth())
+        self.resolutionHeight.setSizePolicy(sizePolicy)
+
+        self.horizontalLayout_6.addWidget(self.resolutionHeight)
+
+        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_6.addItem(self.horizontalSpacer_6)
 
 
-        self.verticalLayout_7.addLayout(self.horizontalLayout_8)
+        self.verticalLayout_7.addLayout(self.horizontalLayout_6)
+
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.showCodeSet_label = QLabel(self.SettingsTab)
+        self.showCodeSet_label.setObjectName(u"showCodeSet_label")
+
+        self.horizontalLayout_5.addWidget(self.showCodeSet_label)
+
+        self.showCodeSet = QLineEdit(self.SettingsTab)
+        self.showCodeSet.setObjectName(u"showCodeSet")
+        sizePolicy.setHeightForWidth(self.showCodeSet.sizePolicy().hasHeightForWidth())
+        self.showCodeSet.setSizePolicy(sizePolicy)
+
+        self.horizontalLayout_5.addWidget(self.showCodeSet)
+
+        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_5.addItem(self.horizontalSpacer_5)
+
+
+        self.verticalLayout_7.addLayout(self.horizontalLayout_5)
+
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.showName_label = QLabel(self.SettingsTab)
+        self.showName_label.setObjectName(u"showName_label")
+
+        self.horizontalLayout_4.addWidget(self.showName_label)
+
+        self.showName = QLineEdit(self.SettingsTab)
+        self.showName.setObjectName(u"showName")
+
+        self.horizontalLayout_4.addWidget(self.showName)
+
+        self.horizontalSpacer_10 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_4.addItem(self.horizontalSpacer_10)
+
+
+        self.verticalLayout_7.addLayout(self.horizontalLayout_4)
+
+        self.horizontalLayout_10 = QHBoxLayout()
+        self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
+        self.recent_file_count_label = QLabel(self.SettingsTab)
+        self.recent_file_count_label.setObjectName(u"recent_file_count_label")
+
+        self.horizontalLayout_10.addWidget(self.recent_file_count_label)
+
+        self.recent_file_count = QSpinBox(self.SettingsTab)
+        self.recent_file_count.setObjectName(u"recent_file_count")
+        self.recent_file_count.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
+
+        self.horizontalLayout_10.addWidget(self.recent_file_count)
+
+        self.horizontalSpacer_11 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_10.addItem(self.horizontalSpacer_11)
+
+
+        self.verticalLayout_7.addLayout(self.horizontalLayout_10)
 
         self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
@@ -661,7 +682,7 @@ class Ui_SaveAs(object):
 
         self.verticalLayout_7.addLayout(self.horizontalLayout_9)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 477, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_7.addItem(self.verticalSpacer_2)
 
@@ -756,15 +777,16 @@ class Ui_SaveAs(object):
         self.loadRef_2_btn.setText(QCoreApplication.translate("SaveAs", u"Load Ref", None))
         self.import_2_btn.setText(QCoreApplication.translate("SaveAs", u"Import", None))
         self.saverTabs.setTabText(self.saverTabs.indexOf(self.ToolsTab), QCoreApplication.translate("SaveAs", u"Tools - Reference - Publish Tracking", None))
-        self.showName_label.setText(QCoreApplication.translate("SaveAs", u"Show Name", None))
-        self.showCodeSet_label.setText(QCoreApplication.translate("SaveAs", u"Show Code", None))
-        self.defaultResolution_label.setText(QCoreApplication.translate("SaveAs", u"Default Resolution:  ", None))
-        self.resolutionWidth_label.setText(QCoreApplication.translate("SaveAs", u"Width", None))
-        self.resolutionHeight_label.setText(QCoreApplication.translate("SaveAs", u"Height", None))
+        self.SceneScale_Label.setText(QCoreApplication.translate("SaveAs", u"Scene Scale", None))
         self.filmbackLabel.setText(QCoreApplication.translate("SaveAs", u"Default Filmback:  ", None))
         self.filmback_width_label.setText(QCoreApplication.translate("SaveAs", u"width (mm)", None))
         self.filmback_height_label.setText(QCoreApplication.translate("SaveAs", u"height (mm)", None))
-        self.SceneScale_Label.setText(QCoreApplication.translate("SaveAs", u"Scene Scale", None))
+        self.defaultResolution_label.setText(QCoreApplication.translate("SaveAs", u"Default Resolution:  ", None))
+        self.resolutionWidth_label.setText(QCoreApplication.translate("SaveAs", u"Width", None))
+        self.resolutionHeight_label.setText(QCoreApplication.translate("SaveAs", u"Height", None))
+        self.showCodeSet_label.setText(QCoreApplication.translate("SaveAs", u"Show Code", None))
+        self.showName_label.setText(QCoreApplication.translate("SaveAs", u"Show Name", None))
+        self.recent_file_count_label.setText(QCoreApplication.translate("SaveAs", u"Recent File Count", None))
         self.save_config_btn.setText(QCoreApplication.translate("SaveAs", u"Save Configuration", None))
         self.saverTabs.setTabText(self.saverTabs.indexOf(self.SettingsTab), QCoreApplication.translate("SaveAs", u"Settings - Configuration", None))
     # retranslateUi

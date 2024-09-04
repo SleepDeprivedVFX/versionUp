@@ -65,7 +65,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '1.1.1'
+__version__ = '1.1.2'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -309,6 +309,8 @@ class super_saver(QWidget):
 
         if self.recent_files:
             self.populate_recent_files()
+        else:
+            self.recent_files = []
 
         # Fix boolean checkboxes.
         if self.appendartist == 'true':
@@ -342,6 +344,7 @@ class super_saver(QWidget):
         self.filmback_width = config['Camera']['filmback_width']
         self.filmback_height = config['Camera']['filmback_height']
         self.scene_scale = config['Scene']['scene_scale']
+        self.recent_file_count = int(config['Project']['recent_file_count'])
 
         self.ui.showName.setText(self.project_name)
         self.ui.resolutionWidth.setText(self.res_width)
@@ -349,6 +352,7 @@ class super_saver(QWidget):
         self.ui.filmback_width.setText(self.filmback_width)
         self.ui.filmback_height.setText(self.filmback_height)
         self.ui.sceneScale.setText(self.scene_scale)
+        self.ui.recent_file_count.setValue(self.recent_file_count)
 
         if pth:
             # Check against current project
@@ -505,7 +509,7 @@ class super_saver(QWidget):
                     pop_up.setText('Unsaved Changes detected!  Save before opening a new file?')
                     pop_up.setStandardButtons(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
                     pop_up.setDefaultButton(QMessageBox.Yes)
-                    ret = pop_up.exec_()
+                    ret = pop_up.exec()
                     if ret == QMessageBox.Yes:
                         cmds.file(s=True)
                         self.open_file(f=False)
@@ -534,9 +538,8 @@ class super_saver(QWidget):
             root_name = root_name.replace(bad_x, '_')
             self.ui.filename.setText(root_name)
 
-    def get_config(self, path=None):
-        if path:
-            pass
+    def make_new_filename(self, path=None, rootName=None):
+        pass
 
     def build_config_file(self, path=None):
         if path:
@@ -552,7 +555,8 @@ class super_saver(QWidget):
             }
             config['Project'] = {
                 'Show_Name': '%s' % self.project_name,
-                'Show_Code': self.try_to_get_show_code(path=path)
+                'Show_Code': self.try_to_get_show_code(path=path),
+                'recent_file_count': '5'
             }
             with open(path, 'w') as configfile:
                 config.write(configfile)
@@ -591,6 +595,7 @@ class super_saver(QWidget):
             fb_width = self.ui.filmback_width.text()
             fb_height = self.ui.filmback_height.text()
             scale = self.ui.sceneScale.text()
+            recent_file_count = self.ui.recent_file_count.value()
             config.set('Camera', 'resolution_width', res_width)
             config.set('Camera', 'resolution_height', res_height)
             config.set('Camera', 'resolution_width', fb_width)
@@ -598,6 +603,7 @@ class super_saver(QWidget):
             config.set('Scene', 'scene_scale', scale)
             config.set('Project', 'show_name', project_name)
             config.set('Project', 'show_code', show_code)
+            config.set('Project', 'recent_file_count', str(recent_file_count))
 
             with open(self.config_path, 'w') as configpath:
                 config.write(configpath)
@@ -898,14 +904,43 @@ DATE: None
 NOTE: None
 """.format(fn=filename)
 
-            # TODO: The purpose of this print test is to develop a system that will allow the user to rename a file
-            #  based on the folder that is selected.  I need to be careful with this, since I don't want to
-            #  accidentally write files to the wrong folder simply because I selected something to load in.  It
-            #  probably needs to be something that occurs if a scene has never been saved, or perhaps as a right-click
-            #  function once I setup the context menu.
-            print('file_text: %s' % file_text)
-            print('folder_name: %s' % folder_name)
-            print('filename: %s' % filename)
+            # Setting the new file / copy to save features
+            allow_file_copy = self.ui.allowFileCopy.isChecked()
+            # Check if the file is saved or not
+            existing_file = cmds.file(q=True, sn=True)
+            # Build and update the scene file name
+            if not existing_file or allow_file_copy:
+                if not filename:
+                    new_path = os.path.join(folder_name, file_text)
+                    new_path = new_path.replace('\\', '/')
+                    new_file_name = self.build_path(path=new_path, rootName=file_text,
+                                                    task=self.ui.taskType.currentText(), v_type='_v', version=1,
+                                                    ext=self.ui.fileType.currentText(), show=self.ui.showCode.text(),
+                                                    artist=self.ui.artistName.text())
+                    if new_file_name:
+                        save_file = os.path.basename(new_file_name)
+                        get_basename = save_file.split('_v')[0]
+                        check_new_filename = self.get_save_file(save_file=save_file,
+                                                                save_path=os.path.dirname(new_file_name),
+                                                                basename=get_basename,
+                                                                ext=self.ui.fileType.currentText())
+
+                        update_file_name = check_new_filename[0]
+                        new_version = check_new_filename[1]
+                        self.ui.output_filename.setText(new_file_name)
+                        self.ui.version.setValue(new_version)
+                        self.ui.folder.setText(new_path)
+                        if self.show_code in update_file_name:
+                            get_short_filename = update_file_name.split('_', maxsplit=1)[1]
+                        else:
+                            get_short_filename = update_file_name
+                        if self.ui.taskType.currentText() in get_short_filename:
+                            get_root_name = get_short_filename.split(self.ui.taskType.currentText())[0]
+                            get_root_name = get_root_name.strip('_')
+                        else:
+                            get_root_name = get_short_filename
+                        self.ui.filename.setText(get_root_name)
+
             if file_text != 'scenes' and file_text != 'assets':
                 if not filename:
                     selected_folder = os.path.join(folder_name, file_text)
@@ -1227,10 +1262,10 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
     def populate_recent_files(self):
         recent_files = self.recent_files
-        print('recent_files: %s' % recent_files)
         for this_file in recent_files:
             filename = this_file['filename']
             file_path = this_file['path']
+            file_path = file_path.replace('\\', '/')
             new_entry = QListWidgetItem()
             new_entry.setText(filename)
             new_entry.setData(Qt.UserRole, file_path)
@@ -1594,8 +1629,8 @@ References Imported and Cleaned:
         # self.settings.setValue('showcode', self.ui.showCode.text())
         self.settings.setValue('bake_cam_scene_name', self.ui.bakeCamSceneName.isChecked())
         self.settings.setValue('geometry', self.saveGeometry())
-        if len(self.recent_files) >= 5:
-            self.recent_files.pop(4)
+        if len(self.recent_files) >= self.recent_file_count:
+            self.recent_files.pop(self.recent_file_count - 1)
         this_file_data = {
             'filename': os.path.basename(self.current_file_path),
             'path': self.current_file_path
