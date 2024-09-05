@@ -55,17 +55,6 @@ color: rgb(220, 220, 220);</string>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="messages">
-         <property name="styleSheet">
-          <string notr="true">font: 75 9pt &quot;MS Shell Dlg 2&quot;;
-color: rgb(255, 150, 150);</string>
-         </property>
-         <property name="text">
-          <string>Errors</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <layout class="QHBoxLayout" name="sideBySide_layout">
          <item>
           <layout class="QVBoxLayout" name="saveAs_Layout">
@@ -389,7 +378,35 @@ color: rgb(255, 150, 150);</string>
               </widget>
              </item>
              <item>
-              <widget class="QListWidget" name="recentFilesList"/>
+              <widget class="QListWidget" name="recentFilesList">
+               <property name="alternatingRowColors">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_11">
+               <item>
+                <widget class="QPushButton" name="clear_recent_btn">
+                 <property name="text">
+                  <string>Clear Recent History</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_12">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
              </item>
             </layout>
            </item>
@@ -411,6 +428,15 @@ color: rgb(255, 150, 150);</string>
              </item>
              <item>
               <widget class="QTreeWidget" name="existingFile_list">
+               <property name="frameShape">
+                <enum>QFrame::Shape::StyledPanel</enum>
+               </property>
+               <property name="alternatingRowColors">
+                <bool>true</bool>
+               </property>
+               <attribute name="headerVisible">
+                <bool>false</bool>
+               </attribute>
                <column>
                 <property name="text">
                  <string notr="true">1</string>
@@ -474,6 +500,9 @@ color: rgb(255, 150, 150);</string>
            </item>
            <item>
             <widget class="QTreeWidget" name="snapshots">
+             <property name="headerHidden">
+              <bool>true</bool>
+             </property>
              <column>
               <property name="text">
                <string notr="true">1</string>
@@ -588,6 +617,9 @@ color: rgb(255, 150, 150);</string>
             <property name="text">
              <string>Use Shot/Asset as Cam Name</string>
             </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item>
@@ -647,7 +679,11 @@ color: rgb(255, 150, 150);</string>
           </widget>
          </item>
          <item>
-          <widget class="QListWidget" name="referenceList"/>
+          <widget class="QListWidget" name="referenceList">
+           <property name="alternatingRowColors">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
@@ -689,6 +725,12 @@ color: rgb(255, 150, 150);</string>
          </item>
          <item>
           <widget class="QTreeWidget" name="assetTree">
+           <property name="alternatingRowColors">
+            <bool>true</bool>
+           </property>
+           <property name="headerHidden">
+            <bool>true</bool>
+           </property>
            <column>
             <property name="text">
              <string notr="true">1</string>
@@ -728,6 +770,398 @@ color: rgb(255, 150, 150);</string>
           </layout>
          </item>
         </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="projectTab">
+      <attribute name="title">
+       <string>Project Settings</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout_30">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_8">
+         <item>
+          <widget class="QLabel" name="recent_project_label">
+           <property name="styleSheet">
+            <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
+           </property>
+           <property name="text">
+            <string>Recent Projects</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QListWidget" name="recent_projects"/>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_15">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_9">
+         <item>
+          <widget class="QLabel" name="projects_label">
+           <property name="styleSheet">
+            <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
+           </property>
+           <property name="text">
+            <string>Project</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_13">
+           <item>
+            <widget class="QLabel" name="set_project_label">
+             <property name="text">
+              <string>Set Project</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="set_project"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="set_proejct_btn">
+             <property name="text">
+              <string>Set Project</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="Line" name="line">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="new_project_label">
+           <property name="styleSheet">
+            <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
+           </property>
+           <property name="text">
+            <string>New Project</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_14">
+           <item>
+            <widget class="QLabel" name="new_project_name_label">
+             <property name="text">
+              <string>New Project Name</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="new_project_name"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_15">
+           <item>
+            <widget class="QLabel" name="new_project_folder_Label">
+             <property name="text">
+              <string>New Project Folder</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="new_project_folder"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="new_project_folder_btn">
+             <property name="text">
+              <string>Browse...</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="Line" name="line_2">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_16">
+           <item>
+            <widget class="QLabel" name="scenes_label">
+             <property name="text">
+              <string>Scenes</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="scenes"/>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="include_subfolders">
+             <property name="toolTip">
+              <string>Typical Project Subfolders: Chars, Veh, Props, Env, Shots</string>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::LayoutDirection::RightToLeft</enum>
+             </property>
+             <property name="text">
+              <string>Include Subfolders</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_17">
+           <item>
+            <widget class="QLabel" name="assets_label">
+             <property name="text">
+              <string>Assets</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="assets"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_18">
+           <item>
+            <widget class="QLabel" name="images_label">
+             <property name="text">
+              <string>Images</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="images"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_19">
+           <item>
+            <widget class="QLabel" name="source_images_label">
+             <property name="text">
+              <string>Source Images</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="source_images"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_20">
+           <item>
+            <widget class="QLabel" name="render_data_label">
+             <property name="text">
+              <string>Render Data</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="render_data"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_21">
+           <item>
+            <widget class="QLabel" name="clips_label">
+             <property name="text">
+              <string>Clips</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="clips"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_22">
+           <item>
+            <widget class="QLabel" name="sound_label">
+             <property name="text">
+              <string>Sound</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="sound"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_23">
+           <item>
+            <widget class="QLabel" name="scripts_label">
+             <property name="text">
+              <string>Scripts</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="scripts"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_24">
+           <item>
+            <widget class="QLabel" name="disk_cache_labe">
+             <property name="text">
+              <string>Disk Cache</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="disk_cache"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_25">
+           <item>
+            <widget class="QLabel" name="movies_label">
+             <property name="text">
+              <string>Movies</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="movies"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_26">
+           <item>
+            <widget class="QLabel" name="time_editor_label">
+             <property name="text">
+              <string>Time Editor</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="time_editor"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_27">
+           <item>
+            <widget class="QLabel" name="Autosave_labe">
+             <property name="text">
+              <string>AutoSave</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="autosave"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_28">
+           <item>
+            <widget class="QLabel" name="scene_ass_label">
+             <property name="text">
+              <string>Scene Assembly</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="scene_ass"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_29">
+           <item>
+            <spacer name="horizontalSpacer_14">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="create_project_btn">
+             <property name="text">
+              <string>Create Project</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_16">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -979,6 +1413,33 @@ color: rgb(255, 150, 150);</string>
         </layout>
        </item>
        <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_12">
+         <item>
+          <widget class="QCheckBox" name="checkBox">
+           <property name="layoutDirection">
+            <enum>Qt::LayoutDirection::RightToLeft</enum>
+           </property>
+           <property name="text">
+            <string>Auto Load on Startup</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_13">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_9">
          <item>
           <spacer name="horizontalSpacer_9">
@@ -1017,6 +1478,17 @@ color: rgb(255, 150, 150);</string>
        </item>
       </layout>
      </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="messages">
+     <property name="styleSheet">
+      <string notr="true">font: 75 9pt &quot;MS Shell Dlg 2&quot;;
+color: rgb(255, 150, 150);</string>
+     </property>
+     <property name="text">
+      <string>Errors</string>
+     </property>
     </widget>
    </item>
   </layout>

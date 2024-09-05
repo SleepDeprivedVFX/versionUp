@@ -24,7 +24,7 @@ TODO: List - Upgrades needed
     15. Make incorrect things, like missing notes, highlight red.
 """
 
-from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings)
+from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from maya import cmds
@@ -48,7 +48,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '1.1.6'
+__version__ = '1.2.0'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -288,6 +288,7 @@ class super_saver(QWidget):
         self.position = self.settings.value('geometry', None)
         self.appendartist = self.settings.value('appendArtist', None)
         self.recent_files = self.settings.value('recent_files', [])
+        self.recent_projects = self.settings.value('recent_projects', [])
         self.bakeCamSceneName = self.settings.value('bake_cam_scene_name', None)
         self.restoreGeometry(self.position)
 
@@ -295,6 +296,13 @@ class super_saver(QWidget):
             self.populate_recent_files()
         else:
             self.recent_files = []
+
+        if self.recent_projects:
+            self.populate_recent_projects()
+        else:
+            self.recent_projects = []
+
+        self.populate_project_settings()
 
         # Fix boolean checkboxes.
         if self.appendartist == 'true':
@@ -432,6 +440,9 @@ class super_saver(QWidget):
         self.populate_publish_assets(current_directory=self.scene_folder_path)
         # self.populate_publish_assets(current_directory=self.asset_folder_path)
         self.ui.recentFilesList.itemDoubleClicked.connect(lambda: self.open_recent_file(f=False))
+        self.ui.recent_projects.itemDoubleClicked.connect(lambda: self.set_project(btn=False))
+        self.ui.set_proejct_btn.clicked.connect(lambda: self.set_project(btn=True))
+        self.ui.new_project_folder_btn.clicked.connect(self.get_project_folder)
         self.reference_tracker()
 
         self.set_custom()
@@ -468,11 +479,12 @@ class super_saver(QWidget):
         self.ui.import_btn.setStyleSheet(
             'color: rgb(140, 140, 140);'
         )
-
         self.ui.save_btn.clicked.connect(lambda: self.run(close=True))
         self.ui.folder_btn.clicked.connect(self.get_folder)
         self.ui.save_config_btn.clicked.connect(self.save_config)
         self.ui.updateRefs_btn.clicked.connect(self.update_references)
+        self.ui.clear_recent_btn.clicked.connect(self.clear_recent_files)
+        self.ui.create_project_btn.clicked.connect(self.create_project)
 
         title_font = QFont()
         title_font.setPointSize(12)
@@ -525,6 +537,11 @@ class super_saver(QWidget):
         self.ui.version.setValue(v)
         self.update_ui()
         self.ui.version.valueChanged.connect(self.update_ui)
+
+    def clear_recent_files(self):
+        self.ui.recentFilesList.clear()
+        self.recent_files = []
+        self.populate_recent_files()
 
     def remove_bad_characters(self):
         root_name = self.ui.filename.text()
@@ -1189,7 +1206,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             file_item.setText(0, file_name)
                             file_item.setData(0, Qt.UserRole, {'folder': folder_name, 'file': file_name})
 
-    def message(self, text=None, ok=True):
+    def message(self, text=None, ok=True, obj=None):
         self.ui.messages.setText(text)
         if ok:
             self.ui.messages.setStyleSheet(
@@ -1199,6 +1216,10 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             self.ui.messages.setStyleSheet(
                 "color: rgb(255, 150, 150);\nfont: 12pt \"MS Shell Dlg 2;\""
             )
+        if obj:
+            obj.setStyleSheet('border: 2px solid red;')
+            QTimer.singleShot(3000, lambda: obj.setStyleSheet(''))
+        QTimer.singleShot(8000, lambda: self.ui.messages.setText(''))
 
     def run(self, close=True):
         output_file = self.ui.output_filename.text()
@@ -1206,10 +1227,10 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         fileType = self.ui.fileType.currentText()
         notes = self.ui.notes.toPlainText() 
         if not notes:
-            self.message(text='YOU MUST ADD A NOTE!!!', ok=False)
+            self.message(text='YOU MUST ADD A NOTE!!!', ok=False, obj=self.ui.notes)
             return False
         elif len(notes) < 10:
-            self.message(text='Your note must be more elaborate.', ok=False)
+            self.message(text='Your note must be more elaborate.', ok=False, obj=self.ui.notes)
             return False
         else:
             self.message(text='Version up save in progress', ok=True)
@@ -1250,10 +1271,10 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         else:
             notes = self.ui.notes.toPlainText()
         if not notes:
-            self.message(text='YOU MUST ADD A NOTE!!!', ok=False)
+            self.message(text='YOU MUST ADD A NOTE!!!', ok=False, obj=self.ui.notes)
             return False
         elif len(notes) < 10:
-            self.message(text='Your note must be more elaborate.', ok=False)
+            self.message(text='Your note must be more elaborate.', ok=False, obj=self.ui.notes)
             return False
         else:
             self.message(text='Snapshot in progress', ok=True)
@@ -1420,6 +1441,85 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                         if last_item:
                             last_item.setExpanded(True)  # Expand only the last item
 
+    def populate_recent_projects(self):
+        self.ui.recent_projects.clear()
+        if self.recent_projects:
+            for project in self.recent_projects:
+                new_item = QListWidgetItem()
+                new_item.setText(project)
+                self.ui.recent_projects.addItem(new_item)
+
+    def populate_project_settings(self):
+        scenes = cmds.workspace(fre='scene')
+        asset = cmds.workspace(fre='templates')
+        images = cmds.workspace(fre='images')
+        sourceimages = cmds.workspace(fre='sourceImages')
+        renderdata = cmds.workspace(fre='renderData')
+        clips = cmds.workspace(fre='clips')
+        sounds = cmds.workspace(fre='sound')
+        scripts = cmds.workspace(fre='scripts')
+        diskcache = cmds.workspace(fre='diskCache')
+        movies = cmds.workspace(fre='movies')
+        time_editor = cmds.workspace(fre='timeEditor')
+        autosave = cmds.workspace(fre='autoSave')
+        scene_assembly = cmds.workspace(fre='sceneAssembly')
+
+        self.ui.set_project.setText(cmds.workspace(q=True, act=True))
+        self.ui.scenes.setText(scenes)
+        self.ui.assets.setText(asset)
+        self.ui.images.setText(images)
+        self.ui.source_images.setText(sourceimages)
+        self.ui.render_data.setText(renderdata)
+        self.ui.clips.setText(clips)
+        self.ui.sound.setText(sounds)
+        self.ui.scripts.setText(scripts)
+        self.ui.disk_cache.setText(diskcache)
+        self.ui.movies.setText(movies)
+        self.ui.time_editor.setText(time_editor)
+        self.ui.autosave.setText(autosave)
+        self.ui.scene_ass.setText(scene_assembly)
+
+    def set_project(self, btn=False):
+        if btn:
+            self.hide()
+            cmds.SetProject()
+            self.close()
+            return True
+        current_item = self.ui.recent_projects.currentItem()
+        path = current_item.text()
+        if os.path.exists(path):
+            cmds.workspace(path, openWorkspace=True)
+        self.populate_project_settings()
+        self.close()
+
+    def create_project(self):
+        self.message(text='', ok=True)
+        project_name = self.ui.new_project_name.text()
+        project_folder = self.ui.new_project_folder.text()
+
+        if not project_name:
+            self.message(text='You must have a project name!', ok=False, obj=self.ui.new_project_name)
+            return False
+        if not project_folder:
+            self.message(text='You must have a project folder!', ok=False, obj=self.ui.new_project_folder)
+        if not os.path.exists(project_folder):
+            self.message(text='Not a valid project folder!', ok=False, obj=self.ui.new_project_folder)
+            return False
+        if any(chars in project_name for chars in self.invalidCharacters):
+            self.message(text='Project Name has Invalid Characters - only allowed alphanumerics', ok=False,
+                         obj=self.ui.new_project_name)
+            return False
+
+
+    def get_project_folder(self):
+        self.hide()
+        new_project_folder = cmds.fileDialog2(fm=3, ds=2)
+        if new_project_folder:
+            new_project_folder = new_project_folder[0]
+            if os.path.exists(new_project_folder):
+                self.ui.new_project_folder.setText(new_project_folder)
+        self.show()
+
     def import_snapshot(self, item, column):
         snapshot_path = item.data(0, Qt.UserRole)
         snapshot_file_date = os.path.getmtime(snapshot_path)
@@ -1458,10 +1558,10 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         '''
         notes = self.ui.notes.toPlainText()
         if not notes:
-            self.message(text='YOU MUST ADD A NOTE!!!', ok=False)
+            self.message(text='YOU MUST ADD A NOTE!!!', ok=False, obj=self.ui.notes)
             return False
         elif len(notes) < 10:
-            self.message(text='Your note must be more elaborate.', ok=False)
+            self.message(text='Your note must be more elaborate.', ok=False, obj=self.ui.notes)
             return False
         else:
             self.message(text='Publish in progress', ok=True)
@@ -1526,7 +1626,7 @@ References Imported and Cleaned:
 
         # Reopen the versioned up file
         cmds.file(new_version, o=True)
-        self.message(text='File Published Successfully!')
+        self.message(text='File Published Successfully!', ok=True)
         time.sleep(3)
         self.close()
 
@@ -1839,6 +1939,12 @@ References Imported and Cleaned:
         if this_file_data not in self.recent_files:
             self.recent_files.insert(0, this_file_data)
         self.settings.setValue('recent_files', self.recent_files)
+        if len(self.recent_projects) >= 5:
+            self.recent_projects.pop(4)
+        current_project = cmds.workspace(q=True, act=True)
+        if current_project not in self.recent_projects:
+            self.recent_projects.insert(0, current_project)
+        self.settings.setValue('recent_projects', self.recent_projects)
 
 
 if __name__ == '__main__':

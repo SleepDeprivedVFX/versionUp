@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UISlHoSd.ui'
+## Form generated from reading UI file 'superSaver_UIBigkKz.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -49,13 +49,6 @@ class Ui_SaveAs(object):
         self.output_filename.setStyleSheet(u"font: 10pt \"MS Shell Dlg 2\";")
 
         self.verticalLayout_2.addWidget(self.output_filename)
-
-        self.messages = QLabel(self.MainTab)
-        self.messages.setObjectName(u"messages")
-        self.messages.setStyleSheet(u"font: 75 9pt \"MS Shell Dlg 2\";\n"
-"color: rgb(255, 150, 150);")
-
-        self.verticalLayout_2.addWidget(self.messages)
 
         self.sideBySide_layout = QHBoxLayout()
         self.sideBySide_layout.setObjectName(u"sideBySide_layout")
@@ -254,8 +247,23 @@ class Ui_SaveAs(object):
 
         self.recentFilesList = QListWidget(self.MainTab)
         self.recentFilesList.setObjectName(u"recentFilesList")
+        self.recentFilesList.setAlternatingRowColors(True)
 
         self.notes_layout.addWidget(self.recentFilesList)
+
+        self.horizontalLayout_11 = QHBoxLayout()
+        self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
+        self.clear_recent_btn = QPushButton(self.MainTab)
+        self.clear_recent_btn.setObjectName(u"clear_recent_btn")
+
+        self.horizontalLayout_11.addWidget(self.clear_recent_btn)
+
+        self.horizontalSpacer_12 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_11.addItem(self.horizontalSpacer_12)
+
+
+        self.notes_layout.addLayout(self.horizontalLayout_11)
 
 
         self.saveAs_Layout.addLayout(self.notes_layout)
@@ -278,6 +286,9 @@ class Ui_SaveAs(object):
         __qtreewidgetitem.setText(0, u"1");
         self.existingFile_list.setHeaderItem(__qtreewidgetitem)
         self.existingFile_list.setObjectName(u"existingFile_list")
+        self.existingFile_list.setFrameShape(QFrame.Shape.StyledPanel)
+        self.existingFile_list.setAlternatingRowColors(True)
+        self.existingFile_list.header().setVisible(False)
 
         self.existingFile_layout.addWidget(self.existingFile_list)
 
@@ -324,6 +335,7 @@ class Ui_SaveAs(object):
         __qtreewidgetitem1.setText(0, u"1");
         self.snapshots.setHeaderItem(__qtreewidgetitem1)
         self.snapshots.setObjectName(u"snapshots")
+        self.snapshots.setHeaderHidden(True)
 
         self.verticalLayout.addWidget(self.snapshots)
 
@@ -399,6 +411,7 @@ class Ui_SaveAs(object):
         self.bakeCamSceneName = QCheckBox(self.toolsGroup)
         self.bakeCamSceneName.setObjectName(u"bakeCamSceneName")
         self.bakeCamSceneName.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
+        self.bakeCamSceneName.setChecked(True)
 
         self.verticalLayout_4.addWidget(self.bakeCamSceneName)
 
@@ -439,6 +452,7 @@ class Ui_SaveAs(object):
 
         self.referenceList = QListWidget(self.ToolsTab)
         self.referenceList.setObjectName(u"referenceList")
+        self.referenceList.setAlternatingRowColors(True)
 
         self.verticalLayout_5.addWidget(self.referenceList)
 
@@ -472,6 +486,8 @@ class Ui_SaveAs(object):
         __qtreewidgetitem2.setText(0, u"1");
         self.assetTree.setHeaderItem(__qtreewidgetitem2)
         self.assetTree.setObjectName(u"assetTree")
+        self.assetTree.setAlternatingRowColors(True)
+        self.assetTree.setHeaderHidden(True)
 
         self.verticalLayout_6.addWidget(self.assetTree)
 
@@ -498,6 +514,345 @@ class Ui_SaveAs(object):
         self.horizontalLayout_3.addLayout(self.verticalLayout_6)
 
         self.saverTabs.addTab(self.ToolsTab, "")
+        self.projectTab = QWidget()
+        self.projectTab.setObjectName(u"projectTab")
+        self.horizontalLayout_30 = QHBoxLayout(self.projectTab)
+        self.horizontalLayout_30.setObjectName(u"horizontalLayout_30")
+        self.verticalLayout_8 = QVBoxLayout()
+        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.recent_project_label = QLabel(self.projectTab)
+        self.recent_project_label.setObjectName(u"recent_project_label")
+        self.recent_project_label.setStyleSheet(u"font: 700 12pt \"Segoe UI\";")
+
+        self.verticalLayout_8.addWidget(self.recent_project_label)
+
+        self.recent_projects = QListWidget(self.projectTab)
+        self.recent_projects.setObjectName(u"recent_projects")
+
+        self.verticalLayout_8.addWidget(self.recent_projects)
+
+        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_8.addItem(self.verticalSpacer_3)
+
+
+        self.horizontalLayout_30.addLayout(self.verticalLayout_8)
+
+        self.horizontalSpacer_15 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_30.addItem(self.horizontalSpacer_15)
+
+        self.verticalLayout_9 = QVBoxLayout()
+        self.verticalLayout_9.setObjectName(u"verticalLayout_9")
+        self.projects_label = QLabel(self.projectTab)
+        self.projects_label.setObjectName(u"projects_label")
+        self.projects_label.setStyleSheet(u"font: 700 12pt \"Segoe UI\";")
+
+        self.verticalLayout_9.addWidget(self.projects_label)
+
+        self.horizontalLayout_13 = QHBoxLayout()
+        self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
+        self.set_project_label = QLabel(self.projectTab)
+        self.set_project_label.setObjectName(u"set_project_label")
+
+        self.horizontalLayout_13.addWidget(self.set_project_label)
+
+        self.set_project = QLineEdit(self.projectTab)
+        self.set_project.setObjectName(u"set_project")
+
+        self.horizontalLayout_13.addWidget(self.set_project)
+
+        self.set_proejct_btn = QPushButton(self.projectTab)
+        self.set_proejct_btn.setObjectName(u"set_proejct_btn")
+
+        self.horizontalLayout_13.addWidget(self.set_proejct_btn)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_13)
+
+        self.line = QFrame(self.projectTab)
+        self.line.setObjectName(u"line")
+        self.line.setFrameShape(QFrame.Shape.HLine)
+        self.line.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.verticalLayout_9.addWidget(self.line)
+
+        self.new_project_label = QLabel(self.projectTab)
+        self.new_project_label.setObjectName(u"new_project_label")
+        self.new_project_label.setStyleSheet(u"font: 700 12pt \"Segoe UI\";")
+
+        self.verticalLayout_9.addWidget(self.new_project_label)
+
+        self.horizontalLayout_14 = QHBoxLayout()
+        self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
+        self.new_project_name_label = QLabel(self.projectTab)
+        self.new_project_name_label.setObjectName(u"new_project_name_label")
+
+        self.horizontalLayout_14.addWidget(self.new_project_name_label)
+
+        self.new_project_name = QLineEdit(self.projectTab)
+        self.new_project_name.setObjectName(u"new_project_name")
+
+        self.horizontalLayout_14.addWidget(self.new_project_name)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_14)
+
+        self.horizontalLayout_15 = QHBoxLayout()
+        self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
+        self.new_project_folder_Label = QLabel(self.projectTab)
+        self.new_project_folder_Label.setObjectName(u"new_project_folder_Label")
+
+        self.horizontalLayout_15.addWidget(self.new_project_folder_Label)
+
+        self.new_project_folder = QLineEdit(self.projectTab)
+        self.new_project_folder.setObjectName(u"new_project_folder")
+
+        self.horizontalLayout_15.addWidget(self.new_project_folder)
+
+        self.new_project_folder_btn = QPushButton(self.projectTab)
+        self.new_project_folder_btn.setObjectName(u"new_project_folder_btn")
+
+        self.horizontalLayout_15.addWidget(self.new_project_folder_btn)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_15)
+
+        self.line_2 = QFrame(self.projectTab)
+        self.line_2.setObjectName(u"line_2")
+        self.line_2.setFrameShape(QFrame.Shape.HLine)
+        self.line_2.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.verticalLayout_9.addWidget(self.line_2)
+
+        self.horizontalLayout_16 = QHBoxLayout()
+        self.horizontalLayout_16.setObjectName(u"horizontalLayout_16")
+        self.scenes_label = QLabel(self.projectTab)
+        self.scenes_label.setObjectName(u"scenes_label")
+
+        self.horizontalLayout_16.addWidget(self.scenes_label)
+
+        self.scenes = QLineEdit(self.projectTab)
+        self.scenes.setObjectName(u"scenes")
+
+        self.horizontalLayout_16.addWidget(self.scenes)
+
+        self.include_subfolders = QCheckBox(self.projectTab)
+        self.include_subfolders.setObjectName(u"include_subfolders")
+        self.include_subfolders.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
+        self.include_subfolders.setChecked(True)
+
+        self.horizontalLayout_16.addWidget(self.include_subfolders)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_16)
+
+        self.horizontalLayout_17 = QHBoxLayout()
+        self.horizontalLayout_17.setObjectName(u"horizontalLayout_17")
+        self.assets_label = QLabel(self.projectTab)
+        self.assets_label.setObjectName(u"assets_label")
+
+        self.horizontalLayout_17.addWidget(self.assets_label)
+
+        self.assets = QLineEdit(self.projectTab)
+        self.assets.setObjectName(u"assets")
+
+        self.horizontalLayout_17.addWidget(self.assets)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_17)
+
+        self.horizontalLayout_18 = QHBoxLayout()
+        self.horizontalLayout_18.setObjectName(u"horizontalLayout_18")
+        self.images_label = QLabel(self.projectTab)
+        self.images_label.setObjectName(u"images_label")
+
+        self.horizontalLayout_18.addWidget(self.images_label)
+
+        self.images = QLineEdit(self.projectTab)
+        self.images.setObjectName(u"images")
+
+        self.horizontalLayout_18.addWidget(self.images)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_18)
+
+        self.horizontalLayout_19 = QHBoxLayout()
+        self.horizontalLayout_19.setObjectName(u"horizontalLayout_19")
+        self.source_images_label = QLabel(self.projectTab)
+        self.source_images_label.setObjectName(u"source_images_label")
+
+        self.horizontalLayout_19.addWidget(self.source_images_label)
+
+        self.source_images = QLineEdit(self.projectTab)
+        self.source_images.setObjectName(u"source_images")
+
+        self.horizontalLayout_19.addWidget(self.source_images)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_19)
+
+        self.horizontalLayout_20 = QHBoxLayout()
+        self.horizontalLayout_20.setObjectName(u"horizontalLayout_20")
+        self.render_data_label = QLabel(self.projectTab)
+        self.render_data_label.setObjectName(u"render_data_label")
+
+        self.horizontalLayout_20.addWidget(self.render_data_label)
+
+        self.render_data = QLineEdit(self.projectTab)
+        self.render_data.setObjectName(u"render_data")
+
+        self.horizontalLayout_20.addWidget(self.render_data)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_20)
+
+        self.horizontalLayout_21 = QHBoxLayout()
+        self.horizontalLayout_21.setObjectName(u"horizontalLayout_21")
+        self.clips_label = QLabel(self.projectTab)
+        self.clips_label.setObjectName(u"clips_label")
+
+        self.horizontalLayout_21.addWidget(self.clips_label)
+
+        self.clips = QLineEdit(self.projectTab)
+        self.clips.setObjectName(u"clips")
+
+        self.horizontalLayout_21.addWidget(self.clips)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_21)
+
+        self.horizontalLayout_22 = QHBoxLayout()
+        self.horizontalLayout_22.setObjectName(u"horizontalLayout_22")
+        self.sound_label = QLabel(self.projectTab)
+        self.sound_label.setObjectName(u"sound_label")
+
+        self.horizontalLayout_22.addWidget(self.sound_label)
+
+        self.sound = QLineEdit(self.projectTab)
+        self.sound.setObjectName(u"sound")
+
+        self.horizontalLayout_22.addWidget(self.sound)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_22)
+
+        self.horizontalLayout_23 = QHBoxLayout()
+        self.horizontalLayout_23.setObjectName(u"horizontalLayout_23")
+        self.scripts_label = QLabel(self.projectTab)
+        self.scripts_label.setObjectName(u"scripts_label")
+
+        self.horizontalLayout_23.addWidget(self.scripts_label)
+
+        self.scripts = QLineEdit(self.projectTab)
+        self.scripts.setObjectName(u"scripts")
+
+        self.horizontalLayout_23.addWidget(self.scripts)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_23)
+
+        self.horizontalLayout_24 = QHBoxLayout()
+        self.horizontalLayout_24.setObjectName(u"horizontalLayout_24")
+        self.disk_cache_labe = QLabel(self.projectTab)
+        self.disk_cache_labe.setObjectName(u"disk_cache_labe")
+
+        self.horizontalLayout_24.addWidget(self.disk_cache_labe)
+
+        self.disk_cache = QLineEdit(self.projectTab)
+        self.disk_cache.setObjectName(u"disk_cache")
+
+        self.horizontalLayout_24.addWidget(self.disk_cache)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_24)
+
+        self.horizontalLayout_25 = QHBoxLayout()
+        self.horizontalLayout_25.setObjectName(u"horizontalLayout_25")
+        self.movies_label = QLabel(self.projectTab)
+        self.movies_label.setObjectName(u"movies_label")
+
+        self.horizontalLayout_25.addWidget(self.movies_label)
+
+        self.movies = QLineEdit(self.projectTab)
+        self.movies.setObjectName(u"movies")
+
+        self.horizontalLayout_25.addWidget(self.movies)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_25)
+
+        self.horizontalLayout_26 = QHBoxLayout()
+        self.horizontalLayout_26.setObjectName(u"horizontalLayout_26")
+        self.time_editor_label = QLabel(self.projectTab)
+        self.time_editor_label.setObjectName(u"time_editor_label")
+
+        self.horizontalLayout_26.addWidget(self.time_editor_label)
+
+        self.time_editor = QLineEdit(self.projectTab)
+        self.time_editor.setObjectName(u"time_editor")
+
+        self.horizontalLayout_26.addWidget(self.time_editor)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_26)
+
+        self.horizontalLayout_27 = QHBoxLayout()
+        self.horizontalLayout_27.setObjectName(u"horizontalLayout_27")
+        self.Autosave_labe = QLabel(self.projectTab)
+        self.Autosave_labe.setObjectName(u"Autosave_labe")
+
+        self.horizontalLayout_27.addWidget(self.Autosave_labe)
+
+        self.autosave = QLineEdit(self.projectTab)
+        self.autosave.setObjectName(u"autosave")
+
+        self.horizontalLayout_27.addWidget(self.autosave)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_27)
+
+        self.horizontalLayout_28 = QHBoxLayout()
+        self.horizontalLayout_28.setObjectName(u"horizontalLayout_28")
+        self.scene_ass_label = QLabel(self.projectTab)
+        self.scene_ass_label.setObjectName(u"scene_ass_label")
+
+        self.horizontalLayout_28.addWidget(self.scene_ass_label)
+
+        self.scene_ass = QLineEdit(self.projectTab)
+        self.scene_ass.setObjectName(u"scene_ass")
+
+        self.horizontalLayout_28.addWidget(self.scene_ass)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_28)
+
+        self.horizontalLayout_29 = QHBoxLayout()
+        self.horizontalLayout_29.setObjectName(u"horizontalLayout_29")
+        self.horizontalSpacer_14 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_29.addItem(self.horizontalSpacer_14)
+
+        self.create_project_btn = QPushButton(self.projectTab)
+        self.create_project_btn.setObjectName(u"create_project_btn")
+
+        self.horizontalLayout_29.addWidget(self.create_project_btn)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_29)
+
+        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_9.addItem(self.verticalSpacer_4)
+
+
+        self.horizontalLayout_30.addLayout(self.verticalLayout_9)
+
+        self.horizontalSpacer_16 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_30.addItem(self.horizontalSpacer_16)
+
+        self.saverTabs.addTab(self.projectTab, "")
         self.SettingsTab = QWidget()
         self.SettingsTab.setObjectName(u"SettingsTab")
         self.verticalLayout_7 = QVBoxLayout(self.SettingsTab)
@@ -662,6 +1017,21 @@ class Ui_SaveAs(object):
 
         self.verticalLayout_7.addLayout(self.horizontalLayout_10)
 
+        self.horizontalLayout_12 = QHBoxLayout()
+        self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
+        self.checkBox = QCheckBox(self.SettingsTab)
+        self.checkBox.setObjectName(u"checkBox")
+        self.checkBox.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
+
+        self.horizontalLayout_12.addWidget(self.checkBox)
+
+        self.horizontalSpacer_13 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_12.addItem(self.horizontalSpacer_13)
+
+
+        self.verticalLayout_7.addLayout(self.horizontalLayout_12)
+
         self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
         self.horizontalSpacer_9 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
@@ -683,6 +1053,13 @@ class Ui_SaveAs(object):
         self.saverTabs.addTab(self.SettingsTab, "")
 
         self.verticalLayout_3.addWidget(self.saverTabs)
+
+        self.messages = QLabel(SaveAs)
+        self.messages.setObjectName(u"messages")
+        self.messages.setStyleSheet(u"font: 75 9pt \"MS Shell Dlg 2\";\n"
+"color: rgb(255, 150, 150);")
+
+        self.verticalLayout_3.addWidget(self.messages)
 
 #if QT_CONFIG(shortcut)
         self.naming_label.setBuddy(self.autoNaming)
@@ -713,7 +1090,6 @@ class Ui_SaveAs(object):
         SaveAs.setWindowTitle(QCoreApplication.translate("SaveAs", u"Super Saver", None))
         self.Title.setText(QCoreApplication.translate("SaveAs", u"Save As...", None))
         self.output_filename.setText(QCoreApplication.translate("SaveAs", u"output filename", None))
-        self.messages.setText(QCoreApplication.translate("SaveAs", u"Errors", None))
         self.naming_label.setText(QCoreApplication.translate("SaveAs", u"Naming", None))
         self.autoNaming.setText(QCoreApplication.translate("SaveAs", u"Auto", None))
         self.customNaming.setText(QCoreApplication.translate("SaveAs", u"Custom", None))
@@ -746,6 +1122,7 @@ class Ui_SaveAs(object):
         self.artistName_label.setText(QCoreApplication.translate("SaveAs", u"Artist Name", None))
         self.notes_label.setText(QCoreApplication.translate("SaveAs", u"Notes", None))
         self.recentFilesLabel.setText(QCoreApplication.translate("SaveAs", u"Recent Files", None))
+        self.clear_recent_btn.setText(QCoreApplication.translate("SaveAs", u"Clear Recent History", None))
         self.existingFile_label.setText(QCoreApplication.translate("SaveAs", u"Existing Files", None))
         self.import_btn.setText(QCoreApplication.translate("SaveAs", u"Import", None))
         self.load_btn.setText(QCoreApplication.translate("SaveAs", u"Load Ref", None))
@@ -770,6 +1147,33 @@ class Ui_SaveAs(object):
         self.loadRef_2_btn.setText(QCoreApplication.translate("SaveAs", u"Load Ref", None))
         self.import_2_btn.setText(QCoreApplication.translate("SaveAs", u"Import", None))
         self.saverTabs.setTabText(self.saverTabs.indexOf(self.ToolsTab), QCoreApplication.translate("SaveAs", u"Tools - Reference - Publish Tracking", None))
+        self.recent_project_label.setText(QCoreApplication.translate("SaveAs", u"Recent Projects", None))
+        self.projects_label.setText(QCoreApplication.translate("SaveAs", u"Project", None))
+        self.set_project_label.setText(QCoreApplication.translate("SaveAs", u"Set Project", None))
+        self.set_proejct_btn.setText(QCoreApplication.translate("SaveAs", u"Set Project", None))
+        self.new_project_label.setText(QCoreApplication.translate("SaveAs", u"New Project", None))
+        self.new_project_name_label.setText(QCoreApplication.translate("SaveAs", u"New Project Name", None))
+        self.new_project_folder_Label.setText(QCoreApplication.translate("SaveAs", u"New Project Folder", None))
+        self.new_project_folder_btn.setText(QCoreApplication.translate("SaveAs", u"Browse...", None))
+        self.scenes_label.setText(QCoreApplication.translate("SaveAs", u"Scenes", None))
+#if QT_CONFIG(tooltip)
+        self.include_subfolders.setToolTip(QCoreApplication.translate("SaveAs", u"Typical Project Subfolders: Chars, Veh, Props, Env, Shots", None))
+#endif // QT_CONFIG(tooltip)
+        self.include_subfolders.setText(QCoreApplication.translate("SaveAs", u"Include Subfolders", None))
+        self.assets_label.setText(QCoreApplication.translate("SaveAs", u"Assets", None))
+        self.images_label.setText(QCoreApplication.translate("SaveAs", u"Images", None))
+        self.source_images_label.setText(QCoreApplication.translate("SaveAs", u"Source Images", None))
+        self.render_data_label.setText(QCoreApplication.translate("SaveAs", u"Render Data", None))
+        self.clips_label.setText(QCoreApplication.translate("SaveAs", u"Clips", None))
+        self.sound_label.setText(QCoreApplication.translate("SaveAs", u"Sound", None))
+        self.scripts_label.setText(QCoreApplication.translate("SaveAs", u"Scripts", None))
+        self.disk_cache_labe.setText(QCoreApplication.translate("SaveAs", u"Disk Cache", None))
+        self.movies_label.setText(QCoreApplication.translate("SaveAs", u"Movies", None))
+        self.time_editor_label.setText(QCoreApplication.translate("SaveAs", u"Time Editor", None))
+        self.Autosave_labe.setText(QCoreApplication.translate("SaveAs", u"AutoSave", None))
+        self.scene_ass_label.setText(QCoreApplication.translate("SaveAs", u"Scene Assembly", None))
+        self.create_project_btn.setText(QCoreApplication.translate("SaveAs", u"Create Project", None))
+        self.saverTabs.setTabText(self.saverTabs.indexOf(self.projectTab), QCoreApplication.translate("SaveAs", u"Project Settings", None))
         self.SceneScale_Label.setText(QCoreApplication.translate("SaveAs", u"Scene Scale", None))
         self.filmbackLabel.setText(QCoreApplication.translate("SaveAs", u"Default Filmback:  ", None))
         self.filmback_width_label.setText(QCoreApplication.translate("SaveAs", u"width (mm)", None))
@@ -780,7 +1184,9 @@ class Ui_SaveAs(object):
         self.showCodeSet_label.setText(QCoreApplication.translate("SaveAs", u"Show Code", None))
         self.showName_label.setText(QCoreApplication.translate("SaveAs", u"Show Name", None))
         self.recent_file_count_label.setText(QCoreApplication.translate("SaveAs", u"Recent File Count", None))
+        self.checkBox.setText(QCoreApplication.translate("SaveAs", u"Auto Load on Startup", None))
         self.save_config_btn.setText(QCoreApplication.translate("SaveAs", u"Save Configuration", None))
         self.saverTabs.setTabText(self.saverTabs.indexOf(self.SettingsTab), QCoreApplication.translate("SaveAs", u"Settings - Configuration", None))
+        self.messages.setText(QCoreApplication.translate("SaveAs", u"Errors", None))
     # retranslateUi
 
