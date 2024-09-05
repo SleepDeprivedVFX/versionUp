@@ -16,12 +16,13 @@ Notes can be reviewed on the right side by clicking on existing files.
 
 """
 TODO: List - Upgrades needed
-    4. Add right-click context menu for load-ref, import, update and others.
-    7. Add hotkeys for Snapshot, Publish and Save.
-    10. Add a playblast feature
-    11. Integrate into Maya startup routine or module
-    13. Make an FBX / OBJ / ABC publisher
-    15. Make incorrect things, like missing notes, highlight red.
+    1. Add right-click context menu for load-ref, import, update and others.
+    2. Add hotkeys for Snapshot, Publish and Save.
+    3. Add a playblast feature
+    4. Integrate into Maya startup routine or module
+    5. Make an FBX / OBJ / ABC publisher
+    6. Finish new project functionality.
+    7. If no file exists, disable the publish button.
 """
 
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
@@ -48,7 +49,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '1.2.0'
+__version__ = '1.2.1'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -1459,7 +1460,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         sounds = cmds.workspace(fre='sound')
         scripts = cmds.workspace(fre='scripts')
         diskcache = cmds.workspace(fre='diskCache')
-        movies = cmds.workspace(fre='movies')
+        movies = cmds.workspace(fre='movie')
         time_editor = cmds.workspace(fre='timeEditor')
         autosave = cmds.workspace(fre='autoSave')
         scene_assembly = cmds.workspace(fre='sceneAssembly')
@@ -1496,6 +1497,14 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         self.message(text='', ok=True)
         project_name = self.ui.new_project_name.text()
         project_folder = self.ui.new_project_folder.text()
+        subfolders = [
+            'Chars',
+            'Env',
+            'Props',
+            'Shots',
+            'Veh',
+            'Cams'
+        ]
 
         if not project_name:
             self.message(text='You must have a project name!', ok=False, obj=self.ui.new_project_name)
@@ -1506,10 +1515,47 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             self.message(text='Not a valid project folder!', ok=False, obj=self.ui.new_project_folder)
             return False
         if any(chars in project_name for chars in self.invalidCharacters):
-            self.message(text='Project Name has Invalid Characters - only allowed alphanumerics', ok=False,
+            self.message(text='Project Name has Invalid Characters - only allowed alphanumerics. No spaces.', ok=False,
                          obj=self.ui.new_project_name)
             return False
+        new_project_path = os.path.join(project_folder, project_name)
+        if not os.path.exists(new_project_path):
+            os.makedirs(new_project_path)
 
+        try:
+            cmds.workspace(new_project_path, newWorkspace=True)
+        except RuntimeError as e:
+            self.message(text=f'Workspace Already exists! {e}', ok=False, obj=self.ui.new_project_name)
+            return False
+        folder_structure = {
+            'scenes': self.ui.scenes.text(),
+            'assets': self.ui.assets.text(),
+            'images': self.ui.images.text(),
+            'sourceimages': self.ui.source_images.text(),
+            'renderdata': self.ui.render_data.text(),
+            'clips': self.ui.clips.text(),
+            'sounds': self.ui.sound.text(),
+            'scripts': self.ui.scripts.text(),
+            'diskcaches': self.ui.disk_cache.text(),
+            'movies': self.ui.movies.text(),
+            'timeeditor': self.ui.time_editor.text(),
+            'autosave': self.ui.autosave.text(),
+            'sceneassembly': self.ui.scene_ass.text()
+        }
+        for key, path in folder_structure.items():
+            if path:
+                new_subpath = os.path.join(new_project_path, path)
+                if not os.path.exists(new_subpath):
+                    os.makedirs(new_subpath)
+                    if path == self.ui.scenes.text() and self.ui.include_subfolders.isChecked():
+                        for subpath in subfolders:
+                            new_scene_subpath = os.path.join(new_subpath, subpath)
+                            if not os.path.exists(new_scene_subpath):
+                                os.makedirs(new_scene_subpath)
+                cmds.workspace(fileRule=[key, path])
+        cmds.workspace(saveWorkspace=True)
+        cmds.workspace(new_project_path, openWorkspace=True)
+        self.close()
 
     def get_project_folder(self):
         self.hide()
