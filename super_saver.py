@@ -21,7 +21,6 @@ TODO: List - Upgrades needed
     3. Add a playblast feature
     4. Integrate into Maya startup routine or module
     5. Make an FBX / OBJ / ABC publisher
-    6. Finish new project functionality.
     7. If no file exists, disable the publish button.
 """
 
@@ -269,7 +268,7 @@ class super_saver(QWidget):
         # Get basic scene information - File path, Workspace, Scene and Asset folders.
         pth = cmds.file(q=True, sn=True)
         self.current_file_path = pth
-        workspace = cmds.workspace(q=True, act=True)
+        workspace = cmds.workspace(q=True, rd=True)
         self.workspace = workspace
         scene_folder = cmds.workspace(fre='scene')
         self.scene_folder_path = os.path.join(workspace, scene_folder)
@@ -291,6 +290,7 @@ class super_saver(QWidget):
         self.recent_files = self.settings.value('recent_files', [])
         self.recent_projects = self.settings.value('recent_projects', [])
         self.bakeCamSceneName = self.settings.value('bake_cam_scene_name', None)
+        self.autosave = self.settings.value('autosave', None)
         self.restoreGeometry(self.position)
 
         if self.recent_files:
@@ -303,8 +303,6 @@ class super_saver(QWidget):
         else:
             self.recent_projects = []
 
-        self.populate_project_settings()
-
         # Fix boolean checkboxes.
         if self.appendartist == 'true':
             self.appendartist = True
@@ -314,8 +312,16 @@ class super_saver(QWidget):
             self.bakeCamSceneName = True
         else:
             self.bakeCamSceneName = False
+        if self.autosave == 'true':
+            self.autosave = True
+        else:
+            self.autosave = False
         self.ui.AppendArtist.setChecked(self.appendartist)
         self.ui.bakeCamSceneName.setChecked(self.bakeCamSceneName)
+        self.ui.autosaver.setChecked(self.autosave)
+
+        # Check Autosave Settings
+        self.set_autosave()
 
         # Set initial artist field
         artist = os.environ[env_user]
@@ -338,6 +344,7 @@ class super_saver(QWidget):
         self.filmback_height = config['Camera']['filmback_height']
         self.scene_scale = config['Scene']['scene_scale']
         self.recent_file_count = int(config['Project']['recent_file_count'])
+        self.autosave_interval = int(config['Scene']['autosave_interval'])
 
         self.ui.showName.setText(self.project_name)
         self.ui.resolutionWidth.setText(self.res_width)
@@ -346,6 +353,9 @@ class super_saver(QWidget):
         self.ui.filmback_height.setText(self.filmback_height)
         self.ui.sceneScale.setText(self.scene_scale)
         self.ui.recent_file_count.setValue(self.recent_file_count)
+        self.ui.autosave_count.setValue(self.autosave_interval)
+
+        self.populate_project_settings()
 
         if pth:
             # Check against current project
@@ -557,23 +567,31 @@ class super_saver(QWidget):
 
     def build_config_file(self, path=None):
         if path:
-            config = configparser.ConfigParser()
-            config['Camera'] = {
-                'Resolution_Width': '2048',
-                'Resolution_Height': '1152',
-                'Filmback_Width': '23.1',
-                'Filmback_Height': '12.99'
-            }
-            config['Scene'] = {
-                'Scene_Scale': '10'
-            }
-            config['Project'] = {
-                'Show_Name': '%s' % self.try_to_get_project_name(),
-                'Show_Code': self.try_to_get_show_code(path=path),
-                'recent_file_count': '5'
-            }
-            with open(path, 'w') as configfile:
-                config.write(configfile)
+            try:
+                if not os.path.exists(path):
+                    get_path = cmds.workspace(q=True, rd=True)
+                    path = os.path.join(get_path, 'show_config.cfg')
+                config = configparser.ConfigParser()
+                config['Camera'] = {
+                    'Resolution_Width': '2048',
+                    'Resolution_Height': '1152',
+                    'Filmback_Width': '23.1',
+                    'Filmback_Height': '12.99'
+                }
+                config['Scene'] = {
+                    'Scene_Scale': '10',
+                    'autosave_interval': '10'
+                }
+                config['Project'] = {
+                    'Show_Name': '%s' % self.try_to_get_project_name(),
+                    'Show_Code': self.try_to_get_show_code(path=path),
+                    'recent_file_count': '5'
+                }
+                with open(path, 'w') as configfile:
+                    config.write(configfile)
+            except PermissionError as e:
+                cmds.error('Cannot create the Configuration file.  You may need to set folder permissions in your '
+                           f'operating system to run the tool: {e}')
 
     def try_to_get_show_code(self, path=None):
         # This method returns a 3 letter show code either from the path, or from the workspace name.
@@ -618,11 +636,13 @@ class super_saver(QWidget):
             fb_height = self.ui.filmback_height.text()
             scale = self.ui.sceneScale.text()
             recent_file_count = self.ui.recent_file_count.value()
+            as_interval = self.ui.autosave_count.value()
             config.set('Camera', 'resolution_width', res_width)
             config.set('Camera', 'resolution_height', res_height)
             config.set('Camera', 'filmback_width', fb_width)
             config.set('Camera', 'filmback_height', fb_height)
             config.set('Scene', 'scene_scale', scale)
+            config.set('Scene', 'autosave_interval', str(as_interval))
             config.set('Project', 'show_name', project_name)
             config.set('Project', 'show_code', show_code)
             config.set('Project', 'recent_file_count', str(recent_file_count))
@@ -1566,6 +1586,15 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                 self.ui.new_project_folder.setText(new_project_folder)
         self.show()
 
+    def set_autosave(self):
+        if self.ui.autosaver.isChecked():
+            print('autosave checked')
+            cmds.optionVar(intValue=('autoSaveEnabled', 1))
+            cmds.optionVar(intValue=('autoSaveInterval', self.ui.autosave_count.value()))
+        else:
+            print('autosave unchecked')
+            cmds.optionVar(intValue=('autoSaveEnabled', 0))
+
     def import_snapshot(self, item, column):
         snapshot_path = item.data(0, Qt.UserRole)
         snapshot_file_date = os.path.getmtime(snapshot_path)
@@ -1991,6 +2020,7 @@ References Imported and Cleaned:
         if current_project not in self.recent_projects:
             self.recent_projects.insert(0, current_project)
         self.settings.setValue('recent_projects', self.recent_projects)
+        self.settings.setValue('autosave', self.ui.autosaver.isChecked())
 
 
 if __name__ == '__main__':

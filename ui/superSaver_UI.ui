@@ -1171,16 +1171,43 @@ color: rgb(220, 220, 220);</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_8">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QLabel" name="SceneScale_Label">
+          <widget class="QLabel" name="showName_label">
            <property name="text">
-            <string>Scene Scale</string>
+            <string>Show Name</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="sceneScale">
+          <widget class="QLineEdit" name="showName"/>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_10">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLabel" name="showCodeSet_label">
+           <property name="text">
+            <string>Show Code</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="showCodeSet">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -1190,7 +1217,72 @@ color: rgb(220, 220, 220);</string>
           </widget>
          </item>
          <item>
-          <spacer name="horizontalSpacer_8">
+          <spacer name="horizontalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="Line" name="line_3">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QLabel" name="defaultResolution_label">
+           <property name="text">
+            <string>Default Resolution:  </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="resolutionWidth_label">
+           <property name="text">
+            <string>Width</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="resolutionWidth">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="resolutionHeight_label">
+           <property name="text">
+            <string>Height</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="resolutionHeight">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_6">
            <property name="orientation">
             <enum>Qt::Orientation::Horizontal</enum>
            </property>
@@ -1263,50 +1355,50 @@ color: rgb(220, 220, 220);</string>
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <layout class="QHBoxLayout" name="horizontalLayout_32">
          <item>
-          <widget class="QLabel" name="defaultResolution_label">
+          <widget class="QLabel" name="image_format_label">
            <property name="text">
-            <string>Default Resolution:  </string>
+            <string>Default Render Format</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="resolutionWidth_label">
-           <property name="text">
-            <string>Width</string>
-           </property>
+          <widget class="QComboBox" name="image_format">
+           <item>
+            <property name="text">
+             <string>jpeg</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>png</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>deepexr</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>tif</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>exr</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>maya</string>
+            </property>
+           </item>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="resolutionWidth">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="resolutionHeight_label">
-           <property name="text">
-            <string>Height</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="resolutionHeight">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_6">
+          <spacer name="horizontalSpacer_18">
            <property name="orientation">
             <enum>Qt::Orientation::Horizontal</enum>
            </property>
@@ -1321,16 +1413,16 @@ color: rgb(220, 220, 220);</string>
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <layout class="QHBoxLayout" name="horizontalLayout_8">
          <item>
-          <widget class="QLabel" name="showCodeSet_label">
+          <widget class="QLabel" name="SceneScale_Label">
            <property name="text">
-            <string>Show Code</string>
+            <string>Scene Scale</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="showCodeSet">
+          <widget class="QLineEdit" name="sceneScale">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -1340,7 +1432,7 @@ color: rgb(220, 220, 220);</string>
           </widget>
          </item>
          <item>
-          <spacer name="horizontalSpacer_5">
+          <spacer name="horizontalSpacer_8">
            <property name="orientation">
             <enum>Qt::Orientation::Horizontal</enum>
            </property>
@@ -1355,31 +1447,11 @@ color: rgb(220, 220, 220);</string>
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <widget class="QLabel" name="showName_label">
-           <property name="text">
-            <string>Show Name</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="showName"/>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_10">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
+        <widget class="Line" name="line_4">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_10">
@@ -1438,6 +1510,66 @@ color: rgb(220, 220, 220);</string>
           </spacer>
          </item>
         </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_31">
+         <item>
+          <widget class="QCheckBox" name="autosaver">
+           <property name="layoutDirection">
+            <enum>Qt::LayoutDirection::RightToLeft</enum>
+           </property>
+           <property name="text">
+            <string>Autosave</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="iterations_label">
+           <property name="text">
+            <string>Interval</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="autosave_count">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LayoutDirection::LeftToRight</enum>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_17">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="Line" name="line_5">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_9">

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIBigkKz.ui'
+## Form generated from reading UI file 'superSaver_UIHlwbIA.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -857,67 +857,55 @@ class Ui_SaveAs(object):
         self.SettingsTab.setObjectName(u"SettingsTab")
         self.verticalLayout_7 = QVBoxLayout(self.SettingsTab)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
-        self.horizontalLayout_8 = QHBoxLayout()
-        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
-        self.SceneScale_Label = QLabel(self.SettingsTab)
-        self.SceneScale_Label.setObjectName(u"SceneScale_Label")
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.showName_label = QLabel(self.SettingsTab)
+        self.showName_label.setObjectName(u"showName_label")
 
-        self.horizontalLayout_8.addWidget(self.SceneScale_Label)
+        self.horizontalLayout_4.addWidget(self.showName_label)
 
-        self.sceneScale = QLineEdit(self.SettingsTab)
-        self.sceneScale.setObjectName(u"sceneScale")
+        self.showName = QLineEdit(self.SettingsTab)
+        self.showName.setObjectName(u"showName")
+
+        self.horizontalLayout_4.addWidget(self.showName)
+
+        self.horizontalSpacer_10 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_4.addItem(self.horizontalSpacer_10)
+
+
+        self.verticalLayout_7.addLayout(self.horizontalLayout_4)
+
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.showCodeSet_label = QLabel(self.SettingsTab)
+        self.showCodeSet_label.setObjectName(u"showCodeSet_label")
+
+        self.horizontalLayout_5.addWidget(self.showCodeSet_label)
+
+        self.showCodeSet = QLineEdit(self.SettingsTab)
+        self.showCodeSet.setObjectName(u"showCodeSet")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.sceneScale.sizePolicy().hasHeightForWidth())
-        self.sceneScale.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.showCodeSet.sizePolicy().hasHeightForWidth())
+        self.showCodeSet.setSizePolicy(sizePolicy)
 
-        self.horizontalLayout_8.addWidget(self.sceneScale)
+        self.horizontalLayout_5.addWidget(self.showCodeSet)
 
-        self.horizontalSpacer_8 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_8.addItem(self.horizontalSpacer_8)
-
-
-        self.verticalLayout_7.addLayout(self.horizontalLayout_8)
-
-        self.horizontalLayout_7 = QHBoxLayout()
-        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-        self.filmbackLabel = QLabel(self.SettingsTab)
-        self.filmbackLabel.setObjectName(u"filmbackLabel")
-
-        self.horizontalLayout_7.addWidget(self.filmbackLabel)
-
-        self.filmback_width_label = QLabel(self.SettingsTab)
-        self.filmback_width_label.setObjectName(u"filmback_width_label")
-
-        self.horizontalLayout_7.addWidget(self.filmback_width_label)
-
-        self.filmback_width = QLineEdit(self.SettingsTab)
-        self.filmback_width.setObjectName(u"filmback_width")
-        sizePolicy.setHeightForWidth(self.filmback_width.sizePolicy().hasHeightForWidth())
-        self.filmback_width.setSizePolicy(sizePolicy)
-
-        self.horizontalLayout_7.addWidget(self.filmback_width)
-
-        self.filmback_height_label = QLabel(self.SettingsTab)
-        self.filmback_height_label.setObjectName(u"filmback_height_label")
-
-        self.horizontalLayout_7.addWidget(self.filmback_height_label)
-
-        self.filmback_height = QLineEdit(self.SettingsTab)
-        self.filmback_height.setObjectName(u"filmback_height")
-        sizePolicy.setHeightForWidth(self.filmback_height.sizePolicy().hasHeightForWidth())
-        self.filmback_height.setSizePolicy(sizePolicy)
-
-        self.horizontalLayout_7.addWidget(self.filmback_height)
-
-        self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_7.addItem(self.horizontalSpacer_7)
+        self.horizontalLayout_5.addItem(self.horizontalSpacer_5)
 
 
-        self.verticalLayout_7.addLayout(self.horizontalLayout_7)
+        self.verticalLayout_7.addLayout(self.horizontalLayout_5)
+
+        self.line_3 = QFrame(self.SettingsTab)
+        self.line_3.setObjectName(u"line_3")
+        self.line_3.setFrameShape(QFrame.Shape.HLine)
+        self.line_3.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.verticalLayout_7.addWidget(self.line_3)
 
         self.horizontalLayout_6 = QHBoxLayout()
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
@@ -957,45 +945,96 @@ class Ui_SaveAs(object):
 
         self.verticalLayout_7.addLayout(self.horizontalLayout_6)
 
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.showCodeSet_label = QLabel(self.SettingsTab)
-        self.showCodeSet_label.setObjectName(u"showCodeSet_label")
+        self.horizontalLayout_7 = QHBoxLayout()
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.filmbackLabel = QLabel(self.SettingsTab)
+        self.filmbackLabel.setObjectName(u"filmbackLabel")
 
-        self.horizontalLayout_5.addWidget(self.showCodeSet_label)
+        self.horizontalLayout_7.addWidget(self.filmbackLabel)
 
-        self.showCodeSet = QLineEdit(self.SettingsTab)
-        self.showCodeSet.setObjectName(u"showCodeSet")
-        sizePolicy.setHeightForWidth(self.showCodeSet.sizePolicy().hasHeightForWidth())
-        self.showCodeSet.setSizePolicy(sizePolicy)
+        self.filmback_width_label = QLabel(self.SettingsTab)
+        self.filmback_width_label.setObjectName(u"filmback_width_label")
 
-        self.horizontalLayout_5.addWidget(self.showCodeSet)
+        self.horizontalLayout_7.addWidget(self.filmback_width_label)
 
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.filmback_width = QLineEdit(self.SettingsTab)
+        self.filmback_width.setObjectName(u"filmback_width")
+        sizePolicy.setHeightForWidth(self.filmback_width.sizePolicy().hasHeightForWidth())
+        self.filmback_width.setSizePolicy(sizePolicy)
 
-        self.horizontalLayout_5.addItem(self.horizontalSpacer_5)
+        self.horizontalLayout_7.addWidget(self.filmback_width)
 
+        self.filmback_height_label = QLabel(self.SettingsTab)
+        self.filmback_height_label.setObjectName(u"filmback_height_label")
 
-        self.verticalLayout_7.addLayout(self.horizontalLayout_5)
+        self.horizontalLayout_7.addWidget(self.filmback_height_label)
 
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.showName_label = QLabel(self.SettingsTab)
-        self.showName_label.setObjectName(u"showName_label")
+        self.filmback_height = QLineEdit(self.SettingsTab)
+        self.filmback_height.setObjectName(u"filmback_height")
+        sizePolicy.setHeightForWidth(self.filmback_height.sizePolicy().hasHeightForWidth())
+        self.filmback_height.setSizePolicy(sizePolicy)
 
-        self.horizontalLayout_4.addWidget(self.showName_label)
+        self.horizontalLayout_7.addWidget(self.filmback_height)
 
-        self.showName = QLineEdit(self.SettingsTab)
-        self.showName.setObjectName(u"showName")
+        self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_4.addWidget(self.showName)
-
-        self.horizontalSpacer_10 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_4.addItem(self.horizontalSpacer_10)
+        self.horizontalLayout_7.addItem(self.horizontalSpacer_7)
 
 
-        self.verticalLayout_7.addLayout(self.horizontalLayout_4)
+        self.verticalLayout_7.addLayout(self.horizontalLayout_7)
+
+        self.horizontalLayout_32 = QHBoxLayout()
+        self.horizontalLayout_32.setObjectName(u"horizontalLayout_32")
+        self.image_format_label = QLabel(self.SettingsTab)
+        self.image_format_label.setObjectName(u"image_format_label")
+
+        self.horizontalLayout_32.addWidget(self.image_format_label)
+
+        self.image_format = QComboBox(self.SettingsTab)
+        self.image_format.addItem("")
+        self.image_format.addItem("")
+        self.image_format.addItem("")
+        self.image_format.addItem("")
+        self.image_format.addItem("")
+        self.image_format.addItem("")
+        self.image_format.setObjectName(u"image_format")
+
+        self.horizontalLayout_32.addWidget(self.image_format)
+
+        self.horizontalSpacer_18 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_32.addItem(self.horizontalSpacer_18)
+
+
+        self.verticalLayout_7.addLayout(self.horizontalLayout_32)
+
+        self.horizontalLayout_8 = QHBoxLayout()
+        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+        self.SceneScale_Label = QLabel(self.SettingsTab)
+        self.SceneScale_Label.setObjectName(u"SceneScale_Label")
+
+        self.horizontalLayout_8.addWidget(self.SceneScale_Label)
+
+        self.sceneScale = QLineEdit(self.SettingsTab)
+        self.sceneScale.setObjectName(u"sceneScale")
+        sizePolicy.setHeightForWidth(self.sceneScale.sizePolicy().hasHeightForWidth())
+        self.sceneScale.setSizePolicy(sizePolicy)
+
+        self.horizontalLayout_8.addWidget(self.sceneScale)
+
+        self.horizontalSpacer_8 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_8.addItem(self.horizontalSpacer_8)
+
+
+        self.verticalLayout_7.addLayout(self.horizontalLayout_8)
+
+        self.line_4 = QFrame(self.SettingsTab)
+        self.line_4.setObjectName(u"line_4")
+        self.line_4.setFrameShape(QFrame.Shape.HLine)
+        self.line_4.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.verticalLayout_7.addWidget(self.line_4)
 
         self.horizontalLayout_10 = QHBoxLayout()
         self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
@@ -1031,6 +1070,43 @@ class Ui_SaveAs(object):
 
 
         self.verticalLayout_7.addLayout(self.horizontalLayout_12)
+
+        self.horizontalLayout_31 = QHBoxLayout()
+        self.horizontalLayout_31.setObjectName(u"horizontalLayout_31")
+        self.autosaver = QCheckBox(self.SettingsTab)
+        self.autosaver.setObjectName(u"autosaver")
+        self.autosaver.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
+        self.autosaver.setChecked(True)
+
+        self.horizontalLayout_31.addWidget(self.autosaver)
+
+        self.iterations_label = QLabel(self.SettingsTab)
+        self.iterations_label.setObjectName(u"iterations_label")
+
+        self.horizontalLayout_31.addWidget(self.iterations_label)
+
+        self.autosave_count = QSpinBox(self.SettingsTab)
+        self.autosave_count.setObjectName(u"autosave_count")
+        sizePolicy.setHeightForWidth(self.autosave_count.sizePolicy().hasHeightForWidth())
+        self.autosave_count.setSizePolicy(sizePolicy)
+        self.autosave_count.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.autosave_count.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
+
+        self.horizontalLayout_31.addWidget(self.autosave_count)
+
+        self.horizontalSpacer_17 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_31.addItem(self.horizontalSpacer_17)
+
+
+        self.verticalLayout_7.addLayout(self.horizontalLayout_31)
+
+        self.line_5 = QFrame(self.SettingsTab)
+        self.line_5.setObjectName(u"line_5")
+        self.line_5.setFrameShape(QFrame.Shape.HLine)
+        self.line_5.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.verticalLayout_7.addWidget(self.line_5)
 
         self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
@@ -1174,17 +1250,27 @@ class Ui_SaveAs(object):
         self.scene_ass_label.setText(QCoreApplication.translate("SaveAs", u"Scene Assembly", None))
         self.create_project_btn.setText(QCoreApplication.translate("SaveAs", u"Create Project", None))
         self.saverTabs.setTabText(self.saverTabs.indexOf(self.projectTab), QCoreApplication.translate("SaveAs", u"Project Settings", None))
-        self.SceneScale_Label.setText(QCoreApplication.translate("SaveAs", u"Scene Scale", None))
-        self.filmbackLabel.setText(QCoreApplication.translate("SaveAs", u"Default Filmback:  ", None))
-        self.filmback_width_label.setText(QCoreApplication.translate("SaveAs", u"width (mm)", None))
-        self.filmback_height_label.setText(QCoreApplication.translate("SaveAs", u"height (mm)", None))
+        self.showName_label.setText(QCoreApplication.translate("SaveAs", u"Show Name", None))
+        self.showCodeSet_label.setText(QCoreApplication.translate("SaveAs", u"Show Code", None))
         self.defaultResolution_label.setText(QCoreApplication.translate("SaveAs", u"Default Resolution:  ", None))
         self.resolutionWidth_label.setText(QCoreApplication.translate("SaveAs", u"Width", None))
         self.resolutionHeight_label.setText(QCoreApplication.translate("SaveAs", u"Height", None))
-        self.showCodeSet_label.setText(QCoreApplication.translate("SaveAs", u"Show Code", None))
-        self.showName_label.setText(QCoreApplication.translate("SaveAs", u"Show Name", None))
+        self.filmbackLabel.setText(QCoreApplication.translate("SaveAs", u"Default Filmback:  ", None))
+        self.filmback_width_label.setText(QCoreApplication.translate("SaveAs", u"width (mm)", None))
+        self.filmback_height_label.setText(QCoreApplication.translate("SaveAs", u"height (mm)", None))
+        self.image_format_label.setText(QCoreApplication.translate("SaveAs", u"Default Render Format", None))
+        self.image_format.setItemText(0, QCoreApplication.translate("SaveAs", u"jpeg", None))
+        self.image_format.setItemText(1, QCoreApplication.translate("SaveAs", u"png", None))
+        self.image_format.setItemText(2, QCoreApplication.translate("SaveAs", u"deepexr", None))
+        self.image_format.setItemText(3, QCoreApplication.translate("SaveAs", u"tif", None))
+        self.image_format.setItemText(4, QCoreApplication.translate("SaveAs", u"exr", None))
+        self.image_format.setItemText(5, QCoreApplication.translate("SaveAs", u"maya", None))
+
+        self.SceneScale_Label.setText(QCoreApplication.translate("SaveAs", u"Scene Scale", None))
         self.recent_file_count_label.setText(QCoreApplication.translate("SaveAs", u"Recent File Count", None))
         self.checkBox.setText(QCoreApplication.translate("SaveAs", u"Auto Load on Startup", None))
+        self.autosaver.setText(QCoreApplication.translate("SaveAs", u"Autosave", None))
+        self.iterations_label.setText(QCoreApplication.translate("SaveAs", u"Interval", None))
         self.save_config_btn.setText(QCoreApplication.translate("SaveAs", u"Save Configuration", None))
         self.saverTabs.setTabText(self.saverTabs.indexOf(self.SettingsTab), QCoreApplication.translate("SaveAs", u"Settings - Configuration", None))
         self.messages.setText(QCoreApplication.translate("SaveAs", u"Errors", None))
