@@ -22,8 +22,7 @@ TODO: List - Upgrades needed
     4. Integrate into Maya startup routine or module
     5. Make an FBX / OBJ / ABC publisher
     7. If no file exists, disable the publish button.
-    8. Add an asset creation form on Assets tab
-    9. Create a "Make Default Folders" button for existing projects.
+    8. Make sure everything updates the ui.
 """
 
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
@@ -50,7 +49,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '1.2.1'
+__version__ = '1.2.2'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -508,6 +507,16 @@ class super_saver(QWidget):
         title_font.setPointSize(12)
         title_font.setBold(True)
         self.ui.toolsGroup.setFont(title_font)
+
+        # SETUP HOTKEYS
+        self.shortcut_save = QShortcut(QKeySequence('Ctrl+Return'), self)
+        self.shortcut_save.activated.connect(self.run)
+        self.shortcut_exit = QShortcut(QKeySequence('Esc'), self)
+        self.shortcut_exit.activated.connect(self.close)
+        self.shortcut_publish = QShortcut(QKeySequence('Ctrl+p'), self)
+        self.shortcut_publish.activated.connect(self.publish)
+        self.shortcut_snapshot = QShortcut(QKeySequence('Ctrl+t'), self)
+        self.shortcut_snapshot.activated.connect(self.snapshot)
 
         self.show()
 
