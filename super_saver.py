@@ -464,8 +464,9 @@ class super_saver(QWidget):
         self.ui.autoNaming.clicked.connect(self.set_custom)
         self.ui.cancel_btn.clicked.connect(self.close)
         self.ui.snap_btn.clicked.connect(self.snapshot)
+        self.check_button_state(btn=self.ui.snap_btn)
         self.ui.publish_btn.clicked.connect(self.publish)
-        self.check_publish_state()
+        self.check_button_state(btn=self.ui.publish_btn)
         self.ui.load_btn.clicked.connect(lambda: self.load_ref(element=self.ui.existingFile_list))
         self.ui.bakeCam_btn.clicked.connect(self.start_cam_bake)
         self.ui.import_btn.clicked.connect(lambda: self.import_object(element=self.ui.existingFile_list))
@@ -1296,7 +1297,8 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
         time.sleep(3)
         print('run: close: %s' % close)
-        self.check_publish_state()
+        self.check_button_state(btn=self.ui.snap_btn)
+        self.check_button_state(btn=self.ui.publish_btn)
         if close:
             self.close()
         else:
@@ -1316,7 +1318,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             return False
         else:
             self.message(text='Snapshot in progress', ok=True)
-        self.check_publish_state()
+        self.check_button_state()
 
         current_file_path = self.current_file_path
         current_root = os.path.dirname(current_file_path)
@@ -1531,11 +1533,18 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         self.populate_project_settings()
         self.close()
 
-    def check_publish_state(self):
-        if cmds.file(q=True, sn=True):
-            self.ui.publish_btn.setEnabled(True)
-        else:
-            self.ui.publish_btn.setEnabled(False)
+    def check_button_state(self, btn=None):
+        if btn:
+            if cmds.file(q=True, sn=True):
+                btn.setEnabled(True)
+                btn.setStyleSheet(
+                    'color: rgb(220, 220, 220);'
+                )
+            else:
+                btn.setEnabled(False)
+                btn.setStyleSheet(
+                    'color: rgb(140, 140, 140);'
+                )
 
     def create_project(self):
         self.message(text='', ok=True)
