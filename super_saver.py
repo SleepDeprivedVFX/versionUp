@@ -20,7 +20,6 @@ TODO: List - Upgrades needed
     3. Add a playblast feature
     4. Integrate into Maya startup routine or module
     5. Make an FBX / OBJ / ABC publisher
-    7. If no file exists, disable the publish button.
     8. Make sure everything updates the ui.
 """
 
@@ -519,7 +518,43 @@ class super_saver(QWidget):
         self.shortcut_snapshot = QShortcut(QKeySequence('Ctrl+t'), self)
         self.shortcut_snapshot.activated.connect(self.snapshot)
 
+        # SETUP RIGHT-CLICK CONTEXT MENUS
+        self.enable_context_menu(self.ui.existingFile_list, 'Existing Files')
+        self.enable_context_menu(self.ui.assetTree, 'Assets')
+
         self.show()
+
+    def enable_context_menu(self, widget=None, widget_name=None):
+        if widget and widget_name:
+            widget.setContextMenuPolicy(Qt.CustomContextMenu)
+            widget.customContextMenuRequested.connect(lambda position: self.create_tree_context_menu(widget,
+                                                                                                     widget_name,
+                                                                                                     position))
+
+    def create_tree_context_menu(self, widget, widget_name, position):
+        current_item = widget.itemAt(position)
+        if not current_item:
+            return False
+
+        data = current_item.data(0, Qt.UserRole)
+        if not data['file']:
+            return False
+
+        context_menu = QMenu(self)
+
+        open_action = QAction('Open', self)
+        ref_action = QAction('Reference', self)
+        import_action = QAction('Import', self)
+
+        open_action.triggered.connect(lambda: self.open_file(f=False))
+        ref_action.triggered.connect(lambda: self.load_ref(element=widget))
+        import_action.triggered.connect(lambda: self.import_object(element=widget))
+
+        context_menu.addAction(open_action)
+        context_menu.addAction(ref_action)
+        context_menu.addAction(import_action)
+
+        context_menu.exec(widget.mapToGlobal(position))
 
     def open_file(self, f=False):
         # get_filename = self.ui.existingFile_list.currentItem()
@@ -703,49 +738,52 @@ class super_saver(QWidget):
             # self.reset_version(v=version)
 
     def get_root_and_task(self, filename=None):
-        root_name = None
-        task_name = None
-        task_abbr = None
-        data = None
-        show_code = self.ui.showCode.text()
-        artist = self.ui.artistName.text()
-        if filename:
-            # Check against current project
-            save_file = filename
-            for task in self.tasks.keys():
-                for abbr in self.tasks[task]:
-                    if abbr in save_file:
-                        root_name = save_file.split(abbr)[0]
-                        task_abbr = abbr
-                        task_name = task
-                        if root_name.endswith('_'):
-                            root_name = root_name.rstrip('_')
-                        if root_name.startswith(show_code):
-                            root_name = root_name.replace(show_code, '')
-                        if root_name.startswith('_'):
-                            root_name = root_name.lstrip('_')
-                        artist_ = '{artist}_'.format(artist=artist)
-                        if artist_ in root_name:
-                            root_name = root_name.replace(artist_, '')
-                        break
-        if root_name and task_name and task_abbr:
-            # EXAMPLE:
-            # root_name = Asset1
-            # task_name = Model
-            # task_abbr = MDL
-            data = {
-                'root_name': root_name,
-                'task_name': task_name,
-                'task_abbr': task_abbr
-            }
-        else:
-            file_data = self.get_version_info(filename=filename)
-            data = {
-                'root_name': file_data['base_filename'],
-                'task_name': None,
-                'task_abbr': None
-            }
-        return data
+        try:
+            root_name = None
+            task_name = None
+            task_abbr = None
+            data = None
+            show_code = self.ui.showCode.text()
+            artist = self.ui.artistName.text()
+            if filename:
+                # Check against current project
+                save_file = filename
+                for task in self.tasks.keys():
+                    for abbr in self.tasks[task]:
+                        if abbr in save_file:
+                            root_name = save_file.split(abbr)[0]
+                            task_abbr = abbr
+                            task_name = task
+                            if root_name.endswith('_'):
+                                root_name = root_name.rstrip('_')
+                            if root_name.startswith(show_code):
+                                root_name = root_name.replace(show_code, '')
+                            if root_name.startswith('_'):
+                                root_name = root_name.lstrip('_')
+                            artist_ = '{artist}_'.format(artist=artist)
+                            if artist_ in root_name:
+                                root_name = root_name.replace(artist_, '')
+                            break
+            if root_name and task_name and task_abbr:
+                # EXAMPLE:
+                # root_name = Asset1
+                # task_name = Model
+                # task_abbr = MDL
+                data = {
+                    'root_name': root_name,
+                    'task_name': task_name,
+                    'task_abbr': task_abbr
+                }
+            else:
+                file_data = self.get_version_info(filename=filename)
+                data = {
+                    'root_name': file_data['base_filename'],
+                    'task_name': None,
+                    'task_abbr': None
+                }
+            return data
+        except TypeError as e:
+            print(f'This is where it happened! {e}')
 
     def set_custom(self):
         auto = self.ui.autoNaming.isChecked()
@@ -1589,7 +1627,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                         os.makedirs(new_scene_subpath)
 
         subfolders = [
-            'Chars',
+            'Char',
             'Env',
             'Props',
             'Shots',
