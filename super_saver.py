@@ -16,9 +16,7 @@ Notes can be reviewed on the right side by clicking on existing files.
 
 """
 TODO: List - Upgrades needed
-    3. Add a playblast feature
     4. Integrate into Maya startup routine or module
-    5. Make an FBX / OBJ / ABC publisher
     8. Make sure everything updates the ui.
     9. Connect all the settings tab settings to actual settings.
 """
@@ -312,6 +310,7 @@ class super_saver(QWidget):
         self.bakeCamSceneName = self.settings.value('bake_cam_scene_name', None)
         self.autosave = self.settings.value('autosave', None)
         self.asset_shot_type = self.settings.value('asset_shot', None)
+        self.render_output = self.settings.value('render_output', None)
         self.restoreGeometry(self.position)
 
         if self.recent_files:
@@ -341,6 +340,7 @@ class super_saver(QWidget):
         self.ui.bakeCamSceneName.setChecked(self.bakeCamSceneName)
         self.ui.autosaver.setChecked(self.autosave)
         self.ui.assetShot_type.setCurrentText(self.asset_shot_type)
+        self.ui.image_format.setCurrentText(self.render_output)
 
         # Check Autosave Settings
         self.set_autosave()
@@ -545,6 +545,9 @@ class super_saver(QWidget):
         # SETUP RIGHT-CLICK CONTEXT MENUS
         self.enable_context_menu(self.ui.existingFile_list, 'Existing Files')
         self.enable_context_menu(self.ui.assetTree, 'Assets')
+
+        # Set Scene Settings
+        self.render_settings()
 
         self.show()
 
@@ -2227,6 +2230,15 @@ References Imported and Cleaned:
                        gamma=1, fo=True)
         self.close()
 
+    def render_settings(self):
+        res_width = int(self.ui.resolutionWidth.text())
+        res_height = int(self.ui.resolutionHeight.text())
+        render_output = self.ui.image_format.currentText()
+        cmds.setAttr('defaultArnoldDriver.aiTranslator', render_output, type='string')
+        cmds.setAttr('defaultResolution.width', res_width)
+        cmds.setAttr('defaultResolution.height', res_height)
+        cmds.setAttr('defaultArnoldDriver.mergeAOVs', 1)
+
     def closeEvent(self, event):
         self.settings.setValue('appendArtist', self.ui.AppendArtist.isChecked())
         # self.settings.setValue('showcode', self.ui.showCode.text())
@@ -2249,6 +2261,7 @@ References Imported and Cleaned:
         self.settings.setValue('recent_projects', self.recent_projects)
         self.settings.setValue('autosave', self.ui.autosaver.isChecked())
         self.settings.setValue('asset_shot', self.ui.assetShot_type.currentText())
+        self.settings.setValue('render_output', self.ui.image_format.currentText())
 
 
 if __name__ == '__main__':
