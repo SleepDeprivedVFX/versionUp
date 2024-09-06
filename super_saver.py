@@ -17,7 +17,6 @@ Notes can be reviewed on the right side by clicking on existing files.
 """
 TODO: List - Upgrades needed
     1. Add right-click context menu for load-ref, import, update and others.
-    2. Add hotkeys for Snapshot, Publish and Save.
     3. Add a playblast feature
     4. Integrate into Maya startup routine or module
     5. Make an FBX / OBJ / ABC publisher
@@ -466,6 +465,7 @@ class super_saver(QWidget):
         self.ui.cancel_btn.clicked.connect(self.close)
         self.ui.snap_btn.clicked.connect(self.snapshot)
         self.ui.publish_btn.clicked.connect(self.publish)
+        self.check_publish_state()
         self.ui.load_btn.clicked.connect(lambda: self.load_ref(element=self.ui.existingFile_list))
         self.ui.bakeCam_btn.clicked.connect(self.start_cam_bake)
         self.ui.import_btn.clicked.connect(lambda: self.import_object(element=self.ui.existingFile_list))
@@ -1296,6 +1296,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
         time.sleep(3)
         print('run: close: %s' % close)
+        self.check_publish_state()
         if close:
             self.close()
         else:
@@ -1315,6 +1316,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             return False
         else:
             self.message(text='Snapshot in progress', ok=True)
+        self.check_publish_state()
 
         current_file_path = self.current_file_path
         current_root = os.path.dirname(current_file_path)
@@ -1528,6 +1530,12 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             cmds.workspace(path, openWorkspace=True)
         self.populate_project_settings()
         self.close()
+
+    def check_publish_state(self):
+        if cmds.file(q=True, sn=True):
+            self.ui.publish_btn.setEnabled(True)
+        else:
+            self.ui.publish_btn.setEnabled(False)
 
     def create_project(self):
         self.message(text='', ok=True)
