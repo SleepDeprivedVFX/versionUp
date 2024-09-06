@@ -22,6 +22,8 @@ TODO: List - Upgrades needed
     4. Integrate into Maya startup routine or module
     5. Make an FBX / OBJ / ABC publisher
     7. If no file exists, disable the publish button.
+    8. Add an asset creation form on Assets tab
+    9. Create a "Make Default Folders" button for existing projects.
 """
 
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
@@ -291,6 +293,7 @@ class super_saver(QWidget):
         self.recent_projects = self.settings.value('recent_projects', [])
         self.bakeCamSceneName = self.settings.value('bake_cam_scene_name', None)
         self.autosave = self.settings.value('autosave', None)
+        self.asset_shot_type = self.settings.value('asset_shot', None)
         self.restoreGeometry(self.position)
 
         if self.recent_files:
@@ -319,6 +322,7 @@ class super_saver(QWidget):
         self.ui.AppendArtist.setChecked(self.appendartist)
         self.ui.bakeCamSceneName.setChecked(self.bakeCamSceneName)
         self.ui.autosaver.setChecked(self.autosave)
+        self.ui.assetShot_type.setCurrentText(self.asset_shot_type)
 
         # Check Autosave Settings
         self.set_autosave()
@@ -496,6 +500,9 @@ class super_saver(QWidget):
         self.ui.updateRefs_btn.clicked.connect(self.update_references)
         self.ui.clear_recent_btn.clicked.connect(self.clear_recent_files)
         self.ui.create_project_btn.clicked.connect(self.create_project)
+        self.ui.build_folders_btn.clicked.connect(lambda: self.create_folders(proj_path=cmds.workspace(q=True,
+                                                                                                       rd=True)))
+        self.ui.make_asset_btn.clicked.connect(self.create_asset_shot)
 
         title_font = QFont()
         title_font.setPointSize(12)
@@ -1517,14 +1524,6 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         self.message(text='', ok=True)
         project_name = self.ui.new_project_name.text()
         project_folder = self.ui.new_project_folder.text()
-        subfolders = [
-            'Chars',
-            'Env',
-            'Props',
-            'Shots',
-            'Veh',
-            'Cams'
-        ]
 
         if not project_name:
             self.message(text='You must have a project name!', ok=False, obj=self.ui.new_project_name)
@@ -1547,35 +1546,94 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         except RuntimeError as e:
             self.message(text=f'Workspace Already exists! {e}', ok=False, obj=self.ui.new_project_name)
             return False
-        folder_structure = {
-            'scenes': self.ui.scenes.text(),
-            'assets': self.ui.assets.text(),
-            'images': self.ui.images.text(),
-            'sourceimages': self.ui.source_images.text(),
-            'renderdata': self.ui.render_data.text(),
-            'clips': self.ui.clips.text(),
-            'sounds': self.ui.sound.text(),
-            'scripts': self.ui.scripts.text(),
-            'diskcaches': self.ui.disk_cache.text(),
-            'movies': self.ui.movies.text(),
-            'timeeditor': self.ui.time_editor.text(),
-            'autosave': self.ui.autosave.text(),
-            'sceneassembly': self.ui.scene_ass.text()
-        }
-        for key, path in folder_structure.items():
-            if path:
-                new_subpath = os.path.join(new_project_path, path)
-                if not os.path.exists(new_subpath):
-                    os.makedirs(new_subpath)
-                    if path == self.ui.scenes.text() and self.ui.include_subfolders.isChecked():
-                        for subpath in subfolders:
-                            new_scene_subpath = os.path.join(new_subpath, subpath)
-                            if not os.path.exists(new_scene_subpath):
-                                os.makedirs(new_scene_subpath)
-                cmds.workspace(fileRule=[key, path])
-        cmds.workspace(saveWorkspace=True)
+
+        self.create_folders(proj_path=new_project_path)
+
         cmds.workspace(new_project_path, openWorkspace=True)
         self.close()
+
+    def create_folders(self, proj_path=None):
+        def do_subfolders(parent_path=None):
+            if parent_path:
+                print(f'cf: proj_path: {parent_path}')
+                for subpath in subfolders:
+                    new_scene_subpath = os.path.join(parent_path, subpath)
+                    if not os.path.exists(new_scene_subpath):
+                        print(f'cf: making subfolder: {new_scene_subpath}')
+                        os.makedirs(new_scene_subpath)
+
+        subfolders = [
+            'Chars',
+            'Env',
+            'Props',
+            'Shots',
+            'Veh',
+            'Cams'
+        ]
+        if proj_path:
+            print(f'cf: proj_path: {proj_path}')
+            folder_structure = {
+                'scenes': self.ui.scenes.text(),
+                'assets': self.ui.assets.text(),
+                'images': self.ui.images.text(),
+                'sourceimages': self.ui.source_images.text(),
+                'renderdata': self.ui.render_data.text(),
+                'clips': self.ui.clips.text(),
+                'sounds': self.ui.sound.text(),
+                'scripts': self.ui.scripts.text(),
+                'diskcaches': self.ui.disk_cache.text(),
+                'movies': self.ui.movies.text(),
+                'timeeditor': self.ui.time_editor.text(),
+                'autosave': self.ui.autosave.text(),
+                'sceneassembly': self.ui.scene_ass.text()
+            }
+            for key, path in folder_structure.items():
+                if path:
+                    new_subpath = os.path.join(proj_path, path)
+                    if not os.path.exists(new_subpath):
+                        print(f'cf: creating new folder: {new_subpath}')
+                        os.makedirs(new_subpath)
+                        if path == self.ui.scenes.text() and self.ui.include_subfolders.isChecked():
+                            do_subfolders(parent_path=new_subpath)
+                    elif path == self.ui.scenes.text() and self.ui.include_subfolders.isChecked():
+                        do_subfolders(parent_path=new_subpath)
+                    cmds.workspace(fileRule=[key, path])
+            cmds.workspace(saveWorkspace=True)
+            cmds.workspace(proj_path, openWorkspace=True)
+            self.update_ui()
+
+    def create_asset_shot(self):
+        _type = self.ui.assetShot_type.currentText()
+        if _type == 'Cams':
+            message_type = 'Camera'
+        elif _type == 'Char':
+            message_type = 'Character'
+        elif _type == 'Env':
+            message_type = 'Environment'
+        elif _type == 'Prop':
+            message_type = 'Prop'
+        elif _type == 'Veh':
+            message_type = 'Vehicle'
+        else:
+            message_type = 'Shot'
+        if not self.ui.asset_name.text():
+            self.message(text=f'You must give the {message_type} a name!', ok=False, obj=self.ui.assetShot_type)
+            return False
+        if any(bad_char in self.ui.asset_name.text() for bad_char in self.invalidCharacters):
+            self.message(text='Only alphanumeric characters are allowed. No spaces!', ok=False, obj=self.ui.asset_name)
+            return False
+
+        # Create folder
+        root_directory = cmds.workspace(q=True, rd=True)
+        scenes_folder = cmds.workspace(fre='scenes')
+        scenes_path = os.path.join(root_directory, scenes_folder)
+        type_path = os.path.join(scenes_path, _type)
+        path = os.path.join(type_path, self.ui.asset_name.text())
+        if not os.path.exists(path):
+            os.makedirs(path)
+        self.ui.existingFile_list.clear()
+        self.populate_existing_files(current_directory=self.scene_folder_path)
+        self.populate_existing_files(current_directory=self.asset_folder_path)
 
     def get_project_folder(self):
         self.hide()
@@ -2021,6 +2079,7 @@ References Imported and Cleaned:
             self.recent_projects.insert(0, current_project)
         self.settings.setValue('recent_projects', self.recent_projects)
         self.settings.setValue('autosave', self.ui.autosaver.isChecked())
+        self.settings.setValue('asset_shot', self.ui.assetShot_type.currentText())
 
 
 if __name__ == '__main__':

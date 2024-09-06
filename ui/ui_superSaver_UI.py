@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIHlwbIA.ui'
+## Form generated from reading UI file 'superSaver_UIrfdZol.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -397,8 +397,8 @@ class Ui_SaveAs(object):
         self.saverTabs.addTab(self.MainTab, "")
         self.ToolsTab = QWidget()
         self.ToolsTab.setObjectName(u"ToolsTab")
-        self.horizontalLayout_3 = QHBoxLayout(self.ToolsTab)
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.horizontalLayout_35 = QHBoxLayout(self.ToolsTab)
+        self.horizontalLayout_35.setObjectName(u"horizontalLayout_35")
         self.toolsGroup = QGroupBox(self.ToolsTab)
         self.toolsGroup.setObjectName(u"toolsGroup")
         self.verticalLayout_4 = QVBoxLayout(self.toolsGroup)
@@ -435,12 +435,84 @@ class Ui_SaveAs(object):
 
         self.verticalLayout_4.addWidget(self.playblast_btn)
 
+        self.build_folders_btn = QPushButton(self.toolsGroup)
+        self.build_folders_btn.setObjectName(u"build_folders_btn")
+
+        self.verticalLayout_4.addWidget(self.build_folders_btn)
+
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_4.addItem(self.verticalSpacer)
 
 
-        self.horizontalLayout_3.addWidget(self.toolsGroup)
+        self.horizontalLayout_35.addWidget(self.toolsGroup)
+
+        self.verticalLayout_11 = QVBoxLayout()
+        self.verticalLayout_11.setObjectName(u"verticalLayout_11")
+        self.verticalLayout_10 = QVBoxLayout()
+        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
+        self.create_Asset_label = QLabel(self.ToolsTab)
+        self.create_Asset_label.setObjectName(u"create_Asset_label")
+        self.create_Asset_label.setStyleSheet(u"font: 700 12pt \"Segoe UI\";")
+
+        self.verticalLayout_10.addWidget(self.create_Asset_label)
+
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.assetShot_type_label = QLabel(self.ToolsTab)
+        self.assetShot_type_label.setObjectName(u"assetShot_type_label")
+
+        self.horizontalLayout_3.addWidget(self.assetShot_type_label)
+
+        self.assetShot_type = QComboBox(self.ToolsTab)
+        self.assetShot_type.addItem("")
+        self.assetShot_type.addItem("")
+        self.assetShot_type.addItem("")
+        self.assetShot_type.addItem("")
+        self.assetShot_type.addItem("")
+        self.assetShot_type.addItem("")
+        self.assetShot_type.setObjectName(u"assetShot_type")
+
+        self.horizontalLayout_3.addWidget(self.assetShot_type)
+
+        self.horizontalSpacer_20 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_3.addItem(self.horizontalSpacer_20)
+
+
+        self.verticalLayout_10.addLayout(self.horizontalLayout_3)
+
+        self.horizontalLayout_33 = QHBoxLayout()
+        self.horizontalLayout_33.setObjectName(u"horizontalLayout_33")
+        self.asset_name_label = QLabel(self.ToolsTab)
+        self.asset_name_label.setObjectName(u"asset_name_label")
+
+        self.horizontalLayout_33.addWidget(self.asset_name_label)
+
+        self.asset_name = QLineEdit(self.ToolsTab)
+        self.asset_name.setObjectName(u"asset_name")
+
+        self.horizontalLayout_33.addWidget(self.asset_name)
+
+
+        self.verticalLayout_10.addLayout(self.horizontalLayout_33)
+
+        self.horizontalLayout_34 = QHBoxLayout()
+        self.horizontalLayout_34.setObjectName(u"horizontalLayout_34")
+        self.horizontalSpacer_19 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_34.addItem(self.horizontalSpacer_19)
+
+        self.make_asset_btn = QPushButton(self.ToolsTab)
+        self.make_asset_btn.setObjectName(u"make_asset_btn")
+
+        self.horizontalLayout_34.addWidget(self.make_asset_btn)
+
+
+        self.verticalLayout_10.addLayout(self.horizontalLayout_34)
+
+
+        self.verticalLayout_11.addLayout(self.verticalLayout_10)
 
         self.verticalLayout_5 = QVBoxLayout()
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
@@ -471,7 +543,10 @@ class Ui_SaveAs(object):
         self.verticalLayout_5.addLayout(self.horizontalLayout)
 
 
-        self.horizontalLayout_3.addLayout(self.verticalLayout_5)
+        self.verticalLayout_11.addLayout(self.verticalLayout_5)
+
+
+        self.horizontalLayout_35.addLayout(self.verticalLayout_11)
 
         self.verticalLayout_6 = QVBoxLayout()
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
@@ -511,7 +586,7 @@ class Ui_SaveAs(object):
         self.verticalLayout_6.addLayout(self.horizontalLayout_2)
 
 
-        self.horizontalLayout_3.addLayout(self.verticalLayout_6)
+        self.horizontalLayout_35.addLayout(self.verticalLayout_6)
 
         self.saverTabs.addTab(self.ToolsTab, "")
         self.projectTab = QWidget()
@@ -1217,12 +1292,24 @@ class Ui_SaveAs(object):
         self.objPub_btn.setText(QCoreApplication.translate("SaveAs", u"Publish Selection as OBJ", None))
         self.abcPub_btn.setText(QCoreApplication.translate("SaveAs", u"Publish Selection as Alembic", None))
         self.playblast_btn.setText(QCoreApplication.translate("SaveAs", u"Playblaster", None))
+        self.build_folders_btn.setText(QCoreApplication.translate("SaveAs", u"Build Default Folders", None))
+        self.create_Asset_label.setText(QCoreApplication.translate("SaveAs", u"Create Asset / Shot", None))
+        self.assetShot_type_label.setText(QCoreApplication.translate("SaveAs", u"Type", None))
+        self.assetShot_type.setItemText(0, QCoreApplication.translate("SaveAs", u"Cams", None))
+        self.assetShot_type.setItemText(1, QCoreApplication.translate("SaveAs", u"Char", None))
+        self.assetShot_type.setItemText(2, QCoreApplication.translate("SaveAs", u"Env", None))
+        self.assetShot_type.setItemText(3, QCoreApplication.translate("SaveAs", u"Prop", None))
+        self.assetShot_type.setItemText(4, QCoreApplication.translate("SaveAs", u"Shot", None))
+        self.assetShot_type.setItemText(5, QCoreApplication.translate("SaveAs", u"Veh", None))
+
+        self.asset_name_label.setText(QCoreApplication.translate("SaveAs", u"Name", None))
+        self.make_asset_btn.setText(QCoreApplication.translate("SaveAs", u"Make Asset/Shot", None))
         self.referenceListLabel.setText(QCoreApplication.translate("SaveAs", u"Loaded References", None))
         self.updateRefs_btn.setText(QCoreApplication.translate("SaveAs", u"Update Selected", None))
         self.assetTreeLabel.setText(QCoreApplication.translate("SaveAs", u"Assets", None))
         self.loadRef_2_btn.setText(QCoreApplication.translate("SaveAs", u"Load Ref", None))
         self.import_2_btn.setText(QCoreApplication.translate("SaveAs", u"Import", None))
-        self.saverTabs.setTabText(self.saverTabs.indexOf(self.ToolsTab), QCoreApplication.translate("SaveAs", u"Tools - Reference - Publish Tracking", None))
+        self.saverTabs.setTabText(self.saverTabs.indexOf(self.ToolsTab), QCoreApplication.translate("SaveAs", u"Tools - Reference - Assets", None))
         self.recent_project_label.setText(QCoreApplication.translate("SaveAs", u"Recent Projects", None))
         self.projects_label.setText(QCoreApplication.translate("SaveAs", u"Project", None))
         self.set_project_label.setText(QCoreApplication.translate("SaveAs", u"Set Project", None))
