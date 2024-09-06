@@ -47,7 +47,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '1.2.3'
+__version__ = '1.2.4'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -2215,7 +2215,17 @@ References Imported and Cleaned:
                         cmds.AbcExport(j=options)
 
     def playblast(self):
-        print('Playblasting!')
+        res_width = int(self.ui.resolutionWidth.text())
+        res_height = int(self.ui.resolutionHeight.text())
+        movies_folder = cmds.workspace(fre='movie')
+        filename = cmds.file(q=True, sn=True, shn=True)
+        basename = os.path.splitext(filename)[0]
+        filename = basename + '.mov'
+        output = os.path.join(movies_folder, filename)
+        cmds.playblast(format='qt', filename=output, sequenceTime=0, clearCache=1, viewer=1, showOrnaments=1, fp=4,
+                       percent=100, compression='PNG', quality=70, widthHeight=(res_width, res_height), exposure=0,
+                       gamma=1, fo=True)
+        self.close()
 
     def closeEvent(self, event):
         self.settings.setValue('appendArtist', self.ui.AppendArtist.isChecked())
