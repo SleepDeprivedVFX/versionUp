@@ -16,11 +16,11 @@ Notes can be reviewed on the right side by clicking on existing files.
 
 """
 TODO: List - Upgrades needed
-    1. Add right-click context menu for load-ref, import, update and others.
     3. Add a playblast feature
     4. Integrate into Maya startup routine or module
     5. Make an FBX / OBJ / ABC publisher
     8. Make sure everything updates the ui.
+    9. Connect all the settings tab settings to actual settings.
 """
 
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
@@ -47,7 +47,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '1.2.2'
+__version__ = '1.2.3'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -62,6 +62,28 @@ def natural_sort_key(s):
     """Sort key for natural sorting, handling both numbers and letters."""
     return [int(text) if text.isdigit() else text.lower() for text in re.split('(\d+)', s)]
 
+class CustomMessageBox(QMessageBox):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        self.setWindowTitle('Export Name')
+        self.setText('What is the name of the object you are exporting?')
+        self.text_input = QLineEdit(self)
+        self.layout().addWidget(self.text_input, 1, 1)
+        self.addButton(QMessageBox.Ok)
+        self.addButton(QMessageBox.Cancel)
+        self.button(QMessageBox.Ok).setEnabled(False)
+        self.text_input.textChanged.connect(self.validate_input)
+
+    def validate_input(self):
+        if re.match(r'^\w+$', self.text_input.text()):
+            self.button(QMessageBox.Ok).setEnabled(True)
+        else:
+            self.button(QMessageBox.Ok).setEnabled(False)
+    def get_input(self):
+        if self.exec() == QMessageBox.Ok:
+            return self.text_input.text()
+        return None
 
 class super_saver(QWidget):
     def __init__(self, parent=None):
@@ -273,7 +295,6 @@ class super_saver(QWidget):
         self.scene_folder_path = os.path.join(workspace, scene_folder)
         asset_folder = cmds.workspace(fre='templates')
         self.asset_folder_path = os.path.join(workspace, asset_folder)
-        # self.project_name = os.path.basename(os.path.normpath(cmds.workspace(q=True, rd=True)))
 
         # Set window title
         self.setWindowTitle('Sans Pipe Super Saver - v%s' % __version__)
@@ -335,7 +356,6 @@ class super_saver(QWidget):
         # Get the configurations
         config = configparser.ConfigParser()
         config.read(self.config_path)
-        # show_code = self.try_to_get_show_code(path=workspace)
         self.show_code = config['Project']['Show_Code']
         show_code = self.show_code
         self.project_name = config['Project']['Show_Name']
@@ -378,7 +398,6 @@ class super_saver(QWidget):
                 base_filename = '{bfn}_{artist}'.format(bfn=version_info['base_filename'], artist=artist)
             else:
                 base_filename = '{bfn}'.format(bfn=version_info['base_filename'])
-            version = version_info['version']
             extension = version_info['extension']
             v_len = version_info['v_len']
             v_type = version_info['v_type']
@@ -416,7 +435,6 @@ class super_saver(QWidget):
 
         else:
             save_path = cmds.file(q=True, dir=True)
-            version = 1
             base_filename = 'default'
             save_file = self.format_name(basename=base_filename)
             v_len = 3
@@ -428,7 +446,6 @@ class super_saver(QWidget):
         # The following get_save_file() also needs to be double checked if the overwrite checckbox become active
         get_save = self.get_save_file(save_file=save_file, save_path=save_path, basename=base_filename, _v=v_type,
                                       l=v_len, ext=extension)
-        save_file = get_save[0]
         next_version = get_save[1]
 
         self.ui.version.setValue(next_version)
@@ -436,7 +453,6 @@ class super_saver(QWidget):
                                    v_len=v_len, version=next_version, ext=extension, show=show_code, artist=artist)
 
         self.ui.output_filename.setText(new_path)
-        # self.reset_version(v=next_version)
 
         self.ui.folder.setText(save_path)
 
@@ -445,12 +461,10 @@ class super_saver(QWidget):
         self.ui.snapshots.setHeaderHidden(True)
         self.ui.snapshots.itemDoubleClicked.connect(self.import_snapshot)
         self.ui.existingFile_list.itemClicked.connect(self.show_file_selection_info)
-        # self.ui.existingFile_list.itemClicked.connect(self.populate_snapshots)
         self.ui.existingFile_list.itemDoubleClicked.connect(lambda: self.open_file(f=False))
         self.populate_existing_files(current_directory=self.scene_folder_path)
         self.populate_existing_files(current_directory=self.asset_folder_path)
         self.populate_publish_assets(current_directory=self.scene_folder_path)
-        # self.populate_publish_assets(current_directory=self.asset_folder_path)
         self.ui.recentFilesList.itemDoubleClicked.connect(lambda: self.open_recent_file(f=False))
         self.ui.recent_projects.itemDoubleClicked.connect(lambda: self.set_project(btn=False))
         self.ui.set_proejct_btn.clicked.connect(lambda: self.set_project(btn=True))
@@ -459,6 +473,7 @@ class super_saver(QWidget):
 
         self.set_custom()
 
+        # CONNECT BUTTONS
         self.ui.customNaming.clicked.connect(self.set_custom)
         self.ui.autoNaming.clicked.connect(self.set_custom)
         self.ui.cancel_btn.clicked.connect(self.close)
@@ -471,7 +486,6 @@ class super_saver(QWidget):
         self.ui.import_btn.clicked.connect(lambda: self.import_object(element=self.ui.existingFile_list))
         self.ui.import_2_btn.clicked.connect(lambda: self.import_object(element=self.ui.assetTree))
         self.ui.loadRef_2_btn.clicked.connect(lambda: self.load_ref(element=self.ui.assetTree))
-
         self.ui.folder.textChanged.connect(self.update_ui)
         self.ui.taskType.currentTextChanged.connect(lambda: self.reset_version(v=1))
         self.ui.version.valueChanged.connect(self.update_ui)
@@ -502,6 +516,16 @@ class super_saver(QWidget):
         self.ui.build_folders_btn.clicked.connect(lambda: self.create_folders(proj_path=cmds.workspace(q=True,
                                                                                                        rd=True)))
         self.ui.make_asset_btn.clicked.connect(self.create_asset_shot)
+        self.ui.fbxPub_btn.clicked.connect(lambda: self.export_selection(export_type='FBX export'))
+        self.ui.objPub_btn.clicked.connect(lambda: self.export_selection(export_type='OBJexport'))
+        self.ui.abcPub_btn.clicked.connect(lambda: self.export_selection(export_type='abc'))
+        self.check_button_state(btn=self.ui.fbxPub_btn)
+        self.check_button_state(btn=self.ui.objPub_btn)
+        self.check_button_state(btn=self.ui.abcPub_btn)
+        self.check_button_state(btn=self.ui.playblast_btn)
+        self.check_button_state(btn=self.ui.bakeCam_btn)
+        self.check_button_state(btn=self.ui.build_folders_btn)
+        self.ui.playblast_btn.clicked.connect(self.playblast)
 
         title_font = QFont()
         title_font.setPointSize(12)
@@ -701,21 +725,6 @@ class super_saver(QWidget):
 
             with open(self.config_path, 'w') as configpath:
                 config.write(configpath)
-
-    # def check_version(self):
-    #     # This would partially replace the update_ui() routine.  The idea here being that it would collect the UI
-    #     # information and get the latest version info and then use that to update the UI.
-    #     path = self.ui.folder.text()
-    #     root_name = self.ui.filename.text()
-    #     version = self.ui.version.value()
-    #     taskType = self.ui.taskType.currentText()
-    #     task = self.tasks[taskType][0]
-    #     ext = self.ui.fileType.currentText()
-    #     overwrite = self.ui.overwrite.isChecked()
-    #     get_output_path = self.build_path(path=path, rootName=root_name, task=task, v_type='_v', v_len=3,
-    #                                       version=version, ext=ext)
-    #     save_file = os.path.basename(get_output_path)
-    #     file_info = self.get_save_file(save_file=save_file, save_path=path, basename=)
 
     def update_ui(self):
         path = self.ui.folder.text()
@@ -1296,6 +1305,14 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             obj.setStyleSheet('border: 2px solid red;')
             QTimer.singleShot(3000, lambda: obj.setStyleSheet(''))
         QTimer.singleShot(8000, lambda: self.ui.messages.setText(''))
+
+    def pop_up_message(self):
+        msg_box = CustomMessageBox(self)
+        result = msg_box.get_input()
+        if result:
+            return result
+        else:
+            return False
 
     def run(self, close=True):
         output_file = self.ui.output_filename.text()
@@ -2121,6 +2138,84 @@ References Imported and Cleaned:
             # Return the duplicate
             return dup_cam
         return False
+
+    def export_selection(self, export_type=None):
+        if export_type:
+            selection = cmds.ls(sl=True)
+            if export_type == 'FBX export':
+                ext = '.fbx'
+                options = ''
+            elif export_type == 'OBJexport':
+                ext = '.obj'
+                options = 'groups=1;ptgroups=1;materials=1;smoothing=1;normals=1'
+            else:
+                start_frame = cmds.playbackOptions(q=True, minTime=True)
+                end_frame = cmds.playbackOptions(q=True, maxTime=True)
+                root_node = '|NonRefThing'
+                ext = '.abc'
+            if export_type != 'abc':
+                if not selection:
+                    filename = cmds.file(q=True, sn=True, shn=True)
+                    base_filename = os.path.splitext(filename)[0]
+                    filename = base_filename + ext
+                    output_filename = os.path.join(self.asset_folder_path, filename)
+                    cmds.file(output_filename, f=True, options=options, type=export_type, pr=True, ea=True)
+                else:
+                    get_filename = self.pop_up_message()
+                    if get_filename:
+                        filename = get_filename + ext
+                        output_filename = os.path.join(self.asset_folder_path, filename)
+                        cmds.file(output_filename, f=True, options=options, typ=export_type, pr=True, es=True)
+                    else:
+                        return False
+            else:
+                if not selection:
+                    filename = cmds.file(q=True, sn=True, shn=True)
+                    base_filename = os.path.splitext(filename)[0]
+                    filename = base_filename + ext
+                    output_filename = os.path.join(self.asset_folder_path, filename)
+                    options = (
+                        f"-frameRange {start_frame} {end_frame} "
+                        "-stripNamespaces "
+                        "-uvWrite "
+                        "-writeColorSets "
+                        "-writeFaceSets "
+                        "-wholeFrameGeo "
+                        "-worldSpace "
+                        "-writeVisibility "
+                        "-eulerFilter "
+                        "-autoSubd "
+                        "-writeUVSets "
+                        "-dataFormat ogawa "
+                        f"-root {root_node} "
+                        f"-file {output_filename}"
+                    )
+                    cmds.AbcExport(j=options)
+                else:
+                    get_filename = self.pop_up_message()
+                    if get_filename:
+                        filename = get_filename + ext
+                        output_filename = os.path.join(self.asset_folder_path, filename)
+                        options = (
+                            f"-frameRange {start_frame} {end_frame} "
+                            "-stripNamespaces "
+                            "-uvWrite "
+                            "-writeColorSets "
+                            "-writeFaceSets "
+                            "-wholeFrameGeo "
+                            "-worldSpace "
+                            "-writeVisibility "
+                            "-eulerFilter "
+                            "-autoSubd "
+                            "-writeUVSets "
+                            "-dataFormat ogawa "
+                            f"-root {root_node} "
+                            f"-file {output_filename}"
+                        )
+                        cmds.AbcExport(j=options)
+
+    def playblast(self):
+        print('Playblasting!')
 
     def closeEvent(self, event):
         self.settings.setValue('appendArtist', self.ui.AppendArtist.isChecked())
