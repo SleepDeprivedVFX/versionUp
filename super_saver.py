@@ -1,7 +1,7 @@
-# Maya Super Saver
+# Sans-Pipe Maya Super Saver
 
 """
-The SUPER SAVER is a pipeline-free versioning and saving system for Maya.
+The SANS-PIPE SUPER SAVER is a pipeline-free versioning and saving system for Maya.
 It is intended to be a stand-alone shelf button for quickly versioning up files and saving notes with them.
 Simple click the button on the shelf or run the script.  A UI will pop up that attempts to name your script based on
 the project folder, but can be customized to save the name as anything.
@@ -16,9 +16,10 @@ Notes can be reviewed on the right side by clicking on existing files.
 
 """
 TODO: List - Upgrades needed
-    4. Integrate into Maya startup routine or module
-    8. Make sure everything updates the ui.
-    9. Connect all the settings tab settings to actual settings.
+    1. Integrate into Maya startup routine or module
+    2. Make sure everything updates the ui.
+    3. Connect all the settings tab settings to actual settings.
+    4. Create new model file with new asset and include model cube and measurements.
 """
 
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
@@ -45,7 +46,7 @@ if ui_path not in sys.path:
 
 from ui import ui_superSaver_UI as ssui
 
-__version__ = '1.2.4'
+__version__ = '1.2.5'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -59,6 +60,7 @@ else:
 def natural_sort_key(s):
     """Sort key for natural sorting, handling both numbers and letters."""
     return [int(text) if text.isdigit() else text.lower() for text in re.split('(\d+)', s)]
+
 
 class CustomMessageBox(QMessageBox):
     def __init__(self, parent=None):
@@ -78,6 +80,7 @@ class CustomMessageBox(QMessageBox):
             self.button(QMessageBox.Ok).setEnabled(True)
         else:
             self.button(QMessageBox.Ok).setEnabled(False)
+
     def get_input(self):
         if self.exec() == QMessageBox.Ok:
             return self.text_input.text()
@@ -2234,10 +2237,14 @@ References Imported and Cleaned:
         res_width = int(self.ui.resolutionWidth.text())
         res_height = int(self.ui.resolutionHeight.text())
         render_output = self.ui.image_format.currentText()
-        cmds.setAttr('defaultArnoldDriver.aiTranslator', render_output, type='string')
         cmds.setAttr('defaultResolution.width', res_width)
         cmds.setAttr('defaultResolution.height', res_height)
-        cmds.setAttr('defaultArnoldDriver.mergeAOVs', 1)
+        try:
+            cmds.setAttr('defaultArnoldDriver.aiTranslator', render_output, type='string')
+            cmds.setAttr('defaultArnoldDriver.mergeAOVs', 1)
+        except RuntimeError as e:
+            cmds.error(f'Arnold render settings have not loaded.  '
+                       f'Make sure the plugin is loaded and run this again: {e}')
 
     def closeEvent(self, event):
         self.settings.setValue('appendArtist', self.ui.AppendArtist.isChecked())
