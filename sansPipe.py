@@ -25,7 +25,6 @@ TODO: List - Upgrades needed
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
-from maya import cmds
 import os
 import sys
 import re
@@ -35,16 +34,30 @@ from datetime import datetime
 import platform
 import configparser
 
-# FIXME: Add garbage for the UI to work in Maya.
-script_path = "C:/Users/sleep/OneDrive/Documents/Scripts/Python/Maya/Utilities/sansPipe"
-ui_path = os.path.join(script_path, 'ui')
-ui_path = ui_path.replace('\\', '/')
-if script_path not in sys.path:
-    sys.path.append(script_path)
-if ui_path not in sys.path:
-    sys.path.append(ui_path)
-
 from ui import ui_superSaver_UI as ssui
+
+from maya import cmds
+import maya.OpenMaya as om_old  # Old API for MObject
+import maya.OpenMayaMPx as om_mpx  # Old API for MFnPlugin
+import maya.api.OpenMaya as om  # New API for other operations
+
+
+def initializePlugin(mobject):
+    mplugin = om_mpx.MFnPlugin(mobject)  # Use MFnPlugin from maya.OpenMayaMPx
+    try:
+        om.MGlobal.displayInfo("sansPipe plugin loaded")
+    except:
+        om.MGlobal.displayError("Failed to register sansPipe plugin")
+
+
+def uninitializePlugin(mobject):
+    mplugin = om_mpx.MFnPlugin(mobject)  # Use MFnPlugin from maya.OpenMayaMPx
+    try:
+        om.MGlobal.displayInfo("sansPipe plugin unloaded")
+    except:
+        om.MGlobal.displayError("Failed to deregister sansPipe plugin")
+
+
 
 __version__ = '1.2.5'
 __author__ = 'Adam Benson'
@@ -86,7 +99,7 @@ class CustomMessageBox(QMessageBox):
             return self.text_input.text()
         return None
 
-class super_saver(QWidget):
+class sansPipe(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
@@ -550,7 +563,10 @@ class super_saver(QWidget):
         self.enable_context_menu(self.ui.assetTree, 'Assets')
 
         # Set Scene Settings
-        self.render_settings()
+        try:
+            self.render_settings()
+        except RuntimeError as e:
+            cmds.warning(f'Cannot load render settings: {e}')
 
         self.show()
 
@@ -2234,16 +2250,16 @@ References Imported and Cleaned:
         self.close()
 
     def render_settings(self):
-        res_width = int(self.ui.resolutionWidth.text())
-        res_height = int(self.ui.resolutionHeight.text())
-        render_output = self.ui.image_format.currentText()
-        cmds.setAttr('defaultResolution.width', res_width)
-        cmds.setAttr('defaultResolution.height', res_height)
         try:
+            res_width = int(self.ui.resolutionWidth.text())
+            res_height = int(self.ui.resolutionHeight.text())
+            render_output = self.ui.image_format.currentText()
+            cmds.setAttr('defaultResolution.width', res_width)
+            cmds.setAttr('defaultResolution.height', res_height)
             cmds.setAttr('defaultArnoldDriver.aiTranslator', render_output, type='string')
             cmds.setAttr('defaultArnoldDriver.mergeAOVs', 1)
         except RuntimeError as e:
-            cmds.error(f'Arnold render settings have not loaded.  '
+            cmds.warning(f'Arnold render settings have not loaded.  '
                        f'Make sure the plugin is loaded and run this again: {e}')
 
     def closeEvent(self, event):
@@ -2271,13 +2287,5 @@ References Imported and Cleaned:
         self.settings.setValue('render_output', self.ui.image_format.currentText())
 
 
-if __name__ == '__main__':
-    try:
-        app = QApplication(sys.argv)
-    except Exception as e:
-        app = QApplication.instance()
-    saveas = super_saver()
-    try:
-        sys.exit(app.exec())
-    except SystemExit as e:
-        print('system exit code', e)
+# if __name__ == '__main__':
+#     saveas = sansPipe()
