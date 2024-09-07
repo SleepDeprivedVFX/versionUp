@@ -1608,7 +1608,7 @@ color: rgb(220, 220, 220);</string>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_12">
          <item>
-          <widget class="QCheckBox" name="checkBox">
+          <widget class="QCheckBox" name="autoload">
            <property name="layoutDirection">
             <enum>Qt::LayoutDirection::RightToLeft</enum>
            </property>

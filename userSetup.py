@@ -2,6 +2,17 @@ import maya.cmds as cmds
 import maya.mel as mel
 import os
 import sys
+from PySide6.QtCore import QSettings
+
+__version__ = '1.2.5'
+__author__ = 'Adam Benson'
+
+settings = QSettings(__author__, 'Sans Pipe Super Saver')
+autoload = settings.value('autoload', None)
+if autoload == 'true':
+    autoload = True
+else:
+    autoload = False
 
 
 def load_sansPipe():
@@ -39,7 +50,8 @@ def load_sansPipe():
 
     try:
         import sansPipe
-        sansPipe.sansPipe()
+        if autoload:
+            sansPipe.sansPipe()
 
     except Exception as e:
         print(f'failed to run sansPipe: {e}')
@@ -69,9 +81,14 @@ def create_sans_pipe_menu():
 
 
 def setup_hotkey():
-    cmds.nameCommand('customSaveAsCommand', ann='SansPipe Save As...', command='python("override_save_as()")')
-    cmds.hotkey(k='S', name='customSaveAsCommand', ctl=True, sht=True)
-    print('Hotkey Ctrl + Shift + S overridden')
+    if autoload:
+        cmds.nameCommand('customSaveAsCommand', ann='SansPipe Save As...', command='python("override_save_as()")')
+        cmds.hotkey(k='S', name='customSaveAsCommand', ctl=True, sht=True)
+        print('Hotkey Ctrl + Shift + S overridden')
+    else:
+        cmds.hotkey(k='S', name='SaveSceneAsNameCommand', ctl=True, sht=True)
+        # string $nameCommandCmd = "nameCommand -ann \"SaveSceneAsNameCommand\"
+        # -command (\"SaveSceneAs\") SaveSceneAsNameCommand"; eval($nameCommandCmd);
 
 
 # Delay the execution until Maya is fully loaded

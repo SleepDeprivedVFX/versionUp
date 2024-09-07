@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIrfdZol.ui'
+## Form generated from reading UI file 'superSaver_UIrravlO.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -1133,11 +1133,11 @@ class Ui_SaveAs(object):
 
         self.horizontalLayout_12 = QHBoxLayout()
         self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
-        self.checkBox = QCheckBox(self.SettingsTab)
-        self.checkBox.setObjectName(u"checkBox")
-        self.checkBox.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
+        self.autoload = QCheckBox(self.SettingsTab)
+        self.autoload.setObjectName(u"autoload")
+        self.autoload.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
 
-        self.horizontalLayout_12.addWidget(self.checkBox)
+        self.horizontalLayout_12.addWidget(self.autoload)
 
         self.horizontalSpacer_13 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
@@ -1355,7 +1355,7 @@ class Ui_SaveAs(object):
 
         self.SceneScale_Label.setText(QCoreApplication.translate("SaveAs", u"Scene Scale", None))
         self.recent_file_count_label.setText(QCoreApplication.translate("SaveAs", u"Recent File Count", None))
-        self.checkBox.setText(QCoreApplication.translate("SaveAs", u"Auto Load on Startup", None))
+        self.autoload.setText(QCoreApplication.translate("SaveAs", u"Auto Load on Startup", None))
         self.autosaver.setText(QCoreApplication.translate("SaveAs", u"Autosave", None))
         self.iterations_label.setText(QCoreApplication.translate("SaveAs", u"Interval", None))
         self.save_config_btn.setText(QCoreApplication.translate("SaveAs", u"Save Configuration", None))

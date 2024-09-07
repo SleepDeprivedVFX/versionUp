@@ -327,6 +327,7 @@ class sansPipe(QWidget):
         self.autosave = self.settings.value('autosave', None)
         self.asset_shot_type = self.settings.value('asset_shot', None)
         self.render_output = self.settings.value('render_output', None)
+        self.auto_load_on_startup = self.settings.value('autoload', None)
         self.restoreGeometry(self.position)
 
         if self.recent_files:
@@ -352,11 +353,17 @@ class sansPipe(QWidget):
             self.autosave = True
         else:
             self.autosave = False
+        if self.auto_load_on_startup == 'true':
+            self.auto_load_on_startup = True
+        else:
+            self.auto_load_on_startup = False
+
         self.ui.AppendArtist.setChecked(self.appendartist)
         self.ui.bakeCamSceneName.setChecked(self.bakeCamSceneName)
         self.ui.autosaver.setChecked(self.autosave)
         self.ui.assetShot_type.setCurrentText(self.asset_shot_type)
         self.ui.image_format.setCurrentText(self.render_output)
+        self.ui.autoload.setChecked(self.auto_load_on_startup)
 
         # Check Autosave Settings
         self.set_autosave()
@@ -2285,6 +2292,7 @@ References Imported and Cleaned:
         self.settings.setValue('autosave', self.ui.autosaver.isChecked())
         self.settings.setValue('asset_shot', self.ui.assetShot_type.currentText())
         self.settings.setValue('render_output', self.ui.image_format.currentText())
+        self.settings.setValue('autoload', self.ui.autoload.isChecked())
 
 
 # if __name__ == '__main__':
