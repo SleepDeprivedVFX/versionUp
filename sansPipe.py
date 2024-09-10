@@ -510,6 +510,8 @@ class sansPipe(QWidget):
         self.ui.import_btn.clicked.connect(lambda: self.import_object(element=self.ui.existingFile_list))
         self.ui.import_2_btn.clicked.connect(lambda: self.import_object(element=self.ui.assetTree))
         self.ui.loadRef_2_btn.clicked.connect(lambda: self.load_ref(element=self.ui.assetTree))
+        self.ui.import_3_btn.clicked.connect(lambda: self.import_object(element=self.ui.publishes_tree))
+        self.ui.loadRef_3_btn.clicked.connect(lambda: self.load_ref(element=self.ui.publishes_tree))
         self.ui.folder.textChanged.connect(self.update_ui)
         self.ui.taskType.currentTextChanged.connect(lambda: self.reset_version(v=1))
         self.ui.version.valueChanged.connect(self.update_ui)
@@ -571,6 +573,7 @@ class sansPipe(QWidget):
         # SETUP RIGHT-CLICK CONTEXT MENUS
         self.enable_context_menu(self.ui.existingFile_list, 'Existing Files')
         self.enable_context_menu(self.ui.assetTree, 'Assets')
+        self.enable_context_menu(self.ui.publishes_tree, 'Publishes')
 
         # Set Scene Settings
         try:
