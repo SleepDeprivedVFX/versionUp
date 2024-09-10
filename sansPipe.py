@@ -1052,18 +1052,41 @@ class sansPipe(QWidget):
             return False
 
     def create_camera(self):
-        filmback_w = float(self.ui.filmback_width)
-        filmback_h = float(self.ui.filmback_height)
+        filmback_w = float(self.ui.filmback_width.text())
+        filmback_h = float(self.ui.filmback_height.text())
         mult_fb_w = (filmback_w / 10) / 2.54
         mult_fb_h = (filmback_h / 10) / 2.54
-        scene_scale = float(self.ui.sceneScale)
+        scene_scale = float(self.ui.sceneScale.text())
         aspect_ratio = mult_fb_w / mult_fb_h
         base_name = self.ui.filename.text()
         show_code = self.ui.showCode.text()
         cam_name = f'{show_code}_{base_name}_shotCam'
-        new_cam = cmds.camera(vfa=mult_fb_h, hfa=mult_fb_w, ar=aspect_ratio, fl=35, coi=5, lsr=1, hfo=0, vfo=0,
-                              ff='Fill', ovr=1, mb=0, sa=144, ncp=1, fcp=10000000, o=False, ow=30, pze=False, hpn=0,
-                              vpn=0, zom=1)
+        self.hide()
+        result = cmds.promptDialog(
+            title='Camera Focal Length',
+            message='Focal Length (numeric value in mm):',
+            button=['Accept', 'Cancel'],
+            defaultButton='Accept',
+            cancelButton='Cancel',
+            dismissString='Cancel',
+            text=str(35.0)
+        )
+        if result == 'Accept':
+            input_value = cmds.promptDialog(q=True, text=True)
+            try:
+                focal_length = float(input_value)
+            except ValueError as e:
+                cmds.warning(f'Improper focal length value: {e}')
+                self.show()
+                return False
+        else:
+            focal_length = 35.0
+            self.show()
+            return False
+        self.show()
+        new_cam = cmds.camera(vfa=mult_fb_h, hfa=mult_fb_w, ar=aspect_ratio, fl=focal_length, coi=5, lsr=1, hfo=0,
+                              vfo=0, ff='Fill', ovr=1, mb=0, sa=144, ncp=1, fcp=10000000, o=False, ow=30, pze=False,
+                              hpn=0, vpn=0, zom=1)
         new_cam_parent = cmds.listRelatives(new_cam, p=True)
         cmds.select(new_cam_parent, r=True)
         cmds.rename(cam_name)
