@@ -1,4 +1,4 @@
-# Sans-Pipe Maya Light Pipeline Utility
+# Sans-Pipe Maya Light Pipeline Utility - MAYA 2025 +
 
 """
 The SANS-PIPE LIGHT PIPELINE UTILITY is a pipeline-free versioning and saving system for Maya.
