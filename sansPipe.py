@@ -1767,6 +1767,10 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             file_name = self.build_path(path=path, rootName=asset_shot_name, task=task,
                                         ext=self.ui.fileType.currentText(), show=self.ui.showCode.text(),
                                         artist=self.ui.artistName.text(), version=1)
+            scale = float(self.ui.sceneScale.text())
+            scale_mult = scale * 10
+            cmds.polyCube(n='_SCENE_SCALE_1_MeterCube', sx=scale, sy=scale, sz=scale, w=scale_mult, d=scale_mult,
+                          h=scale_mult, fzn=True, cuv=1)
             cmds.file(rename=file_name)
             cmds.file(save=True, f=True)
 
