@@ -554,6 +554,7 @@ class sansPipe(QWidget):
         self.check_button_state(btn=self.ui.bakeCam_btn)
         self.check_button_state(btn=self.ui.build_folders_btn)
         self.ui.playblast_btn.clicked.connect(self.playblast)
+        self.ui.createCam_btn.clicked.connect(self.create_camera)
 
         title_font = QFont()
         title_font.setPointSize(12)
@@ -1058,6 +1059,10 @@ class sansPipe(QWidget):
             self.message(text='Saved Successfully!!', ok=True)
         else:
             return False
+
+    def create_camera(self):
+        print('This will eventually create a camera with the proper show filmback and setup.')
+        pass
 
     def show_file_selection_info(self, item, column):
         # Load selection info
@@ -1724,6 +1729,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
     def create_asset_shot(self):
         _type = self.ui.assetShot_type.currentText()
+        asset_shot_name = self.ui.asset_name.text()
         if _type == 'Cams':
             message_type = 'Camera'
         elif _type == 'Char':
@@ -1748,12 +1754,62 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         scenes_folder = cmds.workspace(fre='scenes')
         scenes_path = os.path.join(root_directory, scenes_folder)
         type_path = os.path.join(scenes_path, _type)
-        path = os.path.join(type_path, self.ui.asset_name.text())
+        path = os.path.join(type_path, asset_shot_name)
         if not os.path.exists(path):
             os.makedirs(path)
+
+        close_previous = self.create_new_file_with_prompt()
+        if close_previous:
+            if message_type == 'Shot':
+                task = 'layout'
+            else:
+                task = 'model'
+            file_name = self.build_path(path=path, rootName=asset_shot_name, task=task,
+                                        ext=self.ui.fileType.currentText(), show=self.ui.showCode.text(),
+                                        artist=self.ui.artistName.text(), version=1)
+            cmds.file(rename=file_name)
+            cmds.file(save=True, f=True)
+
+            self.create_note(notes=f'Automatically generated {task} file for {asset_shot_name}', output_file=file_name)
+
+            self.ui.folder.setText(path)
+            self.ui.filename.setText(asset_shot_name)
+            self.ui.version.setValue(1)
+            self.ui.taskType.setCurrentText(task)
+            self.update_ui()
+            self.current_file_path = file_name
+
         self.ui.existingFile_list.clear()
         self.populate_existing_files(current_directory=self.scene_folder_path)
-        self.populate_existing_files(current_directory=self.asset_folder_path)
+        self.ui.saverTabs.setCurrentIndex(0)
+
+    def create_new_file_with_prompt(self):
+        # Check if there are unsaved changes
+        if cmds.file(q=True, modified=True):
+            # Hide the UI
+            self.hide()
+            # Prompt the user to save changes manually
+            result = cmds.confirmDialog(
+                title='Save Changes?',
+                message='You have unsaved changes. Do you want to save them?',
+                button=['Save', 'Don\'t Save', 'Cancel'],
+                defaultButton='Save',
+                cancelButton='Cancel',
+                dismissString='Cancel'
+            )
+
+            if result == 'Save':
+                # Save the current file
+                cmds.file(save=True)
+            elif result == 'Cancel':
+                # Cancel the operation
+                self.show()
+                return
+            self.show()
+
+        # Now create the new file
+        cmds.file(new=True, force=True)
+        return True
 
     def get_project_folder(self):
         self.hide()
