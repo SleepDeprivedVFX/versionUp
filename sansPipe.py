@@ -485,8 +485,10 @@ class sansPipe(QWidget):
         self.ui.existingFile_list.itemClicked.connect(self.show_file_selection_info)
         self.ui.existingFile_list.itemDoubleClicked.connect(lambda: self.open_file(f=False))
         self.populate_existing_files(current_directory=self.scene_folder_path)
-        self.populate_existing_files(current_directory=self.asset_folder_path)
-        self.populate_publish_assets(current_directory=self.scene_folder_path)
+        self.populate_publish_assets(tree=self.ui.assetTree, root='assets',
+                                     current_directory=self.asset_folder_path)
+        self.populate_publish_assets(tree=self.ui.publishes_tree, root='______',
+                                     current_directory=self.scene_folder_path)
         self.ui.recentFilesList.itemDoubleClicked.connect(lambda: self.open_recent_file(f=False))
         self.ui.recent_projects.itemDoubleClicked.connect(lambda: self.set_project(btn=False))
         self.ui.set_proejct_btn.clicked.connect(lambda: self.set_project(btn=True))
@@ -522,10 +524,12 @@ class sansPipe(QWidget):
             'color: rgb(140, 140, 140);'
         )
         self.ui.load_btn.setEnabled(False)
+        self.ui.load_btn.hide()
         self.ui.load_btn.setStyleSheet(
             'color: rgb(140, 140, 140);'
         )
         self.ui.import_btn.setEnabled(False)
+        self.ui.import_btn.hide()
         self.ui.import_btn.setStyleSheet(
             'color: rgb(140, 140, 140);'
         )
@@ -1208,6 +1212,8 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                         folder_item.setText(0, os.path.basename(folder_name))
                         folder_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": ""})
                         folder_items[relative_folder_name] = folder_item
+                        if relative_folder_name == ".":
+                            folder_items[relative_folder_name].setExpanded(True)
 
                         # Expand the current folder or the folder of the currently opened file
                         if self.root_name.startswith(os.path.join(current_directory, relative_folder_name)):
@@ -1252,13 +1258,13 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             folder_items[relative_folder_name].setExpanded(True)
                             self.ui.existingFile_list.itemClicked.emit(file_item, 0)
 
-    def populate_publish_assets(self, current_directory=None):
+    def populate_publish_assets(self, tree=None, root=None, current_directory=None):
         allowed_extensions = ['ma', 'mb', 'obj', 'fbx', 'abc']
         excluded_folders = ['db', 'edits', '.mayaSwatches', 'snapshots']
         allowed_folders = ['assets', 'Publishes']
 
-        if current_directory:
-            self.ui.assetTree.clear()
+        if current_directory and tree:
+            tree.clear()
             if os.path.exists(current_directory):
                 folder_items = {}
 
@@ -1272,9 +1278,9 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
                     # Determine parent item (to preserve full folder hierarchy)
                     if relative_folder_name == '.':
-                        parent_item = self.ui.assetTree
+                        parent_item = tree
                     else:
-                        parent_item = folder_items.get(os.path.dirname(relative_folder_name), self.ui.assetTree)
+                        parent_item = folder_items.get(os.path.dirname(relative_folder_name), tree)
 
                     # Add the folder to the tree (preserve the folder structure)
                     if relative_folder_name not in folder_items:
@@ -1282,6 +1288,8 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                         folder_item.setText(0, os.path.basename(folder_name))
                         folder_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": ""})
                         folder_items[relative_folder_name] = folder_item
+                        if relative_folder_name == '.':
+                            folder_items[relative_folder_name].setExpanded(True)
 
                         # Expand if it's the root directory
                         if self.root_name.startswith(os.path.join(current_directory, relative_folder_name)):
@@ -1310,7 +1318,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
                         # Check if the file is in an allowed folder ("assets" or "Publishes")
                         if any(allowed_folder in relative_folder_name.split(os.sep) for allowed_folder in
-                               allowed_folders):
+                               allowed_folders) or root in folder_name:
                             file_path = os.path.normpath(os.path.join(folder_name, file_name))
                             file_path = file_path.replace('\\', '/')
 
@@ -2294,5 +2302,5 @@ References Imported and Cleaned:
         self.settings.setValue('autoload', self.ui.autoload.isChecked())
 
 
-# if __name__ == '__main__':
-#     saveas = sansPipe()
+if __name__ == '__main__':
+    saveas = sansPipe()

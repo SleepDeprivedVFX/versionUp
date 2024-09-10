@@ -487,6 +487,9 @@ color: rgb(220, 220, 220);</string>
             <layout class="QVBoxLayout" name="existingFile_layout">
              <item>
               <widget class="QLabel" name="existingFile_label">
+               <property name="toolTip">
+                <string>These are the existing files in your project.  Double click or use the open command to open them.  You can also use this list to set the name of a new file or a file with Allow File Copy From --&gt; To checked.</string>
+               </property>
                <property name="styleSheet">
                 <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
                </property>
@@ -500,6 +503,9 @@ color: rgb(220, 220, 220);</string>
              </item>
              <item>
               <widget class="QTreeWidget" name="existingFile_list">
+               <property name="toolTip">
+                <string>These are the existing files in your project.  Double click or use the open command to open them.  You can also use this list to set the name of a new file or a file with Allow File Copy From --&gt; To checked.</string>
+               </property>
                <property name="frameShape">
                 <enum>QFrame::Shape::StyledPanel</enum>
                </property>
@@ -562,6 +568,9 @@ color: rgb(220, 220, 220);</string>
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
             <widget class="QLabel" name="snapshots_label">
+             <property name="toolTip">
+              <string>Snapshots are quick saves that store a date stamped sub-version of your current file without having to version up. You can double click a snapshot to reload it into the current scene.  Unsaved changes will be prompted to auto-snapshot before loading a previous snapshot</string>
+             </property>
              <property name="styleSheet">
               <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
              </property>
@@ -575,6 +584,9 @@ color: rgb(220, 220, 220);</string>
            </item>
            <item>
             <widget class="QTreeWidget" name="snapshots">
+             <property name="toolTip">
+              <string>Snapshots are quick saves that store a date stamped sub-version of your current file without having to version up. You can double click a snapshot to reload it into the current scene.  Unsaved changes will be prompted to auto-snapshot before loading a previous snapshot</string>
+             </property>
              <property name="headerHidden">
               <bool>true</bool>
              </property>
@@ -594,6 +606,9 @@ color: rgb(220, 220, 220);</string>
            </item>
            <item>
             <widget class="QLabel" name="version_notes_label">
+             <property name="toolTip">
+              <string>This shows notes for the current file selected in the Existing Files list</string>
+             </property>
              <property name="styleSheet">
               <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
              </property>
@@ -615,6 +630,9 @@ color: rgb(220, 220, 220);</string>
                <width>0</width>
                <height>150</height>
               </size>
+             </property>
+             <property name="toolTip">
+              <string>This shows notes for the current file selected in the Existing Files list</string>
              </property>
             </widget>
            </item>
@@ -1053,6 +1071,9 @@ color: rgb(220, 220, 220);</string>
             <widget class="QTreeWidget" name="publishes_tree">
              <property name="toolTip">
               <string>The list of items that have been published for the project</string>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
              </property>
              <property name="headerHidden">
               <bool>true</bool>

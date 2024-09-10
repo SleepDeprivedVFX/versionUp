@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UITqFfVf.ui'
+## Form generated from reading UI file 'superSaver_UIfnsHbG.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -608,6 +608,7 @@ class Ui_SaveAs(object):
         __qtreewidgetitem3.setText(0, u"1");
         self.publishes_tree.setHeaderItem(__qtreewidgetitem3)
         self.publishes_tree.setObjectName(u"publishes_tree")
+        self.publishes_tree.setAlternatingRowColors(True)
         self.publishes_tree.setHeaderHidden(True)
 
         self.verticalLayout_12.addWidget(self.publishes_tree)
@@ -1432,12 +1433,30 @@ class Ui_SaveAs(object):
         self.recentFilesList.setToolTip(QCoreApplication.translate("SaveAs", u"Recently Opened Files List.  Double click to quick re-open", None))
 #endif // QT_CONFIG(tooltip)
         self.clear_recent_btn.setText(QCoreApplication.translate("SaveAs", u"Clear Recent History", None))
+#if QT_CONFIG(tooltip)
+        self.existingFile_label.setToolTip(QCoreApplication.translate("SaveAs", u"These are the existing files in your project.  Double click or use the open command to open them.  You can also use this list to set the name of a new file or a file with Allow File Copy From --> To checked.", None))
+#endif // QT_CONFIG(tooltip)
         self.existingFile_label.setText(QCoreApplication.translate("SaveAs", u"Existing Files", None))
+#if QT_CONFIG(tooltip)
+        self.existingFile_list.setToolTip(QCoreApplication.translate("SaveAs", u"These are the existing files in your project.  Double click or use the open command to open them.  You can also use this list to set the name of a new file or a file with Allow File Copy From --> To checked.", None))
+#endif // QT_CONFIG(tooltip)
         self.import_btn.setText(QCoreApplication.translate("SaveAs", u"Import", None))
         self.load_btn.setText(QCoreApplication.translate("SaveAs", u"Load Ref", None))
         self.open_btn.setText(QCoreApplication.translate("SaveAs", u"Open", None))
+#if QT_CONFIG(tooltip)
+        self.snapshots_label.setToolTip(QCoreApplication.translate("SaveAs", u"Snapshots are quick saves that store a date stamped sub-version of your current file without having to version up. You can double click a snapshot to reload it into the current scene.  Unsaved changes will be prompted to auto-snapshot before loading a previous snapshot", None))
+#endif // QT_CONFIG(tooltip)
         self.snapshots_label.setText(QCoreApplication.translate("SaveAs", u"Snapshots", None))
+#if QT_CONFIG(tooltip)
+        self.snapshots.setToolTip(QCoreApplication.translate("SaveAs", u"Snapshots are quick saves that store a date stamped sub-version of your current file without having to version up. You can double click a snapshot to reload it into the current scene.  Unsaved changes will be prompted to auto-snapshot before loading a previous snapshot", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.version_notes_label.setToolTip(QCoreApplication.translate("SaveAs", u"This shows notes for the current file selected in the Existing Files list", None))
+#endif // QT_CONFIG(tooltip)
         self.version_notes_label.setText(QCoreApplication.translate("SaveAs", u"Version Note", None))
+#if QT_CONFIG(tooltip)
+        self.existing_notes.setToolTip(QCoreApplication.translate("SaveAs", u"This shows notes for the current file selected in the Existing Files list", None))
+#endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
         self.publish_btn.setToolTip(QCoreApplication.translate("SaveAs", u"Ctrl + P", None))
 #endif // QT_CONFIG(tooltip)
