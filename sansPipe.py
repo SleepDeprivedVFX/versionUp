@@ -1,16 +1,14 @@
-# Sans-Pipe Maya Super Saver
+# Sans-Pipe Maya Light Pipeline Utility
 
 """
-The SANS-PIPE SUPER SAVER is a pipeline-free versioning and saving system for Maya.
-It is intended to be a stand-alone shelf button for quickly versioning up files and saving notes with them.
-Simple click the button on the shelf or run the script.  A UI will pop up that attempts to name your script based on
-the project folder, but can be customized to save the name as anything.
-Notes can be reviewed on the right side by clicking on existing files.
+The SANS-PIPE LIGHT PIPELINE UTILITY is a pipeline-free versioning and saving system for Maya.
+It is a stand-alone utility for quickly versioning up files and saving notes with them, publishing file, saving
+Snapshots, Reference Tracking and overall scene settings.
+The utility can be configured to open automatically when Maya opens, making opening of files and saving new files a
+snap.
+It saves notes and information with every file that is created.  It can also be used to build new projects, create
+new assets and folder structures on the fly.
 """
-
-# FIXME: There are a few issues that I've discovered so far.
-#  2. The Overwrite function won't work due to the issue with the first fix me
-#  3. The Recent Files menu is doubling up on files
 
 
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
@@ -91,11 +89,20 @@ class CustomMessageBox(QMessageBox):
         return None
 
 class sansPipe(QWidget):
+    """
+    Main SansPipe utility.  This class runs all the functions of the SansPipe utility.
+    """
     def __init__(self, parent=None):
+        """
+        Initialize the tool.  This runs all the basic setup and has most of the functionality created here.
+        :param parent:
+        """
+        # Initialize the QWidget
         QWidget.__init__(self, parent)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.pattern = r'(_v\d+)|(_V\d+)'
-        # TODO: The self.tasks should probably find their way into the config files, BUT for now, I'm leaving them here.
+
+        # Set the project constants.
         self.tasks = {
             "model": [
                 'model',
@@ -271,7 +278,6 @@ class sansPipe(QWidget):
             '\'',
             '"'
         ]
-        # TODO: The cameraNames should probably find their way into the config files as well.
         self.cameraNames = [
             'shotcam',
             'camera',
@@ -286,8 +292,12 @@ class sansPipe(QWidget):
         ]
         self.cameraAttributes = ['translateX', 'translateY', 'translateZ', 'rotateX', 'rotateY', 'rotateZ',
                                  'scaleX', 'scaleY', 'scaleZ', 'visibility', 'centerOfInterest']
+
+        # Initialize the root and task variables
         self.root_name = None
         self.task = None
+
+        # Initialize the UI
         self.ui = ssui.Ui_SaveAs()
         self.ui.setupUi(self)
 
@@ -302,13 +312,14 @@ class sansPipe(QWidget):
         self.asset_folder_path = os.path.join(workspace, asset_folder)
 
         # Set window title
-        self.setWindowTitle('Sans Pipe Super Saver - v%s' % __version__)
+        self.setWindowTitle('SansPipe Light Pipeline Utility - v%s' % __version__)
 
-        # Check for and load config file
+        # Check for and load config file.  Build one if it does not exist.
         self.config_path = os.path.join(workspace, 'show_config.cfg')
         if not os.path.exists(self.config_path):
             self.build_config_file(path=self.config_path)
 
+        # Create the QSettings for information storage.  This information gets accessed by the userSetup.py as well.
         self.settings = QSettings(__author__, 'Sans Pipe Super Saver')
         self.position = self.settings.value('geometry', None)
         self.appendartist = self.settings.value('appendArtist', None)
@@ -321,11 +332,13 @@ class sansPipe(QWidget):
         self.auto_load_on_startup = self.settings.value('autoload', None)
         self.restoreGeometry(self.position)
 
+        # Populate the Recent Files list
         if self.recent_files:
             self.populate_recent_files()
         else:
             self.recent_files = []
 
+        # Populate the recent projects list
         if self.recent_projects:
             self.populate_recent_projects()
         else:
@@ -349,6 +362,7 @@ class sansPipe(QWidget):
         else:
             self.auto_load_on_startup = False
 
+        # Set the boolean checkboxes
         self.ui.AppendArtist.setChecked(self.appendartist)
         self.ui.bakeCamSceneName.setChecked(self.bakeCamSceneName)
         self.ui.autosaver.setChecked(self.autosave)
@@ -367,7 +381,7 @@ class sansPipe(QWidget):
         artist = first_initials + last_name
         self.ui.artistName.setText(artist)
 
-        # Get the configurations
+        # Get the configurations from the show_config.cfg file.
         config = configparser.ConfigParser()
         config.read(self.config_path)
         self.show_code = config['Project']['Show_Code']
@@ -381,6 +395,7 @@ class sansPipe(QWidget):
         self.recent_file_count = int(config['Project']['recent_file_count'])
         self.autosave_interval = int(config['Scene']['autosave_interval'])
 
+        # Set the fields for the Settings tab from the config file.
         self.ui.showName.setText(self.project_name)
         self.ui.resolutionWidth.setText(self.res_width)
         self.ui.resolutionHeight.setText(self.res_height)
@@ -390,8 +405,10 @@ class sansPipe(QWidget):
         self.ui.recent_file_count.setValue(self.recent_file_count)
         self.ui.autosave_count.setValue(self.autosave_interval)
 
+        # Populate the project settings
         self.populate_project_settings()
 
+        # Check for an existing path, and if it's not set, use the workspace path instead.
         if pth:
             # Check against current project
             save_path = os.path.dirname(pth)
@@ -455,21 +472,34 @@ class sansPipe(QWidget):
             extension = 'ma'
             v_type = '_v'
 
+        # Set the filename, which is a misnomer.  This is actually the asset or shot root name, not including the show
+        # code or the version name, et cetera.
         self.ui.filename.setText(self.root_name)
+
+        # Set the default UI message to nothing.
         self.ui.messages.setText('')
-        # The following get_save_file() also needs to be double checked if the overwrite checckbox become active
+
+        # Get the probable name of the next file to be saved.  Either from the project settings or the currently opened
+        # file.  Use this to set the version number.
         get_save = self.get_save_file(save_file=save_file, save_path=save_path, basename=base_filename, _v=v_type,
                                       l=v_len, ext=extension)
         next_version = get_save[1]
 
         self.ui.version.setValue(next_version)
+
+        # Create the file output path for the next save function.
         new_path = self.build_path(path=save_path, rootName=self.root_name, task=self.task, v_type=v_type,
                                    v_len=v_len, version=next_version, ext=extension, show=show_code, artist=artist)
 
         self.ui.output_filename.setText(new_path)
 
+        # Set the folder save path.
         self.ui.folder.setText(save_path)
 
+        # Hide the overwrite function since it currently does nothing and isn't necessarily needed.
+        self.ui.overwrite.hide()
+
+        # Start connecting list functionality to their appropriate functions.
         self.ui.existingFile_list.setHeaderHidden(True)
         self.ui.assetTree.setHeaderHidden(True)
         self.ui.snapshots.setHeaderHidden(True)
@@ -549,6 +579,7 @@ class sansPipe(QWidget):
         self.ui.createCam_btn.clicked.connect(self.create_camera)
         self.ui.bulk_add_btn.clicked.connect(self.get_csv)
 
+        # Set the font for the Tools Group.
         title_font = QFont()
         title_font.setPointSize(12)
         title_font.setBold(True)
@@ -575,9 +606,17 @@ class sansPipe(QWidget):
         except RuntimeError as e:
             cmds.warning(f'Cannot load render settings: {e}')
 
+        # Load up and show the UI.
         self.show()
 
     def enable_context_menu(self, widget=None, widget_name=None):
+        """
+        This function sets the Right-Click functionality for whichever list is run through it, allowing for the context
+        menu to appear when a right-click is activated.
+        :param widget: The UI element that is being enabled.
+        :param widget_name: The name of the UI widget.
+        :return:
+        """
         if widget and widget_name:
             widget.setContextMenuPolicy(Qt.CustomContextMenu)
             widget.customContextMenuRequested.connect(lambda position: self.create_tree_context_menu(widget,
@@ -585,20 +624,32 @@ class sansPipe(QWidget):
                                                                                                      position))
 
     def create_tree_context_menu(self, widget, widget_name, position):
+        """
+        Creates the actual context menu and sets the function for what to do when it is triggered
+        :param widget: The UI widget being activated
+        :param widget_name: The name of the UI widget - currently not used here.
+        :param position: The mouse position for the context menu
+        :return:
+        """
+        # Get the mouse position
         current_item = widget.itemAt(position)
         if not current_item:
             return False
 
+        # Collect data from the context.  If none exists do not show the context menu.
         data = current_item.data(0, Qt.UserRole)
         if not data['file']:
             return False
 
+        # Create the context menu
         context_menu = QMenu(self)
 
+        # Make the settings
         open_action = QAction('Open', self)
         ref_action = QAction('Reference', self)
         import_action = QAction('Import', self)
 
+        # Setup the trigger actions.
         open_action.triggered.connect(lambda: self.open_file(f=False))
         ref_action.triggered.connect(lambda: self.load_ref(element=widget))
         import_action.triggered.connect(lambda: self.import_object(element=widget))
@@ -610,9 +661,15 @@ class sansPipe(QWidget):
         context_menu.exec(widget.mapToGlobal(position))
 
     def open_file(self, f=False):
-        # get_filename = self.ui.existingFile_list.currentItem()
+        """
+        This opens a file on a double click or button press
+        :param f: Whether the file open command should force the file to open.
+        :return:
+        """
+        # Get the item currently selected in the Existing File list
         current_item = self.ui.existingFile_list.currentItem()
         if current_item:
+            # Collect the data
             file_info = current_item.data(0, Qt.UserRole)
             if file_info:
                 folder = file_info['folder']
@@ -643,23 +700,45 @@ class sansPipe(QWidget):
                         self.show()
 
     def format_name(self, basename=None, _v='_v', v=1, l=3, ext='ma'):
+        """
+        Creates the proper naming format for a save function
+        :param basename: The root name of the asset or shot
+        :param _v: The version tag, as in _v001
+        :param v: The version number
+        :param l: The length of the version number, the default is 3
+        :param ext: The extention of the filename
+        :return:
+        """
         if basename:
             save_file = '{basename}{_v}{v:0{l}d}.{ext}'.format(basename=basename, _v=_v, v=v, l=l, ext=ext)
             return save_file
         return False
 
     def reset_version(self, v=1):
+        """
+        Resets the version number when called.  The default is 1, but can be sent a "latest" version number.
+        :param v: Version number being sent.
+        :return:
+        """
         self.ui.version.valueChanged.disconnect(self.update_ui)
         self.ui.version.setValue(v)
         self.update_ui()
         self.ui.version.valueChanged.connect(self.update_ui)
 
     def clear_recent_files(self):
+        """
+        This clears out the recently opened files list.  It has no effect on Maya's default "Recently Opened >" list.
+        :return:
+        """
         self.ui.recentFilesList.clear()
         self.recent_files = []
         self.populate_recent_files()
 
     def remove_bad_characters(self):
+        """
+        Cleans up and replaces bad characters with underscores '_'
+        :return:
+        """
         root_name = self.ui.filename.text()
         bad_x = [x for x in self.invalidCharacters if x in root_name]
         if bad_x:
@@ -667,10 +746,13 @@ class sansPipe(QWidget):
             root_name = root_name.replace(bad_x, '_')
             self.ui.filename.setText(root_name)
 
-    def make_new_filename(self, path=None, rootName=None):
-        pass
-
     def build_config_file(self, path=None):
+        """
+        This method creates the initial configuration file if none exists.  It is necessary for SansPipe to operate.
+        If it is deleted, a new one should be created on startup.
+        :param path: The path where the config file should be created.  The project root by default.
+        :return:
+        """
         if path:
             try:
                 if not os.path.exists(path):
@@ -699,6 +781,13 @@ class sansPipe(QWidget):
                            f'operating system to run the tool: {e}')
 
     def try_to_get_show_code(self, path=None):
+        """
+        This method tries to find a show code in the main path attempting to see if the user already created it from
+        their initial project creation.  Some shows automatically put 3-letter codes in their root path.  If none can
+        be found, then it creates a 3-letter code from the project name itself.
+        :param path: Root path for the project
+        :return:
+        """
         # This method returns a 3 letter show code either from the path, or from the workspace name.
         # It can be overridden in the configuration file.
         show_code = None
@@ -723,6 +812,10 @@ class sansPipe(QWidget):
         return show_code
 
     def try_to_get_project_name(self):
+        """
+        Attempts to get the project name from the path.  This should always work.
+        :return:
+        """
         workspace = cmds.workspace(q=True, act=True)
         workspace = workspace.replace('\\', '/')
         split_ws = workspace.split('/')
@@ -730,6 +823,10 @@ class sansPipe(QWidget):
         return self.project_name
 
     def save_config(self):
+        """
+        Saves the configuration file when called by the user.
+        :return:
+        """
         if os.path.exists(self.config_path):
             config = configparser.ConfigParser()
             config.read(self.config_path)
@@ -756,6 +853,10 @@ class sansPipe(QWidget):
                 config.write(configpath)
 
     def update_ui(self):
+        """
+        Really, this creates a new output filename path from the data updated in the UI
+        :return:
+        """
         path = self.ui.folder.text()
         root_name = self.ui.filename.text()
         version = self.ui.version.value()
@@ -776,6 +877,11 @@ class sansPipe(QWidget):
             # self.reset_version(v=version)
 
     def get_root_and_task(self, filename=None):
+        """
+        Gets and parses out the Root name, task name and other information from the filename
+        :param filename:
+        :return:
+        """
         try:
             root_name = None
             task_name = None
@@ -821,9 +927,13 @@ class sansPipe(QWidget):
                 }
             return data
         except TypeError as e:
-            print(f'This is where it happened! {e}')
+            cmds.warning(f'Could not get root and task! {e}')
 
     def set_custom(self):
+        """
+        Switches the UI from automatic naming to custom naming setup
+        :return:
+        """
         auto = self.ui.autoNaming.isChecked()
         if auto:
             self.ui.filename.setEnabled(False)
@@ -844,13 +954,26 @@ class sansPipe(QWidget):
 
     def build_path(self, path=None, rootName=None, task=None, v_type='_v', v_len=3, version=0, ext=None, show='',
                    artist=None):
+        """
+        This function builds the proper path and filename for an object
+        :param path: The base path, usually starts with the Maya project scene file.
+        :param rootName: The name of the asset or shot
+        :param task: Kind of task
+        :param v_type: How the version number is parsed, usually '_v'
+        :param v_len: The number of zeros in the version number.  Usually 3
+        :param version: The version number
+        :param ext: The file extention
+        :param show: The 3-letter show code
+        :param artist: The artist name - First initial and Last name
+        :return:
+        """
         output_path = None
         if path and rootName and ext:
             try:
                 if rootName.startswith(show):
                     show = ''
             except TypeError as e:
-                print('ERROR: %s' % e)
+                cmds.warning('ERROR: %s' % e)
                 show = ''
 
             if not show.endswith('_'):
@@ -889,6 +1012,10 @@ class sansPipe(QWidget):
         return output_path
 
     def get_folder(self):
+        """
+        This method simply gets the folder path for a custom file name
+        :return:
+        """
         pth = self.ui.folder.text()
         self.hide()
         if pth:
@@ -900,6 +1027,17 @@ class sansPipe(QWidget):
             self.ui.folder.setText(getFolder[0])
 
     def get_save_file(self, save_file=None, save_path=None, basename=None, _v='_v', v=1, l=3, ext='ma'):
+        """
+        This method finds the next available version number and filename for a file based on the task and folder.
+        :param save_file: The current filename
+        :param save_path: Path to the filename
+        :param basename: The root name of the asset or shot
+        :param _v: The format of the version separator
+        :param v: Version number
+        :param l: Number of zeros in the version
+        :param ext: File extension
+        :return:
+        """
         # This finds the next available version.  It needs to have the overwrite check in it
         next_version = v
         overwrite = self.ui.overwrite.isChecked()
@@ -915,6 +1053,13 @@ class sansPipe(QWidget):
         return save_file, next_version
 
     def get_version_info(self, filename=None, default_len=3, default_version=0):
+        """
+        This method parses out the data of a file based on the filename.  It can be used to repopulate the UI
+        :param filename: Filename being parsed
+        :param default_len: Number of zeros in the version number
+        :param default_version: Version number
+        :return:
+        """
         # This function gets the version in an existing filename, or creates a default version
         file_info = None
         if filename:
@@ -956,6 +1101,11 @@ class sansPipe(QWidget):
         return file_info
 
     def check_for_latest_version(self, filename=None):
+        """
+        Check to see if a file is the latest version number
+        :param filename: File being tested
+        :return:
+        """
         if filename:
             # Parse the file's main info
             root_folder = os.path.dirname(filename)
@@ -983,6 +1133,11 @@ class sansPipe(QWidget):
             return latest_file
 
     def collect_files(self, path=None):
+        """
+        Gets a list of files within a folder
+        :param path: Folder being looked at.
+        :return:
+        """
         files = []
         if path:
             if os.path.exists(path):
@@ -993,6 +1148,11 @@ class sansPipe(QWidget):
         return files
 
     def make_db_folder(self, folder=None):
+        """
+        Creates a db folder to store a local JSON database file
+        :param folder:
+        :return:
+        """
         db_folder = None
         if folder:
             db_folder = os.path.join(folder, 'db')
@@ -1001,6 +1161,11 @@ class sansPipe(QWidget):
         return db_folder
 
     def create_db(self, folder=None):
+        """
+        Creates a blank notes database for a particular folder
+        :param folder:
+        :return:
+        """
         if folder:
             if not os.path.exists(folder):
                 data = {
@@ -1012,6 +1177,11 @@ class sansPipe(QWidget):
                     save.close()
 
     def open_db(self, folder=None):
+        """
+        Opens a database file for a particular folder
+        :param folder: The root folder for the asset/shot in question
+        :return:
+        """
         notes_db = None
         if folder:
             notes_db_file = os.path.join(folder, 'notes_db.json')
@@ -1024,6 +1194,12 @@ class sansPipe(QWidget):
         return notes_db
 
     def save_db(self, folder=None, data=None):
+        """
+        Saves the database for a particular folder
+        :param folder: The folder for the asset or shot in question
+        :param data: The data being added to the database.
+        :return:
+        """
         if data and folder:
             notes_file = os.path.join(folder, 'notes_db.json')
             save_data = json.dumps(data, indent=4)
@@ -1032,6 +1208,12 @@ class sansPipe(QWidget):
                 save.close()
 
     def create_note(self, notes=None, output_file=None):
+        """
+        Creates a new note for a project asset or shot
+        :param notes: The note being added to the database.
+        :param output_file: The output file from which to parse the data and determine where to send the note.
+        :return:
+        """
         if notes and output_file:
             path = os.path.dirname(output_file)
             notes_path = self.make_db_folder(folder=path)
@@ -1055,6 +1237,10 @@ class sansPipe(QWidget):
             return False
 
     def create_camera(self):
+        """
+        Creates a new camera using the film back and scene scale settings from the UI.  Asks for a focal length.
+        :return:
+        """
         filmback_w = float(self.ui.filmback_width.text())
         filmback_h = float(self.ui.filmback_height.text())
         mult_fb_w = (filmback_w / 10) / 2.54
@@ -1096,6 +1282,16 @@ class sansPipe(QWidget):
         cmds.scale(scene_scale, scene_scale, scene_scale)
 
     def show_file_selection_info(self, item, column):
+        """
+        This function does a few things.  It checks to see what object is selected in the Existing file list, and if
+        the is a legitimate file than it reads and posts a note in the notes output window.  Otherwise, it posts a blank
+        note.  It also checks button states for the Load Ref and Import buttons and makes sure they are only active
+        when an asset or Published item is selected.  This functionality has actually been removed from the UI, but
+        the pieces still exist, they're just hidden.  That functionality has been moved to the Publishes/Assets tab.
+        :param item:
+        :param column:
+        :return:
+        """
         # Load selection info
         file_info = item.data(0, Qt.UserRole)
         file_text = item.text(0)
@@ -1221,6 +1417,11 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             self.populate_snapshots(item, column)
 
     def populate_existing_files(self, current_directory=None):
+        """
+        This function populates the existing files list based on the folder structure and files found within.
+        :param current_directory: Usually the root scenes directory for a project.
+        :return:
+        """
         allowed_extensions = ['ma', 'mb', 'obj', 'fbx', 'abc']
         excluded_folders = ['db', 'edits', '.mayaSwatches', 'snapshots', 'Publishes']
 
@@ -1298,6 +1499,14 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             self.ui.existingFile_list.itemClicked.emit(file_item, 0)
 
     def populate_publish_assets(self, tree=None, root=None, current_directory=None):
+        """
+        This function populates several trees looking for either asset saves or file publishes.  It keeps them
+        separate for better organization.  Assets are kept separate from working file publishes.
+        :param tree: The QTreeWidget item being populated.
+        :param root: The root folder.  This is primarily to separate out assets from publishes.
+        :param current_directory: The root scene folder
+        :return:
+        """
         allowed_extensions = ['ma', 'mb', 'obj', 'fbx', 'abc']
         excluded_folders = ['db', 'edits', '.mayaSwatches', 'snapshots']
         allowed_folders = ['assets', 'Publishes']
@@ -1367,6 +1576,13 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             file_item.setData(0, Qt.UserRole, {'folder': folder_name, 'file': file_name})
 
     def message(self, text=None, ok=True, obj=None):
+        """
+        This function displays a message at the bottom of the UI and highlights problem fields if there are any
+        :param text: The message being displayed
+        :param ok: Whether the information is good or bad.  True dispays a green message, False displays a red message.
+        :param obj: Red messages will highlight this object: QLineEdit, QTreeWidget, QListWidget or other object.
+        :return:
+        """
         self.ui.messages.setText(text)
         if ok:
             self.ui.messages.setStyleSheet(
@@ -1382,6 +1598,10 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         QTimer.singleShot(8000, lambda: self.ui.messages.setText(''))
 
     def pop_up_message(self):
+        """
+        Pops up a simple message box for quick inputs.
+        :return:
+        """
         msg_box = CustomMessageBox(self)
         result = msg_box.get_input()
         if result:
@@ -1390,6 +1610,12 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             return False
 
     def run(self, close=True):
+        """
+        This is the main 'Save As' feature and makes up the primary function of the tool.  It gets the next version
+        for a file and saves it up with a note.
+        :param close: Whether to keep the UI opened or close it.
+        :return:
+        """
         output_file = self.ui.output_filename.text()
         overwrite = self.ui.overwrite.isChecked()
         fileType = self.ui.fileType.currentText()
@@ -1426,7 +1652,6 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         self.create_note(notes=notes, output_file=output_file)
 
         time.sleep(3)
-        print('run: close: %s' % close)
         self.check_button_state(btn=self.ui.snap_btn)
         self.check_button_state(btn=self.ui.publish_btn)
         if close:
@@ -1436,6 +1661,12 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         return True
 
     def snapshot(self, note=None):
+        """
+        Creates a Snapshot file.  Snapshots are sub-versions of files that are saved with a date-stamp that can be
+        accessed at any time in the future.  Allowing for a layer of projection between versioning up.
+        :param note: The note associated with the snapshot.  Say what you did!
+        :return:
+        """
         if note:
             notes = 'Automatic snapshot - update from replacement snapshot: %s' % note
         else:
@@ -1523,6 +1754,11 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         self.ui.existingFile_list.itemClicked.emit(current_file_item, 0)
 
     def open_recent_file(self, f=False):
+        """
+        This function opens a recent file from the Recent Files list
+        :param f: Whether to force open the file or not.
+        :return:
+        """
         current_item = self.ui.recentFilesList.currentItem()
         file_text = current_item.text()
         open_file = current_item.data(Qt.UserRole)
@@ -1559,6 +1795,11 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                 self.show()
 
     def populate_recent_files(self):
+        """
+        Populates the recent files list.  This list is updated when the UI is closed and will show the latest file the
+        next time it is opened.
+        :return:
+        """
         recent_files = self.recent_files
         for this_file in recent_files:
             filename = this_file['filename']
@@ -1571,6 +1812,13 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             self.ui.recentFilesList.addItem(new_entry)
 
     def populate_snapshots(self, item, column):
+        """
+        This function populates the Snapshots list and saves the data there for quick access.  Double clicking one of
+        these will load that snapshot as the latest version.
+        :param item:
+        :param column:
+        :return:
+        """
         self.ui.snapshots.clear()
         file_info = item.data(0, Qt.UserRole)
         if file_info:
@@ -1613,6 +1861,10 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             last_item.setExpanded(True)  # Expand only the last item
 
     def populate_recent_projects(self):
+        """
+        This method populates the recent projects list on the Projects tab.
+        :return:
+        """
         self.ui.recent_projects.clear()
         if self.recent_projects:
             for project in self.recent_projects:
@@ -1621,6 +1873,11 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                 self.ui.recent_projects.addItem(new_item)
 
     def populate_project_settings(self):
+        """
+        This method gets its information from Maya and fills in the "New Project" defaults.  Changing them in the new
+        project will update them here as well.
+        :return:
+        """
         scenes = cmds.workspace(fre='scene')
         asset = cmds.workspace(fre='templates')
         images = cmds.workspace(fre='images')
@@ -1651,6 +1908,11 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         self.ui.scene_ass.setText(scene_assembly)
 
     def set_project(self, btn=False):
+        """
+        Mirrors Maya's set project feature and sets the current project.
+        :param btn: If the btn is true, it hides the UI while the set project window is opened.
+        :return:
+        """
         if btn:
             self.hide()
             cmds.SetProject()
@@ -1664,6 +1926,11 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         self.close()
 
     def check_button_state(self, btn=None):
+        """
+        Checks the button state for objects that either need to be disabled or enabled.
+        :param btn: The button being checked
+        :return:
+        """
         if btn:
             if cmds.file(q=True, sn=True):
                 btn.setEnabled(True)
@@ -1677,6 +1944,10 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                 )
 
     def create_project(self):
+        """
+        This method creates a new project and makes it the set project in the UI and in Maya.
+        :return:
+        """
         self.message(text='', ok=True)
         project_name = self.ui.new_project_name.text()
         project_folder = self.ui.new_project_folder.text()
@@ -1709,13 +1980,21 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         self.close()
 
     def create_folders(self, proj_path=None):
+        """
+        This method creates a default Maya project folder path and then updates and saves the workspace
+        :param proj_path:
+        :return:
+        """
         def do_subfolders(parent_path=None):
+            """
+            This sub-function adds and creates sub-folders to the scenes file if that checkbox is set.
+            :param parent_path:
+            :return:
+            """
             if parent_path:
-                print(f'cf: proj_path: {parent_path}')
                 for subpath in subfolders:
                     new_scene_subpath = os.path.join(parent_path, subpath)
                     if not os.path.exists(new_scene_subpath):
-                        print(f'cf: making subfolder: {new_scene_subpath}')
                         os.makedirs(new_scene_subpath)
 
         subfolders = [
@@ -1727,7 +2006,6 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             'Cams'
         ]
         if proj_path:
-            print(f'cf: proj_path: {proj_path}')
             folder_structure = {
                 'scenes': self.ui.scenes.text(),
                 'assets': self.ui.assets.text(),
@@ -1747,7 +2025,6 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                 if path:
                     new_subpath = os.path.join(proj_path, path)
                     if not os.path.exists(new_subpath):
-                        print(f'cf: creating new folder: {new_subpath}')
                         os.makedirs(new_subpath)
                         if path == self.ui.scenes.text() and self.ui.include_subfolders.isChecked():
                             do_subfolders(parent_path=new_subpath)
@@ -1759,14 +2036,37 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             self.update_ui()
 
     def get_csv(self):
+        """
+        Opens a dialog to get a CSV file and then populates it in the UI
+        :return:
+        """
         self.hide()
         file_path = cmds.fileDialog2(fileFilter='CSV Files (*.csv)', dialogStyle=2, fileMode=1)[0]
-        print(file_path)
         if os.path.exists(file_path):
             self.ui.bulk_add.setText(file_path)
         self.show()
 
     def bulk_add(self):
+        """
+        This function adds folders from a CSV file.  This allows for bulk creation of a folder tree without having to
+        manually create them.  It should follow the following form in the CSV file:
+        NO HEADERS.
+        Column1 = Asset or Shot Name  |  Column2 = Subfolder name
+        Subfolders are typically:
+        Cams = Cameras - this is for specialty camera rigs.
+        Char = Characters
+        Env = Environments
+        Prop = Props
+        Shot = Shots
+        Veh = Vehicles
+
+        Thus, a typical CSV file would read like this:
+        Bob, Char
+        Truck, Veh
+        Shot_0010, Shot
+        Shot_0020, Shot
+        :return:
+        """
         csv_file_path =  self.ui.bulk_add.text()
         if not os.path.exists(csv_file_path) or os.path.splitext(csv_file_path)[1] != '.csv':
             self.message(text='CSV file is not valid', ok=False, obj=self.ui.bulk_add)
@@ -1794,6 +2094,29 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         self.ui.saverTabs.setCurrentIndex(0)
 
     def create_asset_shot(self):
+        """
+        This function creates a regular new asset or shot.  If it detects anything in the Bulk Add from CSV field, it
+        will trigger that function instead.
+        When creating an asset or shot, you add a simple name for the new asset or shot, select what kind of thing it
+        is from the drop-down list and hit "Create Asset/Shot".
+        The Name of the thing should only be a simple root name and not mirror a full file name.  For instance:
+        Name = Sarah
+        Type = Char
+        or
+        Name = Speedboat
+        Type = Veh
+
+        It should NOT be:
+        Name = PRJ_Sarah_model_v001
+        Type = Char
+        This will create a super long, and very bad name like "PRJ_PRJ_Sarah_model_v001_model_v001" and you don't want
+        that.
+
+        Once the new asset or shot is created a new Maya file will be created and opened with a default One Meter Cube
+        loaded for scene scale.  This scene scale is taken from the UI Settings Scene Scale.  The cube can be deleted
+        once the proper scale is understood for an object.
+        :return:
+        """
         _type = self.ui.assetShot_type.currentText()
         asset_shot_name = self.ui.asset_name.text()
         bulk_add = self.ui.bulk_add.text()
@@ -1858,6 +2181,10 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         self.ui.saverTabs.setCurrentIndex(0)
 
     def create_new_file_with_prompt(self):
+        """
+        This method just attempts to create the new Maya file.  It will prompt you to save any existing work.
+        :return:
+        """
         # Check if there are unsaved changes
         if cmds.file(q=True, modified=True):
             # Hide the UI
@@ -1886,6 +2213,10 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         return True
 
     def get_project_folder(self):
+        """
+        This method populates the new project folder for the new project function.
+        :return:
+        """
         self.hide()
         new_project_folder = cmds.fileDialog2(fm=3, ds=2)
         if new_project_folder:
@@ -1895,15 +2226,28 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         self.show()
 
     def set_autosave(self):
+        """
+        This method sets the Autosave functionality in Maya.  This can be a handy way to set this without having to go
+        into Maya's settings and will help save you from crashes.
+        :return:
+        """
         if self.ui.autosaver.isChecked():
-            print('autosave checked')
             cmds.optionVar(intValue=('autoSaveEnabled', 1))
             cmds.optionVar(intValue=('autoSaveInterval', self.ui.autosave_count.value()))
         else:
-            print('autosave unchecked')
             cmds.optionVar(intValue=('autoSaveEnabled', 0))
 
     def import_snapshot(self, item, column):
+        """
+        This function restores a Snapshot to your current file.  It replaces what is in your current file with what was
+        in the Snapshot that you saved earlier.  Before it loads a snapshot, it will ask if you want to do a protective
+        snapshot of what's currently in your file so that you don't lose anything if you change your mind.
+        If you do not accept the Auto-Snapshot, the imported Snapshot will replace all of your current work and there
+        won't be any way to get it back.
+        :param item:
+        :param column:
+        :return:
+        """
         snapshot_path = item.data(0, Qt.UserRole)
         snapshot_file_date = os.path.getmtime(snapshot_path)
         current_file_path = cmds.file(q=True, sn=True)
@@ -1932,13 +2276,16 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         cmds.file(save=True, type=ext)
 
     def publish(self):
-        '''
-        What it needs to do:
-        1. Take the current file and version up with a PUB note, but keep the original filename
-        2. Save the file out to the Publishes folder with a PUB tag in it.
-        3. Remove references and namespaces for the published file
-        4. Reopen the new versioned up working file.
-        '''
+        """
+        This function publishes your current file and versions it up to protect the publish.  It does several things.
+        It versions up your current file.  It saves a copy of your current file into a Publishes folder and adds the
+        tag "PUB" to the published file.
+        It imports references and removes the namespaces unless several copies of a reference exist.
+        Lastly it adds a note to the publish so that you know what was done to it.
+        This publish then will show up in the Publishes Tree on the Assets - Publishes tab and can be imported or
+        referenced into your scene.
+        :return:
+        """
         notes = self.ui.notes.toPlainText()
         if not notes:
             self.message(text='YOU MUST ADD A NOTE!!!', ok=False, obj=self.ui.notes)
@@ -2019,6 +2366,7 @@ References Imported and Cleaned:
         version of the reference.  If it is not, the reference is flagged as being out of date.
         The function should then populate the self.ui.referenceList with multi-select capabilities.  If a reference is
         flagged as out of date, it should be styled with a red background, and automatically selected.
+        Any out of date references will force the UI to open to the References tab for review.
         :return:
         """
         self.ui.referenceList.clear()
@@ -2083,6 +2431,10 @@ References Imported and Cleaned:
             self.ui.referenceList.addItem(new_entry)
 
     def update_references(self):
+        """
+        This function updates an out-of-date reference to the latest version in the path.
+        :return:
+        """
         update_items = self.get_checked_refs()
 
         # get references and start updating.
@@ -2107,6 +2459,11 @@ References Imported and Cleaned:
         self.reference_tracker()
 
     def get_checked_refs(self):
+        """
+        This method collects a list of Publishes that have been checked.  If an out-of-date publish is not checked,
+        it will not get updated.
+        :return:
+        """
         checked_items = {}
         for i in range(self.ui.referenceList.count()):
             item = self.ui.referenceList.item(i)
@@ -2115,6 +2472,10 @@ References Imported and Cleaned:
         return checked_items
 
     def import_and_clean_references(self):
+        """
+        This is the function that does the importing and cleaning of references for a Publish function.
+        :return:
+        """
         references = cmds.file(q=True, reference=True)
         reference_info = {}
 
@@ -2145,6 +2506,14 @@ References Imported and Cleaned:
         return is_clean
 
     def do_reference_cleanup(self, reference_file=None, namespace=None, count=None):
+        """
+        This function counts the number of reference copies in a scene to decide whether is should remove the namespaces
+        or not.
+        :param reference_file: File being referenced in
+        :param namespace: The current namespace for that file
+        :param count: Number of times a file exists in a scene.
+        :return:
+        """
         cleaned = None
         if reference_file:
             # Import the reference
@@ -2162,6 +2531,11 @@ References Imported and Cleaned:
         return cleaned
 
     def load_ref(self, element=None):
+        """
+        This function loads in a reference from one of the QTreeWidgets: Existing Files, Publishes or Assets.
+        :param element: The Tree from which the reference call is being made.
+        :return:
+        """
         if not element:
             element = self.ui.existingFile_list
         current_item = element.currentItem()
@@ -2183,6 +2557,11 @@ References Imported and Cleaned:
         self.reference_tracker()
 
     def import_object(self, element=None):
+        """
+        This function imports a file from the tree being called from
+        :param element: The tree from which the import call was made
+        :return:
+        """
         if not element:
             element = self.ui.existingFile_list
         current_item = element.currentItem()
@@ -2202,6 +2581,11 @@ References Imported and Cleaned:
             self.message(text='The file could not be found!', ok=False)
 
     def start_cam_bake(self):
+        """
+        This function starts the process of baking out the current scene camera and saves out an FBX into the Assets
+        folder in a Shot_Cams sub-folder.
+        :return:
+        """
         self.message(text='Baking Camera...', ok=True)
         bake_camera = self.cam_bake()
         if bake_camera:
@@ -2232,6 +2616,11 @@ References Imported and Cleaned:
             self.message(text='Camera could not be baked!', ok=False)
 
     def cam_bake(self):
+        """
+        This method does the actual baking of the shot camera.  It creates a duplicate camera, parents it in world space
+        to the current scene camera and bakes out the keyframes for that camera.
+        :return:
+        """
         cam_transform = None
         all_cams = cmds.ls(ca=True)
         for cam in all_cams:
@@ -2310,6 +2699,12 @@ References Imported and Cleaned:
         return False
 
     def export_selection(self, export_type=None):
+        """
+        This function looks to see if an object is selected and decides whether to export selection or export all.
+        It then saves out the selection or entire scene file as an FBX, OBJ or Alembic ABC file.
+        :param export_type: Kind of file to write out, FBX, OBJ, or ABC
+        :return:
+        """
         if export_type:
             selection = cmds.ls(sl=True)
             if export_type == 'FBX export':
@@ -2385,6 +2780,11 @@ References Imported and Cleaned:
                         cmds.AbcExport(j=options)
 
     def playblast(self):
+        """
+        Creates a playblast based on the UI Project settings and saves it with the current filename into the Movies
+        folder.
+        :return:
+        """
         res_width = int(self.ui.resolutionWidth.text())
         res_height = int(self.ui.resolutionHeight.text())
         movies_folder = cmds.workspace(fre='movie')
@@ -2398,6 +2798,11 @@ References Imported and Cleaned:
         self.close()
 
     def render_settings(self):
+        """
+        This method attempts to set the Maya render settings based on the information in the UI Settings Tab.
+        It has an issue with Arnold if the Render Settings dialog in Maya has not been physically opened yet.
+        :return:
+        """
         try:
             res_width = int(self.ui.resolutionWidth.text())
             res_height = int(self.ui.resolutionHeight.text())
@@ -2411,12 +2816,23 @@ References Imported and Cleaned:
                        f'Make sure the plugin is loaded and run this again: {e}')
 
     def closeEvent(self, event):
+        """
+        This method collects all the objects that need to get saved into the QSettings and writes them out for
+        future use.  This is where the Recent Files and Recent Projects lists get parsed.  It also saves any user UI
+        settings for the next time the window is opened.  Including where the window is placed, and how it is expanded.
+        :param event:
+        :return:
+        """
         self.settings.setValue('appendArtist', self.ui.AppendArtist.isChecked())
         # self.settings.setValue('showcode', self.ui.showCode.text())
         self.settings.setValue('bake_cam_scene_name', self.ui.bakeCamSceneName.isChecked())
         self.settings.setValue('geometry', self.saveGeometry())
         if len(self.recent_files) >= self.recent_file_count:
             self.recent_files.pop(self.recent_file_count - 1)
+        if {'filename': '', 'path': ''} in self.recent_files:
+            i = self.recent_files.index({'filename': '', 'path': ''})
+            self.recent_files.pop(i)
+        self.current_file_path = self.current_file_path.replace('\\', '/')
         this_file_data = {
             'filename': os.path.basename(self.current_file_path),
             'path': self.current_file_path
@@ -2427,6 +2843,7 @@ References Imported and Cleaned:
         if len(self.recent_projects) >= 5:
             self.recent_projects.pop(4)
         current_project = cmds.workspace(q=True, act=True)
+        current_project = current_project.replace('\\', '/')
         if current_project not in self.recent_projects:
             self.recent_projects.insert(0, current_project)
         self.settings.setValue('recent_projects', self.recent_projects)
@@ -2436,5 +2853,5 @@ References Imported and Cleaned:
         self.settings.setValue('autoload', self.ui.autoload.isChecked())
 
 
-if __name__ == '__main__':
-    saveas = sansPipe()
+# if __name__ == '__main__':
+#     saveas = sansPipe()
