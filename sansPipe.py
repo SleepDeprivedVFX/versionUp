@@ -11,9 +11,9 @@ new assets and folder structures on the fly.
 """
 
 
-from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
-from PySide6.QtWidgets import *
-from PySide6.QtGui import *
+from PySide2.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
+from PySide2.QtWidgets import *
+from PySide2.QtGui import *
 import os
 import sys
 import re
