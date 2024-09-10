@@ -4,7 +4,7 @@ import os
 import sys
 from PySide6.QtCore import QSettings
 
-__version__ = '1.2.5'
+__version__ = '1.2.8'
 __author__ = 'Adam Benson'
 
 settings = QSettings(__author__, 'Sans Pipe Super Saver')

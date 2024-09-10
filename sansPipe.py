@@ -48,7 +48,7 @@ def uninitializePlugin(mobject):
         om.MGlobal.displayError("Failed to deregister sansPipe plugin")
 
 
-__version__ = '1.2.7'
+__version__ = '1.2.8'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -2598,14 +2598,21 @@ References Imported and Cleaned:
                 cam_name = scene_name.replace(task, 'cam')
                 cam_name = cam_name + '.fbx'
             else:
-                cam_name = 'shot_cam'
+                cam_name = 'shot_cam.fbx'
 
             cmds.select(bake_camera, r=True)
             output_path = os.path.join(get_root_path, 'assets/Shot_Cams')
             output_file = os.path.join(output_path, cam_name)
-            cmds.file(output_file, f=True,
-                      options=";exportUVs=1;exportSkels=none;exportSkin=none;exportBlendShapes=0;exportDisplayColor=0;;exportColorSets=1;exportComponentTags=1;defaultMeshScheme=catmullClark;animation=0;eulerFilter=0;staticSingleSample=0;startTime=1;endTime=1;frameStride=1;frameSample=0.0;defaultUSDFormat=usdc;rootPrim=;rootPrimType=scope;defaultPrim=shotCam_baked;shadingMode=useRegistry;convertMaterialsTo=[UsdPreviewSurface];exportRelativeTextures=automatic;exportInstances=1;exportVisibility=1;mergeTransformAndShape=1;stripNamespaces=0;worldspace=0;excludeExportTypes=[]",
-                      type='FBX Export', pr=True, es=True, ex=False)
+            try:
+                cmds.file(
+                    output_file,
+                    f=True,
+                    options=";exportUVs=1;exportSkels=none;exportSkin=none;exportBlendShapes=0;exportDisplayColor=0;exportColorSets=1;exportComponentTags=1;defaultMeshScheme=catmullClark;animation=0;eulerFilter=0;staticSingleSample=0;startTime=1;endTime=1;frameStride=1;frameSample=0.0;defaultUSDFormat=usdc;rootPrim=;rootPrimType=scope;defaultPrim=shotCam_baked;shadingMode=useRegistry;convertMaterialsTo=[UsdPreviewSurface];exportRelativeTextures=automatic;exportInstances=1;exportVisibility=1;mergeTransformAndShape=1;stripNamespaces=0;worldspace=0;excludeExportTypes=[]",
+                    type='FBX Export', pr=True, es=True, ex=False
+                )
+            except RuntimeError as e:
+                cmds.warning(f'Could not bake the camera!  Could be a permissions issue, or some other failure: {e}')
+                self.message(text='Could NOT bake camera! Make sure Folder Permissions are set in your OS!', ok=False)
             cmds.select(bake_camera, r=True)
             cmds.delete()
             notes = (f'Automatic camera bake for {scene_name}.  Camera name: {bake_camera[0]}  '
