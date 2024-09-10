@@ -855,7 +855,8 @@ class sansPipe(QWidget):
 
             if not show.endswith('_'):
                 show = f'{show}_'
-            print(f'bp: show: {show}')
+            elif show.startswith('_'):
+                show = show.lstrip('_')
             if task:
                 if self.appendartist:
                     filename = '{show}{base}_{task}_{artist}{_v}{v:0{l}d}.{ext}'.format(base=rootName, task=task, _v=v_type,
@@ -1786,6 +1787,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                 new_asset_shot_folder = os.path.join(new_root_folder_path, asset_shot_name)
                 if not os.path.exists(new_asset_shot_folder):
                     os.makedirs(new_asset_shot_folder)
+                    self.create_note(notes='Auto-created using Bulk Add CSV feature', output_file=new_asset_shot_folder)
 
         self.ui.existingFile_list.clear()
         self.populate_existing_files(current_directory=self.scene_folder_path)
@@ -2049,7 +2051,7 @@ References Imported and Cleaned:
             # get the latest version
             latest_file = self.check_for_latest_version(filename=ref_file)
             if not latest_file == ref_file:
-                print(f'{ref_file} is out of date!  Latest file is {latest_file}')
+                cmds.warning(f'{ref_file} is out of date!  Latest file is {latest_file}')
                 out_of_date = True
 
             base_name = os.path.basename(ref_file)
