@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIGEBqfB.ui'
+## Form generated from reading UI file 'superSaver_UIcJWbGv.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -1545,19 +1545,11 @@ class Ui_SaveAs(object):
         self.asset_name.setToolTip(QCoreApplication.translate("SaveAs", u"The name or the asset or shot.  Do not add show codes or other details that you don't want added to the name", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
-        self.bulk_add_label.setToolTip(QCoreApplication.translate("SaveAs", u"You can add a bulk of items from a CSV file.  \n"
-"The CSV file must not have a header.\n"
-"The first column must be the asset or shot name.\n"
-"The second column must be the Type (Cams, Char, Env, Prop, Veh,, or Shot).\n"
-"Do not add a Name in the Name field if using this option.", None))
+        self.bulk_add_label.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>You can add a bulk of items from a CSV file. </p><p>The CSV file must not have a header.</p><p>The first column must be the asset or shot name.</p><p>The second column must be the Type (Cams, Char, Env, Prop, Veh,, or Shot).</p><p>If the second column is blank, the root scenes folder will be used.</p><p>Do not add a Name in the Name field if using this option.</p><p>Bulk item add only creates the folder structures and not new files.</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.bulk_add_label.setText(QCoreApplication.translate("SaveAs", u"Bulk Add from CSV", None))
 #if QT_CONFIG(tooltip)
-        self.bulk_add.setToolTip(QCoreApplication.translate("SaveAs", u"You can add a bulk of items from a CSV file.  \n"
-"The CSV file must not have a header.\n"
-"The first column must be the asset or shot name.\n"
-"The second column must be the Type (Cams, Char, Env, Prop, Veh,, or Shot).\n"
-"Do not add a Name in the Name field if using this option.", None))
+        self.bulk_add.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>You can add a bulk of items from a CSV file. </p><p>The CSV file must not have a header.</p><p>The first column must be the asset or shot name.</p><p>The second column must be the Type (Cams, Char, Env, Prop, Veh,, or Shot).</p><p>If the second column is blank, the root scenes folder will be used.</p><p>Do not add a Name in the Name field if using this option.</p><p>Bulk item add only creates the folder structures and not new files.</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.bulk_add_btn.setText(QCoreApplication.translate("SaveAs", u"Browse...", None))
 #if QT_CONFIG(tooltip)

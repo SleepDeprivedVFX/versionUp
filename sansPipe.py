@@ -24,6 +24,7 @@ import time
 from datetime import datetime
 import platform
 import configparser
+import csv
 
 from ui import ui_superSaver_UI as ssui
 
@@ -546,6 +547,7 @@ class sansPipe(QWidget):
         self.check_button_state(btn=self.ui.build_folders_btn)
         self.ui.playblast_btn.clicked.connect(self.playblast)
         self.ui.createCam_btn.clicked.connect(self.create_camera)
+        self.ui.bulk_add_btn.clicked.connect(self.get_csv)
 
         title_font = QFont()
         title_font.setPointSize(12)
@@ -1755,9 +1757,47 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             cmds.workspace(proj_path, openWorkspace=True)
             self.update_ui()
 
+    def get_csv(self):
+        self.hide()
+        file_path = cmds.fileDialog2(fileFilter='CSV Files (*.csv)', dialogStyle=2, fileMode=1)[0]
+        print(file_path)
+        if os.path.exists(file_path):
+            self.ui.bulk_add.setText(file_path)
+        self.show()
+
+    def bulk_add(self):
+        csv_file_path =  self.ui.bulk_add.text()
+        if not os.path.exists(csv_file_path) or os.path.splitext(csv_file_path)[1] != '.csv':
+            self.message(text='CSV file is not valid', ok=False, obj=self.ui.bulk_add)
+            return False
+        with open(csv_file_path, mode='r', newline='', encoding='utf-8') as bulk:
+            csv_reader = csv.reader(bulk)
+            # Create folder
+            root_directory = cmds.workspace(q=True, rd=True)
+            scenes_folder = cmds.workspace(fre='scenes')
+            scenes_path = os.path.join(root_directory, scenes_folder)
+            for row in csv_reader:
+                asset_shot_name = row[0]
+                asset_shot_folder = row[1]
+                if asset_shot_folder:
+                    new_root_folder_path = os.path.join(scenes_path, asset_shot_folder)
+                else:
+                    new_root_folder_path = scenes_path
+                new_asset_shot_folder = os.path.join(new_root_folder_path, asset_shot_name)
+                if not os.path.exists(new_asset_shot_folder):
+                    os.makedirs(new_asset_shot_folder)
+
+        self.ui.existingFile_list.clear()
+        self.populate_existing_files(current_directory=self.scene_folder_path)
+        self.ui.saverTabs.setCurrentIndex(0)
+
     def create_asset_shot(self):
         _type = self.ui.assetShot_type.currentText()
         asset_shot_name = self.ui.asset_name.text()
+        bulk_add = self.ui.bulk_add.text()
+        if bulk_add:
+            self.bulk_add()
+            return False
         if _type == 'Cams':
             message_type = 'Camera'
         elif _type == 'Char':
@@ -2031,6 +2071,7 @@ References Imported and Cleaned:
                 new_entry.setBackground(light_red)
                 new_entry.setForeground(Qt.white)
                 new_entry.setToolTip(f'Out of date! Latest version: {os.path.basename(latest_file)}')
+                self.ui.saverTabs.setCurrentIndex(1)
             else:
                 new_entry.setCheckState(Qt.Unchecked)
                 new_entry.setBackground(light_green)

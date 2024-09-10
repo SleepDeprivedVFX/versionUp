@@ -917,11 +917,7 @@ color: rgb(220, 220, 220);</string>
              <item>
               <widget class="QLabel" name="bulk_add_label">
                <property name="toolTip">
-                <string>You can add a bulk of items from a CSV file.  
-The CSV file must not have a header.
-The first column must be the asset or shot name.
-The second column must be the Type (Cams, Char, Env, Prop, Veh,, or Shot).
-Do not add a Name in the Name field if using this option.</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;You can add a bulk of items from a CSV file. &lt;/p&gt;&lt;p&gt;The CSV file must not have a header.&lt;/p&gt;&lt;p&gt;The first column must be the asset or shot name.&lt;/p&gt;&lt;p&gt;The second column must be the Type (Cams, Char, Env, Prop, Veh,, or Shot).&lt;/p&gt;&lt;p&gt;If the second column is blank, the root scenes folder will be used.&lt;/p&gt;&lt;p&gt;Do not add a Name in the Name field if using this option.&lt;/p&gt;&lt;p&gt;Bulk item add only creates the folder structures and not new files.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="text">
                 <string>Bulk Add from CSV</string>
@@ -931,11 +927,7 @@ Do not add a Name in the Name field if using this option.</string>
              <item>
               <widget class="QLineEdit" name="bulk_add">
                <property name="toolTip">
-                <string>You can add a bulk of items from a CSV file.  
-The CSV file must not have a header.
-The first column must be the asset or shot name.
-The second column must be the Type (Cams, Char, Env, Prop, Veh,, or Shot).
-Do not add a Name in the Name field if using this option.</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;You can add a bulk of items from a CSV file. &lt;/p&gt;&lt;p&gt;The CSV file must not have a header.&lt;/p&gt;&lt;p&gt;The first column must be the asset or shot name.&lt;/p&gt;&lt;p&gt;The second column must be the Type (Cams, Char, Env, Prop, Veh,, or Shot).&lt;/p&gt;&lt;p&gt;If the second column is blank, the root scenes folder will be used.&lt;/p&gt;&lt;p&gt;Do not add a Name in the Name field if using this option.&lt;/p&gt;&lt;p&gt;Bulk item add only creates the folder structures and not new files.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
               </widget>
              </item>
