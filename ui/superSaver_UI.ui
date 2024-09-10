@@ -46,6 +46,9 @@ color: rgb(220, 220, 220);</string>
        </item>
        <item>
         <widget class="QLabel" name="output_filename">
+         <property name="toolTip">
+          <string>This is the output filename and path for what's going to be saved.</string>
+         </property>
          <property name="styleSheet">
           <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
          </property>
@@ -110,6 +113,9 @@ color: rgb(220, 220, 220);</string>
                </item>
                <item>
                 <widget class="QLabel" name="version_label">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sets the version number&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
                  <property name="text">
                   <string>Version</string>
                  </property>
@@ -132,7 +138,7 @@ color: rgb(220, 220, 220);</string>
            <item>
             <widget class="QCheckBox" name="allowFileCopy">
              <property name="toolTip">
-              <string>This function overrides the default file naming.  By checking this option you make it so that the current file can be &quot;saved as&quot; another asset or shot.  Check this box to copy the current file to a new asset or shot by also selecting the folder you want to save it to in the Existing FIles list</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This function overrides the default file naming. &lt;/p&gt;&lt;p&gt;By checking this option you make it so that the current file can be &amp;quot;saved as&amp;quot; another asset or shot. &lt;/p&gt;&lt;p&gt;Check this box to copy the current file to a new asset or shot by also selecting the folder you want to save it to in the Existing FIles list&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="layoutDirection">
               <enum>Qt::LayoutDirection::RightToLeft</enum>
@@ -181,7 +187,7 @@ color: rgb(220, 220, 220);</string>
              <item>
               <widget class="QLabel" name="taksType_label">
                <property name="toolTip">
-                <string>Choose the task type for the file.  This will be appended to the filename.  Changing this at any time will rename the file to the latest version of that Task Type</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose the task type for the file.  This will be appended to the filename.  &lt;/p&gt;&lt;p&gt;Changing this at any time will rename the file to the latest version of that Task Type&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="text">
                 <string>Task Type</string>
@@ -194,7 +200,7 @@ color: rgb(220, 220, 220);</string>
              <item>
               <widget class="QComboBox" name="taskType">
                <property name="toolTip">
-                <string>Choose the task type for the file.  This will be appended to the filename.  Changing this at any time will rename the file to the latest version of that Task Type</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose the task type for the file.  This will be appended to the filename.  &lt;/p&gt;&lt;p&gt;Changing this at any time will rename the file to the latest version of that Task Type&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <item>
                 <property name="text">
@@ -457,6 +463,9 @@ color: rgb(220, 220, 220);</string>
               <layout class="QHBoxLayout" name="horizontalLayout_11">
                <item>
                 <widget class="QPushButton" name="clear_recent_btn">
+                 <property name="toolTip">
+                  <string>Clears the recent file history</string>
+                 </property>
                  <property name="text">
                   <string>Clear Recent History</string>
                  </property>
@@ -488,7 +497,7 @@ color: rgb(220, 220, 220);</string>
              <item>
               <widget class="QLabel" name="existingFile_label">
                <property name="toolTip">
-                <string>These are the existing files in your project.  Double click or use the open command to open them.  You can also use this list to set the name of a new file or a file with Allow File Copy From --&gt; To checked.</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;These are the existing files in your project.  &lt;/p&gt;&lt;p&gt;Double click or use the open command to open them.  &lt;/p&gt;&lt;p&gt;You can also use this list to set the name of a new file or a file with Allow File Copy From --&amp;gt; To checked.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="styleSheet">
                 <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
@@ -504,7 +513,7 @@ color: rgb(220, 220, 220);</string>
              <item>
               <widget class="QTreeWidget" name="existingFile_list">
                <property name="toolTip">
-                <string>These are the existing files in your project.  Double click or use the open command to open them.  You can also use this list to set the name of a new file or a file with Allow File Copy From --&gt; To checked.</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;These are the existing files in your project.  &lt;/p&gt;&lt;p&gt;Double click or use the open command to open them.  &lt;/p&gt;&lt;p&gt;You can also use this list to set the name of a new file or a file with Allow File Copy From --&amp;gt; To checked.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="frameShape">
                 <enum>QFrame::Shape::StyledPanel</enum>
@@ -569,7 +578,7 @@ color: rgb(220, 220, 220);</string>
            <item>
             <widget class="QLabel" name="snapshots_label">
              <property name="toolTip">
-              <string>Snapshots are quick saves that store a date stamped sub-version of your current file without having to version up. You can double click a snapshot to reload it into the current scene.  Unsaved changes will be prompted to auto-snapshot before loading a previous snapshot</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Snapshots are quick saves that store a date stamped sub-version of your current file without having to version up. &lt;/p&gt;&lt;p&gt;You can double click a snapshot to reload it into the current scene.  &lt;/p&gt;&lt;p&gt;Unsaved changes will be prompted to auto-snapshot before loading a previous snapshot&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="styleSheet">
               <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
@@ -585,7 +594,7 @@ color: rgb(220, 220, 220);</string>
            <item>
             <widget class="QTreeWidget" name="snapshots">
              <property name="toolTip">
-              <string>Snapshots are quick saves that store a date stamped sub-version of your current file without having to version up. You can double click a snapshot to reload it into the current scene.  Unsaved changes will be prompted to auto-snapshot before loading a previous snapshot</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Snapshots are quick saves that store a date stamped sub-version of your current file without having to version up. &lt;/p&gt;&lt;p&gt;You can double click a snapshot to reload it into the current scene.  &lt;/p&gt;&lt;p&gt;Unsaved changes will be prompted to auto-snapshot before loading a previous snapshot&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="headerHidden">
               <bool>true</bool>
@@ -703,7 +712,7 @@ color: rgb(220, 220, 220);</string>
       <attribute name="title">
        <string>Tools - Reference - Assets</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_36">
+      <layout class="QHBoxLayout" name="horizontalLayout_37">
        <item>
         <widget class="QGroupBox" name="toolsGroup">
          <property name="title">
@@ -719,6 +728,9 @@ color: rgb(220, 220, 220);</string>
           </item>
           <item>
            <widget class="QCheckBox" name="bakeCamSceneName">
+            <property name="toolTip">
+             <string>Renames the baked camera to include the shot or asset name</string>
+            </property>
             <property name="layoutDirection">
              <enum>Qt::LayoutDirection::RightToLeft</enum>
             </property>
@@ -894,6 +906,49 @@ color: rgb(220, 220, 220);</string>
             </layout>
            </item>
            <item>
+            <widget class="Line" name="line_7">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_36">
+             <item>
+              <widget class="QLabel" name="bulk_add_label">
+               <property name="toolTip">
+                <string>You can add a bulk of items from a CSV file.  
+The CSV file must not have a header.
+The first column must be the asset or shot name.
+The second column must be the Type (Cams, Char, Env, Prop, Veh,, or Shot).
+Do not add a Name in the Name field if using this option.</string>
+               </property>
+               <property name="text">
+                <string>Bulk Add from CSV</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="bulk_add">
+               <property name="toolTip">
+                <string>You can add a bulk of items from a CSV file.  
+The CSV file must not have a header.
+The first column must be the asset or shot name.
+The second column must be the Type (Cams, Char, Env, Prop, Veh,, or Shot).
+Do not add a Name in the Name field if using this option.</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="bulk_add_btn">
+               <property name="text">
+                <string>Browse...</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
             <layout class="QHBoxLayout" name="horizontalLayout_34">
              <item>
               <spacer name="horizontalSpacer_19">
@@ -927,7 +982,7 @@ color: rgb(220, 220, 220);</string>
            <item>
             <widget class="QLabel" name="referenceListLabel">
              <property name="toolTip">
-              <string>This is a list of references that have been added to your scene.  Green references are up to date.  Red references are out of date</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This is a list of references that have been added to your scene.  &lt;/p&gt;&lt;p&gt;Green references are up to date.  &lt;/p&gt;&lt;p&gt;Red references are out of date&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="styleSheet">
               <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
@@ -943,7 +998,7 @@ color: rgb(220, 220, 220);</string>
            <item>
             <widget class="QListWidget" name="referenceList">
              <property name="toolTip">
-              <string>This is a list of references that have been added to your scene.  Green references are up to date.  Red references are out of date</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This is a list of references that have been added to your scene.  &lt;/p&gt;&lt;p&gt;Green references are up to date.  &lt;/p&gt;&lt;p&gt;Red references are out of date&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="alternatingRowColors">
               <bool>true</bool>
@@ -983,9 +1038,78 @@ color: rgb(220, 220, 220);</string>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_6">
            <item>
+            <layout class="QVBoxLayout" name="verticalLayout_12">
+             <item>
+              <widget class="QLabel" name="publishes_tree_label">
+               <property name="toolTip">
+                <string>The list of items that have been published for the project</string>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
+               </property>
+               <property name="text">
+                <string>Publishes</string>
+               </property>
+               <property name="buddy">
+                <cstring>publishes_tree</cstring>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QTreeWidget" name="publishes_tree">
+               <property name="toolTip">
+                <string>The list of items that have been published for the project</string>
+               </property>
+               <property name="alternatingRowColors">
+                <bool>true</bool>
+               </property>
+               <property name="headerHidden">
+                <bool>true</bool>
+               </property>
+               <column>
+                <property name="text">
+                 <string notr="true">1</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_35">
+               <item>
+                <spacer name="horizontalSpacer_21">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="loadRef_3_btn">
+                 <property name="text">
+                  <string>Load Ref</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="import_3_btn">
+                 <property name="text">
+                  <string>Import</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item>
             <widget class="QLabel" name="assetTreeLabel">
              <property name="toolTip">
-              <string>The list of assets in the assets folder.  This is usually just FBX, OBJ or Alembic files but can be other items as well.  These files are not considered Published.</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The list of assets in the assets folder.  &lt;/p&gt;&lt;p&gt;This is usually just FBX, OBJ or Alembic files but can be other items as well.  &lt;/p&gt;&lt;p&gt;These files are not considered Published.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="styleSheet">
               <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
@@ -1001,7 +1125,7 @@ color: rgb(220, 220, 220);</string>
            <item>
             <widget class="QTreeWidget" name="assetTree">
              <property name="toolTip">
-              <string>The list of assets in the assets folder.  This is usually just FBX, OBJ or Alembic files but can be other items as well.  These files are not considered Published.</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The list of assets in the assets folder.  &lt;/p&gt;&lt;p&gt;This is usually just FBX, OBJ or Alembic files but can be other items as well.  &lt;/p&gt;&lt;p&gt;These files are not considered Published.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="alternatingRowColors">
               <bool>true</bool>
@@ -1049,75 +1173,6 @@ color: rgb(220, 220, 220);</string>
            </item>
           </layout>
          </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_12">
-           <item>
-            <widget class="QLabel" name="publishes_tree_label">
-             <property name="toolTip">
-              <string>The list of items that have been published for the project</string>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
-             </property>
-             <property name="text">
-              <string>Publishes</string>
-             </property>
-             <property name="buddy">
-              <cstring>publishes_tree</cstring>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QTreeWidget" name="publishes_tree">
-             <property name="toolTip">
-              <string>The list of items that have been published for the project</string>
-             </property>
-             <property name="alternatingRowColors">
-              <bool>true</bool>
-             </property>
-             <property name="headerHidden">
-              <bool>true</bool>
-             </property>
-             <column>
-              <property name="text">
-               <string notr="true">1</string>
-              </property>
-             </column>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_35">
-             <item>
-              <spacer name="horizontalSpacer_21">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QPushButton" name="loadRef_3_btn">
-               <property name="text">
-                <string>Load Ref</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="import_3_btn">
-               <property name="text">
-                <string>Import</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </item>
         </layout>
        </item>
       </layout>
@@ -1145,7 +1200,7 @@ color: rgb(220, 220, 220);</string>
          <item>
           <widget class="QListWidget" name="recent_projects">
            <property name="toolTip">
-            <string>A list of recently opened projects.  Double click a project to make it the default project.</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A list of recently opened projects.  &lt;/p&gt;&lt;p&gt;Double click a project to make it the default project.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
          </item>
@@ -1302,7 +1357,7 @@ color: rgb(220, 220, 220);</string>
            <item>
             <widget class="QCheckBox" name="include_subfolders">
              <property name="toolTip">
-              <string>Typical Project Subfolders: Chars, Veh, Props, Env, Shots</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Typical Project Subfolders: Cams, Chars, Veh, Props, Env, Shots&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="layoutDirection">
               <enum>Qt::LayoutDirection::RightToLeft</enum>
@@ -1585,7 +1640,7 @@ color: rgb(220, 220, 220);</string>
          <item>
           <widget class="QLabel" name="showName_label">
            <property name="toolTip">
-            <string>This is the name of the show.  By default it is the same as the root folder name of the project, but can be changed to anything</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This is the name of the show.  &lt;/p&gt;&lt;p&gt;By default it is the same as the root folder name of the project, but can be changed to anything&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>Show Name</string>
@@ -1598,7 +1653,7 @@ color: rgb(220, 220, 220);</string>
          <item>
           <widget class="QLineEdit" name="showName">
            <property name="toolTip">
-            <string>This is the name of the show.  By default it is the same as the root folder name of the project, but can be changed to anything</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This is the name of the show.  &lt;/p&gt;&lt;p&gt;By default it is the same as the root folder name of the project, but can be changed to anything&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
          </item>
@@ -1622,7 +1677,7 @@ color: rgb(220, 220, 220);</string>
          <item>
           <widget class="QLabel" name="showCodeSet_label">
            <property name="toolTip">
-            <string>The Show Code is a 3 letter code that is generated automatically and becomes the prefix for all files.  It can be changed here to anything you like</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The Show Code is a 3 letter code that is generated automatically and becomes the prefix for all files.  &lt;/p&gt;&lt;p&gt;It can be changed here to anything you like&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>Show Code</string>
@@ -1641,7 +1696,7 @@ color: rgb(220, 220, 220);</string>
             </sizepolicy>
            </property>
            <property name="toolTip">
-            <string>The Show Code is a 3 letter code that is generated automatically and becomes the prefix for all files.  It can be changed here to anything you like</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The Show Code is a 3 letter code that is generated automatically and becomes the prefix for all files.  &lt;/p&gt;&lt;p&gt;It can be changed here to anything you like&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
          </item>
@@ -1987,7 +2042,7 @@ color: rgb(220, 220, 220);</string>
          <item>
           <widget class="QCheckBox" name="autoload">
            <property name="toolTip">
-            <string>Auto Load on Startup makes Sans Pipe open when Maya opens and replaces the default Ctrl + Shift + S hotkey command with the Sans Pipe version up utility.  Unchecking this resets the hotkey to its default setting</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Auto Load on Startup makes Sans Pipe open when Maya opens and replaces the default Ctrl + Shift + S hotkey command with the Sans Pipe version up utility.  &lt;/p&gt;&lt;p&gt;Unchecking this resets the hotkey to its default setting&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="layoutDirection">
             <enum>Qt::LayoutDirection::RightToLeft</enum>

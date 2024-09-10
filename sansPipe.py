@@ -9,18 +9,9 @@ Notes can be reviewed on the right side by clicking on existing files.
 """
 
 # FIXME: There are a few issues that I've discovered so far.
-#  1. The version number is not properly changing when the task type is changed.  It still saves the version shown up
-#  top.
 #  2. The Overwrite function won't work due to the issue with the first fix me
 #  3. The Recent Files menu is doubling up on files
 
-"""
-TODO: List - Upgrades needed
-    1. Integrate into Maya startup routine or module
-    2. Make sure everything updates the ui.
-    3. Connect all the settings tab settings to actual settings.
-    4. Create new model file with new asset and include model cube and measurements.
-"""
 
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
 from PySide6.QtWidgets import *
@@ -58,7 +49,7 @@ def uninitializePlugin(mobject):
         om.MGlobal.displayError("Failed to deregister sansPipe plugin")
 
 
-__version__ = '1.2.6'
+__version__ = '1.2.7'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -1061,8 +1052,22 @@ class sansPipe(QWidget):
             return False
 
     def create_camera(self):
-        print('This will eventually create a camera with the proper show filmback and setup.')
-        pass
+        filmback_w = float(self.ui.filmback_width)
+        filmback_h = float(self.ui.filmback_height)
+        mult_fb_w = (filmback_w / 10) / 2.54
+        mult_fb_h = (filmback_h / 10) / 2.54
+        scene_scale = float(self.ui.sceneScale)
+        aspect_ratio = mult_fb_w / mult_fb_h
+        base_name = self.ui.filename.text()
+        show_code = self.ui.showCode.text()
+        cam_name = f'{show_code}_{base_name}_shotCam'
+        new_cam = cmds.camera(vfa=mult_fb_h, hfa=mult_fb_w, ar=aspect_ratio, fl=35, coi=5, lsr=1, hfo=0, vfo=0,
+                              ff='Fill', ovr=1, mb=0, sa=144, ncp=1, fcp=10000000, o=False, ow=30, pze=False, hpn=0,
+                              vpn=0, zom=1)
+        new_cam_parent = cmds.listRelatives(new_cam, p=True)
+        cmds.select(new_cam_parent, r=True)
+        cmds.rename(cam_name)
+        cmds.scale(scene_scale, scene_scale, scene_scale)
 
     def show_file_selection_info(self, item, column):
         # Load selection info

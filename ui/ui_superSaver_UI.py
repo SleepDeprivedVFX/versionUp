@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIfnsHbG.ui'
+## Form generated from reading UI file 'superSaver_UIGEBqfB.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -397,8 +397,8 @@ class Ui_SaveAs(object):
         self.saverTabs.addTab(self.MainTab, "")
         self.ToolsTab = QWidget()
         self.ToolsTab.setObjectName(u"ToolsTab")
-        self.horizontalLayout_36 = QHBoxLayout(self.ToolsTab)
-        self.horizontalLayout_36.setObjectName(u"horizontalLayout_36")
+        self.horizontalLayout_37 = QHBoxLayout(self.ToolsTab)
+        self.horizontalLayout_37.setObjectName(u"horizontalLayout_37")
         self.toolsGroup = QGroupBox(self.ToolsTab)
         self.toolsGroup.setObjectName(u"toolsGroup")
         self.verticalLayout_4 = QVBoxLayout(self.toolsGroup)
@@ -450,7 +450,7 @@ class Ui_SaveAs(object):
         self.verticalLayout_4.addItem(self.verticalSpacer)
 
 
-        self.horizontalLayout_36.addWidget(self.toolsGroup)
+        self.horizontalLayout_37.addWidget(self.toolsGroup)
 
         self.verticalLayout_11 = QVBoxLayout()
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
@@ -502,6 +502,33 @@ class Ui_SaveAs(object):
 
         self.verticalLayout_10.addLayout(self.horizontalLayout_33)
 
+        self.line_7 = QFrame(self.ToolsTab)
+        self.line_7.setObjectName(u"line_7")
+        self.line_7.setFrameShape(QFrame.Shape.HLine)
+        self.line_7.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.verticalLayout_10.addWidget(self.line_7)
+
+        self.horizontalLayout_36 = QHBoxLayout()
+        self.horizontalLayout_36.setObjectName(u"horizontalLayout_36")
+        self.bulk_add_label = QLabel(self.ToolsTab)
+        self.bulk_add_label.setObjectName(u"bulk_add_label")
+
+        self.horizontalLayout_36.addWidget(self.bulk_add_label)
+
+        self.bulk_add = QLineEdit(self.ToolsTab)
+        self.bulk_add.setObjectName(u"bulk_add")
+
+        self.horizontalLayout_36.addWidget(self.bulk_add)
+
+        self.bulk_add_btn = QPushButton(self.ToolsTab)
+        self.bulk_add_btn.setObjectName(u"bulk_add_btn")
+
+        self.horizontalLayout_36.addWidget(self.bulk_add_btn)
+
+
+        self.verticalLayout_10.addLayout(self.horizontalLayout_36)
+
         self.horizontalLayout_34 = QHBoxLayout()
         self.horizontalLayout_34.setObjectName(u"horizontalLayout_34")
         self.horizontalSpacer_19 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
@@ -551,12 +578,52 @@ class Ui_SaveAs(object):
         self.verticalLayout_11.addLayout(self.verticalLayout_5)
 
 
-        self.horizontalLayout_36.addLayout(self.verticalLayout_11)
+        self.horizontalLayout_37.addLayout(self.verticalLayout_11)
 
         self.verticalLayout_13 = QVBoxLayout()
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
         self.verticalLayout_6 = QVBoxLayout()
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.verticalLayout_12 = QVBoxLayout()
+        self.verticalLayout_12.setObjectName(u"verticalLayout_12")
+        self.publishes_tree_label = QLabel(self.ToolsTab)
+        self.publishes_tree_label.setObjectName(u"publishes_tree_label")
+        self.publishes_tree_label.setStyleSheet(u"font: 700 12pt \"Segoe UI\";")
+
+        self.verticalLayout_12.addWidget(self.publishes_tree_label)
+
+        self.publishes_tree = QTreeWidget(self.ToolsTab)
+        __qtreewidgetitem2 = QTreeWidgetItem()
+        __qtreewidgetitem2.setText(0, u"1");
+        self.publishes_tree.setHeaderItem(__qtreewidgetitem2)
+        self.publishes_tree.setObjectName(u"publishes_tree")
+        self.publishes_tree.setAlternatingRowColors(True)
+        self.publishes_tree.setHeaderHidden(True)
+
+        self.verticalLayout_12.addWidget(self.publishes_tree)
+
+        self.horizontalLayout_35 = QHBoxLayout()
+        self.horizontalLayout_35.setObjectName(u"horizontalLayout_35")
+        self.horizontalSpacer_21 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_35.addItem(self.horizontalSpacer_21)
+
+        self.loadRef_3_btn = QPushButton(self.ToolsTab)
+        self.loadRef_3_btn.setObjectName(u"loadRef_3_btn")
+
+        self.horizontalLayout_35.addWidget(self.loadRef_3_btn)
+
+        self.import_3_btn = QPushButton(self.ToolsTab)
+        self.import_3_btn.setObjectName(u"import_3_btn")
+
+        self.horizontalLayout_35.addWidget(self.import_3_btn)
+
+
+        self.verticalLayout_12.addLayout(self.horizontalLayout_35)
+
+
+        self.verticalLayout_6.addLayout(self.verticalLayout_12)
+
         self.assetTreeLabel = QLabel(self.ToolsTab)
         self.assetTreeLabel.setObjectName(u"assetTreeLabel")
         self.assetTreeLabel.setStyleSheet(u"font: 700 12pt \"Segoe UI\";")
@@ -564,9 +631,9 @@ class Ui_SaveAs(object):
         self.verticalLayout_6.addWidget(self.assetTreeLabel)
 
         self.assetTree = QTreeWidget(self.ToolsTab)
-        __qtreewidgetitem2 = QTreeWidgetItem()
-        __qtreewidgetitem2.setText(0, u"1");
-        self.assetTree.setHeaderItem(__qtreewidgetitem2)
+        __qtreewidgetitem3 = QTreeWidgetItem()
+        __qtreewidgetitem3.setText(0, u"1");
+        self.assetTree.setHeaderItem(__qtreewidgetitem3)
         self.assetTree.setObjectName(u"assetTree")
         self.assetTree.setAlternatingRowColors(True)
         self.assetTree.setHeaderHidden(True)
@@ -595,48 +662,8 @@ class Ui_SaveAs(object):
 
         self.verticalLayout_13.addLayout(self.verticalLayout_6)
 
-        self.verticalLayout_12 = QVBoxLayout()
-        self.verticalLayout_12.setObjectName(u"verticalLayout_12")
-        self.publishes_tree_label = QLabel(self.ToolsTab)
-        self.publishes_tree_label.setObjectName(u"publishes_tree_label")
-        self.publishes_tree_label.setStyleSheet(u"font: 700 12pt \"Segoe UI\";")
 
-        self.verticalLayout_12.addWidget(self.publishes_tree_label)
-
-        self.publishes_tree = QTreeWidget(self.ToolsTab)
-        __qtreewidgetitem3 = QTreeWidgetItem()
-        __qtreewidgetitem3.setText(0, u"1");
-        self.publishes_tree.setHeaderItem(__qtreewidgetitem3)
-        self.publishes_tree.setObjectName(u"publishes_tree")
-        self.publishes_tree.setAlternatingRowColors(True)
-        self.publishes_tree.setHeaderHidden(True)
-
-        self.verticalLayout_12.addWidget(self.publishes_tree)
-
-        self.horizontalLayout_35 = QHBoxLayout()
-        self.horizontalLayout_35.setObjectName(u"horizontalLayout_35")
-        self.horizontalSpacer_21 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_35.addItem(self.horizontalSpacer_21)
-
-        self.loadRef_3_btn = QPushButton(self.ToolsTab)
-        self.loadRef_3_btn.setObjectName(u"loadRef_3_btn")
-
-        self.horizontalLayout_35.addWidget(self.loadRef_3_btn)
-
-        self.import_3_btn = QPushButton(self.ToolsTab)
-        self.import_3_btn.setObjectName(u"import_3_btn")
-
-        self.horizontalLayout_35.addWidget(self.import_3_btn)
-
-
-        self.verticalLayout_12.addLayout(self.horizontalLayout_35)
-
-
-        self.verticalLayout_13.addLayout(self.verticalLayout_12)
-
-
-        self.horizontalLayout_36.addLayout(self.verticalLayout_13)
+        self.horizontalLayout_37.addLayout(self.verticalLayout_13)
 
         self.saverTabs.addTab(self.ToolsTab, "")
         self.projectTab = QWidget()
@@ -1297,8 +1324,8 @@ class Ui_SaveAs(object):
         self.assetShot_type_label.setBuddy(self.assetShot_type)
         self.asset_name_label.setBuddy(self.asset_name)
         self.referenceListLabel.setBuddy(self.referenceList)
-        self.assetTreeLabel.setBuddy(self.assetTree)
         self.publishes_tree_label.setBuddy(self.publishes_tree)
+        self.assetTreeLabel.setBuddy(self.assetTree)
         self.set_project_label.setBuddy(self.set_project)
         self.new_project_name_label.setBuddy(self.new_project_name)
         self.new_project_folder_Label.setBuddy(self.new_project_folder)
@@ -1348,6 +1375,9 @@ class Ui_SaveAs(object):
     def retranslateUi(self, SaveAs):
         SaveAs.setWindowTitle(QCoreApplication.translate("SaveAs", u"Super Saver", None))
         self.Title.setText(QCoreApplication.translate("SaveAs", u"Save As...", None))
+#if QT_CONFIG(tooltip)
+        self.output_filename.setToolTip(QCoreApplication.translate("SaveAs", u"This is the output filename and path for what's going to be saved.", None))
+#endif // QT_CONFIG(tooltip)
         self.output_filename.setText(QCoreApplication.translate("SaveAs", u"output filename", None))
         self.naming_label.setText(QCoreApplication.translate("SaveAs", u"Naming", None))
 #if QT_CONFIG(tooltip)
@@ -1358,12 +1388,15 @@ class Ui_SaveAs(object):
         self.customNaming.setToolTip(QCoreApplication.translate("SaveAs", u"Custom Naming - Only if the auto naming isn't right, or you want a special name", None))
 #endif // QT_CONFIG(tooltip)
         self.customNaming.setText(QCoreApplication.translate("SaveAs", u"Custom", None))
+#if QT_CONFIG(tooltip)
+        self.version_label.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>Sets the version number</p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
         self.version_label.setText(QCoreApplication.translate("SaveAs", u"Version", None))
 #if QT_CONFIG(tooltip)
         self.version.setToolTip(QCoreApplication.translate("SaveAs", u"File Version Number", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
-        self.allowFileCopy.setToolTip(QCoreApplication.translate("SaveAs", u"This function overrides the default file naming.  By checking this option you make it so that the current file can be \"saved as\" another asset or shot.  Check this box to copy the current file to a new asset or shot by also selecting the folder you want to save it to in the Existing FIles list", None))
+        self.allowFileCopy.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>This function overrides the default file naming. </p><p>By checking this option you make it so that the current file can be &quot;saved as&quot; another asset or shot. </p><p>Check this box to copy the current file to a new asset or shot by also selecting the folder you want to save it to in the Existing FIles list</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.allowFileCopy.setText(QCoreApplication.translate("SaveAs", u"Allow File Copy From --> To", None))
 #if QT_CONFIG(tooltip)
@@ -1378,7 +1411,7 @@ class Ui_SaveAs(object):
 #endif // QT_CONFIG(tooltip)
         self.folder_btn.setText(QCoreApplication.translate("SaveAs", u"Browse...", None))
 #if QT_CONFIG(tooltip)
-        self.taksType_label.setToolTip(QCoreApplication.translate("SaveAs", u"Choose the task type for the file.  This will be appended to the filename.  Changing this at any time will rename the file to the latest version of that Task Type", None))
+        self.taksType_label.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>Choose the task type for the file.  This will be appended to the filename.  </p><p>Changing this at any time will rename the file to the latest version of that Task Type</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.taksType_label.setText(QCoreApplication.translate("SaveAs", u"Task Type", None))
         self.taskType.setItemText(0, QCoreApplication.translate("SaveAs", u"model", None))
@@ -1394,7 +1427,7 @@ class Ui_SaveAs(object):
         self.taskType.setItemText(10, QCoreApplication.translate("SaveAs", u"prototype", None))
 
 #if QT_CONFIG(tooltip)
-        self.taskType.setToolTip(QCoreApplication.translate("SaveAs", u"Choose the task type for the file.  This will be appended to the filename.  Changing this at any time will rename the file to the latest version of that Task Type", None))
+        self.taskType.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>Choose the task type for the file.  This will be appended to the filename.  </p><p>Changing this at any time will rename the file to the latest version of that Task Type</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
         self.fileType_label.setToolTip(QCoreApplication.translate("SaveAs", u"Maya file type.  Either Ascii or Binary", None))
@@ -1432,23 +1465,26 @@ class Ui_SaveAs(object):
 #if QT_CONFIG(tooltip)
         self.recentFilesList.setToolTip(QCoreApplication.translate("SaveAs", u"Recently Opened Files List.  Double click to quick re-open", None))
 #endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.clear_recent_btn.setToolTip(QCoreApplication.translate("SaveAs", u"Clears the recent file history", None))
+#endif // QT_CONFIG(tooltip)
         self.clear_recent_btn.setText(QCoreApplication.translate("SaveAs", u"Clear Recent History", None))
 #if QT_CONFIG(tooltip)
-        self.existingFile_label.setToolTip(QCoreApplication.translate("SaveAs", u"These are the existing files in your project.  Double click or use the open command to open them.  You can also use this list to set the name of a new file or a file with Allow File Copy From --> To checked.", None))
+        self.existingFile_label.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>These are the existing files in your project.  </p><p>Double click or use the open command to open them.  </p><p>You can also use this list to set the name of a new file or a file with Allow File Copy From --&gt; To checked.</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.existingFile_label.setText(QCoreApplication.translate("SaveAs", u"Existing Files", None))
 #if QT_CONFIG(tooltip)
-        self.existingFile_list.setToolTip(QCoreApplication.translate("SaveAs", u"These are the existing files in your project.  Double click or use the open command to open them.  You can also use this list to set the name of a new file or a file with Allow File Copy From --> To checked.", None))
+        self.existingFile_list.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>These are the existing files in your project.  </p><p>Double click or use the open command to open them.  </p><p>You can also use this list to set the name of a new file or a file with Allow File Copy From --&gt; To checked.</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.import_btn.setText(QCoreApplication.translate("SaveAs", u"Import", None))
         self.load_btn.setText(QCoreApplication.translate("SaveAs", u"Load Ref", None))
         self.open_btn.setText(QCoreApplication.translate("SaveAs", u"Open", None))
 #if QT_CONFIG(tooltip)
-        self.snapshots_label.setToolTip(QCoreApplication.translate("SaveAs", u"Snapshots are quick saves that store a date stamped sub-version of your current file without having to version up. You can double click a snapshot to reload it into the current scene.  Unsaved changes will be prompted to auto-snapshot before loading a previous snapshot", None))
+        self.snapshots_label.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>Snapshots are quick saves that store a date stamped sub-version of your current file without having to version up. </p><p>You can double click a snapshot to reload it into the current scene.  </p><p>Unsaved changes will be prompted to auto-snapshot before loading a previous snapshot</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.snapshots_label.setText(QCoreApplication.translate("SaveAs", u"Snapshots", None))
 #if QT_CONFIG(tooltip)
-        self.snapshots.setToolTip(QCoreApplication.translate("SaveAs", u"Snapshots are quick saves that store a date stamped sub-version of your current file without having to version up. You can double click a snapshot to reload it into the current scene.  Unsaved changes will be prompted to auto-snapshot before loading a previous snapshot", None))
+        self.snapshots.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>Snapshots are quick saves that store a date stamped sub-version of your current file without having to version up. </p><p>You can double click a snapshot to reload it into the current scene.  </p><p>Unsaved changes will be prompted to auto-snapshot before loading a previous snapshot</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
         self.version_notes_label.setToolTip(QCoreApplication.translate("SaveAs", u"This shows notes for the current file selected in the Existing Files list", None))
@@ -1476,6 +1512,9 @@ class Ui_SaveAs(object):
         self.saverTabs.setTabText(self.saverTabs.indexOf(self.MainTab), QCoreApplication.translate("SaveAs", u"Save - Publish - Snap", None))
         self.toolsGroup.setTitle(QCoreApplication.translate("SaveAs", u"Tools", None))
         self.bakeCam_btn.setText(QCoreApplication.translate("SaveAs", u"Bake Camera", None))
+#if QT_CONFIG(tooltip)
+        self.bakeCamSceneName.setToolTip(QCoreApplication.translate("SaveAs", u"Renames the baked camera to include the shot or asset name", None))
+#endif // QT_CONFIG(tooltip)
         self.bakeCamSceneName.setText(QCoreApplication.translate("SaveAs", u"Use Shot/Asset as Cam Name", None))
         self.createCam_btn.setText(QCoreApplication.translate("SaveAs", u"Create Camera", None))
         self.fbxPub_btn.setText(QCoreApplication.translate("SaveAs", u"Publish Selection as FBX", None))
@@ -1506,26 +1545,33 @@ class Ui_SaveAs(object):
         self.asset_name.setToolTip(QCoreApplication.translate("SaveAs", u"The name or the asset or shot.  Do not add show codes or other details that you don't want added to the name", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
+        self.bulk_add_label.setToolTip(QCoreApplication.translate("SaveAs", u"You can add a bulk of items from a CSV file.  \n"
+"The CSV file must not have a header.\n"
+"The first column must be the asset or shot name.\n"
+"The second column must be the Type (Cams, Char, Env, Prop, Veh,, or Shot).\n"
+"Do not add a Name in the Name field if using this option.", None))
+#endif // QT_CONFIG(tooltip)
+        self.bulk_add_label.setText(QCoreApplication.translate("SaveAs", u"Bulk Add from CSV", None))
+#if QT_CONFIG(tooltip)
+        self.bulk_add.setToolTip(QCoreApplication.translate("SaveAs", u"You can add a bulk of items from a CSV file.  \n"
+"The CSV file must not have a header.\n"
+"The first column must be the asset or shot name.\n"
+"The second column must be the Type (Cams, Char, Env, Prop, Veh,, or Shot).\n"
+"Do not add a Name in the Name field if using this option.", None))
+#endif // QT_CONFIG(tooltip)
+        self.bulk_add_btn.setText(QCoreApplication.translate("SaveAs", u"Browse...", None))
+#if QT_CONFIG(tooltip)
         self.make_asset_btn.setToolTip(QCoreApplication.translate("SaveAs", u"Creates the asset or shot", None))
 #endif // QT_CONFIG(tooltip)
         self.make_asset_btn.setText(QCoreApplication.translate("SaveAs", u"Make Asset/Shot", None))
 #if QT_CONFIG(tooltip)
-        self.referenceListLabel.setToolTip(QCoreApplication.translate("SaveAs", u"This is a list of references that have been added to your scene.  Green references are up to date.  Red references are out of date", None))
+        self.referenceListLabel.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>This is a list of references that have been added to your scene.  </p><p>Green references are up to date.  </p><p>Red references are out of date</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.referenceListLabel.setText(QCoreApplication.translate("SaveAs", u"Loaded References", None))
 #if QT_CONFIG(tooltip)
-        self.referenceList.setToolTip(QCoreApplication.translate("SaveAs", u"This is a list of references that have been added to your scene.  Green references are up to date.  Red references are out of date", None))
+        self.referenceList.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>This is a list of references that have been added to your scene.  </p><p>Green references are up to date.  </p><p>Red references are out of date</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.updateRefs_btn.setText(QCoreApplication.translate("SaveAs", u"Update Selected", None))
-#if QT_CONFIG(tooltip)
-        self.assetTreeLabel.setToolTip(QCoreApplication.translate("SaveAs", u"The list of assets in the assets folder.  This is usually just FBX, OBJ or Alembic files but can be other items as well.  These files are not considered Published.", None))
-#endif // QT_CONFIG(tooltip)
-        self.assetTreeLabel.setText(QCoreApplication.translate("SaveAs", u"Assets", None))
-#if QT_CONFIG(tooltip)
-        self.assetTree.setToolTip(QCoreApplication.translate("SaveAs", u"The list of assets in the assets folder.  This is usually just FBX, OBJ or Alembic files but can be other items as well.  These files are not considered Published.", None))
-#endif // QT_CONFIG(tooltip)
-        self.loadRef_2_btn.setText(QCoreApplication.translate("SaveAs", u"Load Ref", None))
-        self.import_2_btn.setText(QCoreApplication.translate("SaveAs", u"Import", None))
 #if QT_CONFIG(tooltip)
         self.publishes_tree_label.setToolTip(QCoreApplication.translate("SaveAs", u"The list of items that have been published for the project", None))
 #endif // QT_CONFIG(tooltip)
@@ -1535,13 +1581,22 @@ class Ui_SaveAs(object):
 #endif // QT_CONFIG(tooltip)
         self.loadRef_3_btn.setText(QCoreApplication.translate("SaveAs", u"Load Ref", None))
         self.import_3_btn.setText(QCoreApplication.translate("SaveAs", u"Import", None))
+#if QT_CONFIG(tooltip)
+        self.assetTreeLabel.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>The list of assets in the assets folder.  </p><p>This is usually just FBX, OBJ or Alembic files but can be other items as well.  </p><p>These files are not considered Published.</p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.assetTreeLabel.setText(QCoreApplication.translate("SaveAs", u"Assets", None))
+#if QT_CONFIG(tooltip)
+        self.assetTree.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>The list of assets in the assets folder.  </p><p>This is usually just FBX, OBJ or Alembic files but can be other items as well.  </p><p>These files are not considered Published.</p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.loadRef_2_btn.setText(QCoreApplication.translate("SaveAs", u"Load Ref", None))
+        self.import_2_btn.setText(QCoreApplication.translate("SaveAs", u"Import", None))
         self.saverTabs.setTabText(self.saverTabs.indexOf(self.ToolsTab), QCoreApplication.translate("SaveAs", u"Tools - Reference - Assets", None))
 #if QT_CONFIG(tooltip)
         self.recent_project_label.setToolTip(QCoreApplication.translate("SaveAs", u"A list of recently opened projects.  Double click a project to make it the default project.", None))
 #endif // QT_CONFIG(tooltip)
         self.recent_project_label.setText(QCoreApplication.translate("SaveAs", u"Recent Projects", None))
 #if QT_CONFIG(tooltip)
-        self.recent_projects.setToolTip(QCoreApplication.translate("SaveAs", u"A list of recently opened projects.  Double click a project to make it the default project.", None))
+        self.recent_projects.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>A list of recently opened projects.  </p><p>Double click a project to make it the default project.</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
         self.projects_label.setToolTip(QCoreApplication.translate("SaveAs", u"Quickly set a project.  This works the same as the default Maya Set Project feature", None))
@@ -1558,7 +1613,7 @@ class Ui_SaveAs(object):
         self.new_project_folder_btn.setText(QCoreApplication.translate("SaveAs", u"Browse...", None))
         self.scenes_label.setText(QCoreApplication.translate("SaveAs", u"Scenes", None))
 #if QT_CONFIG(tooltip)
-        self.include_subfolders.setToolTip(QCoreApplication.translate("SaveAs", u"Typical Project Subfolders: Chars, Veh, Props, Env, Shots", None))
+        self.include_subfolders.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>Typical Project Subfolders: Cams, Chars, Veh, Props, Env, Shots</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.include_subfolders.setText(QCoreApplication.translate("SaveAs", u"Include Subfolders", None))
         self.assets_label.setText(QCoreApplication.translate("SaveAs", u"Assets", None))
@@ -1576,18 +1631,18 @@ class Ui_SaveAs(object):
         self.create_project_btn.setText(QCoreApplication.translate("SaveAs", u"Create Project", None))
         self.saverTabs.setTabText(self.saverTabs.indexOf(self.projectTab), QCoreApplication.translate("SaveAs", u"Project Settings", None))
 #if QT_CONFIG(tooltip)
-        self.showName_label.setToolTip(QCoreApplication.translate("SaveAs", u"This is the name of the show.  By default it is the same as the root folder name of the project, but can be changed to anything", None))
+        self.showName_label.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>This is the name of the show.  </p><p>By default it is the same as the root folder name of the project, but can be changed to anything</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.showName_label.setText(QCoreApplication.translate("SaveAs", u"Show Name", None))
 #if QT_CONFIG(tooltip)
-        self.showName.setToolTip(QCoreApplication.translate("SaveAs", u"This is the name of the show.  By default it is the same as the root folder name of the project, but can be changed to anything", None))
+        self.showName.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>This is the name of the show.  </p><p>By default it is the same as the root folder name of the project, but can be changed to anything</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
-        self.showCodeSet_label.setToolTip(QCoreApplication.translate("SaveAs", u"The Show Code is a 3 letter code that is generated automatically and becomes the prefix for all files.  It can be changed here to anything you like", None))
+        self.showCodeSet_label.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>The Show Code is a 3 letter code that is generated automatically and becomes the prefix for all files.  </p><p>It can be changed here to anything you like</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.showCodeSet_label.setText(QCoreApplication.translate("SaveAs", u"Show Code", None))
 #if QT_CONFIG(tooltip)
-        self.showCodeSet.setToolTip(QCoreApplication.translate("SaveAs", u"The Show Code is a 3 letter code that is generated automatically and becomes the prefix for all files.  It can be changed here to anything you like", None))
+        self.showCodeSet.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>The Show Code is a 3 letter code that is generated automatically and becomes the prefix for all files.  </p><p>It can be changed here to anything you like</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
         self.defaultResolution_label.setToolTip(QCoreApplication.translate("SaveAs", u"The default rendering resolution for the project.  Setting it here also sets your render settings in the project", None))
@@ -1654,7 +1709,7 @@ class Ui_SaveAs(object):
         self.recent_file_count.setToolTip(QCoreApplication.translate("SaveAs", u"This sets the number of Recent Files listed in the Recent File history", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
-        self.autoload.setToolTip(QCoreApplication.translate("SaveAs", u"Auto Load on Startup makes Sans Pipe open when Maya opens and replaces the default Ctrl + Shift + S hotkey command with the Sans Pipe version up utility.  Unchecking this resets the hotkey to its default setting", None))
+        self.autoload.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>Auto Load on Startup makes Sans Pipe open when Maya opens and replaces the default Ctrl + Shift + S hotkey command with the Sans Pipe version up utility.  </p><p>Unchecking this resets the hotkey to its default setting</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.autoload.setText(QCoreApplication.translate("SaveAs", u"Auto Load on Startup", None))
 #if QT_CONFIG(tooltip)
