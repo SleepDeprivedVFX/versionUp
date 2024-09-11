@@ -2056,7 +2056,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         Cams = Cameras - this is for specialty camera rigs.
         Char = Characters
         Env = Environments
-        Prop = Props
+        Props = Props
         Shot = Shots
         Veh = Vehicles
 
@@ -2129,8 +2129,8 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             message_type = 'Character'
         elif _type == 'Env':
             message_type = 'Environment'
-        elif _type == 'Prop':
-            message_type = 'Prop'
+        elif _type == 'Props':
+            message_type = 'Props'
         elif _type == 'Veh':
             message_type = 'Vehicle'
         else:
