@@ -10,6 +10,30 @@ It saves notes and information with every file that is created.  It can also be 
 new assets and folder structures on the fly.
 """
 
+"""
+Version 1.3 Goals:
+    1. Create a dynamically loading toolset:
+        This would add buttons to the tools, menu and shelf based on tools added to either A) a sansPipe_tools.py script
+        or B) by searching for and dynamically adding tools added to a bin folder.
+    2. Split all existing tools into a separate file that could be accessed either by the UI or by the shelf or menu.
+    3. Add Playblast record keeping, and perhaps organize playblasts into their own folder.
+        It would also be great if these could be played from a specific shot.
+    4. May want to add task folders to better organize how each section is delineated.
+        Scenes > Char > CharacterName > Model
+        Scenes > Char > CharacterName > LookDev
+        Scenes > Char > CharacterName > Rig
+    5. Add some Project Level collection system.  
+        This would go through the root project, look for database JSON files and output an Excel sheet that would list
+        all existing projects and their current statuses.
+    6. Add task statuses.
+        This could be a really good one to add.
+    7. UI enhancements (Related to some of the above):
+        a. Add Task Statuses
+        b. Add a Playblasts section to... somewhere.
+        c. Add a reports section.
+    8. Unify SansPipe to work with either PySide6 or PySide2
+"""
+
 
 from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
 from PySide6.QtWidgets import *
@@ -1293,7 +1317,15 @@ class sansPipe(QWidget):
         :return:
         """
         # Load selection info
-        file_info = item.data(0, Qt.UserRole)
+        try:
+            file_info = item.data(0, Qt.UserRole)
+            print(f'testing file_info: {file_info}')
+        except AttributeError as e:
+            print(f'Shit hit the fan {e}')
+            item = self.ui.existingFile_list.currentItem()
+            print(f'item: {item}')
+            file_info = item.data(0, Qt.UserRole)
+            print('Attempted fix from UI')
         file_text = item.text(0)
         if file_info:
             folder_name = file_info['folder']
@@ -1750,8 +1782,9 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             self.message(text='UNABLE TO SAVE SNAPSHOT!!', ok=False)
         self.ui.notes.clear()
         self.message(text='File snapshot --> %s' % datetime_stamp, ok=True)
-        current_file_item = self.ui.existingFile_list.currentItem()
-        self.ui.existingFile_list.itemClicked.emit(current_file_item, 0)
+        current_file_item = self.ui.existingFile_list.selectedItems()[0]
+        current_file_column = self.ui.existingFile_list.currentColumn()
+        self.ui.existingFile_list.itemClicked.emit(current_file_item, current_file_column)
 
     def open_recent_file(self, f=False):
         """
@@ -2860,5 +2893,5 @@ References Imported and Cleaned:
         self.settings.setValue('autoload', self.ui.autoload.isChecked())
 
 
-# if __name__ == '__main__':
-#     saveas = sansPipe()
+if __name__ == '__main__':
+    saveas = sansPipe()
