@@ -4,7 +4,7 @@ import os
 import sys
 from PySide6.QtCore import QSettings
 
-__version__ = '1.2.8'
+__version__ = '1.2.9'
 __author__ = 'Adam Benson'
 
 settings = QSettings(__author__, 'Sans Pipe Super Saver')
@@ -80,8 +80,49 @@ def create_sans_pipe_menu():
     # cmds.menuItem(label='Another Custom Command', command=lambda: print("Another command triggered"))
 
 
+# Function to check if the hotkey set is locked by testing temporary command creation
+def is_hotkey_set_locked():
+    try:
+        # Create a temporary runtime command
+        if not cmds.runTimeCommand('tempCommand', exists=True):
+            cmds.runTimeCommand('tempCommand', ann='Temp Command', c='print("Temp Command")', default=True)
+
+        # Try to assign it to a temporary hotkey
+        cmds.hotkey(k='F12', name='tempCommand')
+
+        # Clean up by removing the temp hotkey and runtime command
+        cmds.hotkey(k='F12', name='')
+        cmds.runTimeCommand('tempCommand', edit=True, delete=True)
+
+        return False  # If no errors, the set isn't locked
+    except RuntimeError:
+        return True  # If there are errors, the set is likely locked
+
+
+# Function to create a new hotkey set and copy hotkeys
+def create_new_hotkey_set():
+    current_hotkey_set = cmds.hotkeySet(query=True, current=True)
+    new_hotkey_set = "custom_hotkey_set"
+
+    # Create a new hotkey set based on the current one
+    if not cmds.hotkeySet(new_hotkey_set, exists=True):
+        cmds.hotkeySet(new_hotkey_set, source=current_hotkey_set)  # This copies the current set
+        print(f"New hotkey set '{new_hotkey_set}' created and unlocked.")
+
+    # Switch to the new hotkey set
+    cmds.hotkeySet(new_hotkey_set, edit=True, current=True)
+    print(f"Switched to new hotkey set: {new_hotkey_set}")
+
+    return new_hotkey_set
+
+
 def setup_hotkey():
     if autoload:
+        current_hotkey_set = cmds.hotkeySet(q=True, current=True)
+        is_default = (current_hotkey_set == 'Maya_Default')
+        is_locked = is_hotkey_set_locked()
+        if is_locked or is_default:
+            create_new_hotkey_set()
         cmds.nameCommand('customSaveAsCommand', ann='SansPipe Save As...', command='python("override_save_as()")')
         cmds.hotkey(k='S', name='customSaveAsCommand', ctl=True, sht=True)
         print('Hotkey Ctrl + Shift + S overridden')
