@@ -4,7 +4,7 @@
 ## Form generated from reading UI file 'superSaver_UIcJWbGv.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
-##
+## V1.3.0
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
