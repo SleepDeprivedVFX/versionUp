@@ -10,7 +10,7 @@ except ImportError:
     except ImportError:
         raise RuntimeError('No PySide6 or PySide2 detected!')
 
-__version__ = '1.2.10'
+__version__ = '1.2.11'
 __author__ = 'Adam Benson'
 
 settings = QSettings(__author__, 'Sans Pipe Super Saver')

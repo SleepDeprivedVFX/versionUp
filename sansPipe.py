@@ -79,7 +79,7 @@ def uninitializePlugin(mobject):
         om.MGlobal.displayError("Failed to deregister sansPipe plugin")
 
 
-__version__ = '1.2.10'
+__version__ = '1.2.11'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -2884,7 +2884,7 @@ References Imported and Cleaned:
             'filename': os.path.basename(self.current_file_path),
             'path': self.current_file_path
         }
-        if this_file_data not in self.recent_files:
+        if this_file_data not in self.recent_files and this_file_data != {'filename': '', 'path': ''}:
             self.recent_files.insert(0, this_file_data)
         self.settings.setValue('recent_files', self.recent_files)
         if len(self.recent_projects) >= 5:
