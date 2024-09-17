@@ -2893,5 +2893,5 @@ References Imported and Cleaned:
         self.settings.setValue('autoload', self.ui.autoload.isChecked())
 
 
-if __name__ == '__main__':
-    saveas = sansPipe()
+# if __name__ == '__main__':
+#     saveas = sansPipe()
