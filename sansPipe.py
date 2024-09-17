@@ -31,6 +31,9 @@ Version 1.3 Goals:
         a. Add Task Statuses
         b. Add a Playblasts section to... somewhere.
         c. Add a reports section.
+    8. Make the UI stay opened if references are out of date on a recently opened file
+    9. Filtering on trees:
+        Task filtering for both Existing File and Publishes. Only show Chars.  Only show Rigs
 """
 
 from maya import cmds
