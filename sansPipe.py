@@ -1,4 +1,4 @@
-# Sans-Pipe Maya Light Pipeline Utility - MAYA 2025 +
+# Sans-Pipe Maya Light Pipeline Utility - MAYA 20xx +
 
 """
 The SANS-PIPE LIGHT PIPELINE UTILITY is a pipeline-free versioning and saving system for Maya.
@@ -64,7 +64,15 @@ import platform
 import configparser
 import csv
 
+# Temporary fix.  This gets removed when it gets ported over to the working drive
+shit_path = 'c:/users/sleep/onedrive/documents/scripts/python/maya/utilities/sansPipe'
+if shit_path not in sys.path:
+    sys.path.append(shit_path)
+# END Temporary fix
+
+import sp_tools as sp
 from ui import ui_superSaver_UI as ssui
+
 
 def initializePlugin(mobject):
     mplugin = om_mpx.MFnPlugin(mobject)  # Use MFnPlugin from maya.OpenMayaMPx
