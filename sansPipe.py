@@ -31,13 +31,26 @@ Version 1.3 Goals:
         a. Add Task Statuses
         b. Add a Playblasts section to... somewhere.
         c. Add a reports section.
-    8. Unify SansPipe to work with either PySide6 or PySide2
 """
 
+from maya import cmds
+import maya.OpenMaya as om_old  # Old API for MObject
+import maya.OpenMayaMPx as om_mpx  # Old API for MFnPlugin
+import maya.api.OpenMaya as om  # New API for other operations
 
-from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
-from PySide6.QtWidgets import *
-from PySide6.QtGui import *
+try:
+    from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
+    from PySide6.QtWidgets import *
+    from PySide6.QtGui import *
+    print('PySide6 detected.')
+except ImportError:
+    try:
+        from PySide2.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
+        from PySide2.QtWidgets import *
+        from PySide2.QtGui import *
+        print('PySide2 detected.')
+    except ImportError:
+        raise RuntimeError('Neither PySide 6 or PySide 2 detected!')
 import os
 import sys
 import re
@@ -49,12 +62,6 @@ import configparser
 import csv
 
 from ui import ui_superSaver_UI as ssui
-
-from maya import cmds
-import maya.OpenMaya as om_old  # Old API for MObject
-import maya.OpenMayaMPx as om_mpx  # Old API for MFnPlugin
-import maya.api.OpenMaya as om  # New API for other operations
-
 
 def initializePlugin(mobject):
     mplugin = om_mpx.MFnPlugin(mobject)  # Use MFnPlugin from maya.OpenMayaMPx
@@ -72,7 +79,7 @@ def uninitializePlugin(mobject):
         om.MGlobal.displayError("Failed to deregister sansPipe plugin")
 
 
-__version__ = '1.2.9'
+__version__ = '1.2.10'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
