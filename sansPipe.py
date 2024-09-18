@@ -65,12 +65,12 @@ import configparser
 import csv
 
 # Temporary fix.  This gets removed when it gets ported over to the working drive
-shit_path = 'c:/users/sleep/onedrive/documents/scripts/python/maya/utilities/sansPipe'
+shit_path = 'c:/users/sleep/onedrive/documents/scripts/python/maya/utilities/sansPipe/'
 if shit_path not in sys.path:
     sys.path.append(shit_path)
 # END Temporary fix
 
-import sp_tools as sp
+import sp_tools as sptk
 from ui import ui_superSaver_UI as ssui
 
 
@@ -144,197 +144,6 @@ class sansPipe(QWidget):
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.pattern = r'(_v\d+)|(_V\d+)'
 
-        # Set the project constants.
-        self.tasks = {
-            "model": [
-                'model',
-                'MDL',
-                'mdl',
-                'Model',
-                'MODEL'
-                ],
-            "lookdev": [
-                'lookdev',
-                'Surfacing',
-                'SRF',
-                'surface',
-                'surfacing',
-                'Surface',
-                'SUR',
-                'srf',
-                'sur',
-                'LookDev',
-                'LKD',
-                'lkd',
-                'Lookdev',
-                'LOOKDEV',
-                'VisDev',
-                'visdev',
-                'vsd',
-                'VSD'
-                ],
-            "rig": [
-                'rig',
-                'Rig',
-                'RIG',
-                'rigging',
-                'Rigging',
-                'RIGGING'
-                ],
-            "anim": [
-                'anim',
-                'Animation',
-                'ANIM',
-                'animation',
-                'anm',
-                'ANM',
-                'Anim',
-                ],
-            "lighting": [
-                'lighting',
-                'Lighting',
-                'LGT',
-                'Light',
-                'lgt',
-                'light',
-                'LIGHT',
-                'LIGHTING',
-                'Lgt'
-            ],
-            "sculpt": [
-                'sculpt',
-                'Sculpt',
-                'SCPT',
-                'scpt',
-                'sclpt',
-                'spt',
-                'scl'
-                'SCLPT',
-                'SPT',
-                'SCL'
-                ],
-            "groom": [
-                'groom',
-                'Groom',
-                'GRM',
-                'grm',
-                'hair',
-                'Hair',
-                'HAIR',
-                'fur',
-                'FUR',
-                'Fur'
-            ],
-            "fx": [
-                'fx',
-                'Dynamics',
-                'FX',
-                'dyn',
-                'DYN',
-                'DYNAMICS',
-                'dynamics',
-                'Fluids',
-                'Fluid',
-                'FLD',
-                'fld',
-                'fluid',
-                'fluids',
-                'smoke',
-                'Smoke',
-                'SMOKE',
-                'smk',
-                'SMK',
-                'Fire',
-                'fire',
-                'Particles',
-                'particles',
-                'ptl',
-                'PTL',
-                'SIM',
-                'sim'
-                ],
-            "cloth": [
-                'cloth',
-                'Cloth',
-                'CLTH',
-                'clth',
-                'CTH',
-                'cth'
-                ],
-            "prototype": [
-                'prototype',
-                'Prototype',
-                'PROTO',
-                'Proto',
-                'prt',
-                'PRT',
-                'proto'
-            ],
-            "previs": [
-                'previs',
-                'Previs',
-                'PreVis',
-                'PRV',
-                'PVS',
-                'pre'
-            ],
-            "layout": [
-                'layout',
-                'Layout',
-                'LayOut',
-                'LAY',
-                'LYO',
-                'lay'
-            ]
-        }
-        self.invalidCharacters = [
-            ' ',
-            '+',
-            '=',
-            '@',
-            '-',
-            '&',
-            '*',
-            '!',
-            '#',
-            '$',
-            '%',
-            '^',
-            '(',
-            ')',
-            '|',
-            '\\',
-            '/',
-            '?',
-            ':',
-            ';',
-            '<',
-            '>',
-            ',',
-            '[',
-            ']',
-            '{',
-            '}',
-            '`',
-            '~',
-            '\'',
-            '"'
-        ]
-        self.cameraNames = [
-            'shotcam',
-            'camera',
-            'shot',
-            'scenecamera',
-            'scenecam',
-            'cam',
-            'shot_cam',
-            'shot_camera',
-            'scene_cam',
-            'scene_camera'
-        ]
-        self.cameraAttributes = ['translateX', 'translateY', 'translateZ', 'rotateX', 'rotateY', 'rotateZ',
-                                 'scaleX', 'scaleY', 'scaleZ', 'visibility', 'centerOfInterest']
-
         # Initialize the root and task variables
         self.root_name = None
         self.task = None
@@ -361,18 +170,33 @@ class sansPipe(QWidget):
         if not os.path.exists(self.config_path):
             self.build_config_file(path=self.config_path)
 
+        # Get Global Variables from JSON
+        # NOTE: this is temporary
+        sp_global_vars = os.path.join(shit_path, 'sp_global_vars.json')
+        sp_global_vars = sp_global_vars.replace('\\', '/')
+        with open(sp_global_vars, 'r') as global_vars:
+            globVars = json.load(global_vars)
+        # Set the project constants.
+        self.tasks = globVars['tasks']
+        self.invalidCharacters = globVars['invalidCharacters']
+        self.cameraNames = globVars['cameraNames']
+        self.cameraAttributes = globVars['cameraAttributes']
+
         # Create the QSettings for information storage.  This information gets accessed by the userSetup.py as well.
         self.settings = QSettings(__author__, 'Sans Pipe Super Saver')
         self.position = self.settings.value('geometry', None)
-        self.appendartist = self.settings.value('appendArtist', None)
-        self.recent_files = self.settings.value('recent_files', [])
-        self.recent_projects = self.settings.value('recent_projects', [])
-        self.bakeCamSceneName = self.settings.value('bake_cam_scene_name', None)
-        self.autosave = self.settings.value('autosave', None)
-        self.asset_shot_type = self.settings.value('asset_shot', None)
-        self.render_output = self.settings.value('render_output', None)
-        self.auto_load_on_startup = self.settings.value('autoload', None)
+        self.appendartist = self.settings.value('appendArtist', None, type=bool)
+        self.recent_files = self.settings.value('recent_files', [], type=list)
+        self.recent_projects = self.settings.value('recent_projects', [], type=list)
+        self.bakeCamSceneName = self.settings.value('bake_cam_scene_name', None, type=bool)
+        self.autosave = self.settings.value('autosave', None, type=bool)
+        self.asset_shot_type = self.settings.value('asset_shot', None, type=str)
+        self.render_output = self.settings.value('render_output', None, type=str)
+        self.auto_load_on_startup = self.settings.value('autoload', None, type=bool)
         self.restoreGeometry(self.position)
+
+        # Create SP Tool Kit
+        self.sptk = sptk.sp_toolkit()
 
         # Populate the Recent Files list
         if self.recent_files:
@@ -385,24 +209,6 @@ class sansPipe(QWidget):
             self.populate_recent_projects()
         else:
             self.recent_projects = []
-
-        # Fix boolean checkboxes.
-        if self.appendartist == 'true':
-            self.appendartist = True
-        else:
-            self.appendartist = False
-        if self.bakeCamSceneName == 'true':
-            self.bakeCamSceneName = True
-        else:
-            self.bakeCamSceneName = False
-        if self.autosave == 'true':
-            self.autosave = True
-        else:
-            self.autosave = False
-        if self.auto_load_on_startup == 'true':
-            self.auto_load_on_startup = True
-        else:
-            self.auto_load_on_startup = False
 
         # Set the boolean checkboxes
         self.ui.AppendArtist.setChecked(self.appendartist)
@@ -570,7 +376,7 @@ class sansPipe(QWidget):
         self.ui.publish_btn.clicked.connect(self.publish)
         self.check_button_state(btn=self.ui.publish_btn)
         self.ui.load_btn.clicked.connect(lambda: self.load_ref(element=self.ui.existingFile_list))
-        self.ui.bakeCam_btn.clicked.connect(self.start_cam_bake)
+        self.ui.bakeCam_btn.clicked.connect(self.run_cam_bake)
         self.ui.import_btn.clicked.connect(lambda: self.import_object(element=self.ui.existingFile_list))
         self.ui.import_2_btn.clicked.connect(lambda: self.import_object(element=self.ui.assetTree))
         self.ui.loadRef_2_btn.clicked.connect(lambda: self.load_ref(element=self.ui.assetTree))
@@ -2631,130 +2437,24 @@ References Imported and Cleaned:
         else:
             self.message(text='The file could not be found!', ok=False)
 
-    def start_cam_bake(self):
+    def run_cam_bake(self):
         """
         This function starts the process of baking out the current scene camera and saves out an FBX into the Assets
         folder in a Shot_Cams sub-folder.
         :return:
         """
-        self.message(text='Baking Camera...', ok=True)
-        bake_camera = self.cam_bake()
-        if bake_camera:
-            get_scene_name = cmds.file(q=True, sn=True)
-            data = self.get_root_and_task(filename=get_scene_name)
-            scene_name = os.path.splitext(os.path.basename(get_scene_name))[0]
-            get_root_path = cmds.workspace(q=True, rd=True)
-            task = data['task_name']
-            if task in scene_name:
-                cam_name = scene_name.replace(task, 'cam')
-                cam_name = cam_name + '.fbx'
-            else:
-                cam_name = 'shot_cam.fbx'
-
-            cmds.select(bake_camera, r=True)
-            output_path = os.path.join(get_root_path, 'assets/Shot_Cams')
-            output_file = os.path.join(output_path, cam_name)
-            try:
-                cmds.file(
-                    output_file,
-                    f=True,
-                    options=";exportUVs=1;exportSkels=none;exportSkin=none;exportBlendShapes=0;exportDisplayColor=0;exportColorSets=1;exportComponentTags=1;defaultMeshScheme=catmullClark;animation=0;eulerFilter=0;staticSingleSample=0;startTime=1;endTime=1;frameStride=1;frameSample=0.0;defaultUSDFormat=usdc;rootPrim=;rootPrimType=scope;defaultPrim=shotCam_baked;shadingMode=useRegistry;convertMaterialsTo=[UsdPreviewSurface];exportRelativeTextures=automatic;exportInstances=1;exportVisibility=1;mergeTransformAndShape=1;stripNamespaces=0;worldspace=0;excludeExportTypes=[]",
-                    type='FBX Export', pr=True, es=True, ex=False
-                )
-            except RuntimeError as e:
-                cmds.warning(f'Could not bake the camera!  Could be a permissions issue, or some other failure: {e}')
-                self.message(text='Could NOT bake camera! Make sure Folder Permissions are set in your OS!', ok=False)
-            cmds.select(bake_camera, r=True)
-            cmds.delete()
-            notes = (f'Automatic camera bake for {scene_name}.  Camera name: {bake_camera[0]}  '
-                     f'Output filename: {os.path.basename(output_file)}')
+        data = self.get_root_and_task(filename=cmds.file(q=True, sn=True))
+        self.hide()
+        cam_bake = self.sptk.start_cam_bake(data=data)
+        self.show()
+        if cam_bake:
+            notes = cam_bake['notes']
+            output_file = cam_bake['output']
+            cam_name = cam_bake['cam_name']
             self.create_note(notes=notes, output_file=output_file)
             self.message(text='Camera baked successfully: %s' % cam_name, ok=True)
         else:
             self.message(text='Camera could not be baked!', ok=False)
-
-    def cam_bake(self):
-        """
-        This method does the actual baking of the shot camera.  It creates a duplicate camera, parents it in world space
-        to the current scene camera and bakes out the keyframes for that camera.
-        :return:
-        """
-        cam_transform = None
-        all_cams = cmds.ls(ca=True)
-        for cam in all_cams:
-            if self.ui.bakeCamSceneName.isChecked():
-                if self.root_name in cam:
-                    cmds.select(cam, r=True)
-                    find_trans = cmds.listRelatives(cam, p=True)
-                    if find_trans:
-                        check_trans = cmds.objectType(find_trans[0])
-                        if check_trans == 'transform':
-                            cam_transform = find_trans[0]
-                            break
-                        else:
-                            return False
-                    else:
-                        return False
-                else:
-                    for name in self.cameraNames:
-                        if name in cam:
-                            cmds.select(cam, r=True)
-                            find_trans = cmds.listRelatives(cam, p=True)
-                            if find_trans:
-                                check_trans = cmds.objectType(find_trans[0])
-                                if check_trans == 'transform':
-                                    cam_transform = find_trans[0]
-                                    break
-                                else:
-                                    return False
-                            else:
-                                return False
-            else:
-                for name in self.cameraNames:
-                    if name in cam:
-                        cmds.select(cam, r=True)
-                        find_trans = cmds.listRelatives(cam, p=True)
-                        if find_trans:
-                            check_trans = cmds.objectType(find_trans[0])
-                            if check_trans == 'transform':
-                                cam_transform = find_trans[0]
-                                break
-                            else:
-                                return False
-                        else:
-                            return False
-        if cam_transform:
-            cmds.select(cam_transform, r=True)
-            # Unlock the camera
-            for attr in self.cameraAttributes:
-                cmds.setAttr(f'{cam_transform}.{attr}', lock=False)
-
-            # Duplicate and bake
-            if cam_transform and self.root_name not in cam_transform:
-                new_cam_name = '%s_%s' % (self.root_name, cam_transform)
-            else:
-                new_cam_name = cam_transform
-            cmds.duplicate(n='%s_baked' % new_cam_name)
-            dup_cam = cmds.ls(sl=True)
-            cmds.Unparent()
-            cmds.select(cam_transform, r=True)
-            cmds.select(dup_cam, tgl=True)
-            do_constraint = cmds.parentConstraint(mo=True, weight=1)
-            constraint = do_constraint[0]
-            cmds.select(dup_cam, r=True)
-            startFrame = cmds.playbackOptions(query=True, minTime=True)
-            endFrame = cmds.playbackOptions(query=True, maxTime=True)
-            cmds.bakeResults(dup_cam, sm=True, time=(startFrame, endFrame), sb=1, osr=1, dic=True, pok=True, sac=True,
-                             rba=False, ral=False, bol=False, mr=True, cp=False, s=True)
-            cmds.delete(constraint)
-
-            # Relock the main cam
-            for attr in self.cameraAttributes:
-                cmds.setAttr(f'{cam_transform}.{attr}', lock=True)
-
-            # Return the duplicate
-            return dup_cam
-        return False
 
     def export_selection(self, export_type=None):
         """
@@ -2911,5 +2611,5 @@ References Imported and Cleaned:
         self.settings.setValue('autoload', self.ui.autoload.isChecked())
 
 
-# if __name__ == '__main__':
-#     saveas = sansPipe()
+if __name__ == '__main__':
+    saveas = sansPipe()

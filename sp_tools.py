@@ -12,34 +12,81 @@ import re
 import json
 import time
 from datetime import datetime
+import configparser
+
+try:
+    from PySide6.QtCore import QSettings
+    print('PySide6 detected.')
+except ImportError:
+    try:
+        from PySide2.QtCore import QSettings
+        print('PySide2 detected.')
+    except ImportError:
+        raise RuntimeError('Neither PySide 6 or PySide 2 detected!')
+
+# Temporary fix.  This gets removed when it gets ported over to the working drive
+shit_path = 'c:/users/sleep/onedrive/documents/scripts/python/maya/utilities/sansPipe/'
+
+__version__ = '1.3.0'
+__author__ = 'Adam Benson'
 
 
 class sp_toolkit(object):
     def __init__(self):
         """
-        This may eventually need to process data from the config_file
+        Processing the global setups for the overall system
         """
-        pass
+        # Get the configuration and variables files for the project
+        self.workspace = cmds.workspace(q=True, rd=True)
+        self.config_path = os.path.join(self.workspace, 'show_config.cfg')
+        if not os.path.exists(self.config_path):
+            cmds.warning('No configuration file exists.  Please run SansPile for the first time.')
+
+        # Get the configurations from the show_config.cfg file.
+        config = configparser.ConfigParser()
+        config.read(self.config_path)
+        self.show_code = config['Project']['Show_Code']
+        self.project_name = config['Project']['Show_Name']
+        self.res_width = config['Camera']['resolution_width']
+        self.res_height = config['Camera']['resolution_height']
+        self.filmback_width = config['Camera']['filmback_width']
+        self.filmback_height = config['Camera']['filmback_height']
+        self.scene_scale = config['Scene']['scene_scale']
+        self.recent_file_count = int(config['Project']['recent_file_count'])
+        self.autosave_interval = int(config['Scene']['autosave_interval'])
+
+        # Get Global Variables from JSON
+        # NOTE: this is temporary
+        sp_global_vars = os.path.join(shit_path, 'sp_global_vars.json')
+        sp_global_vars = sp_global_vars.replace('\\', '/')
+        with open(sp_global_vars, 'r') as global_vars:
+            globVars = json.load(global_vars)
+        # Set the project constants.
+        self.tasks = globVars['tasks']
+        self.invalidCharacters = globVars['invalidCharacters']
+        self.cameraNames = globVars['cameraNames']
+        self.cameraAttributes = globVars['cameraAttributes']
+
+        # Get the QSettings from the Super Saver
+        self.settings = QSettings(__author__, 'Sans Pipe Super Saver')
+        self.appendartist = self.settings.value('appendArtist', None, type=bool)
+        self.bakeCamSceneName = self.settings.value('bake_cam_scene_name', None, type=bool)
 
     def create_camera(self):
         """
         Creates a new camera using the film back and scene scale settings from the UI.  Asks for a focal length.
         :return:
         """
-        # NOTE: filmback info can be acquired from the config
-        filmback_w = float(self.ui.filmback_width.text())
-        filmback_h = float(self.ui.filmback_height.text())
+        filmback_w = float(self.filmback_width)
+        filmback_h = float(self.filmback_height)
         mult_fb_w = (filmback_w / 10) / 2.54
         mult_fb_h = (filmback_h / 10) / 2.54
-        # NOTE: Scene Scale can be acquired from the config
-        scene_scale = float(self.ui.sceneScale.text())
+        scene_scale = float(self.scene_scale)
         aspect_ratio = mult_fb_w / mult_fb_h
         # NOTE: base_name is tricky.
         base_name = self.ui.filename.text()
-        # NOTE: show_code can be acquired from the config.
-        show_code = self.ui.showCode.text()
+        show_code = self.show_code
         cam_name = f'{show_code}_{base_name}_shotCam'
-        self.hide()
         result = cmds.promptDialog(
             title='Camera Focal Length',
             message='Focal Length (numeric value in mm):',
@@ -70,19 +117,16 @@ class sp_toolkit(object):
         cmds.rename(cam_name)
         cmds.scale(scene_scale, scene_scale, scene_scale)
 
-    def start_cam_bake(self):
+    def start_cam_bake(self, data=None):
         """
         This function starts the process of baking out the current scene camera and saves out an FBX into the Assets
         folder in a Shot_Cams sub-folder.
         :return:
         """
-        # NOTE: This has no connection to the UI
-        self.message(text='Baking Camera...', ok=True)
-        bake_camera = self.cam_bake()
+        cmds.inViewMessage(amg="Baking Camera...", pos='midCenter', fade=True)
+        bake_camera = self.cam_bake(root_name=data['root_name'])
         if bake_camera:
             get_scene_name = cmds.file(q=True, sn=True)
-            # NOTE: data doesn't have access to get_root_and_task() here.
-            data = self.get_root_and_task(filename=get_scene_name)
             scene_name = os.path.splitext(os.path.basename(get_scene_name))[0]
             get_root_path = cmds.workspace(q=True, rd=True)
             task = data['task_name']
@@ -109,13 +153,13 @@ class sp_toolkit(object):
             cmds.delete()
             notes = (f'Automatic camera bake for {scene_name}.  Camera name: {bake_camera[0]}  '
                      f'Output filename: {os.path.basename(output_file)}')
-            # NOTE: create_note and message aren't accessible here.
-            self.create_note(notes=notes, output_file=output_file)
-            self.message(text='Camera baked successfully: %s' % cam_name, ok=True)
-        else:
-            self.message(text='Camera could not be baked!', ok=False)
 
-    def cam_bake(self):
+            cmds.inViewMessage(amg=f"Camera Baked Successfully! {cam_name}", pos='midCenter', fade=True)
+            return {'notes': notes, 'output': output_file, 'cam_name': cam_name}
+        else:
+            return None
+
+    def cam_bake(self, root_name=None):
         """
         This method does the actual baking of the shot camera.  It creates a duplicate camera, parents it in world space
         to the current scene camera and bakes out the keyframes for that camera.
@@ -124,10 +168,8 @@ class sp_toolkit(object):
         cam_transform = None
         all_cams = cmds.ls(ca=True)
         for cam in all_cams:
-            # NOTE: no access to the UI here, but could get this from QSettings
-            if self.ui.bakeCamSceneName.isChecked():
-                # NOTE: no access to root_name here.
-                if self.root_name in cam:
+            if self.bakeCamSceneName:
+                if root_name in cam:
                     cmds.select(cam, r=True)
                     find_trans = cmds.listRelatives(cam, p=True)
                     if find_trans:
@@ -140,7 +182,6 @@ class sp_toolkit(object):
                     else:
                         return False
                 else:
-                    # NOTE: self.cameraNames are not currently accessible, but I want to isolate them anyways.
                     for name in self.cameraNames:
                         if name in cam:
                             cmds.select(cam, r=True)
@@ -171,13 +212,12 @@ class sp_toolkit(object):
         if cam_transform:
             cmds.select(cam_transform, r=True)
             # Unlock the camera
-            # NOTE: cameraAttributes aren't accessible here, but I want to split them out anyways.
             for attr in self.cameraAttributes:
                 cmds.setAttr(f'{cam_transform}.{attr}', lock=False)
 
             # Duplicate and bake
-            if cam_transform and self.root_name not in cam_transform:
-                new_cam_name = '%s_%s' % (self.root_name, cam_transform)
+            if cam_transform and root_name not in cam_transform:
+                new_cam_name = '%s_%s' % (root_name, cam_transform)
             else:
                 new_cam_name = cam_transform
             cmds.duplicate(n='%s_baked' % new_cam_name)
