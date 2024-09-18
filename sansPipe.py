@@ -182,6 +182,14 @@ class sansPipe(QWidget):
         self.cameraNames = globVars['cameraNames']
         self.cameraAttributes = globVars['cameraAttributes']
 
+        # Set initial artist field
+        artist = os.environ[env_user]
+        first_initials = artist[0:2]
+        first_initials = first_initials.upper()
+        last_name = artist[2:]
+        artist = first_initials + last_name
+        self.ui.artistName.setText(artist)
+
         # Create the QSettings for information storage.  This information gets accessed by the userSetup.py as well.
         self.settings = QSettings(__author__, 'Sans Pipe Super Saver')
         self.position = self.settings.value('geometry', None)
@@ -193,6 +201,7 @@ class sansPipe(QWidget):
         self.asset_shot_type = self.settings.value('asset_shot', None, type=str)
         self.render_output = self.settings.value('render_output', None, type=str)
         self.auto_load_on_startup = self.settings.value('autoload', None, type=bool)
+        self.artist = self.settings.value('artist_name', None, type=str)
         self.restoreGeometry(self.position)
 
         # Create SP Tool Kit
@@ -220,14 +229,6 @@ class sansPipe(QWidget):
 
         # Check Autosave Settings
         self.set_autosave()
-
-        # Set initial artist field
-        artist = os.environ[env_user]
-        first_initials = artist[0:2]
-        first_initials = first_initials.upper()
-        last_name = artist[2:]
-        artist = first_initials + last_name
-        self.ui.artistName.setText(artist)
 
         # Get the configurations from the show_config.cfg file.
         config = configparser.ConfigParser()
@@ -750,6 +751,7 @@ class sansPipe(QWidget):
                                 root_name = root_name.rstrip('_')
                             if root_name.startswith(show_code):
                                 root_name = root_name.replace(show_code, '')
+                                root_name = root_name.lstrip('_')
                             if root_name.startswith('_'):
                                 root_name = root_name.lstrip('_')
                             artist_ = '{artist}_'.format(artist=artist)
@@ -1089,45 +1091,13 @@ class sansPipe(QWidget):
         Creates a new camera using the film back and scene scale settings from the UI.  Asks for a focal length.
         :return:
         """
-        filmback_w = float(self.ui.filmback_width.text())
-        filmback_h = float(self.ui.filmback_height.text())
-        mult_fb_w = (filmback_w / 10) / 2.54
-        mult_fb_h = (filmback_h / 10) / 2.54
-        scene_scale = float(self.ui.sceneScale.text())
-        aspect_ratio = mult_fb_w / mult_fb_h
-        base_name = self.ui.filename.text()
-        show_code = self.ui.showCode.text()
-        cam_name = f'{show_code}_{base_name}_shotCam'
         self.hide()
-        result = cmds.promptDialog(
-            title='Camera Focal Length',
-            message='Focal Length (numeric value in mm):',
-            button=['Accept', 'Cancel'],
-            defaultButton='Accept',
-            cancelButton='Cancel',
-            dismissString='Cancel',
-            text=str(35.0)
-        )
-        if result == 'Accept':
-            input_value = cmds.promptDialog(q=True, text=True)
-            try:
-                focal_length = float(input_value)
-            except ValueError as e:
-                cmds.warning(f'Improper focal length value: {e}')
-                self.show()
-                return False
-        else:
-            focal_length = 35.0
-            self.show()
-            return False
+        create_cam = self.sptk.create_camera()
         self.show()
-        new_cam = cmds.camera(vfa=mult_fb_h, hfa=mult_fb_w, ar=aspect_ratio, fl=focal_length, coi=5, lsr=1, hfo=0,
-                              vfo=0, ff='Fill', ovr=1, mb=0, sa=144, ncp=1, fcp=10000000, o=False, ow=30, pze=False,
-                              hpn=0, vpn=0, zom=1)
-        new_cam_parent = cmds.listRelatives(new_cam, p=True)
-        cmds.select(new_cam_parent, r=True)
-        cmds.rename(cam_name)
-        cmds.scale(scene_scale, scene_scale, scene_scale)
+        if create_cam:
+            self.message(text=f'{create_cam} Camera created', ok=True)
+        else:
+            self.message(text='Unable to create camera!', ok=False)
 
     def show_file_selection_info(self, item, column):
         """
@@ -2543,16 +2513,8 @@ References Imported and Cleaned:
         folder.
         :return:
         """
-        res_width = int(self.ui.resolutionWidth.text())
-        res_height = int(self.ui.resolutionHeight.text())
-        movies_folder = cmds.workspace(fre='movie')
-        filename = cmds.file(q=True, sn=True, shn=True)
-        basename = os.path.splitext(filename)[0]
-        filename = basename + '.mov'
-        output = os.path.join(movies_folder, filename)
-        cmds.playblast(format='qt', filename=output, sequenceTime=0, clearCache=1, viewer=1, showOrnaments=1, fp=4,
-                       percent=100, compression='PNG', quality=70, widthHeight=(res_width, res_height), exposure=0,
-                       gamma=1, fo=True)
+        self.hide()
+        playblast = self.sptk.playblast()
         self.close()
 
     def render_settings(self):
@@ -2609,6 +2571,7 @@ References Imported and Cleaned:
         self.settings.setValue('asset_shot', self.ui.assetShot_type.currentText())
         self.settings.setValue('render_output', self.ui.image_format.currentText())
         self.settings.setValue('autoload', self.ui.autoload.isChecked())
+        self.settings.setValue('artist_name', self.ui.artistName.text())
 
 
 if __name__ == '__main__':

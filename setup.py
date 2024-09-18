@@ -8,7 +8,7 @@ setup(
     author_email='AdamBenson.vfx@gmail.com',
     packages=find_packages(exclude=['setup.py', 'userSetup.py', '__init__.py']),
     include_package_data=True,
-    py_modules=['sansPipe'],  # Include other files (like resources) specified in MANIFEST.in
+    py_modules=['sansPipe', 'sp_tools'],  # Include other files (like resources) specified in MANIFEST.in
     install_requires=[],  # List any external dependencies (PySide6 not needed since Maya includes it)
     entry_points={
         'console_scripts': [

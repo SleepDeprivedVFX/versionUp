@@ -13,6 +13,9 @@ except ImportError:
 __version__ = '1.3.0'
 __author__ = 'Adam Benson'
 
+# Temporary fix.  This gets removed when it gets ported over to the working drive
+shit_path = 'c:/users/sleep/onedrive/documents/scripts/python/maya/utilities/sansPipe/'
+
 settings = QSettings(__author__, 'Sans Pipe Super Saver')
 autoload = settings.value('autoload', None)
 if autoload == 'true':
@@ -37,7 +40,7 @@ def load_sansPipe():
 
     # Verify if the sansPipe folder exists
     if not os.path.exists(sans_pipe_folder):
-        print(f"Plugin folder {sans_pipe_folder} does not exist.")
+        cmds.error(f"Plugin folder {sans_pipe_folder} does not exist.")
         return
 
     # Add the sansPipe folder to the Python path
@@ -50,9 +53,9 @@ def load_sansPipe():
             cmds.loadPlugin(os.path.join(sans_pipe_folder, 'sansPipe.py'))
         print("sansPipe plugin loaded successfully.")
     except RuntimeError as e:
-        print(f"Error loading sansPipe plugin: {e}")
+        cmds.error(f"Error loading sansPipe plugin: {e}")
     except Exception as e:
-        print(f"Failed to initialize sansPipe: {e}")
+        cmds.error(f"Failed to initialize sansPipe: {e}")
 
     try:
         import sansPipe
@@ -69,7 +72,22 @@ def override_save_as(*args):
         sansPipe.sansPipe()
         # run.sansPipe()
     except Exception as e:
-        print(f'failed to run sansPipe: {e}')
+        cmds.error(f'failed to run sansPipe: {e}')
+
+
+def run_cam_bake(*args):
+    try:
+        import sp_tools as sptk
+        sptk.sp_toolkit().start_cam_bake()
+    except Exception as e:
+        cmds.error(f'failed to run Camera Bake: {e}')
+
+def create_camera(*args):
+    try:
+        import sp_tools as sptk
+        sptk.sp_toolkit().create_camera()
+    except Exception as e:
+        cmds.error(f'Unable to create camera! {e}')
 
 
 def create_sans_pipe_menu():
@@ -84,6 +102,8 @@ def create_sans_pipe_menu():
     cmds.menuItem(label='Sans Pipe Saver...', command=override_save_as)
     # You can add more menu items as needed
     # cmds.menuItem(label='Another Custom Command', command=lambda: print("Another command triggered"))
+    cmds.menuItem(label='Bake Camera', command=run_cam_bake)
+    cmds.menuItem(label='Create Camera', command=create_camera)
 
 
 # Function to check if the hotkey set is locked by testing temporary command creation

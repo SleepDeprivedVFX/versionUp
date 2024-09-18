@@ -71,6 +71,47 @@ class sp_toolkit(object):
         self.settings = QSettings(__author__, 'Sans Pipe Super Saver')
         self.appendartist = self.settings.value('appendArtist', None, type=bool)
         self.bakeCamSceneName = self.settings.value('bake_cam_scene_name', None, type=bool)
+        self.artist_name = self.settings.value('artist_name', None, type=str)
+
+    def get_data(self):
+        """
+        This attempts to get as much data as the main UI to help fill in variables.
+        :return:
+        """
+        filepath = cmds.file(q=True, sn=True)
+        if not filepath:
+            print('You must save the file first!')
+            return
+        filename = os.path.basename(filepath)
+        root_name = None
+        task_name = None
+        task_abbr = None
+        data = None
+        show_code = self.show_code
+        artist_name = self.artist_name
+        for task in self.tasks.keys():
+            for abbr in self.tasks[task]:
+                root_name = filename.split(abbr)[0]
+                task_abbr = abbr
+                task_name = task
+                if root_name.endswith('_'):
+                    root_name = root_name.rstrip('_')
+                if root_name.startswith(show_code):
+                    root_name = root_name.replace(show_code, '')
+                    root_name = root_name.lstrip('_')
+                if root_name.startswith('_'):
+                    root_name = root_name.lstrip('_')
+                artist = f'{artist_name}_'
+                if artist in root_name:
+                    root_name = root_name.replace(artist, '')
+                break
+        if root_name and task_name and task_abbr:
+            data = {
+                'root_name': root_name,
+                'task_name': task_name,
+                'task_abbr': task_abbr
+            }
+        return data
 
     def create_camera(self):
         """
@@ -83,8 +124,10 @@ class sp_toolkit(object):
         mult_fb_h = (filmback_h / 10) / 2.54
         scene_scale = float(self.scene_scale)
         aspect_ratio = mult_fb_w / mult_fb_h
-        # NOTE: base_name is tricky.
-        base_name = self.ui.filename.text()
+        data = self.get_data()
+        print(f'sptk: cc: data: {data}')
+        base_name = data['root_name']
+        print(f'sptk: cc: base_name: {base_name}')
         show_code = self.show_code
         cam_name = f'{show_code}_{base_name}_shotCam'
         result = cmds.promptDialog(
@@ -105,10 +148,8 @@ class sp_toolkit(object):
                 self.show()
                 return False
         else:
-            focal_length = 35.0
-            self.show()
             return False
-        self.show()
+
         new_cam = cmds.camera(vfa=mult_fb_h, hfa=mult_fb_w, ar=aspect_ratio, fl=focal_length, coi=5, lsr=1, hfo=0,
                               vfo=0, ff='Fill', ovr=1, mb=0, sa=144, ncp=1, fcp=10000000, o=False, ow=30, pze=False,
                               hpn=0, vpn=0, zom=1)
@@ -116,6 +157,7 @@ class sp_toolkit(object):
         cmds.select(new_cam_parent, r=True)
         cmds.rename(cam_name)
         cmds.scale(scene_scale, scene_scale, scene_scale)
+        return cam_name
 
     def start_cam_bake(self, data=None):
         """
@@ -123,6 +165,8 @@ class sp_toolkit(object):
         folder in a Shot_Cams sub-folder.
         :return:
         """
+        if not data:
+            data = self.get_data()
         cmds.inViewMessage(amg="Baking Camera...", pos='midCenter', fade=True)
         bake_camera = self.cam_bake(root_name=data['root_name'])
         if bake_camera:
@@ -241,4 +285,23 @@ class sp_toolkit(object):
             # Return the duplicate
             return dup_cam
         return False
+
+    def playblast(self):
+        """
+        Creates a playblast based on the UI Project settings and saves it with the current filename into the Movies
+        folder.
+        :return:
+        """
+        res_width = int(self.res_width)
+        res_height = int(self.res_height)
+        movies_folder = cmds.workspace(fre='movie')
+        filename = cmds.file(q=True, sn=True, shn=True)
+        basename = os.path.splitext(filename)[0]
+        filename = basename + '.mov'
+        output = os.path.join(movies_folder, filename)
+        cmds.playblast(format='qt', filename=output, sequenceTime=0, clearCache=1, viewer=1, showOrnaments=1, fp=4,
+                       percent=100, compression='PNG', quality=70, widthHeight=(res_width, res_height), exposure=0,
+                       gamma=1, fo=True)
+
+
 
