@@ -573,29 +573,22 @@ QComboBox {{
                     status = data['Status']
         return status
 
-    def set_item_status(self, item=None, status=None):
-        if item:
+    def set_item_status(self, status=None):
+        if status:
             if status == 'Ready':
-                item.setForeground(0, QColor('black'))
-                item.setBackground(0, QColor('ghostwhite'))
+                return 'black', 'ghostwhite'
             elif status == 'Waiting':
-                item.setForeground(0, QColor('darkorchid'))
-                item.setBackground(0, QColor('lavender'))
+                return 'darkorchid', 'lavender'
             elif status == 'Needs Revision':
-                item.setForeground(0, QColor('brown'))
-                item.setBackground(0, QColor('orange'))
+                return 'brown', 'orange'
             elif status == 'In Progress':
-                item.setForeground(0, QColor('darkblue'))
-                item.setBackground(0, QColor('lightskyblue'))
+                return 'darkblue', 'lightskyblue'
             elif status == 'For Review':
-                item.setForeground(0, QColor('darkcyan'))
-                item.setBackground(0, QColor('lightyellow'))
+                return 'darkcyan', 'lightyellow'
             elif status == 'Done':
-                item.setForeground(0, QColor('darkgreen'))
-                item.setBackground(0, QColor('palegreen'))
+                return 'darkgreen', 'palegreen'
             elif status == 'Omit':
-                item.setForeground(0, QColor('red'))
-                item.setBackground(0, QColor('black'))
+                return 'red', 'black'
 
     def create_tree_context_menu(self, widget, widget_name, position):
         """
@@ -1425,7 +1418,11 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                         folder_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": ""})
                         status = self.get_item_status(folder=folder_name)
                         if status:
-                            self.set_item_status(item=folder_item, status=status)
+                            colors = self.set_item_status(status=status)
+                            fg = colors[0]
+                            bg = colors[1]
+                            folder_item.setForeground(0, QColor(fg))
+                            folder_item.setBackground(0, QColor(bg))
                         folder_items[relative_folder_name] = folder_item
                         if relative_folder_name == ".":
                             folder_items[relative_folder_name].setExpanded(True)
@@ -1454,7 +1451,11 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             subfolder_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": ""})
                             status = self.get_item_status(folder=folder_name)
                             if status:
-                                self.set_item_status(item=folder_item, status=status)
+                                colors = self.set_item_status(status=status)
+                                fg = colors[0]
+                                bg = colors[1]
+                                subfolder_item.setForeground(0, QColor(fg))
+                                subfolder_item.setBackground(0, QColor(bg))
                             folder_items[relative_subfolder_name] = subfolder_item
 
                     # Add files after subfolders, filtering by allowed extensions
@@ -1468,6 +1469,13 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                         file_item = QTreeWidgetItem(folder_items[relative_folder_name])
                         file_item.setText(0, file_name)
                         file_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": file_name})
+                        status = self.get_item_status(folder=folder_name)
+                        if status:
+                            colors = self.set_item_status(status=status)
+                            fg = colors[0]
+                            bg = colors[1]
+                            file_item.setForeground(0, QColor(fg))
+                            file_item.setBackground(0, QColor(bg))
 
                         # Highlight the currently opened file
                         if file_path == self.current_file_path:
