@@ -339,14 +339,14 @@ class sansPipe(QWidget):
         model = QStandardItemModel()
 
         # Add the drop-down items
-        self.add_colored_item(task_statuses, '-')
-        self.add_colored_item(task_statuses, 'Ready', 'black', 'ghostwhite')
-        self.add_colored_item(task_statuses, 'Waiting', 'darkorchid', 'lavender')
-        self.add_colored_item(task_statuses, 'Needs Revision', 'brown', 'orange')
-        self.add_colored_item(task_statuses, 'In Progress', 'darkblue', 'lightskyblue')
-        self.add_colored_item(task_statuses, 'For Review', 'darkcyan', 'lightyellow')
-        self.add_colored_item(task_statuses, 'Done', 'darkgreen', 'palegreen')
-        self.add_colored_item(task_statuses, 'Omit', 'red', 'black')
+        self.add_colored_item(task_statuses, model, '-')
+        self.add_colored_item(task_statuses, model, 'Ready', 'black', 'ghostwhite')
+        self.add_colored_item(task_statuses, model, 'Waiting', 'darkorchid', 'lavender')
+        self.add_colored_item(task_statuses, model, 'Needs Revision', 'brown', 'orange')
+        self.add_colored_item(task_statuses, model, 'In Progress', 'darkblue', 'lightskyblue')
+        self.add_colored_item(task_statuses, model, 'For Review', 'darkcyan', 'lightyellow')
+        self.add_colored_item(task_statuses, model, 'Done', 'darkgreen', 'palegreen')
+        self.add_colored_item(task_statuses, model, 'Omit', 'red', 'black')
         task_statuses.setModel(model)
 
         # Set the top level color of the drop-down box.
@@ -496,7 +496,7 @@ class sansPipe(QWidget):
                                                                                                      widget_name,
                                                                                                      position))
 
-    def add_colored_item(self, task_statuses, text, text_color=None, background_color=None):
+    def add_colored_item(self, task_statuses, model, text, text_color=None, background_color=None):
         """
         This populates the Task Status drop-down list with colors
         :param task_statuses: self.ui.taskStatus
@@ -517,6 +517,7 @@ class sansPipe(QWidget):
         This updates the stylesheet of the top level of the taskStatus drop-down menu
         :return:
         """
+        print('status_changed called.')
         selected_index = self.ui.taskStatus.currentIndex()
         background_color = 'dimgrey'
         text_color = 'gainsboro'
@@ -524,18 +525,23 @@ class sansPipe(QWidget):
         default_background_color = background_color
 
         if selected_index == 0:
+            print('default index')
             text_color = default_text_color
             background_color = default_background_color
         elif selected_index == 1:
+            print('index 1 - black, ghostwhite')
             text_color = 'black'
             background_color = 'ghostwhite'
         elif selected_index == 2:
+            print('index 2 - darkorchid, lavender')
             text_color = 'darkorchid'
             background_color = 'lavender'
         elif selected_index == 3:
+            print('index 3 - brown, orange')
             text_color = 'brown'
             background_color = 'orange'
         elif selected_index == 4:
+            print('index 4 - darkblue, lightskyblue')
             text_color = 'darkblue'
             background_color = 'lightskyblue'
         elif selected_index == 5:
@@ -547,11 +553,15 @@ class sansPipe(QWidget):
         elif selected_index == 7:
             text_color = 'red'
             background_color = 'black'
+        self.ui.taskStatus.setEditable(True)
+        line_edit = self.ui.taskStatus.lineEdit()
         self.ui.taskStatus.setStyleSheet(f"""
 QComboBox {{
     color: {text_color};
-    background-color: {background_color}        
-        """)
+    background-color: {background_color};
+}} 
+""")
+        line_edit.setReadOnly(True)
 
     def create_tree_context_menu(self, widget, widget_name, position):
         """
