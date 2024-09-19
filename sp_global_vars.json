@@ -198,5 +198,23 @@
         "scaleZ",
         "visibility",
         "centerOfInterest"
+    ],
+    "shot_tasks": [
+        "layout",
+        "previs",
+        "cloth",
+        "fx",
+        "lighting",
+        "anim"
+    ],
+    "asset_tasks": [
+        "model",
+        "sculpt",
+        "lookdev",
+        "rig",
+        "groom",
+        "fx",
+        "cloth",
+        "prototype"
     ]
 }

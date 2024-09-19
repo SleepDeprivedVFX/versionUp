@@ -181,6 +181,8 @@ class sansPipe(QWidget):
         self.invalidCharacters = globVars['invalidCharacters']
         self.cameraNames = globVars['cameraNames']
         self.cameraAttributes = globVars['cameraAttributes']
+        self.asset_tasks = globVars['asset_tasks']
+        self.shot_tasks = globVars['shot_tasks']
 
         # Set initial artist field
         artist = os.environ[env_user]
@@ -831,6 +833,14 @@ class sansPipe(QWidget):
             elif show.startswith('_'):
                 show = show.lstrip('_')
             if task:
+                # FIXME: Adding the task path here is problematic.
+                all_tasks = self.shot_tasks + self.asset_tasks
+                for task_type in all_tasks:
+                    if task_type in path and task not in path:
+                        path = path.replace(task_type, task)
+                        break
+                if task not in path:
+                    path = os.path.join(path, task)
                 if self.appendartist:
                     filename = '{show}{base}_{task}_{artist}{_v}{v:0{l}d}.{ext}'.format(base=rootName, task=task, _v=v_type,
                                                                                         l=v_len, v=version, ext=ext,
@@ -995,6 +1005,8 @@ class sansPipe(QWidget):
                 for f in list_files:
                     if os.path.isfile(os.path.join(path, f)):
                         files.append(f)
+            else:
+                os.makedirs(path)
         return files
 
     def make_db_folder(self, folder=None):
@@ -1057,7 +1069,7 @@ class sansPipe(QWidget):
                 save.write(save_data)
                 save.close()
 
-    def create_note(self, notes=None, output_file=None):
+    def create_note(self, notes=None, output_file=None, status=None):
         """
         Creates a new note for a project asset or shot
         :param notes: The note being added to the database.
@@ -1081,6 +1093,7 @@ class sansPipe(QWidget):
                 'details': notes
             }
             notes_db['Notes'].append(new_note)
+            notes_db['Status'] = status
             self.save_db(folder=notes_path, data=notes_db)
             self.message(text='Saved Successfully!!', ok=True)
         else:
@@ -1978,13 +1991,29 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         if not os.path.exists(path):
             os.makedirs(path)
 
+        # Create task sub-folders.
+        if _type != 'Cams' or _type != 'Shot':
+            for task_type in self.asset_tasks:
+                task_path = os.path.join(path, task_type)
+                if not os.path.exists(task_path):
+                    os.makedirs(task_path)
+        elif _type == 'Shot':
+            for task_type in self.shot_tasks:
+                task_path = os.path.join(path, task_type)
+                if not os.path.exists(task_path):
+                    os.makedirs(task_path)
+        elif _type == 'Cams':
+            task_path = os.path.join(path, 'rig')
+            if not os.path.exists(task_path):
+                os.makedirs(task_path)
+
         close_previous = self.create_new_file_with_prompt()
         if close_previous:
             if message_type == 'Shot':
-                task = 'layout'
+                task_type = 'layout'
             else:
-                task = 'model'
-            file_name = self.build_path(path=path, rootName=asset_shot_name, task=task,
+                task_type = 'model'
+            file_name = self.build_path(path=path, rootName=asset_shot_name, task=task_type,
                                         ext=self.ui.fileType.currentText(), show=self.ui.showCode.text(),
                                         artist=self.ui.artistName.text(), version=1)
             scale = float(self.ui.sceneScale.text())
@@ -1994,12 +2023,12 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             cmds.file(rename=file_name)
             cmds.file(save=True, f=True)
 
-            self.create_note(notes=f'Automatically generated {task} file for {asset_shot_name}', output_file=file_name)
+            self.create_note(notes=f'Automatically generated {task_type} file for {asset_shot_name}', output_file=file_name)
 
             self.ui.folder.setText(path)
             self.ui.filename.setText(asset_shot_name)
             self.ui.version.setValue(1)
-            self.ui.taskType.setCurrentText(task)
+            self.ui.taskType.setCurrentText(task_type)
             self.update_ui()
             self.current_file_path = file_name
 
