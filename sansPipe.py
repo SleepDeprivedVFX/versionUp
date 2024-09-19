@@ -334,6 +334,24 @@ class sansPipe(QWidget):
         # Set the default UI message to nothing.
         self.ui.messages.setText('')
 
+        # Set up the task statuses
+        task_statuses = self.ui.taskStatus
+        model = QStandardItemModel()
+
+        # Add the drop-down items
+        self.add_colored_item(task_statuses, '-')
+        self.add_colored_item(task_statuses, 'Ready', 'black', 'ghostwhite')
+        self.add_colored_item(task_statuses, 'Waiting', 'darkorchid', 'lavender')
+        self.add_colored_item(task_statuses, 'Needs Revision', 'brown', 'orange')
+        self.add_colored_item(task_statuses, 'In Progress', 'darkblue', 'lightskyblue')
+        self.add_colored_item(task_statuses, 'For Review', 'darkcyan', 'lightyellow')
+        self.add_colored_item(task_statuses, 'Done', 'darkgreen', 'palegreen')
+        self.add_colored_item(task_statuses, 'Omit', 'red', 'black')
+        task_statuses.setModel(model)
+
+        # Set the top level color of the drop-down box.
+        self.ui.taskStatus.currentIndexChanged.connect(self.status_changed)
+
         # Get the probable name of the next file to be saved.  Either from the project settings or the currently opened
         # file.  Use this to set the version number.
         get_save = self.get_save_file(save_file=save_file, save_path=save_path, basename=base_filename, _v=v_type,
@@ -477,6 +495,63 @@ class sansPipe(QWidget):
             widget.customContextMenuRequested.connect(lambda position: self.create_tree_context_menu(widget,
                                                                                                      widget_name,
                                                                                                      position))
+
+    def add_colored_item(self, task_statuses, text, text_color=None, background_color=None):
+        """
+        This populates the Task Status drop-down list with colors
+        :param task_statuses: self.ui.taskStatus
+        :param text: The Dropdown selection text
+        :param text_color: the color of the text
+        :param background_color: the background color of the drop-down item
+        :return:
+        """
+        item = QStandardItem(text)
+        if text_color:
+            item.setForeground(QColor(text_color))
+        if background_color:
+            item.setBackground(QColor(background_color))
+        model.appendRow(item)
+
+    def status_changed(self):
+        """
+        This updates the stylesheet of the top level of the taskStatus drop-down menu
+        :return:
+        """
+        selected_index = self.ui.taskStatus.currentIndex()
+        background_color = 'dimgrey'
+        text_color = 'gainsboro'
+        default_text_color = text_color
+        default_background_color = background_color
+
+        if selected_index == 0:
+            text_color = default_text_color
+            background_color = default_background_color
+        elif selected_index == 1:
+            text_color = 'black'
+            background_color = 'ghostwhite'
+        elif selected_index == 2:
+            text_color = 'darkorchid'
+            background_color = 'lavender'
+        elif selected_index == 3:
+            text_color = 'brown'
+            background_color = 'orange'
+        elif selected_index == 4:
+            text_color = 'darkblue'
+            background_color = 'lightskyblue'
+        elif selected_index == 5:
+            text_color = 'darkcyan'
+            background_color = 'lightyellow'
+        elif selected_index == 6:
+            text_color = 'darkgreen'
+            background_color = 'palegreen'
+        elif selected_index == 7:
+            text_color = 'red'
+            background_color = 'black'
+        self.ui.taskStatus.setStyleSheet(f"""
+QComboBox {{
+    color: {text_color};
+    background-color: {background_color}        
+        """)
 
     def create_tree_context_menu(self, widget, widget_name, position):
         """

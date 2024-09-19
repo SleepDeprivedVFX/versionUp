@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UILJgJGp.ui'
+## Form generated from reading UI file 'superSaver_UIBoMGXS.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -62,14 +62,6 @@ class Ui_SaveAs(object):
         self.horizontalLayout_38.addWidget(self.taskStatus_label)
 
         self.taskStatus = QComboBox(self.MainTab)
-        self.taskStatus.addItem("")
-        self.taskStatus.addItem("")
-        self.taskStatus.addItem("")
-        self.taskStatus.addItem("")
-        self.taskStatus.addItem("")
-        self.taskStatus.addItem("")
-        self.taskStatus.addItem("")
-        self.taskStatus.addItem("")
         self.taskStatus.setObjectName(u"taskStatus")
 
         self.horizontalLayout_38.addWidget(self.taskStatus)
@@ -1411,15 +1403,6 @@ class Ui_SaveAs(object):
 #endif // QT_CONFIG(tooltip)
         self.output_filename.setText(QCoreApplication.translate("SaveAs", u"output filename", None))
         self.taskStatus_label.setText(QCoreApplication.translate("SaveAs", u"Task Status", None))
-        self.taskStatus.setItemText(0, QCoreApplication.translate("SaveAs", u"-", None))
-        self.taskStatus.setItemText(1, QCoreApplication.translate("SaveAs", u"Ready", None))
-        self.taskStatus.setItemText(2, QCoreApplication.translate("SaveAs", u"Waiting", None))
-        self.taskStatus.setItemText(3, QCoreApplication.translate("SaveAs", u"For Review", None))
-        self.taskStatus.setItemText(4, QCoreApplication.translate("SaveAs", u"Needs Revision", None))
-        self.taskStatus.setItemText(5, QCoreApplication.translate("SaveAs", u"In Progress", None))
-        self.taskStatus.setItemText(6, QCoreApplication.translate("SaveAs", u"Done", None))
-        self.taskStatus.setItemText(7, QCoreApplication.translate("SaveAs", u"Omit", None))
-
         self.naming_label.setText(QCoreApplication.translate("SaveAs", u"Naming", None))
 #if QT_CONFIG(tooltip)
         self.autoNaming.setToolTip(QCoreApplication.translate("SaveAs", u"Auto Naming (Recommended)", None))
