@@ -1119,7 +1119,7 @@ class sansPipe(QWidget):
     def show_file_selection_info(self, item, column):
         """
         This function does a few things.  It checks to see what object is selected in the Existing file list, and if
-        the is a legitimate file than it reads and posts a note in the notes output window.  Otherwise, it posts a blank
+        it is a legitimate file than it reads and posts a note in the notes output window.  Otherwise, it posts a blank
         note.  It also checks button states for the Load Ref and Import buttons and makes sure they are only active
         when an asset or Published item is selected.  This functionality has actually been removed from the UI, but
         the pieces still exist, they're just hidden.  That functionality has been moved to the Publishes/Assets tab.
@@ -1130,13 +1130,9 @@ class sansPipe(QWidget):
         # Load selection info
         try:
             file_info = item.data(0, Qt.UserRole)
-            print(f'testing file_info: {file_info}')
         except AttributeError as e:
-            print(f'Shit hit the fan {e}')
             item = self.ui.existingFile_list.currentItem()
-            print(f'item: {item}')
             file_info = item.data(0, Qt.UserRole)
-            print('Attempted fix from UI')
         file_text = item.text(0)
         if file_info:
             folder_name = file_info['folder']
@@ -1187,14 +1183,6 @@ NOTE: None
                         else:
                             get_root_name = get_short_filename
                         self.ui.filename.setText(get_root_name)
-
-            if file_text != 'scenes' and file_text != 'assets':
-                if not filename:
-                    selected_folder = os.path.join(folder_name, file_text)
-                else:
-                    selected_folder = folder_name
-            else:
-                selected_folder = folder_name
 
             # Make sure it's a file, not a folder
             if filename:
@@ -1256,6 +1244,14 @@ DATE: {date}
 
 NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=date, details=details)
                         break
+            if 'Status' in notes_db.keys():
+                status = notes_db['Status']
+                if status:
+                    self.ui.taskStatus.setCurrentText(status)
+                else:
+                    self.ui.taskStatus.setCurrentText('-')
+            else:
+                self.ui.taskStatus.setCurrentText('-')
             self.ui.existing_notes.setText(post_note)
             self.populate_snapshots(item, column)
 
