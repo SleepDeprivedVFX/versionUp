@@ -13,9 +13,6 @@ except ImportError:
 __version__ = '1.3.1'
 __author__ = 'Adam Benson'
 
-# Temporary fix.  This gets removed when it gets ported over to the working drive
-shit_path = 'c:/users/sleep/onedrive/documents/scripts/python/maya/utilities/sansPipe/'
-
 settings = QSettings(__author__, 'Sans Pipe Super Saver')
 autoload = settings.value('autoload', None)
 if autoload == 'true':
@@ -81,6 +78,7 @@ def run_cam_bake(*args):
         sptk.sp_toolkit().start_cam_bake()
     except Exception as e:
         cmds.error(f'failed to run Camera Bake: {e}')
+
 
 def create_camera(*args):
     try:

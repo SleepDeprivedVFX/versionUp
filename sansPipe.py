@@ -64,12 +64,6 @@ import platform
 import configparser
 import csv
 
-# Temporary fix.  This gets removed when it gets ported over to the working drive
-shit_path = 'c:/users/sleep/onedrive/documents/scripts/python/maya/utilities/sansPipe/'
-if shit_path not in sys.path:
-    sys.path.append(shit_path)
-# END Temporary fix
-
 import sp_tools as sptk
 from ui import ui_superSaver_UI as ssui
 
@@ -171,10 +165,7 @@ class sansPipe(QWidget):
             self.build_config_file(path=self.config_path)
 
         # Get Global Variables from JSON
-        # NOTE: this is temporary
-        sp_global_vars = os.path.join(shit_path, 'sp_global_vars.json')
-        sp_global_vars = sp_global_vars.replace('\\', '/')
-        with open(sp_global_vars, 'r') as global_vars:
+        with open('sp_global_vars.json', 'r') as global_vars:
             globVars = json.load(global_vars)
         # Set the project constants.
         self.tasks = globVars['tasks']

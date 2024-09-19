@@ -24,9 +24,6 @@ except ImportError:
     except ImportError:
         raise RuntimeError('Neither PySide 6 or PySide 2 detected!')
 
-# Temporary fix.  This gets removed when it gets ported over to the working drive
-shit_path = 'c:/users/sleep/onedrive/documents/scripts/python/maya/utilities/sansPipe/'
-
 __version__ = '1.3.1'
 __author__ = 'Adam Benson'
 
@@ -56,10 +53,7 @@ class sp_toolkit(object):
         self.autosave_interval = int(config['Scene']['autosave_interval'])
 
         # Get Global Variables from JSON
-        # NOTE: this is temporary
-        sp_global_vars = os.path.join(shit_path, 'sp_global_vars.json')
-        sp_global_vars = sp_global_vars.replace('\\', '/')
-        with open(sp_global_vars, 'r') as global_vars:
+        with open('sp_global_vars.json', 'r') as global_vars:
             globVars = json.load(global_vars)
         # Set the project constants.
         self.tasks = globVars['tasks']
