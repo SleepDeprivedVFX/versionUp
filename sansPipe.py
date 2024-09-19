@@ -517,7 +517,6 @@ class sansPipe(QWidget):
         This updates the stylesheet of the top level of the taskStatus drop-down menu
         :return:
         """
-        print('status_changed called.')
         selected_index = self.ui.taskStatus.currentIndex()
         background_color = 'dimgrey'
         text_color = 'gainsboro'
@@ -525,23 +524,18 @@ class sansPipe(QWidget):
         default_background_color = background_color
 
         if selected_index == 0:
-            print('default index')
             text_color = default_text_color
             background_color = default_background_color
         elif selected_index == 1:
-            print('index 1 - black, ghostwhite')
             text_color = 'black'
             background_color = 'ghostwhite'
         elif selected_index == 2:
-            print('index 2 - darkorchid, lavender')
             text_color = 'darkorchid'
             background_color = 'lavender'
         elif selected_index == 3:
-            print('index 3 - brown, orange')
             text_color = 'brown'
             background_color = 'orange'
         elif selected_index == 4:
-            print('index 4 - darkblue, lightskyblue')
             text_color = 'darkblue'
             background_color = 'lightskyblue'
         elif selected_index == 5:
@@ -562,6 +556,46 @@ QComboBox {{
 }} 
 """)
         line_edit.setReadOnly(True)
+
+    def get_item_status(self, folder=None, filename=None):
+        """
+        This method looks for a current status to set it on the tree.
+        :param folder:
+        :param filename:
+        :return:
+        """
+        status = None
+        if folder:
+            db_folder = os.path.join(folder, 'db')
+            if os.path.exists(db_folder):
+                data = self.open_db(db_folder)
+                if data and 'Status' in data.keys():
+                    status = data['Status']
+        return status
+
+    def set_item_status(self, item=None, status=None):
+        if item:
+            if status == 'Ready':
+                item.setForeground(0, QColor('black'))
+                item.setBackground(0, QColor('ghostwhite'))
+            elif status == 'Waiting':
+                item.setForeground(0, QColor('darkorchid'))
+                item.setBackground(0, QColor('lavender'))
+            elif status == 'Needs Revision':
+                item.setForeground(0, QColor('brown'))
+                item.setBackground(0, QColor('orange'))
+            elif status == 'In Progress':
+                item.setForeground(0, QColor('darkblue'))
+                item.setBackground(0, QColor('lightskyblue'))
+            elif status == 'For Review':
+                item.setForeground(0, QColor('darkcyan'))
+                item.setBackground(0, QColor('lightyellow'))
+            elif status == 'Done':
+                item.setForeground(0, QColor('darkgreen'))
+                item.setBackground(0, QColor('palegreen'))
+            elif status == 'Omit':
+                item.setForeground(0, QColor('red'))
+                item.setBackground(0, QColor('black'))
 
     def create_tree_context_menu(self, widget, widget_name, position):
         """
@@ -619,6 +653,7 @@ QComboBox {{
                     self.hide()
                     cmds.file(open_file, o=True, f=f)
                     self.current_file_path = open_file
+                    self.create_note(output_file=open_file, status='In Progress')
                     self.close()
                 except RuntimeError as e:
                     msg = str(e)
@@ -634,8 +669,10 @@ QComboBox {{
                     if ret == QMessageBox.Yes:
                         cmds.file(s=True)
                         self.open_file(f=False)
+                        self.create_note(output_file=open_file, status='In Progress')
                     elif ret == QMessageBox.No:
                         self.open_file(f=True)
+                        self.create_note(output_file=open_file, status='In Progress')
                     else:
                         self.show()
 
@@ -1120,7 +1157,8 @@ QComboBox {{
         if folder:
             if not os.path.exists(folder):
                 data = {
-                    "Notes": []
+                    "Notes": [],
+                    "Status": None
                 }
                 save_data = json.dumps(data, indent=4)
                 with open(folder, 'w+') as save:
@@ -1169,7 +1207,7 @@ QComboBox {{
             path = os.path.dirname(output_file)
             notes_path = self.make_db_folder(folder=path)
             notes_db = self.open_db(folder=notes_path)
-            if not os.path.exists:
+            if not os.path.exists(path):
                 os.makedirs(path)
             self.message(text='Writing Notes...', ok=True)
             date_now = datetime.now()
@@ -1182,9 +1220,19 @@ QComboBox {{
                 'details': notes
             }
             notes_db['Notes'].append(new_note)
+            print(f'create_notes: status 1: {status}')
             notes_db['Status'] = status
             self.save_db(folder=notes_path, data=notes_db)
             self.message(text='Saved Successfully!!', ok=True)
+        elif status and output_file and not notes:
+            path = os.path.dirname(output_file)
+            notes_path = self.make_db_folder(folder=path)
+            notes_db = self.open_db(folder=notes_path)
+            if not os.path.exists(path):
+                os.makedirs(path)
+            print(f'create_notes: status 2: {status}')
+            notes_db['Status'] = status
+            self.save_db(folder=notes_path, data=notes_db)
         else:
             return False
 
@@ -1375,6 +1423,9 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                         folder_item = QTreeWidgetItem(parent_item)
                         folder_item.setText(0, os.path.basename(folder_name))
                         folder_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": ""})
+                        status = self.get_item_status(folder=folder_name)
+                        if status:
+                            self.set_item_status(item=folder_item, status=status)
                         folder_items[relative_folder_name] = folder_item
                         if relative_folder_name == ".":
                             folder_items[relative_folder_name].setExpanded(True)
@@ -1401,6 +1452,9 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             subfolder_item = QTreeWidgetItem(folder_items[relative_folder_name])
                             subfolder_item.setText(0, os.path.basename(subfolder))
                             subfolder_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": ""})
+                            status = self.get_item_status(folder=folder_name)
+                            if status:
+                                self.set_item_status(item=folder_item, status=status)
                             folder_items[relative_subfolder_name] = subfolder_item
 
                     # Add files after subfolders, filtering by allowed extensions
@@ -1533,7 +1587,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         else:
             return False
 
-    def run(self, close=True):
+    def run(self, close=True, status=None):
         """
         This is the main 'Save As' feature and makes up the primary function of the tool.  It gets the next version
         for a file and saves it up with a note.
@@ -1573,7 +1627,9 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                 cmds.file(s=True, type=fileType, options='v=0;')
 
         # Create Note
-        self.create_note(notes=notes, output_file=output_file)
+        if not status:
+            status = 'In Progress'
+        self.create_note(notes=notes, output_file=output_file, status=status)
 
         time.sleep(3)
         self.check_button_state(btn=self.ui.snap_btn)
@@ -2012,7 +2068,8 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                 new_asset_shot_folder = os.path.join(new_root_folder_path, asset_shot_name)
                 if not os.path.exists(new_asset_shot_folder):
                     os.makedirs(new_asset_shot_folder)
-                    self.create_note(notes='Auto-created using Bulk Add CSV feature', output_file=new_asset_shot_folder)
+                    self.create_note(notes='Auto-created using Bulk Add CSV feature', output_file=new_asset_shot_folder,
+                                     status='Ready')
 
         self.ui.existingFile_list.clear()
         self.populate_existing_files(current_directory=self.scene_folder_path)
@@ -2108,7 +2165,8 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             cmds.file(rename=file_name)
             cmds.file(save=True, f=True)
 
-            self.create_note(notes=f'Automatically generated {task_type} file for {asset_shot_name}', output_file=file_name)
+            self.create_note(notes=f'Automatically generated {task_type} file for {asset_shot_name}',
+                             output_file=file_name, status='Ready')
 
             self.ui.folder.setText(path)
             self.ui.filename.setText(asset_shot_name)
@@ -2240,7 +2298,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         current_file = self.current_file_path
 
         # Do the version up first
-        new_version = self.run(close=False)
+        new_version = self.run(close=False, status='Done')
 
         # Create the publish version
         root_path = os.path.dirname(current_file)
@@ -2291,7 +2349,7 @@ References Imported and Cleaned:
             notes = new_notes
 
         # create new note
-        self.create_note(notes=notes, output_file=publish_file)
+        self.create_note(notes=notes, output_file=publish_file, status='Done')
         # Save publish file
         cmds.file(s=True, type=file_type, options='v=0;')
 
@@ -2535,7 +2593,7 @@ References Imported and Cleaned:
             notes = cam_bake['notes']
             output_file = cam_bake['output']
             cam_name = cam_bake['cam_name']
-            self.create_note(notes=notes, output_file=output_file)
+            self.create_note(notes=notes, output_file=output_file, status='For Review')
             self.message(text='Camera baked successfully: %s' % cam_name, ok=True)
         else:
             self.message(text='Camera could not be baked!', ok=False)
