@@ -63,6 +63,7 @@ from datetime import datetime
 import platform
 import configparser
 import csv
+import inspect
 
 import sp_tools as sptk
 from ui import ui_superSaver_UI as ssui
@@ -84,7 +85,7 @@ def uninitializePlugin(mobject):
         om.MGlobal.displayError("Failed to deregister sansPipe plugin")
 
 
-__version__ = '1.3.1'
+__version__ = '1.3.2'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -165,8 +166,20 @@ class sansPipe(QWidget):
             self.build_config_file(path=self.config_path)
 
         # Get Global Variables from JSON
-        with open('sp_global_vars.json', 'r') as global_vars:
-            globVars = json.load(global_vars)
+        current_file_path = inspect.getfile(inspect.currentframe())
+        print(f'current_file_path: {current_file_path}')
+        plugin_dir = os.path.dirname(os.path.abspath(current_file_path))
+        print(f'plugin_dir: {plugin_dir}')
+        sp_global_vars = os.path.join(plugin_dir, 'sp_global_vars.json')
+        print(f'sp_global_vars path: {sp_global_vars}')
+        if os.path.exists(sp_global_vars):
+            print('file exists!')
+            with open(sp_global_vars, 'r') as global_vars:
+                globVars = json.load(global_vars)
+        else:
+            cmds.error('Cannot open the sp_global_vars db')
+            globVars = {'tasks': None, 'invalidCharacter': None, 'cameraNames': None, 'cameraAttributes': None,
+                        'asset_tasks': None, 'shot_tasks': None }
         # Set the project constants.
         self.tasks = globVars['tasks']
         self.invalidCharacters = globVars['invalidCharacters']
