@@ -10,7 +10,7 @@ except ImportError:
     except ImportError:
         raise RuntimeError('No PySide6 or PySide2 detected!')
 
-__version__ = '1.3.0'
+__version__ = '1.3.1'
 __author__ = 'Adam Benson'
 
 # Temporary fix.  This gets removed when it gets ported over to the working drive

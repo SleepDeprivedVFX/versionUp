@@ -27,7 +27,7 @@ except ImportError:
 # Temporary fix.  This gets removed when it gets ported over to the working drive
 shit_path = 'c:/users/sleep/onedrive/documents/scripts/python/maya/utilities/sansPipe/'
 
-__version__ = '1.3.0'
+__version__ = '1.3.1'
 __author__ = 'Adam Benson'
 
 

@@ -1,45 +1,26 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIcJWbGv.ui'
+## Form generated from reading UI file 'superSaver_UILJgJGp.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
-## V1.3.0
+##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-try:
-        from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-            QMetaObject, QObject, QPoint, QRect,
-            QSize, QTime, QUrl, Qt)
-        from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-            QFont, QFontDatabase, QGradient, QIcon,
-            QImage, QKeySequence, QLinearGradient, QPainter,
-            QPalette, QPixmap, QRadialGradient, QTransform)
-        from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QCheckBox, QComboBox,
-            QFrame, QGroupBox, QHBoxLayout, QHeaderView,
-            QLabel, QLineEdit, QListWidget, QListWidgetItem,
-            QPushButton, QRadioButton, QSizePolicy, QSpacerItem,
-            QSpinBox, QTabWidget, QTextEdit, QTreeWidget,
-            QTreeWidgetItem, QVBoxLayout, QWidget)
-except ImportError:
-        try:
-                from PySide2.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                    QMetaObject, QObject, QPoint, QRect,
-                    QSize, QTime, QUrl, Qt)
-                from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-                    QFont, QFontDatabase, QGradient, QIcon,
-                    QImage, QKeySequence, QLinearGradient, QPainter,
-                    QPalette, QPixmap, QRadialGradient, QTransform)
-                from PySide2.QtWidgets import (QAbstractSpinBox, QApplication, QCheckBox, QComboBox,
-                    QFrame, QGroupBox, QHBoxLayout, QHeaderView,
-                    QLabel, QLineEdit, QListWidget, QListWidgetItem,
-                    QPushButton, QRadioButton, QSizePolicy, QSpacerItem,
-                    QSpinBox, QTabWidget, QTextEdit, QTreeWidget,
-                    QTreeWidgetItem, QVBoxLayout, QWidget)
-        except ImportError:
-                raise RuntimeError('Cannot find usable PySide!')
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QCheckBox, QComboBox,
+    QFrame, QGroupBox, QHBoxLayout, QHeaderView,
+    QLabel, QLineEdit, QListWidget, QListWidgetItem,
+    QPushButton, QRadioButton, QSizePolicy, QSpacerItem,
+    QSpinBox, QTabWidget, QTextEdit, QTreeWidget,
+    QTreeWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_SaveAs(object):
     def setupUi(self, SaveAs):
@@ -68,6 +49,37 @@ class Ui_SaveAs(object):
         self.output_filename.setStyleSheet(u"font: 10pt \"MS Shell Dlg 2\";")
 
         self.verticalLayout_2.addWidget(self.output_filename)
+
+        self.horizontalLayout_38 = QHBoxLayout()
+        self.horizontalLayout_38.setObjectName(u"horizontalLayout_38")
+        self.horizontalSpacer_22 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_38.addItem(self.horizontalSpacer_22)
+
+        self.taskStatus_label = QLabel(self.MainTab)
+        self.taskStatus_label.setObjectName(u"taskStatus_label")
+
+        self.horizontalLayout_38.addWidget(self.taskStatus_label)
+
+        self.taskStatus = QComboBox(self.MainTab)
+        self.taskStatus.addItem("")
+        self.taskStatus.addItem("")
+        self.taskStatus.addItem("")
+        self.taskStatus.addItem("")
+        self.taskStatus.addItem("")
+        self.taskStatus.addItem("")
+        self.taskStatus.addItem("")
+        self.taskStatus.addItem("")
+        self.taskStatus.setObjectName(u"taskStatus")
+
+        self.horizontalLayout_38.addWidget(self.taskStatus)
+
+        self.horizontalSpacer_23 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_38.addItem(self.horizontalSpacer_23)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout_38)
 
         self.sideBySide_layout = QHBoxLayout()
         self.sideBySide_layout.setObjectName(u"sideBySide_layout")
@@ -1398,6 +1410,16 @@ class Ui_SaveAs(object):
         self.output_filename.setToolTip(QCoreApplication.translate("SaveAs", u"This is the output filename and path for what's going to be saved.", None))
 #endif // QT_CONFIG(tooltip)
         self.output_filename.setText(QCoreApplication.translate("SaveAs", u"output filename", None))
+        self.taskStatus_label.setText(QCoreApplication.translate("SaveAs", u"Task Status", None))
+        self.taskStatus.setItemText(0, QCoreApplication.translate("SaveAs", u"-", None))
+        self.taskStatus.setItemText(1, QCoreApplication.translate("SaveAs", u"Ready", None))
+        self.taskStatus.setItemText(2, QCoreApplication.translate("SaveAs", u"Waiting", None))
+        self.taskStatus.setItemText(3, QCoreApplication.translate("SaveAs", u"For Review", None))
+        self.taskStatus.setItemText(4, QCoreApplication.translate("SaveAs", u"Needs Revision", None))
+        self.taskStatus.setItemText(5, QCoreApplication.translate("SaveAs", u"In Progress", None))
+        self.taskStatus.setItemText(6, QCoreApplication.translate("SaveAs", u"Done", None))
+        self.taskStatus.setItemText(7, QCoreApplication.translate("SaveAs", u"Omit", None))
+
         self.naming_label.setText(QCoreApplication.translate("SaveAs", u"Naming", None))
 #if QT_CONFIG(tooltip)
         self.autoNaming.setToolTip(QCoreApplication.translate("SaveAs", u"Auto Naming (Recommended)", None))
