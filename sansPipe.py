@@ -85,7 +85,7 @@ def uninitializePlugin(mobject):
         om.MGlobal.displayError("Failed to deregister sansPipe plugin")
 
 
-__version__ = '1.3.2'
+__version__ = '1.3.3'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':

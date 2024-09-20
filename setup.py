@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='sansPipe',
-    version='1.3.2',
+    version='1.3.3',
     description='Pipeline Utility for when there is no pipeline.',
     author='Adam Benson',
     author_email='AdamBenson.vfx@gmail.com',
