@@ -15,20 +15,20 @@ Version 1.3 Goals:
     1. Create a dynamically loading toolset:
         This would add buttons to the tools, menu and shelf based on tools added to either A) a sansPipe_tools.py script
         or B) by searching for and dynamically adding tools added to a bin folder.
-    2. Split all existing tools into a separate file that could be accessed either by the UI or by the shelf or menu.
+                    2. Split all existing tools into a separate file that could be accessed either by the UI or by the shelf or menu.
     3. Add Playblast record keeping, and perhaps organize playblasts into their own folder.
         It would also be great if these could be played from a specific shot.
-    4. May want to add task folders to better organize how each section is delineated.
-        Scenes > Char > CharacterName > Model
-        Scenes > Char > CharacterName > LookDev
-        Scenes > Char > CharacterName > Rig
+                    4. May want to add task folders to better organize how each section is delineated.
+                        Scenes > Char > CharacterName > Model
+                        Scenes > Char > CharacterName > LookDev
+                        Scenes > Char > CharacterName > Rig
     5. Add some Project Level collection system.  
         This would go through the root project, look for database JSON files and output an Excel sheet that would list
         all existing projects and their current statuses.
     6. Add task statuses.
         This could be a really good one to add.
     7. UI enhancements (Related to some of the above):
-        a. Add Task Statuses
+                         a. Add Task Statuses
         b. Add a Playblasts section to... somewhere.
         c. Add a reports section.
     8. Make the UI stay opened if references are out of date on a recently opened file
@@ -167,13 +167,9 @@ class sansPipe(QWidget):
 
         # Get Global Variables from JSON
         current_file_path = inspect.getfile(inspect.currentframe())
-        print(f'current_file_path: {current_file_path}')
         plugin_dir = os.path.dirname(os.path.abspath(current_file_path))
-        print(f'plugin_dir: {plugin_dir}')
         sp_global_vars = os.path.join(plugin_dir, 'sp_global_vars.json')
-        print(f'sp_global_vars path: {sp_global_vars}')
         if os.path.exists(sp_global_vars):
-            print('file exists!')
             with open(sp_global_vars, 'r') as global_vars:
                 globVars = json.load(global_vars)
         else:
@@ -512,7 +508,7 @@ class sansPipe(QWidget):
             item.setBackground(QColor(background_color))
         model.appendRow(item)
 
-    def status_changed(self):
+    def status_changed(self, status=None):
         """
         This updates the stylesheet of the top level of the taskStatus drop-down menu
         :return:
@@ -526,25 +522,25 @@ class sansPipe(QWidget):
         if selected_index == 0:
             text_color = default_text_color
             background_color = default_background_color
-        elif selected_index == 1:
+        elif selected_index == 1 or status == 'Ready':
             text_color = 'black'
             background_color = 'ghostwhite'
-        elif selected_index == 2:
+        elif selected_index == 2 or status == 'Waiting':
             text_color = 'darkorchid'
             background_color = 'lavender'
-        elif selected_index == 3:
+        elif selected_index == 3 or status == 'Needs Revision':
             text_color = 'brown'
             background_color = 'orange'
-        elif selected_index == 4:
+        elif selected_index == 4 or status == 'In Progress':
             text_color = 'darkblue'
             background_color = 'lightskyblue'
-        elif selected_index == 5:
+        elif selected_index == 5 or status == 'For Review':
             text_color = 'darkcyan'
             background_color = 'lightyellow'
-        elif selected_index == 6:
+        elif selected_index == 6 or status == 'Done':
             text_color = 'darkgreen'
             background_color = 'palegreen'
-        elif selected_index == 7:
+        elif selected_index == 7 or status == 'Omit':
             text_color = 'red'
             background_color = 'black'
         self.ui.taskStatus.setEditable(True)
@@ -556,6 +552,26 @@ QComboBox {{
 }} 
 """)
         line_edit.setReadOnly(True)
+        # self.change_task_status()
+
+    def change_task_status(self):
+        selected_file = self.ui.existingFile_list.selectedItems()
+        current_status = self.ui.taskStatus.currentText()
+        if selected_file:
+            selected_file = selected_file[0]
+            data = selected_file.data(0, Qt.UserRole)
+            folder = data['folder']
+            path = folder
+            path = path.replace('\\', '/')
+            path = os.path.dirname(path)
+            try:
+                get_db = self.open_db(path)
+                if get_db['Status'] != current_status:
+                    self.create_note(output_file=path, status=current_status)
+                    self.update_ui()
+                    self.populate_existing_files(current_directory=self.scene_folder_path)
+            except RuntimeError as e:
+                cmds.warning(f'Cannot open this database: {path}, {e}')
 
     def get_item_status(self, folder=None, filename=None):
         """
@@ -1165,14 +1181,17 @@ QComboBox {{
         :return:
         """
         notes_db = None
-        if folder:
-            notes_db_file = os.path.join(folder, 'notes_db.json')
-            if not os.path.exists(notes_db_file):
-                # create an empty file
-                self.create_db(folder=notes_db_file)
-            with open(notes_db_file, 'r+') as open_notes:
-                notes_db = json.load(open_notes)
-                open_notes.close()
+        try:
+            if folder:
+                notes_db_file = os.path.join(folder, 'notes_db.json')
+                if not os.path.exists(notes_db_file):
+                    # create an empty file
+                    self.create_db(folder=notes_db_file)
+                with open(notes_db_file, 'r+') as open_notes:
+                    notes_db = json.load(open_notes)
+                    open_notes.close()
+        except RuntimeError as e:
+            cmds.warning(f'Unable to open {notes_db_file} because {e}')
         return notes_db
 
     def save_db(self, folder=None, data=None):
@@ -1196,38 +1215,41 @@ QComboBox {{
         :param output_file: The output file from which to parse the data and determine where to send the note.
         :return:
         """
-        if notes and output_file:
-            path = os.path.dirname(output_file)
-            notes_path = self.make_db_folder(folder=path)
-            notes_db = self.open_db(folder=notes_path)
-            if not os.path.exists(path):
-                os.makedirs(path)
-            self.message(text='Writing Notes...', ok=True)
-            date_now = datetime.now()
-            date = '{d} | {t}'.format(d=date_now.date(), t=date_now.time())
-            new_note = {
-                'filename': os.path.basename(output_file),
-                'user': os.environ[env_user],
-                'computer': os.environ[computername],
-                'date': date,
-                'details': notes
-            }
-            notes_db['Notes'].append(new_note)
-            print(f'create_notes: status 1: {status}')
-            notes_db['Status'] = status
-            self.save_db(folder=notes_path, data=notes_db)
-            self.message(text='Saved Successfully!!', ok=True)
-        elif status and output_file and not notes:
-            path = os.path.dirname(output_file)
-            notes_path = self.make_db_folder(folder=path)
-            notes_db = self.open_db(folder=notes_path)
-            if not os.path.exists(path):
-                os.makedirs(path)
-            print(f'create_notes: status 2: {status}')
-            notes_db['Status'] = status
-            self.save_db(folder=notes_path, data=notes_db)
-        else:
-            return False
+        try:
+            if notes and output_file:
+                path = os.path.dirname(output_file)
+                notes_path = self.make_db_folder(folder=path)
+                notes_db = self.open_db(folder=notes_path)
+                if not os.path.exists(path):
+                    os.makedirs(path)
+                self.message(text='Writing Notes...', ok=True)
+                date_now = datetime.now()
+                date = '{d} | {t}'.format(d=date_now.date(), t=date_now.time())
+                new_note = {
+                    'filename': os.path.basename(output_file),
+                    'user': os.environ[env_user],
+                    'computer': os.environ[computername],
+                    'date': date,
+                    'details': notes
+                }
+                notes_db['Notes'].append(new_note)
+                print(f'create_notes: status 1: {status}')
+                notes_db['Status'] = status
+                self.save_db(folder=notes_path, data=notes_db)
+                self.message(text='Saved Successfully!!', ok=True)
+            elif status and output_file and not notes:
+                path = os.path.dirname(output_file)
+                notes_path = self.make_db_folder(folder=path)
+                notes_db = self.open_db(folder=notes_path)
+                if not os.path.exists(path):
+                    os.makedirs(path)
+                print(f'create_notes: status 2: {status}')
+                notes_db['Status'] = status
+                self.save_db(folder=notes_path, data=notes_db)
+            else:
+                return False
+        except RuntimeError as e:
+            cmds.warning(f'Unable to create note for {notes_path} because {e}')
 
     def create_camera(self):
         """
@@ -1373,9 +1395,17 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             if 'Status' in notes_db.keys():
                 status = notes_db['Status']
                 if status:
+                    self.ui.taskStatus.blockSignals(True)
                     self.ui.taskStatus.setCurrentText(status)
+                    self.ui.taskStatus.blockSignals(False)
+                    self.status_changed(status)
+                    QApplication.processEvents()
                 else:
+                    self.ui.taskStatus.blockSignals(True)
                     self.ui.taskStatus.setCurrentText('-')
+                    self.ui.taskStatus.blockSignals(False)
+                    self.status_changed(status)
+                    QApplication.processEvents()
             else:
                 self.ui.taskStatus.setCurrentText('-')
             self.ui.existing_notes.setText(post_note)
@@ -1754,6 +1784,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         try:
             self.hide()
             cmds.file(open_file, o=True, f=f)
+            self.create_note(output_file=open_file, status='In Progress')
             recent_file = {
                 'filename': file_text,
                 'path': open_file
