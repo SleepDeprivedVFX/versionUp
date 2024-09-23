@@ -87,6 +87,13 @@ def create_camera(*args):
     except Exception as e:
         cmds.error(f'Unable to create camera! {e}')
 
+def do_database_repair(*args):
+    try:
+        import sp_tools as sptk
+        sptk.sp_toolkit().db_seek_and_repair()
+    except Exception as e:
+        cmds.error(f'Unable to run DB Seek and Repair! {e}')
+
 
 def create_sans_pipe_menu():
     # Check if the menu already exists (to avoid duplicates)
@@ -102,6 +109,7 @@ def create_sans_pipe_menu():
     # cmds.menuItem(label='Another Custom Command', command=lambda: print("Another command triggered"))
     cmds.menuItem(label='Bake Camera', command=run_cam_bake)
     cmds.menuItem(label='Create Camera', command=create_camera)
+    cmds.menuItem(label='Do Database Repair', command=do_database_repair)
 
 
 # Function to check if the hotkey set is locked by testing temporary command creation

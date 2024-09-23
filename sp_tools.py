@@ -310,5 +310,46 @@ class sp_toolkit(object):
                        percent=100, compression='PNG', quality=70, widthHeight=(res_width, res_height), exposure=0,
                        gamma=1, fo=True)
 
+    def db_seek_and_repair(self):
+        """
+        I'm running into a situation where sometimes one of the database files is getting corrupted, and I can't figure
+        out where.  So, this tool is designed to try and find that corrupted DB file and potentially repair it.
+        Fuckin' JSON.
+        :return:
+        """
+        find_db_path = os.path.join(self.workspace, cmds.workspace(fre='scenes'))
+        print(f'find_db_path: {find_db_path}')
+        collect_dbs = []
+        walk_path = os.walk(find_db_path)
+        for root, dir, files in walk_path:
+            if 'db' in root:
+                for f in files:
+                    if f.endswith('.json'):
+                        path = os.path.join(root, f)
+                        collect_dbs.append(path)
+        for db in collect_dbs:
+            print(f'db path: {db}')
+            with open(db, 'r') as odb:
+                get_db = odb.read()
+            try:
+                db_data = json.loads(get_db)
+                print(f'data: {db_data}')
+            except Exception as e:
+                print(f'Could not load data for {db}')
+                fixed_data = self.fix_json(odb)
+                try:
+                    db_data = json.loads(fixed_data)
+                    print(f'Database has been repaired! {db}')
+                    with open(db, 'w') as wdb:
+                        json.dump(fixed_data, wdb, indent=4)
+                except json.JSONDecodeError:
+                    print(f'Could not repair the database: {db}')
+                    return None
 
+    def fix_json(self, data):
+        while data.strip().endswith('}'):
+            data = data.strip()[:-1]
+        if data.count('{') > data.count('}'):
+            data += '}'
+        return data
 
