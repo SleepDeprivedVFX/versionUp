@@ -34,6 +34,17 @@ Version 1.3 Goals:
     8. Make the UI stay opened if references are out of date on a recently opened file
     9. Filtering on trees:
         Task filtering for both Existing File and Publishes. Only show Chars.  Only show Rigs
+    10. Rework #6 Task statuses.  Needs to be in the note and not a separate tag.  Each save as should have it's own 
+        note and be tallied up by that instead of an overall tag.
+    11. Add a "Blow away Snapshots" function for project cleanup.  The button would exist on the settings page, and 
+        there could also be a right-click context for individual elements
+    12. Rearrange the Tasks and Publishes.  Put publishes in their own folder either in the root of Scenes, or outside
+        of the scene folder.  TBD
+    13. Move the system from a JSON database setup to a SQL database - either per asset - like the JSONs, or as a global
+        database for everything.
+        
+KNOWN BUGS:
+    1. Unloaded references break the system
 """
 
 from maya import cmds
@@ -85,7 +96,7 @@ def uninitializePlugin(mobject):
         om.MGlobal.displayError("Failed to deregister sansPipe plugin")
 
 
-__version__ = '1.3.3'
+__version__ = '1.3.4'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
@@ -552,24 +563,45 @@ QComboBox {{
 }} 
 """)
         line_edit.setReadOnly(True)
-        # self.change_task_status()
+        self.change_task_status()
 
     def change_task_status(self):
         selected_file = self.ui.existingFile_list.selectedItems()
         current_status = self.ui.taskStatus.currentText()
+
         if selected_file:
             selected_file = selected_file[0]
             data = selected_file.data(0, Qt.UserRole)
             folder = data['folder']
+            filename = data['file']
+
             path = folder
             path = path.replace('\\', '/')
-            path = os.path.dirname(path)
+            # path = os.path.dirname(path)
+            db_path = os.path.join(path, 'db')
+            file_path = os.path.join(folder, filename)
             try:
-                get_db = self.open_db(path)
-                if get_db['Status'] != current_status:
-                    self.create_note(output_file=path, status=current_status)
-                    self.update_ui()
-                    self.populate_existing_files(current_directory=self.scene_folder_path)
+                get_db = self.open_db(db_path)
+                notes = get_db['Notes']
+                if filename:
+                    for note in notes:
+                        if filename == note['filename']:
+                            if 'status' in note.keys():
+                                status = note['status']
+                                if status != current_status:
+                                    self.create_note(output_file=file_path, status=current_status)
+                            else:
+                                self.create_note(output_file=file_path, status=current_status)
+                            break
+                else:
+                    note = notes[-1]
+                    if 'status' in note.keys():
+                        status = note['status']
+                        if status != current_status:
+                            self.create_note(output_file=path, status=current_status)
+
+                self.update_ui()
+                self.populate_existing_files(current_directory=self.scene_folder_path)
             except RuntimeError as e:
                 cmds.warning(f'Cannot open this database: {path}, {e}')
 
@@ -580,13 +612,33 @@ QComboBox {{
         :param filename:
         :return:
         """
-        status = None
+
+        status = '-'
         if folder:
+
             db_folder = os.path.join(folder, 'db')
             if os.path.exists(db_folder):
                 data = self.open_db(db_folder)
-                if data and 'Status' in data.keys():
-                    status = data['Status']
+                notes = data['Notes']
+
+                if notes and not filename:
+
+                    last_note = notes[-1]
+
+                    if type(last_note) == dict and 'status' in last_note.keys():
+
+                        status = last_note['status']
+
+                elif notes and filename:
+
+                    for note in notes:
+                        if filename == note['filename']:
+
+                            if type(note) == dict and 'status' in note.keys():
+
+                                status = note['status']
+
+                            break
         return status
 
     def set_item_status(self, status=None):
@@ -605,6 +657,8 @@ QComboBox {{
                 return 'darkgreen', 'palegreen'
             elif status == 'Omit':
                 return 'red', 'black'
+            else:
+                return 'gainsporo', 'dimgrey'
 
     def create_tree_context_menu(self, widget, widget_name, position):
         """
@@ -1213,39 +1267,88 @@ QComboBox {{
         Creates a new note for a project asset or shot
         :param notes: The note being added to the database.
         :param output_file: The output file from which to parse the data and determine where to send the note.
+        :param status: The status of the note being said.
         :return:
         """
         try:
-            if notes and output_file:
+            if os.path.isfile(output_file):
                 path = os.path.dirname(output_file)
+                file_name = os.path.basename(output_file)
+            elif os.path.isdir(output_file):
+                path = output_file
+                file_name = None
+            else:
+                path = output_file
+                file_name = None
+
+            if notes and output_file:
                 notes_path = self.make_db_folder(folder=path)
                 notes_db = self.open_db(folder=notes_path)
                 if not os.path.exists(path):
                     os.makedirs(path)
                 self.message(text='Writing Notes...', ok=True)
+                if not status:
+                    # FIXME: I'm unsure at this juncture if this should auto-set to "In Progress"
+                    status = 'In Progress'
                 date_now = datetime.now()
                 date = '{d} | {t}'.format(d=date_now.date(), t=date_now.time())
                 new_note = {
-                    'filename': os.path.basename(output_file),
+                    'filename': file_name,
                     'user': os.environ[env_user],
                     'computer': os.environ[computername],
                     'date': date,
+                    'status': status,
                     'details': notes
                 }
-                notes_db['Notes'].append(new_note)
-                print(f'create_notes: status 1: {status}')
-                notes_db['Status'] = status
+
+                update = False
+                for note in notes_db['Notes']:
+                    if note['filename'] == file_name:
+                        note.update(new_note)
+                        update = True
+                        break
+                if not update:
+                    notes_db['Notes'].append(new_note)
+
                 self.save_db(folder=notes_path, data=notes_db)
                 self.message(text='Saved Successfully!!', ok=True)
             elif status and output_file and not notes:
-                path = os.path.dirname(output_file)
                 notes_path = self.make_db_folder(folder=path)
                 notes_db = self.open_db(folder=notes_path)
                 if not os.path.exists(path):
                     os.makedirs(path)
-                print(f'create_notes: status 2: {status}')
-                notes_db['Status'] = status
+
+                date_now = datetime.now()
+                date = '{d} | {t}'.format(d=date_now.date(), t=date_now.time())
+                notes = 'Status update'
+
+                update = False
+                for note in notes_db['Notes']:
+                    if note['filename'] == file_name:
+                        new_note = {
+                            'user': os.environ[env_user],
+                            'computer': os.environ[computername],
+                            'date': date,
+                            'status': status,
+                            'details': note['details'] + '\nUpdate: ' + notes
+                        }
+
+                        note.update(new_note)
+                        update = True
+                        break
+                if not update:
+                    new_note = {
+                        'filename': file_name,
+                        'user': os.environ[env_user],
+                        'computer': os.environ[computername],
+                        'date': date,
+                        'status': status,
+                        'details': notes
+                    }
+                    notes_db['Notes'].append(new_note)
+
                 self.save_db(folder=notes_path, data=notes_db)
+                self.message(text='Status updated', ok=True)
             else:
                 return False
         except RuntimeError as e:
@@ -1291,6 +1394,7 @@ QComboBox {{
 USER: None
 COMP: None
 DATE: None
+STATUS: -
 
 NOTE: None
 """.format(fn=filename)
@@ -1380,6 +1484,10 @@ NOTE: None
                         date = note['date']
                         computer = note['computer']
                         details = note['details']
+                        if 'status' in note.keys():
+                            status = note['status']
+                        else:
+                            status = '-'
 
                         # Set pretty date
                         d_date = datetime.strptime(date, '%Y-%m-%d | %H:%M:%S.%f')
@@ -1389,25 +1497,24 @@ NOTE: None
 USER: {user}
 COMP: {computer}
 DATE: {date}
+STATUS: {status}
 
-NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=date, details=details)
+NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=date, status=status, details=details)
+
+                        if status and status != '-':
+                            self.ui.taskStatus.blockSignals(True)
+                            self.ui.taskStatus.setCurrentText(status)
+                            self.ui.taskStatus.blockSignals(False)
+                            self.status_changed(status)
+                            QApplication.processEvents()
+                        else:
+                            self.ui.taskStatus.blockSignals(True)
+                            self.ui.taskStatus.setCurrentText('-')
+                            self.ui.taskStatus.blockSignals(False)
+                            self.status_changed(status)
+                            QApplication.processEvents()
                         break
-            if 'Status' in notes_db.keys():
-                status = notes_db['Status']
-                if status:
-                    self.ui.taskStatus.blockSignals(True)
-                    self.ui.taskStatus.setCurrentText(status)
-                    self.ui.taskStatus.blockSignals(False)
-                    self.status_changed(status)
-                    QApplication.processEvents()
-                else:
-                    self.ui.taskStatus.blockSignals(True)
-                    self.ui.taskStatus.setCurrentText('-')
-                    self.ui.taskStatus.blockSignals(False)
-                    self.status_changed(status)
-                    QApplication.processEvents()
-            else:
-                self.ui.taskStatus.setCurrentText('-')
+
             self.ui.existing_notes.setText(post_note)
             self.populate_snapshots(item, column)
 
@@ -1499,7 +1606,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                         file_item = QTreeWidgetItem(folder_items[relative_folder_name])
                         file_item.setText(0, file_name)
                         file_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": file_name})
-                        status = self.get_item_status(folder=folder_name)
+                        status = self.get_item_status(folder=folder_name, filename=file_name)
                         if status:
                             colors = self.set_item_status(status=status)
                             fg = colors[0]
