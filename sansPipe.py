@@ -25,8 +25,8 @@ Version 1.3 Goals:
     5. Add some Project Level collection system.  
         This would go through the root project, look for database JSON files and output an Excel sheet that would list
         all existing projects and their current statuses.
-    6. Add task statuses.
-        This could be a really good one to add.
+                    6. Add task statuses.
+                        This could be a really good one to add.
     7. UI enhancements (Related to some of the above):
                          a. Add Task Statuses
         b. Add a Playblasts section to... somewhere.
@@ -34,8 +34,8 @@ Version 1.3 Goals:
     8. Make the UI stay opened if references are out of date on a recently opened file
     9. Filtering on trees:
         Task filtering for both Existing File and Publishes. Only show Chars.  Only show Rigs
-    10. Rework #6 Task statuses.  Needs to be in the note and not a separate tag.  Each save as should have it's own 
-        note and be tallied up by that instead of an overall tag.
+                    10. Rework #6 Task statuses.  Needs to be in the note and not a separate tag.  Each save as should have it's own 
+                        note and be tallied up by that instead of an overall tag.
     11. Add a "Blow away Snapshots" function for project cleanup.  The button would exist on the settings page, and 
         there could also be a right-click context for individual elements
     12. Rearrange the Tasks and Publishes.  Put publishes in their own folder either in the root of Scenes, or outside
@@ -384,8 +384,8 @@ class sansPipe(QWidget):
         self.ui.assetTree.setHeaderHidden(True)
         self.ui.snapshots.setHeaderHidden(True)
         self.ui.snapshots.itemDoubleClicked.connect(self.import_snapshot)
-        self.ui.existingFile_list.itemClicked.connect(self.show_file_selection_info)
         self.ui.existingFile_list.itemDoubleClicked.connect(lambda: self.open_file(f=False))
+        self.ui.existingFile_list.itemClicked.connect(self.show_file_selection_info)
         self.populate_existing_files(current_directory=self.scene_folder_path)
         self.populate_publish_assets(tree=self.ui.assetTree, root='assets',
                                      current_directory=self.asset_folder_path)
@@ -599,9 +599,9 @@ QComboBox {{
                         status = note['status']
                         if status != current_status:
                             self.create_note(output_file=path, status=current_status)
-
-                self.update_ui()
-                self.populate_existing_files(current_directory=self.scene_folder_path)
+                #
+                # self.update_ui()
+                # self.populate_existing_files(current_directory=self.scene_folder_path)
             except RuntimeError as e:
                 cmds.warning(f'Cannot open this database: {path}, {e}')
 
@@ -1241,7 +1241,7 @@ QComboBox {{
                 if not os.path.exists(notes_db_file):
                     # create an empty file
                     self.create_db(folder=notes_db_file)
-                with open(notes_db_file, 'r+') as open_notes:
+                with open(notes_db_file, 'r') as open_notes:
                     notes_db = json.load(open_notes)
                     open_notes.close()
         except RuntimeError as e:
@@ -1329,8 +1329,7 @@ QComboBox {{
                             'user': os.environ[env_user],
                             'computer': os.environ[computername],
                             'date': date,
-                            'status': status,
-                            'details': note['details'] + '\nUpdate: ' + notes
+                            'status': status
                         }
 
                         note.update(new_note)
@@ -1390,6 +1389,8 @@ QComboBox {{
             filename = file_info['file']
             folder = self.make_db_folder(folder_name)
             notes_db = self.open_db(folder=folder)
+            if not notes_db:
+                return False
             post_note = """FILE: {fn}
 USER: None
 COMP: None
@@ -1524,6 +1525,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         :param current_directory: Usually the root scenes directory for a project.
         :return:
         """
+        self.ui.existingFile_list.clear()
         allowed_extensions = ['ma', 'mb', 'obj', 'fbx', 'abc']
         excluded_folders = ['db', 'edits', '.mayaSwatches', 'snapshots', 'Publishes']
 
