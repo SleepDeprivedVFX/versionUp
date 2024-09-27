@@ -44,7 +44,13 @@ Version 1.3 Goals:
         database for everything.
         
 KNOWN BUGS:
-    1. Unloaded references break the system
+    2. Task settings: I realized that I'm getting a double trigger somewhere.  It's not causing much of a visible lag, 
+        but it is there.  The Task Status drop down triggers a change in status, but selecting an item triggers a task
+        status change.  Now, currently, it's checking to see if there's a difference before it actively changes the 
+        status of a task, but I wonder if it's an added layer of iteration that doesn't need to happen?  Need to look 
+        into it.
+    3. Create Asset/Shots function is creating a different folder than the default folder.
+        Furthermore, it may be creating tasks that are beyond the scope of the shots.
 """
 
 from maya import cmds
@@ -1661,6 +1667,13 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                         folder_item.setText(0, os.path.basename(folder_name))
                         folder_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": ""})
                         folder_items[relative_folder_name] = folder_item
+                        status = self.get_item_status(folder=folder_name)
+                        if status:
+                            colors = self.set_item_status(status=status)
+                            fg = colors[0]
+                            bg = colors[1]
+                            folder_item.setForeground(0, QColor(fg))
+                            folder_item.setBackground(0, QColor(bg))
                         if relative_folder_name == '.':
                             folder_items[relative_folder_name].setExpanded(True)
 
@@ -1682,6 +1695,13 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             subfolder_item = QTreeWidgetItem(folder_items[relative_folder_name])
                             subfolder_item.setText(0, os.path.basename(subfolder))
                             subfolder_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": ""})
+                            status = self.get_item_status(folder=folder_name)
+                            if status:
+                                colors = self.set_item_status(status=status)
+                                fg = colors[0]
+                                bg = colors[1]
+                                subfolder_item.setForeground(0, QColor(fg))
+                                subfolder_item.setBackground(0, QColor(bg))
                             folder_items[relative_subfolder_name] = subfolder_item
 
                     for file_name in files:
@@ -1699,6 +1719,13 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             file_item = QTreeWidgetItem(folder_items[relative_folder_name])
                             file_item.setText(0, file_name)
                             file_item.setData(0, Qt.UserRole, {'folder': folder_name, 'file': file_name})
+                            status = self.get_item_status(folder=folder_name, filename=file_name)
+                            if status:
+                                colors = self.set_item_status(status=status)
+                                fg = colors[0]
+                                bg = colors[1]
+                                file_item.setForeground(0, QColor(fg))
+                                file_item.setBackground(0, QColor(bg))
 
     def message(self, text=None, ok=True, obj=None):
         """
@@ -2264,7 +2291,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         elif _type == 'Veh':
             message_type = 'Vehicle'
         else:
-            message_type = 'Shot'
+            message_type = 'Shots'
         if not self.ui.asset_name.text():
             self.message(text=f'You must give the {message_type} a name!', ok=False, obj=self.ui.assetShot_type)
             return False
@@ -2282,12 +2309,12 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             os.makedirs(path)
 
         # Create task sub-folders.
-        if _type != 'Cams' or _type != 'Shot':
+        if _type != 'Cams' or _type != 'Shots':
             for task_type in self.asset_tasks:
                 task_path = os.path.join(path, task_type)
                 if not os.path.exists(task_path):
                     os.makedirs(task_path)
-        elif _type == 'Shot':
+        elif _type == 'Shots':
             for task_type in self.shot_tasks:
                 task_path = os.path.join(path, task_type)
                 if not os.path.exists(task_path):
@@ -2299,7 +2326,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
         close_previous = self.create_new_file_with_prompt()
         if close_previous:
-            if message_type == 'Shot':
+            if message_type == 'Shots':
                 task_type = 'layout'
             else:
                 task_type = 'model'
@@ -2446,7 +2473,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         current_file = self.current_file_path
 
         # Do the version up first
-        new_version = self.run(close=False, status='Done')
+        new_version = self.run(close=False, status='For Review')
 
         # Create the publish version
         root_path = os.path.dirname(current_file)
@@ -2525,57 +2552,66 @@ References Imported and Cleaned:
 
         # Gathering all references
         for ref in references:
-            # Get the path and namespace of the reference
-            out_of_date = False
-            ref_file = cmds.referenceQuery(ref, filename=True, wcn=True)
-            namespace = cmds.referenceQuery(ref, namespace=True)
-            ref_node = cmds.referenceQuery(ref, rfn=True)
+            # Check that a reference is loaded
+            is_loaded = cmds.referenceQuery(ref, isLoaded=True)
+            if not is_loaded:
+                cmds.warning(f'Reference file {ref} is unloaded.  Skipping.')
+                continue
 
-            NS_basename = cmds.namespaceInfo(namespace, bn=True)
+            try:
+                # Get the path and namespace of the reference
+                out_of_date = False
+                ref_file = cmds.referenceQuery(ref, filename=True, wcn=True)
+                namespace = cmds.referenceQuery(ref, namespace=True)
+                ref_node = cmds.referenceQuery(ref, rfn=True)
 
-            # Count the duplicate entries
-            if ref_file in reference_info.keys():
-                reference_info[ref_file]['count'] += 1
-            else:
-                reference_info[ref_file] = {
-                    'filename': ref_file,
+                NS_basename = cmds.namespaceInfo(namespace, bn=True)
+
+                # Count the duplicate entries
+                if ref_file in reference_info.keys():
+                    reference_info[ref_file]['count'] += 1
+                else:
+                    reference_info[ref_file] = {
+                        'filename': ref_file,
+                        'namespace': namespace,
+                        'count': 1
+                    }
+
+                # get the latest version
+                latest_file = self.check_for_latest_version(filename=ref_file)
+                if not latest_file == ref_file:
+                    cmds.warning(f'{ref_file} is out of date!  Latest file is {latest_file}')
+                    out_of_date = True
+
+                base_name = os.path.basename(ref_file)
+                root_dir = os.path.dirname(ref_file)
+                data = {
                     'namespace': namespace,
-                    'count': 1
+                    'path': root_dir,
+                    'reference_node': ref_node,
+                    'latest_file': latest_file
                 }
+                new_entry = QListWidgetItem()
+                new_entry.setText(f'{NS_basename}:{base_name}')
+                new_entry.setData(Qt.UserRole, data)
 
-            # get the latest version
-            latest_file = self.check_for_latest_version(filename=ref_file)
-            if not latest_file == ref_file:
-                cmds.warning(f'{ref_file} is out of date!  Latest file is {latest_file}')
-                out_of_date = True
+                # Set checkable
+                new_entry.setFlags(new_entry.flags() | Qt.ItemIsUserCheckable)
+                if out_of_date:
+                    new_entry.setCheckState(Qt.Checked)
+                    new_entry.setBackground(light_red)
+                    new_entry.setForeground(Qt.white)
+                    new_entry.setToolTip(f'Out of date! Latest version: {os.path.basename(latest_file)}')
+                    self.ui.saverTabs.setCurrentIndex(1)
+                else:
+                    new_entry.setCheckState(Qt.Unchecked)
+                    new_entry.setBackground(light_green)
+                    new_entry.setForeground(Qt.black)
+                    new_entry.setToolTip(f'Up to Date!')
 
-            base_name = os.path.basename(ref_file)
-            root_dir = os.path.dirname(ref_file)
-            data = {
-                'namespace': namespace,
-                'path': root_dir,
-                'reference_node': ref_node,
-                'latest_file': latest_file
-            }
-            new_entry = QListWidgetItem()
-            new_entry.setText(f'{NS_basename}:{base_name}')
-            new_entry.setData(Qt.UserRole, data)
-
-            # Set checkable
-            new_entry.setFlags(new_entry.flags() | Qt.ItemIsUserCheckable)
-            if out_of_date:
-                new_entry.setCheckState(Qt.Checked)
-                new_entry.setBackground(light_red)
-                new_entry.setForeground(Qt.white)
-                new_entry.setToolTip(f'Out of date! Latest version: {os.path.basename(latest_file)}')
-                self.ui.saverTabs.setCurrentIndex(1)
-            else:
-                new_entry.setCheckState(Qt.Unchecked)
-                new_entry.setBackground(light_green)
-                new_entry.setForeground(Qt.black)
-                new_entry.setToolTip(f'Up to Date!')
-
-            self.ui.referenceList.addItem(new_entry)
+                self.ui.referenceList.addItem(new_entry)
+            except Exception as e:
+                cmds.warning(f'Failed to process reference file {ref}: {e}')
 
     def update_references(self):
         """
