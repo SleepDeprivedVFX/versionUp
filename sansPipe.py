@@ -1264,7 +1264,7 @@ QComboBox {{
         if data and folder:
             notes_file = os.path.join(folder, 'notes_db.json')
             save_data = json.dumps(data, indent=4)
-            with open(notes_file, 'r+') as save:
+            with open(notes_file, 'w') as save:
                 save.write(save_data)
                 save.close()
 

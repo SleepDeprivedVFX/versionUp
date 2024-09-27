@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIBoMGXS.ui'
+## Form generated from reading UI file 'superSaver_UIIbylMs.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -1555,7 +1555,7 @@ class Ui_SaveAs(object):
         self.assetShot_type.setItemText(1, QCoreApplication.translate("SaveAs", u"Char", None))
         self.assetShot_type.setItemText(2, QCoreApplication.translate("SaveAs", u"Env", None))
         self.assetShot_type.setItemText(3, QCoreApplication.translate("SaveAs", u"Prop", None))
-        self.assetShot_type.setItemText(4, QCoreApplication.translate("SaveAs", u"Shot", None))
+        self.assetShot_type.setItemText(4, QCoreApplication.translate("SaveAs", u"Shots", None))
         self.assetShot_type.setItemText(5, QCoreApplication.translate("SaveAs", u"Veh", None))
 
 #if QT_CONFIG(tooltip)
