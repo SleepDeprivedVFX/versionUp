@@ -2213,14 +2213,14 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         Char = Characters
         Env = Environments
         Props = Props
-        Shot = Shots
+        Shots = Shots
         Veh = Vehicles
 
         Thus, a typical CSV file would read like this:
         Bob, Char
         Truck, Veh
-        Shot_0010, Shot
-        Shot_0020, Shot
+        Shot_0010, Shots
+        Shot_0020, Shots
         :return:
         """
         csv_file_path =  self.ui.bulk_add.text()
