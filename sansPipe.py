@@ -418,6 +418,7 @@ class sansPipe(QWidget):
 
         # Hide the overwrite function since it currently does nothing and isn't necessarily needed.
         self.ui.overwrite.hide()
+        self.ui.existing_notes.setReadOnly(True)
 
         # Start connecting list functionality to their appropriate functions.
         self.ui.existingFile_list.setHeaderHidden(True)
@@ -624,6 +625,7 @@ QComboBox {{
                 get_db = self.open_db(db_path)
                 notes = get_db['Notes']
                 if filename:
+                    found_note = False
                     for note in notes:
                         if filename == note['filename']:
                             if 'status' in note.keys():
@@ -631,15 +633,24 @@ QComboBox {{
                                 if status != current_status:
                                     self.hide()
                                     pop_note = self.pop_up_note()
+                                    self.show()
                                     self.create_note(notes=pop_note, output_file=file_path, status=current_status,
                                                      task_note=True)
-                                    self.show()
                             else:
                                 self.hide()
                                 pop_note = self.pop_up_note()
+                                self.show()
                                 self.create_note(notes=pop_note, output_file=file_path, status=current_status,
                                                  task_note=True)
+                            found_note = True
                             break
+
+                    # Create note if none found
+                    if not found_note:
+                        self.hide()
+                        pop_note = self.pop_up_note()
+                        self.show()
+                        self.create_note(notes=pop_note, output_file=file_path, status=current_status, task_note=True)
                 else:
                     note = notes[-1]
                     if 'status' in note.keys():
@@ -647,7 +658,13 @@ QComboBox {{
                         if status != current_status:
                             self.hide()
                             pop_note = self.pop_up_note()
+                            self.show()
                             self.create_note(notes=pop_note, output_file=path, status=current_status, task_note=True)
+                    else:
+                        self.hide()
+                        pop_note = self.pop_up_note()
+                        self.show()
+                        self.create_note(notes=pop_note, output_file=path, status=current_status, task_note=True)
                 #
                 # self.update_ui()
                 # self.populate_existing_files(current_directory=self.scene_folder_path)

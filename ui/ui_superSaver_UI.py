@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIIbylMs.ui'
+## Form generated from reading UI file 'superSaver_UINGWPlB.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -377,7 +377,7 @@ class Ui_SaveAs(object):
 
         self.existing_notes = QTextEdit(self.MainTab)
         self.existing_notes.setObjectName(u"existing_notes")
-        self.existing_notes.setEnabled(False)
+        self.existing_notes.setEnabled(True)
         self.existing_notes.setMinimumSize(QSize(0, 150))
 
         self.verticalLayout.addWidget(self.existing_notes)
