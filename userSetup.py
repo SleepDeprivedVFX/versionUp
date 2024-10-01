@@ -14,11 +14,7 @@ __version__ = '1.3.5'
 __author__ = 'Adam Benson'
 
 settings = QSettings(__author__, 'Sans Pipe Super Saver')
-autoload = settings.value('autoload', None)
-if autoload == 'true':
-    autoload = True
-else:
-    autoload = False
+autoload = settings.value('autoload', None, type=bool)
 
 
 def load_sansPipe():

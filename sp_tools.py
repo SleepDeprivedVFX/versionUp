@@ -55,13 +55,9 @@ class sp_toolkit(object):
 
         # Get Global Variables from JSON
         current_file_path = inspect.getfile(inspect.currentframe())
-        print(f'current_file_path: {current_file_path}')
         plugin_dir = os.path.dirname(os.path.abspath(current_file_path))
-        print(f'plugin_dir: {plugin_dir}')
         sp_global_vars = os.path.join(plugin_dir, 'sp_global_vars.json')
-        print(f'sp_global_vars path: {sp_global_vars}')
         if os.path.exists(sp_global_vars):
-            print('file exists!')
             with open(sp_global_vars, 'r') as global_vars:
                 globVars = json.load(global_vars)
         else:
@@ -87,7 +83,7 @@ class sp_toolkit(object):
         """
         filepath = cmds.file(q=True, sn=True)
         if not filepath:
-            print('You must save the file first!')
+            cmds.warning('You must save the file first!')
             return
         filename = os.path.basename(filepath)
         root_name = None
@@ -132,9 +128,7 @@ class sp_toolkit(object):
         scene_scale = float(self.scene_scale)
         aspect_ratio = mult_fb_w / mult_fb_h
         data = self.get_data()
-        print(f'sptk: cc: data: {data}')
         base_name = data['root_name']
-        print(f'sptk: cc: base_name: {base_name}')
         show_code = self.show_code
         cam_name = f'{show_code}_{base_name}_shotCam'
         result = cmds.promptDialog(
@@ -318,7 +312,6 @@ class sp_toolkit(object):
         :return:
         """
         find_db_path = os.path.join(self.workspace, cmds.workspace(fre='scenes'))
-        print(f'find_db_path: {find_db_path}')
         collect_dbs = []
         walk_path = os.walk(find_db_path)
         for root, dir, files in walk_path:
@@ -328,14 +321,12 @@ class sp_toolkit(object):
                         path = os.path.join(root, f)
                         collect_dbs.append(path)
         for db in collect_dbs:
-            print(f'db path: {db}')
             with open(db, 'r') as odb:
                 get_db = odb.read()
             try:
                 db_data = json.loads(get_db)
-                print(f'data: {db_data}')
             except Exception as e:
-                print(f'Could not load data for {db}')
+                cmds.warning(f'Could not load data for {db}')
                 fixed_data = self.fix_json(odb)
                 try:
                     db_data = json.loads(fixed_data)
@@ -343,7 +334,7 @@ class sp_toolkit(object):
                     with open(db, 'w') as wdb:
                         json.dump(fixed_data, wdb, indent=4)
                 except json.JSONDecodeError:
-                    print(f'Could not repair the database: {db}')
+                    cmds.warning(f'Could not repair the database: {db}')
                     return None
 
     def fix_json(self, data):
