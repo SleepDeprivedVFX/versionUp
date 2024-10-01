@@ -152,6 +152,30 @@ class CustomMessageBox(QMessageBox):
             return self.text_input.text()
         return None
 
+class CustomNotesBox(QMessageBox):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        self.setWindowTitle('Status Update Note')
+        self.setText('Why are you changing the status?  Leave a note!')
+        self.text_input = QPlainTextEdit(self)
+        self.layout().addWidget(self.text_input, 1, 1)
+        self.addButton(QMessageBox.Ok)
+        self.addButton(QMessageBox.Cancel)
+        self.button(QMessageBox.Ok).setEnabled(False)
+        self.text_input.textChanged.connect(self.validate_input)
+
+    def validate_input(self):
+        if len(self.text_input.toPlainText()) > 10:
+            self.button(QMessageBox.Ok).setEnabled(True)
+        else:
+            self.button(QMessageBox.Ok).setEnabled(False)
+
+    def get_input(self):
+        if self.exec() == QMessageBox.Ok:
+            return self.text_input.toPlainText()
+        return None
+
 class sansPipe(QWidget):
     """
     Main SansPipe utility.  This class runs all the functions of the SansPipe utility.
@@ -605,16 +629,25 @@ QComboBox {{
                             if 'status' in note.keys():
                                 status = note['status']
                                 if status != current_status:
-                                    self.create_note(output_file=file_path, status=current_status)
+                                    self.hide()
+                                    pop_note = self.pop_up_note()
+                                    self.create_note(notes=pop_note, output_file=file_path, status=current_status,
+                                                     task_note=True)
+                                    self.show()
                             else:
-                                self.create_note(output_file=file_path, status=current_status)
+                                self.hide()
+                                pop_note = self.pop_up_note()
+                                self.create_note(notes=pop_note, output_file=file_path, status=current_status,
+                                                 task_note=True)
                             break
                 else:
                     note = notes[-1]
                     if 'status' in note.keys():
                         status = note['status']
                         if status != current_status:
-                            self.create_note(output_file=path, status=current_status)
+                            self.hide()
+                            pop_note = self.pop_up_note()
+                            self.create_note(notes=pop_note, output_file=path, status=current_status, task_note=True)
                 #
                 # self.update_ui()
                 # self.populate_existing_files(current_directory=self.scene_folder_path)
@@ -1278,13 +1311,16 @@ QComboBox {{
                 save.write(save_data)
                 save.close()
 
-    def create_note(self, notes=None, output_file=None, status=None):
+    def create_note(self, notes=None, output_file=None, status=None, task_note=False):
         """
         Creates a new note for a project asset or shot
         :param notes: The note being added to the database.
         :param output_file: The output file from which to parse the data and determine where to send the note.
         :param status: The status of the note being said.
         :return:
+        """
+        """
+        FIXME: I'm adding task_note=False to add some functionality so that it can process task revisions with notes.
         """
         try:
             if os.path.isfile(output_file):
@@ -1297,7 +1333,7 @@ QComboBox {{
                 path = output_file
                 file_name = None
 
-            if notes and output_file:
+            if notes and output_file and not task_note:
                 notes_path = self.make_db_folder(folder=path)
                 notes_db = self.open_db(folder=notes_path)
                 if not os.path.exists(path):
@@ -1328,7 +1364,7 @@ QComboBox {{
 
                 self.save_db(folder=notes_path, data=notes_db)
                 self.message(text='Saved Successfully!!', ok=True)
-            elif status and output_file and not notes:
+            elif status and output_file and not notes and not task_note:
                 notes_path = self.make_db_folder(folder=path)
                 notes_db = self.open_db(folder=notes_path)
                 if not os.path.exists(path):
@@ -1364,6 +1400,50 @@ QComboBox {{
 
                 self.save_db(folder=notes_path, data=notes_db)
                 self.message(text='Status updated', ok=True)
+            elif notes and output_file and status and task_note:
+                notes_path = self.make_db_folder(folder=path)
+                notes_db = self.open_db(folder=notes_path)
+                # NOTE: I'm not sure if os.path.exists(path) is the right path to look at.  Double check this
+                if not os.path.exists(path):
+                    os.makedirs(path)
+
+                date_now = datetime.now()
+                date = '{d} | {t}'.format(d=date_now.date(), t=date_now.time())
+
+                update = False
+                for note in notes_db['Notes']:
+                    if note['filename'] == file_name:
+                        update = True
+                        original_notes = note['details']
+                        update_notes = f"""ORIGINAL NOTE BY: {note['user']}:
+{original_notes}
+on: {note['date']}
+
+STATUS REPLY:
+{notes}
+"""
+                        new_note = {
+                            'user': os.environ[env_user],
+                            'computer': os.environ[computername],
+                            'date': date,
+                            'details': update_notes,
+                            'status': status
+                        }
+
+                        note.update(new_note)
+                        break
+                if not update:
+                    new_note = {
+                        'filename': file_name,
+                        'user': os.environ[env_user],
+                        'computer': os.environ[computername],
+                        'date': date,
+                        'details': notes,
+                        'status': status
+                    }
+                    notes_db['Notes'].append(new_note)
+                self.save_db(folder=notes_path, data=notes_db)
+                self.message(text='Status Updated', ok=True)
             else:
                 return False
         except RuntimeError as e:
@@ -1768,8 +1848,18 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         result = msg_box.get_input()
         if result:
             return result
-        else:
-            return False
+        return False
+
+    def pop_up_note(self):
+        """
+        Pops up a simple Text editor to add a note in for status changes.
+        :return:
+        """
+        note_box = CustomNotesBox()
+        result = note_box.get_input()
+        if result:
+            return result
+        return False
 
     def run(self, close=True, status=None):
         """
