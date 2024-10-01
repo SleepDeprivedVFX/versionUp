@@ -27,10 +27,10 @@ Version 1.3 Goals:
         all existing projects and their current statuses.
                     6. Add task statuses.
                         This could be a really good one to add.
-    6.5. Add an "Add Note" button, or a feature that would request a note on task change, if it was triggered by the 
-        button.  This way a note would accompany a revision.  The system should probably archive the previous database 
-        entry with a flag of some sort (Filename_v001_RR1) or something like that, where RR# would be like saying 
-        "Revision Required Version 1" -> RR1.  Each version would get its own number RR2, RR3.
+                    6.5. Add an "Add Note" button, or a feature that would request a note on task change, if it was triggered by the 
+                        button.  This way a note would accompany a revision.  The system should probably archive the previous database 
+                        entry with a flag of some sort (Filename_v001_RR1) or something like that, where RR# would be like saying 
+                        "Revision Required Version 1" -> RR1.  Each version would get its own number RR2, RR3.
     7. UI enhancements (Related to some of the above):
                          a. Add Task Statuses
         b. Add a Playblasts section to... somewhere.
@@ -47,6 +47,8 @@ Version 1.3 Goals:
     13. Move the system from a JSON database setup to a SQL database - either per asset - like the JSONs, or as a global
         database for everything.
     14. Remove the "Publish" folder from displaying in the publishes.  It should just read like:
+        NOTE: This is problematic.  It will probably be solved by item #12, and should therefore be prioritized after 
+            that change
         Char
             CharName
                 Task
@@ -58,9 +60,6 @@ KNOWN BUGS:
         status change.  Now, currently, it's checking to see if there's a difference before it actively changes the 
         status of a task, but I wonder if it's an added layer of iteration that doesn't need to happen?  Need to look 
         into it.
-    3. Create Asset/Shots function is creating a different folder than the default folder.
-        Furthermore, it may be creating tasks that are beyond the scope of the shots.
-    4. The Copy from is not changing the filename.
 """
 
 from maya import cmds
@@ -1088,7 +1087,7 @@ QComboBox {{
             elif show.startswith('_'):
                 show = show.lstrip('_')
             if task:
-                # FIXME: Adding the task path here is problematic.
+                # FIXME: Adding the task path here is problematic.  NOTE: Why?  Why did I leave this note?
                 all_tasks = self.shot_tasks + self.asset_tasks
                 for task_type in all_tasks:
                     if task_type in path and task not in path:
@@ -1118,9 +1117,7 @@ QComboBox {{
                     basename = '{show}{base}'.format(base=rootName, show=show)
             check_filename = self.get_save_file(save_file=filename, save_path=path, basename=basename)
             filename = check_filename[0]
-            # Do I add the version update here?  Nope
 
-            # self.reset_version(v=next_version)
             output_path = os.path.join(path, filename)
             if '\\' in output_path:
                 output_path = output_path.replace('\\', '/')
@@ -1738,10 +1735,10 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
     def populate_publish_assets(self, tree=None, root=None, current_directory=None):
         """
-        This function populates several trees looking for either asset saves or file publishes.  It keeps them
-        separate for better organization.  Assets are kept separate from working file publishes.
+        This function populates several trees looking for either asset saves or file publishes. It keeps them
+        separate for better organization. Assets are kept separate from working file publishes.
         :param tree: The QTreeWidget item being populated.
-        :param root: The root folder.  This is primarily to separate out assets from publishes.
+        :param root: The root folder. This is primarily to separate out assets from publishes.
         :param current_directory: The root scene folder
         :return:
         """
@@ -2426,7 +2423,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             os.makedirs(path)
 
         # Create task sub-folders.
-        if _type != 'Cams' or _type != 'Shots':
+        if _type != 'Cams' and _type != 'Shots':
             for task_type in self.asset_tasks:
                 task_path = os.path.join(path, task_type)
                 if not os.path.exists(task_path):
