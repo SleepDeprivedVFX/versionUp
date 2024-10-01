@@ -27,6 +27,10 @@ Version 1.3 Goals:
         all existing projects and their current statuses.
                     6. Add task statuses.
                         This could be a really good one to add.
+    6.5. Add an "Add Note" button, or a feature that would request a note on task change, if it was triggered by the 
+        button.  This way a note would accompany a revision.  The system should probably archive the previous database 
+        entry with a flag of some sort (Filename_v001_RR1) or something like that, where RR# would be like saying 
+        "Revision Required Version 1" -> RR1.  Each version would get its own number RR2, RR3.
     7. UI enhancements (Related to some of the above):
                          a. Add Task Statuses
         b. Add a Playblasts section to... somewhere.
@@ -42,6 +46,11 @@ Version 1.3 Goals:
         of the scene folder.  TBD
     13. Move the system from a JSON database setup to a SQL database - either per asset - like the JSONs, or as a global
         database for everything.
+    14. Remove the "Publish" folder from displaying in the publishes.  It should just read like:
+        Char
+            CharName
+                Task
+                    PublishedFile.ma
         
 KNOWN BUGS:
     2. Task settings: I realized that I'm getting a double trigger somewhere.  It's not causing much of a visible lag, 
@@ -51,6 +60,7 @@ KNOWN BUGS:
         into it.
     3. Create Asset/Shots function is creating a different folder than the default folder.
         Furthermore, it may be creating tasks that are beyond the scope of the shots.
+    4. The Copy from is not changing the filename.
 """
 
 from maya import cmds
