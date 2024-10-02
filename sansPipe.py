@@ -1677,6 +1677,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
             self.ui.existing_notes.setText(post_note)
             self.populate_snapshots(item, column)
+            self.ui.snapshots.scrollToBottom()
 
     def populate_existing_files(self, current_directory=None):
         """
@@ -1778,9 +1779,12 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                         # Highlight the currently opened file
                         if file_path == self.current_file_path:
                             file_item.setSelected(True)
-                            self.ui.existingFile_list.scrollToItem(file_item)
                             folder_items[relative_folder_name].setExpanded(True)
+                            self.ui.existingFile_list.scrollToItem(file_item)
                             self.ui.existingFile_list.itemClicked.emit(file_item, 0)
+                            self.ui.existingFile_list.verticalScrollBar().setValue(
+                                self.ui.existingFile_list.verticalScrollBar().value() + 20
+                            )
 
     def populate_publish_assets(self, tree=None, root=None, current_directory=None):
         """
@@ -2178,6 +2182,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
                         if last_item:
                             last_item.setExpanded(True)  # Expand only the last item
+        self.ui.snapshots.scrollToBottom()
 
     def populate_recent_projects(self):
         """
