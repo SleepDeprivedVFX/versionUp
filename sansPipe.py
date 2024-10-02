@@ -16,8 +16,8 @@ Version 1.3 Goals:
         This would add buttons to the tools, menu and shelf based on tools added to either A) a sansPipe_tools.py script
         or B) by searching for and dynamically adding tools added to a bin folder.
                     2. Split all existing tools into a separate file that could be accessed either by the UI or by the shelf or menu.
-    3. Add Playblast record keeping, and perhaps organize playblasts into their own folder.
-        It would also be great if these could be played from a specific shot.
+                    3. Add Playblast record keeping, and perhaps organize playblasts into their own folder.
+                        It would also be great if these could be played from a specific shot.
                     4. May want to add task folders to better organize how each section is delineated.
                         Scenes > Char > CharacterName > Model
                         Scenes > Char > CharacterName > LookDev
@@ -33,7 +33,7 @@ Version 1.3 Goals:
                         "Revision Required Version 1" -> RR1.  Each version would get its own number RR2, RR3.
     7. UI enhancements (Related to some of the above):
                          a. Add Task Statuses
-        b. Add a Playblasts section to... somewhere.
+                         b. Add a Playblasts section to... somewhere.
         c. Add a reports section.
     8. Make the UI stay opened if references are out of date on a recently opened file
     9. Filtering on trees:
@@ -46,13 +46,7 @@ Version 1.3 Goals:
                         of the scene folder.  TBD
     13. Move the system from a JSON database setup to a SQL database - either per asset - like the JSONs, or as a global
         database for everything.
-        
-KNOWN BUGS:
-    2. Task settings: I realized that I'm getting a double trigger somewhere.  It's not causing much of a visible lag, 
-        but it is there.  The Task Status drop down triggers a change in status, but selecting an item triggers a task
-        status change.  Now, currently, it's checking to see if there's a difference before it actively changes the 
-        status of a task, but I wonder if it's an added layer of iteration that doesn't need to happen?  Need to look 
-        into it.
+
 """
 
 from maya import cmds
