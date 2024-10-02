@@ -83,6 +83,7 @@ import platform
 import configparser
 import csv
 import inspect
+import subprocess
 
 import sp_tools as sptk
 from ui import ui_superSaver_UI as ssui
@@ -746,16 +747,20 @@ QComboBox {{
         open_action = QAction('Open', self)
         ref_action = QAction('Reference', self)
         import_action = QAction('Import', self)
+        playblast_action = QAction('View Playblast', self)
         delete_snapshots = QAction('Blow Away Snapshots', self)
 
         # Setup the trigger actions.
         open_action.triggered.connect(lambda: self.open_file(f=False))
         ref_action.triggered.connect(lambda: self.load_ref(element=widget))
         import_action.triggered.connect(lambda: self.import_object(element=widget))
+        playblast_action.triggered.connect(lambda: self.playblast_player(element=widget))
         delete_snapshots.triggered.connect(lambda: self.blow_away_snaps(element=widget))
 
         if widget == self.ui.existingFile_list:
             context_menu.addAction(open_action)
+            context_menu.addAction(playblast_action)
+            context_menu.addSeparator()
             context_menu.addAction(delete_snapshots)
         else:
             context_menu.addAction(ref_action)
@@ -1476,6 +1481,34 @@ STATUS REPLY:
             self.message(text=f'{create_cam} Camera created', ok=True)
         else:
             self.message(text='Unable to create camera!', ok=False)
+
+    def playblast_player(self, element=None):
+        if element:
+            current_item = element.currentItem()
+            data = current_item.data(0, Qt.UserRole)
+            if data:
+                filename = data['file']
+                if filename:
+                    get_root_name = os.path.splitext(filename)
+                    root_name = get_root_name[0]
+                    root_path = cmds.workspace(q=True, rd=True)
+                    movies_folder = cmds.workspace(fre='movie')
+                    movie_path = os.path.join(root_path, movies_folder)
+                    if os.path.exists(movie_path):
+                        movie_filename = root_name + '.mov'
+                        movie_file = os.path.join(movie_path, movie_filename)
+                        if os.path.exists(movie_file):
+                            try:
+                                self.message(text=f'Playing movie {movie_file}', ok=True)
+                                if platform.system() == 'Windows':
+                                    subprocess.run(['start', '', movie_file], shell=True)
+                                else:
+                                    subprocess.run(['open', movie_file])
+                            except Exception as e:
+                                self.message(text=f'The movie {movie_file} could not be played', ok=False)
+                                cmds.warning(f'Unable to open the file {movie_file}')
+                        else:
+                            self.message(text=f'Playblast could not be found for {movie_file}', ok=False)
 
     def blow_away_snaps(self, element=None):
         if element:
