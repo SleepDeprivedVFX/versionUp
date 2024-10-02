@@ -83,12 +83,21 @@ def create_camera(*args):
     except Exception as e:
         cmds.error(f'Unable to create camera! {e}')
 
+
 def do_database_repair(*args):
     try:
         import sp_tools as sptk
         sptk.sp_toolkit().db_seek_and_repair()
     except Exception as e:
         cmds.error(f'Unable to run DB Seek and Repair! {e}')
+
+
+def blow_away_snaps(*args):
+    try:
+        import sp_tools as sptk
+        sptk.sp_toolkit().blow_away_snapshots()
+    except Exception as e:
+        cmds.error(f'Unable to run Blow Away Snapshots! {e}')
 
 
 def create_sans_pipe_menu():
@@ -106,6 +115,7 @@ def create_sans_pipe_menu():
     cmds.menuItem(label='Bake Camera', command=run_cam_bake)
     cmds.menuItem(label='Create Camera', command=create_camera)
     cmds.menuItem(label='Do Database Repair', command=do_database_repair)
+    cmds.menuItem(label='!Blow Away All Snapshots!', command=blow_away_snaps)
 
 
 # Function to check if the hotkey set is locked by testing temporary command creation

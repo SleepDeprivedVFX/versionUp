@@ -489,10 +489,11 @@ class sansPipe(QWidget):
         self.check_button_state(btn=self.ui.abcPub_btn)
         self.check_button_state(btn=self.ui.playblast_btn)
         self.check_button_state(btn=self.ui.bakeCam_btn)
-        self.check_button_state(btn=self.ui.build_folders_btn)
+        # self.check_button_state(btn=self.ui.build_folders_btn)
         self.ui.playblast_btn.clicked.connect(self.playblast)
         self.ui.createCam_btn.clicked.connect(self.create_camera)
         self.ui.bulk_add_btn.clicked.connect(self.get_csv)
+        self.ui.blowAwaySnaps_btn.clicked.connect(self.blow_away_snaps)
 
         # Set the font for the Tools Group.
         title_font = QFont()
@@ -745,15 +746,20 @@ QComboBox {{
         open_action = QAction('Open', self)
         ref_action = QAction('Reference', self)
         import_action = QAction('Import', self)
+        delete_snapshots = QAction('Blow Away Snapshots', self)
 
         # Setup the trigger actions.
         open_action.triggered.connect(lambda: self.open_file(f=False))
         ref_action.triggered.connect(lambda: self.load_ref(element=widget))
         import_action.triggered.connect(lambda: self.import_object(element=widget))
+        delete_snapshots.triggered.connect(lambda: self.blow_away_snaps(element=widget))
 
-        context_menu.addAction(open_action)
-        context_menu.addAction(ref_action)
-        context_menu.addAction(import_action)
+        if widget == self.ui.existingFile_list:
+            context_menu.addAction(open_action)
+            context_menu.addAction(delete_snapshots)
+        else:
+            context_menu.addAction(ref_action)
+            context_menu.addAction(import_action)
 
         context_menu.exec(widget.mapToGlobal(position))
 
@@ -1470,6 +1476,21 @@ STATUS REPLY:
             self.message(text=f'{create_cam} Camera created', ok=True)
         else:
             self.message(text='Unable to create camera!', ok=False)
+
+    def blow_away_snaps(self, element=None):
+        if element:
+            current_item = element.currentItem()
+            data = current_item.data(0, Qt.UserRole)
+            folder = data['folder']
+        else:
+            folder = None
+        self.hide()
+        blow_away = self.sptk.blow_away_snapshots(folder=folder)
+        self.show()
+        if blow_away:
+            self.message(text='Snapshots have been erased.', ok=True)
+        else:
+            self.message(text='Unable to remove snapshots', ok=False)
 
     def show_file_selection_info(self, item, column):
         """
@@ -2997,6 +3018,7 @@ References Imported and Cleaned:
         :return:
         """
         self.hide()
+        # FIXME: Add some viewer functionality here.  Like, removing all but the GEO
         playblast = self.sptk.playblast()
         self.close()
 

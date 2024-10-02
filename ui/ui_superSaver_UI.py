@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIYDIVJp.ui'
+## Form generated from reading UI file 'superSaver_UIxGqVGX.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -467,6 +467,11 @@ class Ui_SaveAs(object):
         self.build_folders_btn.setObjectName(u"build_folders_btn")
 
         self.verticalLayout_4.addWidget(self.build_folders_btn)
+
+        self.blowAwaySnaps_btn = QPushButton(self.toolsGroup)
+        self.blowAwaySnaps_btn.setObjectName(u"blowAwaySnaps_btn")
+
+        self.verticalLayout_4.addWidget(self.blowAwaySnaps_btn)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
@@ -1561,6 +1566,7 @@ class Ui_SaveAs(object):
         self.abcPub_btn.setText(QCoreApplication.translate("SaveAs", u"Publish Selection as Alembic", None))
         self.playblast_btn.setText(QCoreApplication.translate("SaveAs", u"Playblaster", None))
         self.build_folders_btn.setText(QCoreApplication.translate("SaveAs", u"Build Default Folders", None))
+        self.blowAwaySnaps_btn.setText(QCoreApplication.translate("SaveAs", u"Blow Away Snapshots", None))
         self.create_Asset_label.setText(QCoreApplication.translate("SaveAs", u"Create Asset / Shot", None))
 #if QT_CONFIG(tooltip)
         self.assetShot_type_label.setToolTip(QCoreApplication.translate("SaveAs", u"Create a new Asset or Shot.  Adding an asset or shot here creates a folder and a base model or layout file.  In assets it will also create lookdev and rig files and reference the model file into it.", None))

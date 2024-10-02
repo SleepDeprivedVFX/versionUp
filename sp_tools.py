@@ -4,6 +4,7 @@
 This tool kit stores the functions that help run the SANS-PIPE UTILITY.  The idea here is that these tools can be used
 in or out of the pipeline system, with, or without the main UI.
 """
+import shutil
 
 from maya import cmds
 import os
@@ -345,5 +346,39 @@ class sp_toolkit(object):
         return data
 
     def blow_away_snapshots(self, folder=None):
-        pass
+        success = False
+        if folder:
+            root_folder = folder
+        else:
+            proj_root = cmds.workspace(q=True, rd=True)
+            scenes_folder = cmds.workspace(fre='scene')
+            root_folder = os.path.join(proj_root, scenes_folder)
+
+        result = cmds.promptDialog(
+            title='Blow Away Snapshots?!!?',
+            message='DANGER!\nBlow Away Snapshots will delete all snapshot files!\nIf called from a context menu it '
+                    'will only delete snapshots within that folder, otherwise it does it for the entire project.\nThis '
+                    'is not undoable!\nDo this only if you know you do not need them anymore and you just want to free '
+                    'up some space!\nType "DELETE" in all caps if you really want to do this',
+            button=['Accept', 'Cancel'],
+            defaultButton='Cancel',
+            cancelButton='Cancel',
+            dismissString='Cancel',
+            text=''
+        )
+        if result == 'Accept':
+            input_value = cmds.promptDialog(q=True, text=True)
+            if input_value == 'DELETE':
+                success = True
+                if os.path.exists(root_folder):
+                    snaps_found = []
+                    for root, dirs, files in os.walk(root_folder):
+                        if 'snapshots' in root:
+                            snaps_found.append(root)
+                    if snaps_found:
+                        for snap in snaps_found:
+                            print(f'Deleting {snap}')
+                            shutil.rmtree(snap)
+                            print('Folder Deleted!')
+        return success
 
