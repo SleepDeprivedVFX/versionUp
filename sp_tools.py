@@ -26,7 +26,7 @@ except ImportError:
     except ImportError:
         raise RuntimeError('Neither PySide 6 or PySide 2 detected!')
 
-__version__ = '1.3.6'
+__version__ = '1.3.7'
 __author__ = 'Adam Benson'
 
 

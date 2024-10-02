@@ -46,6 +46,7 @@ Version 1.3 Goals:
                         of the scene folder.  TBD
     13. Move the system from a JSON database setup to a SQL database - either per asset - like the JSONs, or as a global
         database for everything.
+    14. Make sure there are both Mac and Windows hotkeys
 
 """
 
@@ -99,7 +100,7 @@ def uninitializePlugin(mobject):
         om.MGlobal.displayError("Failed to deregister sansPipe plugin")
 
 
-__version__ = '1.3.6'
+__version__ = '1.3.7'
 __author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
