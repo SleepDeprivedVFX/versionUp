@@ -187,6 +187,12 @@ class sansPipe(QWidget):
         self.root_name = None
         self.task = None
 
+        # Initialize plug-in path settings
+        plugin_name = 'sansPipe'
+        plugin_path = cmds.pluginInfo(plugin_name, query=True, path=True)
+        self.plugin_folder = os.path.dirname(plugin_path)
+        self.icons = os.path.join(self.plugin_folder, 'icons')
+
         # Initialize the UI
         self.ui = ssui.Ui_SaveAs()
         self.ui.setupUi(self)
@@ -1775,6 +1781,16 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             bg = colors[1]
                             file_item.setForeground(0, QColor(fg))
                             file_item.setBackground(0, QColor(bg))
+
+                        movie_filename = file_name.replace('.ma', '.mov')
+                        movie_filename = movie_filename.replace('.mb', '.mov')
+                        movie_folder = cmds.workspace(fre='movie')
+                        movie_path = os.path.join(self.workspace, movie_folder)
+                        movie_file = os.path.join(movie_path, movie_filename)
+                        if os.path.exists(movie_file):
+                            icon_path = os.path.join(self.icons, 'cam_icon.png')
+                            icon = QIcon(icon_path)
+                            file_item.setIcon(0, icon)
 
                         # Highlight the currently opened file
                         if file_path == self.current_file_path:
