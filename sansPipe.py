@@ -40,8 +40,8 @@ Version 1.3 Goals:
         Task filtering for both Existing File and Publishes. Only show Chars.  Only show Rigs
                     10. Rework #6 Task statuses.  Needs to be in the note and not a separate tag.  Each save as should have it's own 
                         note and be tallied up by that instead of an overall tag.
-    11. Add a "Blow away Snapshots" function for project cleanup.  The button would exist on the settings page, and 
-        there could also be a right-click context for individual elements
+                    11. Add a "Blow away Snapshots" function for project cleanup.  The button would exist on the settings page, and 
+                        there could also be a right-click context for individual elements
                     12. Rearrange the Tasks and Publishes.  Put publishes in their own folder either in the root of Scenes, or outside
                         of the scene folder.  TBD
     13. Move the system from a JSON database setup to a SQL database - either per asset - like the JSONs, or as a global
