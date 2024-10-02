@@ -47,6 +47,8 @@ Version 1.3 Goals:
     13. Move the system from a JSON database setup to a SQL database - either per asset - like the JSONs, or as a global
         database for everything.
     14. Make sure there are both Mac and Windows hotkeys
+    15. Improve playblast settings.  Adjust what the viewport sees and try to put some burn-ins on there.
+    16. Rework the Status notes to use the Notes window instead of the pop up.
 
 """
 

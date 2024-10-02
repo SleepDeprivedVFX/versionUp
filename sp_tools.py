@@ -15,6 +15,7 @@ import time
 from datetime import datetime
 import configparser
 import inspect
+import math
 
 try:
     from PySide6.QtCore import QSettings
@@ -288,6 +289,31 @@ class sp_toolkit(object):
             return dup_cam
         return False
 
+    def create_burn_in(self, camera=None, filename=None, version=None, time_code=None, frame_number=None,
+                       focal_length=None):
+        burn_in_text = cmds.textCurves(ch=False, f='Arial', t=f'Filename: {filename}\nVersion: {version}\nTime Code: '
+                                                              f'{time_code}\nFrame: {frame_number}\nFocal Length: '
+                                                              f'{focal_length}')
+        cmds.parent(burn_in_text[0], camera)
+        cmds.move(0, 0, 1, burn_in_text, r=True)
+
+        aspect_ratio = cmds.getAttr(camera + '.filmAspectRatio')
+        sensor_width = cmds.getAttr(camera + '.horizontalFilmAperture') * 25.4  # Convert from inches to mm
+        fov_degrees = cmds.getAttr(camera + '.focalLength') / sensor_width * 2 * math.degrees(math.atan(sensor_width / (2 * focal_length)))
+
+        # Calculate width and scale text based on the FOV
+        # Assuming FOV in degrees
+        burn_in_width = 2 * math.tan(math.radians(fov_degrees / 2)) * 1  # 1 unit away
+        scale_factor = burn_in_width / cmds.getAttr(burn_in_text[0] + '.boundingBox')[1][0]  # Scale to fit in width
+
+        cmds.scale(scale_factor, scale_factor, scale_factor, burn_in_text)
+
+        # Set visibility and other attributes as needed
+        cmds.setAttr(burn_in_text[0] + '.overrideEnabled', 1)
+        cmds.setAttr(burn_in_text[0] + '.overrideColor', 17)  # Change color as needed (17 is red)
+
+        return burn_in_text
+
     def playblast(self):
         """
         Creates a playblast based on the UI Project settings and saves it with the current filename into the Movies
@@ -300,10 +326,24 @@ class sp_toolkit(object):
         filename = cmds.file(q=True, sn=True, shn=True)
         basename = os.path.splitext(filename)[0]
         filename = basename + '.mov'
+        # print(f'basename: {basename}')
+        # pattern = r'(_v|_V)\d+'
+        # version = re.findall(pattern, basename)
+        # print(f'version: {version}')
         output = os.path.join(movies_folder, filename)
+        # current_frame = cmds.currentTime(query=True)
+        # current_camera = cmds.modelEditor('modelPanel4', q=True, camera=True)
+        # focal_length = cmds.getAttr(current_camera + '.focalLength')
+        #
+        # burn_in_text = self.create_burn_in(camera=current_camera, filename=filename, version=version,
+        #                                    time_code=current_frame, frame_number=current_frame,
+        #                                    focal_length=focal_length)
+
         cmds.playblast(format='qt', filename=output, sequenceTime=0, clearCache=1, viewer=1, showOrnaments=1, fp=4,
                        percent=100, compression='PNG', quality=70, widthHeight=(res_width, res_height), exposure=0,
                        gamma=1, fo=True)
+
+        # cmds.delete(burn_in_text)
 
     def db_seek_and_repair(self):
         """
