@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UINGWPlB.ui'
+## Form generated from reading UI file 'superSaver_UIYDIVJp.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -691,8 +691,8 @@ class Ui_SaveAs(object):
         self.saverTabs.addTab(self.ToolsTab, "")
         self.projectTab = QWidget()
         self.projectTab.setObjectName(u"projectTab")
-        self.horizontalLayout_30 = QHBoxLayout(self.projectTab)
-        self.horizontalLayout_30.setObjectName(u"horizontalLayout_30")
+        self.horizontalLayout_39 = QHBoxLayout(self.projectTab)
+        self.horizontalLayout_39.setObjectName(u"horizontalLayout_39")
         self.verticalLayout_8 = QVBoxLayout()
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
         self.recent_project_label = QLabel(self.projectTab)
@@ -711,11 +711,11 @@ class Ui_SaveAs(object):
         self.verticalLayout_8.addItem(self.verticalSpacer_3)
 
 
-        self.horizontalLayout_30.addLayout(self.verticalLayout_8)
+        self.horizontalLayout_39.addLayout(self.verticalLayout_8)
 
         self.horizontalSpacer_15 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_30.addItem(self.horizontalSpacer_15)
+        self.horizontalLayout_39.addItem(self.horizontalSpacer_15)
 
         self.verticalLayout_9 = QVBoxLayout()
         self.verticalLayout_9.setObjectName(u"verticalLayout_9")
@@ -821,6 +821,21 @@ class Ui_SaveAs(object):
 
 
         self.verticalLayout_9.addLayout(self.horizontalLayout_16)
+
+        self.horizontalLayout_30 = QHBoxLayout()
+        self.horizontalLayout_30.setObjectName(u"horizontalLayout_30")
+        self.publish_label = QLabel(self.projectTab)
+        self.publish_label.setObjectName(u"publish_label")
+
+        self.horizontalLayout_30.addWidget(self.publish_label)
+
+        self.publish = QLineEdit(self.projectTab)
+        self.publish.setObjectName(u"publish")
+
+        self.horizontalLayout_30.addWidget(self.publish)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_30)
 
         self.horizontalLayout_17 = QHBoxLayout()
         self.horizontalLayout_17.setObjectName(u"horizontalLayout_17")
@@ -1021,11 +1036,11 @@ class Ui_SaveAs(object):
         self.verticalLayout_9.addItem(self.verticalSpacer_4)
 
 
-        self.horizontalLayout_30.addLayout(self.verticalLayout_9)
+        self.horizontalLayout_39.addLayout(self.verticalLayout_9)
 
         self.horizontalSpacer_16 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_30.addItem(self.horizontalSpacer_16)
+        self.horizontalLayout_39.addItem(self.horizontalSpacer_16)
 
         self.saverTabs.addTab(self.projectTab, "")
         self.SettingsTab = QWidget()
@@ -1632,6 +1647,7 @@ class Ui_SaveAs(object):
         self.include_subfolders.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>Typical Project Subfolders: Cams, Chars, Veh, Props, Env, Shots</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.include_subfolders.setText(QCoreApplication.translate("SaveAs", u"Include Subfolders", None))
+        self.publish_label.setText(QCoreApplication.translate("SaveAs", u"Publish", None))
         self.assets_label.setText(QCoreApplication.translate("SaveAs", u"Assets", None))
         self.images_label.setText(QCoreApplication.translate("SaveAs", u"Images", None))
         self.source_images_label.setText(QCoreApplication.translate("SaveAs", u"Source Images", None))

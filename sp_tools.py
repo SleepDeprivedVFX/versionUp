@@ -344,3 +344,6 @@ class sp_toolkit(object):
             data += '}'
         return data
 
+    def blow_away_snapshots(self, folder=None):
+        pass
+

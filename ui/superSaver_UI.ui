@@ -1213,7 +1213,7 @@ color: rgb(220, 220, 220);</string>
       <attribute name="title">
        <string>Project Settings</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_30">
+      <layout class="QHBoxLayout" name="horizontalLayout_39">
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_8">
          <item>
@@ -1401,6 +1401,20 @@ color: rgb(220, 220, 220);</string>
               <bool>true</bool>
              </property>
             </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_30">
+           <item>
+            <widget class="QLabel" name="publish_label">
+             <property name="text">
+              <string>Publish</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="publish"/>
            </item>
           </layout>
          </item>

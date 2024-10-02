@@ -42,17 +42,10 @@ Version 1.3 Goals:
                         note and be tallied up by that instead of an overall tag.
     11. Add a "Blow away Snapshots" function for project cleanup.  The button would exist on the settings page, and 
         there could also be a right-click context for individual elements
-    12. Rearrange the Tasks and Publishes.  Put publishes in their own folder either in the root of Scenes, or outside
-        of the scene folder.  TBD
+                    12. Rearrange the Tasks and Publishes.  Put publishes in their own folder either in the root of Scenes, or outside
+                        of the scene folder.  TBD
     13. Move the system from a JSON database setup to a SQL database - either per asset - like the JSONs, or as a global
         database for everything.
-    14. Remove the "Publish" folder from displaying in the publishes.  It should just read like:
-        NOTE: This is problematic.  It will probably be solved by item #12, and should therefore be prioritized after 
-            that change
-        Char
-            CharName
-                Task
-                    PublishedFile.ma
         
 KNOWN BUGS:
     2. Task settings: I realized that I'm getting a double trigger somewhere.  It's not causing much of a visible lag, 
@@ -204,6 +197,8 @@ class sansPipe(QWidget):
         self.workspace = workspace
         scene_folder = cmds.workspace(fre='scene')
         self.scene_folder_path = os.path.join(workspace, scene_folder)
+        publish_folder = cmds.workspace(fre='publish')
+        self.publish_folder_path = os.path.join(workspace, publish_folder)
         asset_folder = cmds.workspace(fre='templates')
         self.asset_folder_path = os.path.join(workspace, asset_folder)
 
@@ -427,10 +422,10 @@ class sansPipe(QWidget):
         self.ui.existingFile_list.itemDoubleClicked.connect(lambda: self.open_file(f=False))
         self.ui.existingFile_list.itemClicked.connect(self.show_file_selection_info)
         self.populate_existing_files(current_directory=self.scene_folder_path)
-        self.populate_publish_assets(tree=self.ui.assetTree, root='assets',
+        self.populate_publish_assets(tree=self.ui.assetTree, root=self.ui.assets.text(),
                                      current_directory=self.asset_folder_path)
-        self.populate_publish_assets(tree=self.ui.publishes_tree, root='______',
-                                     current_directory=self.scene_folder_path)
+        self.populate_publish_assets(tree=self.ui.publishes_tree, root=self.ui.publish.text(),
+                                     current_directory=self.publish_folder_path)
         self.ui.recentFilesList.itemDoubleClicked.connect(lambda: self.open_recent_file(f=False))
         self.ui.recent_projects.itemDoubleClicked.connect(lambda: self.set_project(btn=False))
         self.ui.set_proejct_btn.clicked.connect(lambda: self.set_project(btn=True))
@@ -1744,7 +1739,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         """
         allowed_extensions = ['ma', 'mb', 'obj', 'fbx', 'abc']
         excluded_folders = ['db', 'edits', '.mayaSwatches', 'snapshots']
-        allowed_folders = ['assets', 'Publishes']
+        allowed_folders = ['assets', 'Publishes', self.ui.publish.text()]
 
         if current_directory and tree:
             tree.clear()
@@ -2148,7 +2143,16 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         project will update them here as well.
         :return:
         """
+        # Make sure and then build the publish file rule.
+        publish_rule_name = 'publish'
+        publish_folder_path = 'publish'
+        existing_rules = cmds.workspace(fileRuleList=True)
+        if publish_rule_name not in existing_rules:
+            cmds.workspace(fileRule=[publish_rule_name, publish_folder_path])
+            cmds.workspace(saveWorkspace=True)
+
         scenes = cmds.workspace(fre='scene')
+        publish = cmds.workspace(fre='publish')
         asset = cmds.workspace(fre='templates')
         images = cmds.workspace(fre='images')
         sourceimages = cmds.workspace(fre='sourceImages')
@@ -2164,6 +2168,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
         self.ui.set_project.setText(cmds.workspace(q=True, act=True))
         self.ui.scenes.setText(scenes)
+        self.ui.publish.setText(publish)
         self.ui.assets.setText(asset)
         self.ui.images.setText(images)
         self.ui.source_images.setText(sourceimages)
@@ -2278,6 +2283,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         if proj_path:
             folder_structure = {
                 'scenes': self.ui.scenes.text(),
+                'publish': self.ui.publish.text(),
                 'assets': self.ui.assets.text(),
                 'images': self.ui.images.text(),
                 'sourceimages': self.ui.source_images.text(),
@@ -2296,9 +2302,11 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                     new_subpath = os.path.join(proj_path, path)
                     if not os.path.exists(new_subpath):
                         os.makedirs(new_subpath)
-                        if path == self.ui.scenes.text() and self.ui.include_subfolders.isChecked():
+                        if (path == self.ui.scenes.text() and self.ui.include_subfolders.isChecked()
+                                or path == self.ui.publish.text() and self.ui.include_subfolders.isChecked()):
                             do_subfolders(parent_path=new_subpath)
-                    elif path == self.ui.scenes.text() and self.ui.include_subfolders.isChecked():
+                    elif (path == self.ui.scenes.text() and self.ui.include_subfolders.isChecked()
+                          or path == self.ui.publish.text() and self.ui.include_subfolders.isChecked()):
                         do_subfolders(parent_path=new_subpath)
                     cmds.workspace(fileRule=[key, path])
             cmds.workspace(saveWorkspace=True)
@@ -2608,7 +2616,12 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         end_name = split_version[1]
         pub_name = root_name + '_PUB' + v + end_name
 
-        pub_folder = os.path.join(root_path, 'Publishes')
+        publish_folder = self.ui.publish.text()
+        scene_folder = self.ui.scenes.text()
+        pub_folder = root_path.replace(scene_folder, publish_folder)
+        if not os.path.exists(pub_folder):
+            os.makedirs(pub_folder)
+
         if not os.path.exists(pub_folder):
             os.makedirs(pub_folder)
         publish_file = os.path.join(pub_folder, pub_name)
