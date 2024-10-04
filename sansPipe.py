@@ -492,6 +492,30 @@ class sansPipe(QWidget):
         title_font.setBold(True)
         self.ui.toolsGroup.setFont(title_font)
 
+        # Set the tab styles
+        self.ui.saverTabs.setStyleSheet("""
+        QTabBar::tab {
+            font-size: 14px;
+            font-weight: bold;
+            padding: 10px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            border-bottom-left-radius: 0px;
+            border-bottom-right-radius: 0px;
+        }
+        QTabBar::tab:selected {
+            background-color: chocolate;
+            color: gainsboro;        
+        }
+        QTabBar::tab:!selected {
+            background-color: dimgray;
+            color: darkgray;
+        }
+        QTabBar::tab:hover {
+            background-color: peachpuff;
+        }
+        """)
+
         # SETUP HOTKEYS
         self.shortcut_save = QShortcut(QKeySequence('Ctrl+Return'), self)
         self.shortcut_save.activated.connect(self.run)
@@ -552,7 +576,7 @@ class sansPipe(QWidget):
         :return:
         """
         selected_index = self.ui.taskStatus.currentIndex()
-        background_color = 'dimgrey'
+        background_color = 'dimgray'
         text_color = 'gainsboro'
         default_text_color = text_color
         default_background_color = background_color
@@ -621,19 +645,25 @@ QComboBox {{
                                     if not user_note:
                                         self.message(text='You have to say why you are changing status!', ok=False,
                                                      obj=self.ui.notes)
-                                        self.ui.taskStatus.setCurrentText(current_status)
+                                        self.ui.taskStatus.blockSignals(True)
+                                        self.status_changed(status=current_status, human=False)
+                                        self.ui.taskStatus.blockSignals(False)
                                         return False
                                     self.create_note(notes=user_note, output_file=file_path, status=current_status,
                                                      task_note=True)
+                                    self.ui.notes.clear()
                             else:
                                 if human:
                                     if not user_note:
                                         self.message(text='You have to say why you are changing status!', ok=False,
                                                      obj=self.ui.notes)
-                                        self.ui.taskStatus.setCurrentText(current_status)
+                                        self.ui.taskStatus.blockSignals(True)
+                                        self.status_changed(status=current_status, human=False)
+                                        self.ui.taskStatus.blockSignals(False)
                                         return False
-                                    self.create_note(notes=pop_note, output_file=file_path, status=current_status,
+                                    self.create_note(notes=user_note, output_file=file_path, status=current_status,
                                                      task_note=True)
+                                    self.ui.notes.clear()
                             found_note = True
                             break
 
@@ -642,9 +672,12 @@ QComboBox {{
                         if not user_note:
                             self.message(text='You have to say why you are changing status!', ok=False,
                                          obj=self.ui.notes)
-                            self.ui.taskStatus.setCurrentText(current_status)
+                            self.ui.taskStatus.blockSignals(True)
+                            self.status_changed(status=current_status, human=False)
+                            self.ui.taskStatus.blockSignals(False)
                             return False
-                        self.create_note(notes=pop_note, output_file=file_path, status=current_status, task_note=True)
+                        self.create_note(notes=user_note, output_file=file_path, status=current_status, task_note=True)
+                        self.ui.notes.clear()
                 else:
                     if notes:
                         note = notes[-1]
@@ -656,16 +689,22 @@ QComboBox {{
                             if not user_note:
                                 self.message(text='You have to say why you are changing status!', ok=False,
                                              obj=self.ui.notes)
-                                self.ui.taskStatus.setCurrentText(current_status)
+                                self.ui.taskStatus.blockSignals(True)
+                                self.status_changed(status=current_status, human=False)
+                                self.ui.taskStatus.blockSignals(False)
                                 return False
-                            self.create_note(notes=pop_note, output_file=path, status=current_status, task_note=True)
+                            self.create_note(notes=user_note, output_file=path, status=current_status, task_note=True)
+                            self.ui.notes.clear()
                     else:
                         if not user_note:
                             self.message(text='You have to say why you are changing status!', ok=False,
                                          obj=self.ui.notes)
-                            self.ui.taskStatus.setCurrentText(current_status)
+                            self.ui.taskStatus.blockSignals(True)
+                            self.status_changed(status=current_status, human=False)
+                            self.ui.taskStatus.blockSignals(False)
                             return False
-                        self.create_note(notes=pop_note, output_file=path, status=current_status, task_note=True)
+                        self.create_note(notes=user_note, output_file=path, status=current_status, task_note=True)
+                        self.ui.notes.clear()
                 #
                 # self.update_ui()
                 # self.populate_existing_files(current_directory=self.scene_folder_path)
@@ -725,7 +764,7 @@ QComboBox {{
             elif status == 'Omit':
                 return 'red', 'black'
             else:
-                return 'gainsporo', 'dimgrey'
+                return 'gainsporo', 'dimgray'
 
     def create_tree_context_menu(self, widget, widget_name, position):
         """
