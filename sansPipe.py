@@ -48,7 +48,17 @@ Version 1.3 Goals:
         database for everything.
     14. Make sure there are both Mac and Windows hotkeys
     15. Improve playblast settings.  Adjust what the viewport sees and try to put some burn-ins on there.
-    16. Rework the Status notes to use the Notes window instead of the pop up.
+                    16. Rework the Status notes to use the Notes window instead of the pop up.
+                    17. Add right-click "Open without Status change"
+                    18. Make v001 status "Ready" instead of "In Progress"
+    19. Increase font size of the tabs
+    20. Make settings tabs for more and advanced settings, like:
+        a. Make playblast options more robust - Playblast tab.  MOV or PNG/JPG sequence?  HUD settings
+        b. Tab for Hotkeys
+        c. Tab for Things like default CSV file templates, or other goodies.
+    
+KNOWN BUGS:
+1. Many features are not working in Versions of Maya before 2025.  I need to get that all debugged.
 
 """
 
@@ -142,29 +152,6 @@ class CustomMessageBox(QMessageBox):
             return self.text_input.text()
         return None
 
-class CustomNotesBox(QMessageBox):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-
-        self.setWindowTitle('Status Update Note')
-        self.setText('Why are you changing the status?  Leave a note!')
-        self.text_input = QPlainTextEdit(self)
-        self.layout().addWidget(self.text_input, 1, 1)
-        self.addButton(QMessageBox.Ok)
-        self.addButton(QMessageBox.Cancel)
-        self.button(QMessageBox.Ok).setEnabled(False)
-        self.text_input.textChanged.connect(self.validate_input)
-
-    def validate_input(self):
-        if len(self.text_input.toPlainText()) > 10:
-            self.button(QMessageBox.Ok).setEnabled(True)
-        else:
-            self.button(QMessageBox.Ok).setEnabled(False)
-
-    def get_input(self):
-        if self.exec() == QMessageBox.Ok:
-            return self.text_input.toPlainText()
-        return None
 
 class sansPipe(QWidget):
     """
@@ -559,7 +546,7 @@ class sansPipe(QWidget):
             item.setBackground(QColor(background_color))
         model.appendRow(item)
 
-    def status_changed(self, status=None):
+    def status_changed(self, status=None, human=True):
         """
         This updates the stylesheet of the top level of the taskStatus drop-down menu
         :return:
@@ -603,11 +590,12 @@ QComboBox {{
 }} 
 """)
         line_edit.setReadOnly(True)
-        self.change_task_status()
+        self.change_task_status(human=human)
 
-    def change_task_status(self):
+    def change_task_status(self, human=True):
         selected_file = self.ui.existingFile_list.selectedItems()
         current_status = self.ui.taskStatus.currentText()
+        user_note = self.ui.notes.toPlainText()
 
         if selected_file:
             selected_file = selected_file[0]
@@ -629,40 +617,54 @@ QComboBox {{
                         if filename == note['filename']:
                             if 'status' in note.keys():
                                 status = note['status']
-                                if status != current_status:
-                                    self.hide()
-                                    pop_note = self.pop_up_note()
-                                    self.show()
-                                    self.create_note(notes=pop_note, output_file=file_path, status=current_status,
+                                if status != current_status and human:
+                                    if not user_note:
+                                        self.message(text='You have to say why you are changing status!', ok=False,
+                                                     obj=self.ui.notes)
+                                        self.ui.taskStatus.setCurrentText(current_status)
+                                        return False
+                                    self.create_note(notes=user_note, output_file=file_path, status=current_status,
                                                      task_note=True)
                             else:
-                                self.hide()
-                                pop_note = self.pop_up_note()
-                                self.show()
-                                self.create_note(notes=pop_note, output_file=file_path, status=current_status,
-                                                 task_note=True)
+                                if human:
+                                    if not user_note:
+                                        self.message(text='You have to say why you are changing status!', ok=False,
+                                                     obj=self.ui.notes)
+                                        self.ui.taskStatus.setCurrentText(current_status)
+                                        return False
+                                    self.create_note(notes=pop_note, output_file=file_path, status=current_status,
+                                                     task_note=True)
                             found_note = True
                             break
 
                     # Create note if none found
                     if not found_note:
-                        self.hide()
-                        pop_note = self.pop_up_note()
-                        self.show()
+                        if not user_note:
+                            self.message(text='You have to say why you are changing status!', ok=False,
+                                         obj=self.ui.notes)
+                            self.ui.taskStatus.setCurrentText(current_status)
+                            return False
                         self.create_note(notes=pop_note, output_file=file_path, status=current_status, task_note=True)
                 else:
-                    note = notes[-1]
+                    if notes:
+                        note = notes[-1]
+                    else:
+                        note = {}
                     if 'status' in note.keys():
                         status = note['status']
-                        if status != current_status:
-                            self.hide()
-                            pop_note = self.pop_up_note()
-                            self.show()
+                        if status != current_status and human:
+                            if not user_note:
+                                self.message(text='You have to say why you are changing status!', ok=False,
+                                             obj=self.ui.notes)
+                                self.ui.taskStatus.setCurrentText(current_status)
+                                return False
                             self.create_note(notes=pop_note, output_file=path, status=current_status, task_note=True)
                     else:
-                        self.hide()
-                        pop_note = self.pop_up_note()
-                        self.show()
+                        if not user_note:
+                            self.message(text='You have to say why you are changing status!', ok=False,
+                                         obj=self.ui.notes)
+                            self.ui.taskStatus.setCurrentText(current_status)
+                            return False
                         self.create_note(notes=pop_note, output_file=path, status=current_status, task_note=True)
                 #
                 # self.update_ui()
@@ -748,6 +750,7 @@ QComboBox {{
 
         # Make the settings
         open_action = QAction('Open', self)
+        open_no_status = QAction('Open No Status Update')
         ref_action = QAction('Reference', self)
         import_action = QAction('Import', self)
         playblast_action = QAction('View Playblast', self)
@@ -755,6 +758,7 @@ QComboBox {{
 
         # Setup the trigger actions.
         open_action.triggered.connect(lambda: self.open_file(f=False))
+        open_no_status.triggered.connect(lambda: self.open_file(f=False, status_update=False))
         ref_action.triggered.connect(lambda: self.load_ref(element=widget))
         import_action.triggered.connect(lambda: self.import_object(element=widget))
         playblast_action.triggered.connect(lambda: self.playblast_player(element=widget))
@@ -762,6 +766,7 @@ QComboBox {{
 
         if widget == self.ui.existingFile_list:
             context_menu.addAction(open_action)
+            context_menu.addAction(open_no_status)
             context_menu.addAction(playblast_action)
             context_menu.addSeparator()
             context_menu.addAction(delete_snapshots)
@@ -771,7 +776,7 @@ QComboBox {{
 
         context_menu.exec(widget.mapToGlobal(position))
 
-    def open_file(self, f=False):
+    def open_file(self, f=False, status_update=True):
         """
         This opens a file on a double click or button press
         :param f: Whether the file open command should force the file to open.
@@ -789,8 +794,18 @@ QComboBox {{
                 try:
                     self.hide()
                     cmds.file(open_file, o=True, f=f)
+                    get_version = self.get_version_info(filename=open_file)
+                    if get_version:
+                        version = get_version['version']
+                    else:
+                        version = 1
                     self.current_file_path = open_file
-                    self.create_note(output_file=open_file, status='In Progress')
+                    if version == 1:
+                        new_status = 'Ready'
+                    else:
+                        new_status = 'In Progress'
+                    if status_update:
+                        self.create_note(output_file=open_file, status=new_status)
                     self.close()
                 except RuntimeError as e:
                     msg = str(e)
@@ -805,11 +820,31 @@ QComboBox {{
                     ret = pop_up.exec()
                     if ret == QMessageBox.Yes:
                         cmds.file(s=True)
-                        self.open_file(f=False)
-                        self.create_note(output_file=open_file, status='In Progress')
+                        self.open_file(f=False, status_update=status_update)
+                        get_version = self.get_version_info(filename=open_file)
+                        if get_version:
+                            version = get_version['version']
+                        else:
+                            version = 1
+                        if version == 1:
+                            new_status = 'Ready'
+                        else:
+                            new_status = 'In Progress'
+                        if status_update:
+                            self.create_note(output_file=open_file, status=new_status)
                     elif ret == QMessageBox.No:
-                        self.open_file(f=True)
-                        self.create_note(output_file=open_file, status='In Progress')
+                        self.open_file(f=True, status_update=status_update)
+                        get_version = self.get_version_info(filename=open_file)
+                        if get_version:
+                            version = get_version['version']
+                        else:
+                            version = 1
+                        if version == 1:
+                            new_status = 'Ready'
+                        else:
+                            new_status = 'In Progress'
+                        if status_update:
+                            self.create_note(output_file=open_file, status=new_status)
                     else:
                         self.show()
 
@@ -1668,13 +1703,13 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             self.ui.taskStatus.blockSignals(True)
                             self.ui.taskStatus.setCurrentText(status)
                             self.ui.taskStatus.blockSignals(False)
-                            self.status_changed(status)
+                            self.status_changed(status, human=False)
                             QApplication.processEvents()
                         else:
                             self.ui.taskStatus.blockSignals(True)
                             self.ui.taskStatus.setCurrentText('-')
                             self.ui.taskStatus.blockSignals(False)
-                            self.status_changed(status)
+                            self.status_changed(status, human=False)
                             QApplication.processEvents()
                         break
 
@@ -1930,17 +1965,6 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             return result
         return False
 
-    def pop_up_note(self):
-        """
-        Pops up a simple Text editor to add a note in for status changes.
-        :return:
-        """
-        note_box = CustomNotesBox()
-        result = note_box.get_input()
-        if result:
-            return result
-        return False
-
     def run(self, close=True, status=None):
         """
         This is the main 'Save As' feature and makes up the primary function of the tool.  It gets the next version
@@ -1981,8 +2005,14 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                 cmds.file(s=True, type=fileType, options='v=0;')
 
         # Create Note
+        get_version_info = self.get_version_info(filename=output_file)
+        version = get_version_info['version']
+        if version == 1:
+            status_update = 'Ready'
+        else:
+            status_update = 'In Progress'
         if not status:
-            status = 'In Progress'
+            status = status_update
         self.create_note(notes=notes, output_file=output_file, status=status)
 
         time.sleep(3)

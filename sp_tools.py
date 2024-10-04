@@ -194,8 +194,7 @@ class sp_toolkit(object):
                     type='FBX Export', pr=True, es=True, ex=False
                 )
             except RuntimeError as e:
-                cmds.warning(f'Could not bake the camera!  Could be a permissions issue, or some other failure: {e}')
-                self.message(text='Could NOT bake camera! Make sure Folder Permissions are set in your OS!', ok=False)
+                cmds.error(f'Could not bake the camera!  Could be a permissions issue, or some other failure: {e}')
             cmds.select(bake_camera, r=True)
             cmds.delete()
             notes = (f'Automatic camera bake for {scene_name}.  Camera name: {bake_camera[0]}  '
