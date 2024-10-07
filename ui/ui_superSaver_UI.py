@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIOOiywp.ui'
+## Form generated from reading UI file 'superSaver_UIfTqcaE.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -9,36 +9,37 @@
 ################################################################################
 
 try:
-        from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-            QMetaObject, QObject, QPoint, QRect,
-            QSize, QTime, QUrl, Qt)
-        from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-            QFont, QFontDatabase, QGradient, QIcon,
-            QImage, QKeySequence, QLinearGradient, QPainter,
-            QPalette, QPixmap, QRadialGradient, QTransform)
-        from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QCheckBox, QComboBox,
-            QFrame, QGroupBox, QHBoxLayout, QHeaderView,
-            QLabel, QLineEdit, QListWidget, QListWidgetItem,
-            QPushButton, QRadioButton, QSizePolicy, QSpacerItem,
-            QSpinBox, QTabWidget, QTextEdit, QTreeWidget,
-            QTreeWidgetItem, QVBoxLayout, QWidget)
+    from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+                                QMetaObject, QObject, QPoint, QRect,
+                                QSize, QTime, QUrl, Qt)
+    from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+                               QFont, QFontDatabase, QGradient, QIcon,
+                               QImage, QKeySequence, QLinearGradient, QPainter,
+                               QPalette, QPixmap, QRadialGradient, QTransform)
+    from PySide6.QtWidgets import (QAbstractItemView, QAbstractSpinBox, QApplication, QCheckBox,
+                                   QComboBox, QFrame, QGroupBox, QHBoxLayout,
+                                   QHeaderView, QLabel, QLineEdit, QListWidget,
+                                   QListWidgetItem, QPushButton, QRadioButton, QSizePolicy,
+                                   QSpacerItem, QSpinBox, QTabWidget, QTextEdit,
+                                   QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
 except ImportError:
-        try:
-                from PySide2.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                    QMetaObject, QObject, QPoint, QRect,
-                    QSize, QTime, QUrl, Qt)
-                from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-                    QFont, QFontDatabase, QGradient, QIcon,
-                    QImage, QKeySequence, QLinearGradient, QPainter,
-                    QPalette, QPixmap, QRadialGradient, QTransform)
-                from PySide2.QtWidgets import (QAbstractSpinBox, QApplication, QCheckBox, QComboBox,
-                    QFrame, QGroupBox, QHBoxLayout, QHeaderView,
-                    QLabel, QLineEdit, QListWidget, QListWidgetItem,
-                    QPushButton, QRadioButton, QSizePolicy, QSpacerItem,
-                    QSpinBox, QTabWidget, QTextEdit, QTreeWidget,
-                    QTreeWidgetItem, QVBoxLayout, QWidget)
-        except ImportError:
-                raise RuntimeError('Neither PySide6 or PySide2 detected!')
+    try:
+        from PySide2.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+                                    QMetaObject, QObject, QPoint, QRect,
+                                    QSize, QTime, QUrl, Qt)
+        from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+                                   QFont, QFontDatabase, QGradient, QIcon,
+                                   QImage, QKeySequence, QLinearGradient, QPainter,
+                                   QPalette, QPixmap, QRadialGradient, QTransform)
+        from PySide2.QtWidgets import (QAbstractItemView, QAbstractSpinBox, QApplication, QCheckBox,
+                                       QComboBox, QFrame, QGroupBox, QHBoxLayout,
+                                       QHeaderView, QLabel, QLineEdit, QListWidget,
+                                       QListWidgetItem, QPushButton, QRadioButton, QSizePolicy,
+                                       QSpacerItem, QSpinBox, QTabWidget, QTextEdit,
+                                       QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
+    except ImportError:
+        raise RuntimeError("Neither PySide6 nor PySide2 could be imported. Please ensure one of them is installed.")
+
 
 class Ui_SaveAs(object):
     def setupUi(self, SaveAs):
@@ -1068,16 +1069,29 @@ class Ui_SaveAs(object):
         self.saverTabs.addTab(self.projectTab, "")
         self.SettingsTab = QWidget()
         self.SettingsTab.setObjectName(u"SettingsTab")
-        self.verticalLayout_7 = QVBoxLayout(self.SettingsTab)
+        self.verticalLayout_16 = QVBoxLayout(self.SettingsTab)
+        self.verticalLayout_16.setObjectName(u"verticalLayout_16")
+        self.settingsTabs = QTabWidget(self.SettingsTab)
+        self.settingsTabs.setObjectName(u"settingsTabs")
+        self.settingsTabs.setTabPosition(QTabWidget.TabPosition.West)
+        self.show_settings = QWidget()
+        self.show_settings.setObjectName(u"show_settings")
+        self.verticalLayout_7 = QVBoxLayout(self.show_settings)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
+        self.show_settings_Label = QLabel(self.show_settings)
+        self.show_settings_Label.setObjectName(u"show_settings_Label")
+        self.show_settings_Label.setStyleSheet(u"font: 700 12pt \"Segoe UI\";")
+
+        self.verticalLayout_7.addWidget(self.show_settings_Label)
+
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.showName_label = QLabel(self.SettingsTab)
+        self.showName_label = QLabel(self.show_settings)
         self.showName_label.setObjectName(u"showName_label")
 
         self.horizontalLayout_4.addWidget(self.showName_label)
 
-        self.showName = QLineEdit(self.SettingsTab)
+        self.showName = QLineEdit(self.show_settings)
         self.showName.setObjectName(u"showName")
 
         self.horizontalLayout_4.addWidget(self.showName)
@@ -1091,12 +1105,12 @@ class Ui_SaveAs(object):
 
         self.horizontalLayout_5 = QHBoxLayout()
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.showCodeSet_label = QLabel(self.SettingsTab)
+        self.showCodeSet_label = QLabel(self.show_settings)
         self.showCodeSet_label.setObjectName(u"showCodeSet_label")
 
         self.horizontalLayout_5.addWidget(self.showCodeSet_label)
 
-        self.showCodeSet = QLineEdit(self.SettingsTab)
+        self.showCodeSet = QLineEdit(self.show_settings)
         self.showCodeSet.setObjectName(u"showCodeSet")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -1113,7 +1127,7 @@ class Ui_SaveAs(object):
 
         self.verticalLayout_7.addLayout(self.horizontalLayout_5)
 
-        self.line_3 = QFrame(self.SettingsTab)
+        self.line_3 = QFrame(self.show_settings)
         self.line_3.setObjectName(u"line_3")
         self.line_3.setFrameShape(QFrame.Shape.HLine)
         self.line_3.setFrameShadow(QFrame.Shadow.Sunken)
@@ -1122,29 +1136,29 @@ class Ui_SaveAs(object):
 
         self.horizontalLayout_6 = QHBoxLayout()
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.defaultResolution_label = QLabel(self.SettingsTab)
+        self.defaultResolution_label = QLabel(self.show_settings)
         self.defaultResolution_label.setObjectName(u"defaultResolution_label")
 
         self.horizontalLayout_6.addWidget(self.defaultResolution_label)
 
-        self.resolutionWidth_label = QLabel(self.SettingsTab)
+        self.resolutionWidth_label = QLabel(self.show_settings)
         self.resolutionWidth_label.setObjectName(u"resolutionWidth_label")
 
         self.horizontalLayout_6.addWidget(self.resolutionWidth_label)
 
-        self.resolutionWidth = QLineEdit(self.SettingsTab)
+        self.resolutionWidth = QLineEdit(self.show_settings)
         self.resolutionWidth.setObjectName(u"resolutionWidth")
         sizePolicy.setHeightForWidth(self.resolutionWidth.sizePolicy().hasHeightForWidth())
         self.resolutionWidth.setSizePolicy(sizePolicy)
 
         self.horizontalLayout_6.addWidget(self.resolutionWidth)
 
-        self.resolutionHeight_label = QLabel(self.SettingsTab)
+        self.resolutionHeight_label = QLabel(self.show_settings)
         self.resolutionHeight_label.setObjectName(u"resolutionHeight_label")
 
         self.horizontalLayout_6.addWidget(self.resolutionHeight_label)
 
-        self.resolutionHeight = QLineEdit(self.SettingsTab)
+        self.resolutionHeight = QLineEdit(self.show_settings)
         self.resolutionHeight.setObjectName(u"resolutionHeight")
         sizePolicy.setHeightForWidth(self.resolutionHeight.sizePolicy().hasHeightForWidth())
         self.resolutionHeight.setSizePolicy(sizePolicy)
@@ -1160,29 +1174,29 @@ class Ui_SaveAs(object):
 
         self.horizontalLayout_7 = QHBoxLayout()
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-        self.filmbackLabel = QLabel(self.SettingsTab)
+        self.filmbackLabel = QLabel(self.show_settings)
         self.filmbackLabel.setObjectName(u"filmbackLabel")
 
         self.horizontalLayout_7.addWidget(self.filmbackLabel)
 
-        self.filmback_width_label = QLabel(self.SettingsTab)
+        self.filmback_width_label = QLabel(self.show_settings)
         self.filmback_width_label.setObjectName(u"filmback_width_label")
 
         self.horizontalLayout_7.addWidget(self.filmback_width_label)
 
-        self.filmback_width = QLineEdit(self.SettingsTab)
+        self.filmback_width = QLineEdit(self.show_settings)
         self.filmback_width.setObjectName(u"filmback_width")
         sizePolicy.setHeightForWidth(self.filmback_width.sizePolicy().hasHeightForWidth())
         self.filmback_width.setSizePolicy(sizePolicy)
 
         self.horizontalLayout_7.addWidget(self.filmback_width)
 
-        self.filmback_height_label = QLabel(self.SettingsTab)
+        self.filmback_height_label = QLabel(self.show_settings)
         self.filmback_height_label.setObjectName(u"filmback_height_label")
 
         self.horizontalLayout_7.addWidget(self.filmback_height_label)
 
-        self.filmback_height = QLineEdit(self.SettingsTab)
+        self.filmback_height = QLineEdit(self.show_settings)
         self.filmback_height.setObjectName(u"filmback_height")
         sizePolicy.setHeightForWidth(self.filmback_height.sizePolicy().hasHeightForWidth())
         self.filmback_height.setSizePolicy(sizePolicy)
@@ -1198,12 +1212,12 @@ class Ui_SaveAs(object):
 
         self.horizontalLayout_32 = QHBoxLayout()
         self.horizontalLayout_32.setObjectName(u"horizontalLayout_32")
-        self.image_format_label = QLabel(self.SettingsTab)
+        self.image_format_label = QLabel(self.show_settings)
         self.image_format_label.setObjectName(u"image_format_label")
 
         self.horizontalLayout_32.addWidget(self.image_format_label)
 
-        self.image_format = QComboBox(self.SettingsTab)
+        self.image_format = QComboBox(self.show_settings)
         self.image_format.addItem("")
         self.image_format.addItem("")
         self.image_format.addItem("")
@@ -1223,12 +1237,12 @@ class Ui_SaveAs(object):
 
         self.horizontalLayout_8 = QHBoxLayout()
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
-        self.SceneScale_Label = QLabel(self.SettingsTab)
+        self.SceneScale_Label = QLabel(self.show_settings)
         self.SceneScale_Label.setObjectName(u"SceneScale_Label")
 
         self.horizontalLayout_8.addWidget(self.SceneScale_Label)
 
-        self.sceneScale = QLineEdit(self.SettingsTab)
+        self.sceneScale = QLineEdit(self.show_settings)
         self.sceneScale.setObjectName(u"sceneScale")
         sizePolicy.setHeightForWidth(self.sceneScale.sizePolicy().hasHeightForWidth())
         self.sceneScale.setSizePolicy(sizePolicy)
@@ -1242,21 +1256,494 @@ class Ui_SaveAs(object):
 
         self.verticalLayout_7.addLayout(self.horizontalLayout_8)
 
-        self.line_4 = QFrame(self.SettingsTab)
+        self.verticalSpacer_6 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_7.addItem(self.verticalSpacer_6)
+
+        self.settingsTabs.addTab(self.show_settings, "")
+        self.playblast_settings = QWidget()
+        self.playblast_settings.setObjectName(u"playblast_settings")
+        self.verticalLayout_20 = QVBoxLayout(self.playblast_settings)
+        self.verticalLayout_20.setObjectName(u"verticalLayout_20")
+        self.playblast_settings_label = QLabel(self.playblast_settings)
+        self.playblast_settings_label.setObjectName(u"playblast_settings_label")
+        self.playblast_settings_label.setStyleSheet(u"font: 700 12pt \"Segoe UI\";")
+
+        self.verticalLayout_20.addWidget(self.playblast_settings_label)
+
+        self.line_5 = QFrame(self.playblast_settings)
+        self.line_5.setObjectName(u"line_5")
+        self.line_5.setFrameShape(QFrame.Shape.HLine)
+        self.line_5.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.verticalLayout_20.addWidget(self.line_5)
+
+        self.horizontalLayout_47 = QHBoxLayout()
+        self.horizontalLayout_47.setObjectName(u"horizontalLayout_47")
+        self.pb_scene_elements_label = QLabel(self.playblast_settings)
+        self.pb_scene_elements_label.setObjectName(u"pb_scene_elements_label")
+
+        self.horizontalLayout_47.addWidget(self.pb_scene_elements_label)
+
+        self.pb_scene_elements = QComboBox(self.playblast_settings)
+        self.pb_scene_elements.addItem("")
+        self.pb_scene_elements.addItem("")
+        self.pb_scene_elements.addItem("")
+        self.pb_scene_elements.addItem("")
+        self.pb_scene_elements.setObjectName(u"pb_scene_elements")
+
+        self.horizontalLayout_47.addWidget(self.pb_scene_elements)
+
+        self.horizontalSpacer_30 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_47.addItem(self.horizontalSpacer_30)
+
+
+        self.verticalLayout_20.addLayout(self.horizontalLayout_47)
+
+        self.pb_wireframe = QCheckBox(self.playblast_settings)
+        self.pb_wireframe.setObjectName(u"pb_wireframe")
+
+        self.verticalLayout_20.addWidget(self.pb_wireframe)
+
+        self.pb_textured = QCheckBox(self.playblast_settings)
+        self.pb_textured.setObjectName(u"pb_textured")
+        self.pb_textured.setChecked(True)
+
+        self.verticalLayout_20.addWidget(self.pb_textured)
+
+        self.pb_use_all_lights = QCheckBox(self.playblast_settings)
+        self.pb_use_all_lights.setObjectName(u"pb_use_all_lights")
+
+        self.verticalLayout_20.addWidget(self.pb_use_all_lights)
+
+        self.pb_shadows = QCheckBox(self.playblast_settings)
+        self.pb_shadows.setObjectName(u"pb_shadows")
+        self.pb_shadows.setChecked(True)
+
+        self.verticalLayout_20.addWidget(self.pb_shadows)
+
+        self.pb_ao = QCheckBox(self.playblast_settings)
+        self.pb_ao.setObjectName(u"pb_ao")
+        self.pb_ao.setChecked(True)
+
+        self.verticalLayout_20.addWidget(self.pb_ao)
+
+        self.pb_motionblur = QCheckBox(self.playblast_settings)
+        self.pb_motionblur.setObjectName(u"pb_motionblur")
+        self.pb_motionblur.setChecked(True)
+
+        self.verticalLayout_20.addWidget(self.pb_motionblur)
+
+        self.pb_aa = QCheckBox(self.playblast_settings)
+        self.pb_aa.setObjectName(u"pb_aa")
+        self.pb_aa.setChecked(True)
+
+        self.verticalLayout_20.addWidget(self.pb_aa)
+
+        self.pb_burnin = QCheckBox(self.playblast_settings)
+        self.pb_burnin.setObjectName(u"pb_burnin")
+        self.pb_burnin.setChecked(True)
+
+        self.verticalLayout_20.addWidget(self.pb_burnin)
+
+        self.verticalSpacer_8 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_20.addItem(self.verticalSpacer_8)
+
+        self.settingsTabs.addTab(self.playblast_settings, "")
+        self.hotkeys = QWidget()
+        self.hotkeys.setObjectName(u"hotkeys")
+        self.verticalLayout_14 = QVBoxLayout(self.hotkeys)
+        self.verticalLayout_14.setObjectName(u"verticalLayout_14")
+        self.hotkeys_label = QLabel(self.hotkeys)
+        self.hotkeys_label.setObjectName(u"hotkeys_label")
+        self.hotkeys_label.setStyleSheet(u"font: 700 12pt \"Segoe UI\";")
+
+        self.verticalLayout_14.addWidget(self.hotkeys_label)
+
+        self.hotkeys1 = QLabel(self.hotkeys)
+        self.hotkeys1.setObjectName(u"hotkeys1")
+        self.hotkeys1.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
+
+        self.verticalLayout_14.addWidget(self.hotkeys1)
+
+        self.line_4 = QFrame(self.hotkeys)
         self.line_4.setObjectName(u"line_4")
         self.line_4.setFrameShape(QFrame.Shape.HLine)
         self.line_4.setFrameShadow(QFrame.Shadow.Sunken)
 
-        self.verticalLayout_7.addWidget(self.line_4)
+        self.verticalLayout_14.addWidget(self.line_4)
+
+        self.horizontalLayout_40 = QHBoxLayout()
+        self.horizontalLayout_40.setObjectName(u"horizontalLayout_40")
+        self.hk_open_label = QLabel(self.hotkeys)
+        self.hk_open_label.setObjectName(u"hk_open_label")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.hk_open_label.sizePolicy().hasHeightForWidth())
+        self.hk_open_label.setSizePolicy(sizePolicy1)
+
+        self.horizontalLayout_40.addWidget(self.hk_open_label)
+
+        self.hk_open_mod_1 = QComboBox(self.hotkeys)
+        self.hk_open_mod_1.addItem("")
+        self.hk_open_mod_1.addItem("")
+        self.hk_open_mod_1.addItem("")
+        self.hk_open_mod_1.addItem("")
+        self.hk_open_mod_1.addItem("")
+        self.hk_open_mod_1.addItem("")
+        self.hk_open_mod_1.setObjectName(u"hk_open_mod_1")
+
+        self.horizontalLayout_40.addWidget(self.hk_open_mod_1)
+
+        self.hk_open_mod_2 = QComboBox(self.hotkeys)
+        self.hk_open_mod_2.addItem("")
+        self.hk_open_mod_2.addItem("")
+        self.hk_open_mod_2.addItem("")
+        self.hk_open_mod_2.addItem("")
+        self.hk_open_mod_2.addItem("")
+        self.hk_open_mod_2.addItem("")
+        self.hk_open_mod_2.setObjectName(u"hk_open_mod_2")
+
+        self.horizontalLayout_40.addWidget(self.hk_open_mod_2)
+
+        self.hk_open_mod_3 = QComboBox(self.hotkeys)
+        self.hk_open_mod_3.addItem("")
+        self.hk_open_mod_3.addItem("")
+        self.hk_open_mod_3.addItem("")
+        self.hk_open_mod_3.addItem("")
+        self.hk_open_mod_3.addItem("")
+        self.hk_open_mod_3.addItem("")
+        self.hk_open_mod_3.setObjectName(u"hk_open_mod_3")
+
+        self.horizontalLayout_40.addWidget(self.hk_open_mod_3)
+
+        self.hk_open_key = QLineEdit(self.hotkeys)
+        self.hk_open_key.setObjectName(u"hk_open_key")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.hk_open_key.sizePolicy().hasHeightForWidth())
+        self.hk_open_key.setSizePolicy(sizePolicy2)
+
+        self.horizontalLayout_40.addWidget(self.hk_open_key)
+
+        self.horizontalSpacer_24 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_40.addItem(self.horizontalSpacer_24)
+
+
+        self.verticalLayout_14.addLayout(self.horizontalLayout_40)
+
+        self.horizontalLayout_41 = QHBoxLayout()
+        self.horizontalLayout_41.setObjectName(u"horizontalLayout_41")
+        self.hk_saveVUp_label = QLabel(self.hotkeys)
+        self.hk_saveVUp_label.setObjectName(u"hk_saveVUp_label")
+        sizePolicy1.setHeightForWidth(self.hk_saveVUp_label.sizePolicy().hasHeightForWidth())
+        self.hk_saveVUp_label.setSizePolicy(sizePolicy1)
+
+        self.horizontalLayout_41.addWidget(self.hk_saveVUp_label)
+
+        self.hk_savevup_mod_1 = QComboBox(self.hotkeys)
+        self.hk_savevup_mod_1.addItem("")
+        self.hk_savevup_mod_1.addItem("")
+        self.hk_savevup_mod_1.addItem("")
+        self.hk_savevup_mod_1.addItem("")
+        self.hk_savevup_mod_1.addItem("")
+        self.hk_savevup_mod_1.addItem("")
+        self.hk_savevup_mod_1.setObjectName(u"hk_savevup_mod_1")
+
+        self.horizontalLayout_41.addWidget(self.hk_savevup_mod_1)
+
+        self.hk_savevup_mod_2 = QComboBox(self.hotkeys)
+        self.hk_savevup_mod_2.addItem("")
+        self.hk_savevup_mod_2.addItem("")
+        self.hk_savevup_mod_2.addItem("")
+        self.hk_savevup_mod_2.addItem("")
+        self.hk_savevup_mod_2.addItem("")
+        self.hk_savevup_mod_2.addItem("")
+        self.hk_savevup_mod_2.setObjectName(u"hk_savevup_mod_2")
+
+        self.horizontalLayout_41.addWidget(self.hk_savevup_mod_2)
+
+        self.hk_savevup_mod_3 = QComboBox(self.hotkeys)
+        self.hk_savevup_mod_3.addItem("")
+        self.hk_savevup_mod_3.addItem("")
+        self.hk_savevup_mod_3.addItem("")
+        self.hk_savevup_mod_3.addItem("")
+        self.hk_savevup_mod_3.addItem("")
+        self.hk_savevup_mod_3.addItem("")
+        self.hk_savevup_mod_3.setObjectName(u"hk_savevup_mod_3")
+
+        self.horizontalLayout_41.addWidget(self.hk_savevup_mod_3)
+
+        self.hk_savevup_key = QLineEdit(self.hotkeys)
+        self.hk_savevup_key.setObjectName(u"hk_savevup_key")
+        sizePolicy2.setHeightForWidth(self.hk_savevup_key.sizePolicy().hasHeightForWidth())
+        self.hk_savevup_key.setSizePolicy(sizePolicy2)
+
+        self.horizontalLayout_41.addWidget(self.hk_savevup_key)
+
+        self.horizontalSpacer_25 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_41.addItem(self.horizontalSpacer_25)
+
+
+        self.verticalLayout_14.addLayout(self.horizontalLayout_41)
+
+        self.horizontalLayout_42 = QHBoxLayout()
+        self.horizontalLayout_42.setObjectName(u"horizontalLayout_42")
+        self.hk_snapshot_label = QLabel(self.hotkeys)
+        self.hk_snapshot_label.setObjectName(u"hk_snapshot_label")
+        sizePolicy1.setHeightForWidth(self.hk_snapshot_label.sizePolicy().hasHeightForWidth())
+        self.hk_snapshot_label.setSizePolicy(sizePolicy1)
+
+        self.horizontalLayout_42.addWidget(self.hk_snapshot_label)
+
+        self.hk_snapshot_mod_1 = QComboBox(self.hotkeys)
+        self.hk_snapshot_mod_1.addItem("")
+        self.hk_snapshot_mod_1.addItem("")
+        self.hk_snapshot_mod_1.addItem("")
+        self.hk_snapshot_mod_1.addItem("")
+        self.hk_snapshot_mod_1.addItem("")
+        self.hk_snapshot_mod_1.addItem("")
+        self.hk_snapshot_mod_1.setObjectName(u"hk_snapshot_mod_1")
+
+        self.horizontalLayout_42.addWidget(self.hk_snapshot_mod_1)
+
+        self.hk_snapshot_mod_2 = QComboBox(self.hotkeys)
+        self.hk_snapshot_mod_2.addItem("")
+        self.hk_snapshot_mod_2.addItem("")
+        self.hk_snapshot_mod_2.addItem("")
+        self.hk_snapshot_mod_2.addItem("")
+        self.hk_snapshot_mod_2.addItem("")
+        self.hk_snapshot_mod_2.addItem("")
+        self.hk_snapshot_mod_2.setObjectName(u"hk_snapshot_mod_2")
+
+        self.horizontalLayout_42.addWidget(self.hk_snapshot_mod_2)
+
+        self.hk_snapshot_mod_3 = QComboBox(self.hotkeys)
+        self.hk_snapshot_mod_3.addItem("")
+        self.hk_snapshot_mod_3.addItem("")
+        self.hk_snapshot_mod_3.addItem("")
+        self.hk_snapshot_mod_3.addItem("")
+        self.hk_snapshot_mod_3.addItem("")
+        self.hk_snapshot_mod_3.addItem("")
+        self.hk_snapshot_mod_3.setObjectName(u"hk_snapshot_mod_3")
+
+        self.horizontalLayout_42.addWidget(self.hk_snapshot_mod_3)
+
+        self.hk_snapshot_key = QLineEdit(self.hotkeys)
+        self.hk_snapshot_key.setObjectName(u"hk_snapshot_key")
+        sizePolicy2.setHeightForWidth(self.hk_snapshot_key.sizePolicy().hasHeightForWidth())
+        self.hk_snapshot_key.setSizePolicy(sizePolicy2)
+
+        self.horizontalLayout_42.addWidget(self.hk_snapshot_key)
+
+        self.horizontalSpacer_26 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_42.addItem(self.horizontalSpacer_26)
+
+
+        self.verticalLayout_14.addLayout(self.horizontalLayout_42)
+
+        self.horizontalLayout_43 = QHBoxLayout()
+        self.horizontalLayout_43.setObjectName(u"horizontalLayout_43")
+        self.hk_publish_label = QLabel(self.hotkeys)
+        self.hk_publish_label.setObjectName(u"hk_publish_label")
+        sizePolicy1.setHeightForWidth(self.hk_publish_label.sizePolicy().hasHeightForWidth())
+        self.hk_publish_label.setSizePolicy(sizePolicy1)
+
+        self.horizontalLayout_43.addWidget(self.hk_publish_label)
+
+        self.hk_publish_mod_1 = QComboBox(self.hotkeys)
+        self.hk_publish_mod_1.addItem("")
+        self.hk_publish_mod_1.addItem("")
+        self.hk_publish_mod_1.addItem("")
+        self.hk_publish_mod_1.addItem("")
+        self.hk_publish_mod_1.addItem("")
+        self.hk_publish_mod_1.addItem("")
+        self.hk_publish_mod_1.setObjectName(u"hk_publish_mod_1")
+
+        self.horizontalLayout_43.addWidget(self.hk_publish_mod_1)
+
+        self.hk_publish_mod_2 = QComboBox(self.hotkeys)
+        self.hk_publish_mod_2.addItem("")
+        self.hk_publish_mod_2.addItem("")
+        self.hk_publish_mod_2.addItem("")
+        self.hk_publish_mod_2.addItem("")
+        self.hk_publish_mod_2.addItem("")
+        self.hk_publish_mod_2.addItem("")
+        self.hk_publish_mod_2.setObjectName(u"hk_publish_mod_2")
+
+        self.horizontalLayout_43.addWidget(self.hk_publish_mod_2)
+
+        self.hk_publish_mod_3 = QComboBox(self.hotkeys)
+        self.hk_publish_mod_3.addItem("")
+        self.hk_publish_mod_3.addItem("")
+        self.hk_publish_mod_3.addItem("")
+        self.hk_publish_mod_3.addItem("")
+        self.hk_publish_mod_3.addItem("")
+        self.hk_publish_mod_3.addItem("")
+        self.hk_publish_mod_3.setObjectName(u"hk_publish_mod_3")
+
+        self.horizontalLayout_43.addWidget(self.hk_publish_mod_3)
+
+        self.hk_publish_key = QLineEdit(self.hotkeys)
+        self.hk_publish_key.setObjectName(u"hk_publish_key")
+        sizePolicy2.setHeightForWidth(self.hk_publish_key.sizePolicy().hasHeightForWidth())
+        self.hk_publish_key.setSizePolicy(sizePolicy2)
+
+        self.horizontalLayout_43.addWidget(self.hk_publish_key)
+
+        self.horizontalSpacer_27 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_43.addItem(self.horizontalSpacer_27)
+
+
+        self.verticalLayout_14.addLayout(self.horizontalLayout_43)
+
+        self.horizontalLayout_44 = QHBoxLayout()
+        self.horizontalLayout_44.setObjectName(u"horizontalLayout_44")
+        self.hk_close_label = QLabel(self.hotkeys)
+        self.hk_close_label.setObjectName(u"hk_close_label")
+        sizePolicy1.setHeightForWidth(self.hk_close_label.sizePolicy().hasHeightForWidth())
+        self.hk_close_label.setSizePolicy(sizePolicy1)
+
+        self.horizontalLayout_44.addWidget(self.hk_close_label)
+
+        self.hk_close_mod_1 = QComboBox(self.hotkeys)
+        self.hk_close_mod_1.addItem("")
+        self.hk_close_mod_1.addItem("")
+        self.hk_close_mod_1.addItem("")
+        self.hk_close_mod_1.addItem("")
+        self.hk_close_mod_1.addItem("")
+        self.hk_close_mod_1.addItem("")
+        self.hk_close_mod_1.setObjectName(u"hk_close_mod_1")
+
+        self.horizontalLayout_44.addWidget(self.hk_close_mod_1)
+
+        self.hk_close_mod_2 = QComboBox(self.hotkeys)
+        self.hk_close_mod_2.addItem("")
+        self.hk_close_mod_2.addItem("")
+        self.hk_close_mod_2.addItem("")
+        self.hk_close_mod_2.addItem("")
+        self.hk_close_mod_2.addItem("")
+        self.hk_close_mod_2.addItem("")
+        self.hk_close_mod_2.setObjectName(u"hk_close_mod_2")
+
+        self.horizontalLayout_44.addWidget(self.hk_close_mod_2)
+
+        self.hk_close_mod_3 = QComboBox(self.hotkeys)
+        self.hk_close_mod_3.addItem("")
+        self.hk_close_mod_3.addItem("")
+        self.hk_close_mod_3.addItem("")
+        self.hk_close_mod_3.addItem("")
+        self.hk_close_mod_3.addItem("")
+        self.hk_close_mod_3.addItem("")
+        self.hk_close_mod_3.setObjectName(u"hk_close_mod_3")
+
+        self.horizontalLayout_44.addWidget(self.hk_close_mod_3)
+
+        self.hk_close_key = QLineEdit(self.hotkeys)
+        self.hk_close_key.setObjectName(u"hk_close_key")
+        sizePolicy2.setHeightForWidth(self.hk_close_key.sizePolicy().hasHeightForWidth())
+        self.hk_close_key.setSizePolicy(sizePolicy2)
+
+        self.horizontalLayout_44.addWidget(self.hk_close_key)
+
+        self.horizontalSpacer_28 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_44.addItem(self.horizontalSpacer_28)
+
+
+        self.verticalLayout_14.addLayout(self.horizontalLayout_44)
+
+        self.verticalSpacer_5 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_14.addItem(self.verticalSpacer_5)
+
+        self.settingsTabs.addTab(self.hotkeys, "")
+        self.archiver = QWidget()
+        self.archiver.setObjectName(u"archiver")
+        self.verticalLayout_19 = QVBoxLayout(self.archiver)
+        self.verticalLayout_19.setObjectName(u"verticalLayout_19")
+        self.archiver_label = QLabel(self.archiver)
+        self.archiver_label.setObjectName(u"archiver_label")
+        self.archiver_label.setStyleSheet(u"font: 700 12pt \"Segoe UI\";")
+
+        self.verticalLayout_19.addWidget(self.archiver_label)
+
+        self.horizontalLayout_46 = QHBoxLayout()
+        self.horizontalLayout_46.setObjectName(u"horizontalLayout_46")
+        self.verticalLayout_18 = QVBoxLayout()
+        self.verticalLayout_18.setObjectName(u"verticalLayout_18")
+        self.textEdit = QTextEdit(self.archiver)
+        self.textEdit.setObjectName(u"textEdit")
+        self.textEdit.setReadOnly(True)
+
+        self.verticalLayout_18.addWidget(self.textEdit)
+
+        self.verticalSpacer_7 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_18.addItem(self.verticalSpacer_7)
+
+
+        self.horizontalLayout_46.addLayout(self.verticalLayout_18)
+
+        self.verticalLayout_17 = QVBoxLayout()
+        self.verticalLayout_17.setObjectName(u"verticalLayout_17")
+        self.archiver_list = QTreeWidget(self.archiver)
+        __qtreewidgetitem4 = QTreeWidgetItem()
+        __qtreewidgetitem4.setText(0, u"1");
+        self.archiver_list.setHeaderItem(__qtreewidgetitem4)
+        self.archiver_list.setObjectName(u"archiver_list")
+        self.archiver_list.setSelectionMode(QAbstractItemView.SelectionMode.MultiSelection)
+        self.archiver_list.setHeaderHidden(True)
+
+        self.verticalLayout_17.addWidget(self.archiver_list)
+
+        self.horizontalLayout_45 = QHBoxLayout()
+        self.horizontalLayout_45.setObjectName(u"horizontalLayout_45")
+        self.horizontalSpacer_29 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_45.addItem(self.horizontalSpacer_29)
+
+        self.archiver_btn = QPushButton(self.archiver)
+        self.archiver_btn.setObjectName(u"archiver_btn")
+
+        self.horizontalLayout_45.addWidget(self.archiver_btn)
+
+
+        self.verticalLayout_17.addLayout(self.horizontalLayout_45)
+
+
+        self.horizontalLayout_46.addLayout(self.verticalLayout_17)
+
+
+        self.verticalLayout_19.addLayout(self.horizontalLayout_46)
+
+        self.settingsTabs.addTab(self.archiver, "")
+        self.system_settings = QWidget()
+        self.system_settings.setObjectName(u"system_settings")
+        self.verticalLayout_15 = QVBoxLayout(self.system_settings)
+        self.verticalLayout_15.setObjectName(u"verticalLayout_15")
+        self.system_settings_label = QLabel(self.system_settings)
+        self.system_settings_label.setObjectName(u"system_settings_label")
+        self.system_settings_label.setStyleSheet(u"font: 700 12pt \"Segoe UI\";")
+
+        self.verticalLayout_15.addWidget(self.system_settings_label)
 
         self.horizontalLayout_10 = QHBoxLayout()
         self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
-        self.recent_file_count_label = QLabel(self.SettingsTab)
+        self.recent_file_count_label = QLabel(self.system_settings)
         self.recent_file_count_label.setObjectName(u"recent_file_count_label")
 
         self.horizontalLayout_10.addWidget(self.recent_file_count_label)
 
-        self.recent_file_count = QSpinBox(self.SettingsTab)
+        self.recent_file_count = QSpinBox(self.system_settings)
         self.recent_file_count.setObjectName(u"recent_file_count")
         self.recent_file_count.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
 
@@ -1267,11 +1754,11 @@ class Ui_SaveAs(object):
         self.horizontalLayout_10.addItem(self.horizontalSpacer_11)
 
 
-        self.verticalLayout_7.addLayout(self.horizontalLayout_10)
+        self.verticalLayout_15.addLayout(self.horizontalLayout_10)
 
         self.horizontalLayout_12 = QHBoxLayout()
         self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
-        self.autoload = QCheckBox(self.SettingsTab)
+        self.autoload = QCheckBox(self.system_settings)
         self.autoload.setObjectName(u"autoload")
         self.autoload.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
 
@@ -1282,23 +1769,23 @@ class Ui_SaveAs(object):
         self.horizontalLayout_12.addItem(self.horizontalSpacer_13)
 
 
-        self.verticalLayout_7.addLayout(self.horizontalLayout_12)
+        self.verticalLayout_15.addLayout(self.horizontalLayout_12)
 
         self.horizontalLayout_31 = QHBoxLayout()
         self.horizontalLayout_31.setObjectName(u"horizontalLayout_31")
-        self.autosaver = QCheckBox(self.SettingsTab)
+        self.autosaver = QCheckBox(self.system_settings)
         self.autosaver.setObjectName(u"autosaver")
         self.autosaver.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
         self.autosaver.setChecked(True)
 
         self.horizontalLayout_31.addWidget(self.autosaver)
 
-        self.iterations_label = QLabel(self.SettingsTab)
+        self.iterations_label = QLabel(self.system_settings)
         self.iterations_label.setObjectName(u"iterations_label")
 
         self.horizontalLayout_31.addWidget(self.iterations_label)
 
-        self.autosave_count = QSpinBox(self.SettingsTab)
+        self.autosave_count = QSpinBox(self.system_settings)
         self.autosave_count.setObjectName(u"autosave_count")
         sizePolicy.setHeightForWidth(self.autosave_count.sizePolicy().hasHeightForWidth())
         self.autosave_count.setSizePolicy(sizePolicy)
@@ -1312,37 +1799,15 @@ class Ui_SaveAs(object):
         self.horizontalLayout_31.addItem(self.horizontalSpacer_17)
 
 
-        self.verticalLayout_7.addLayout(self.horizontalLayout_31)
-
-        self.line_5 = QFrame(self.SettingsTab)
-        self.line_5.setObjectName(u"line_5")
-        self.line_5.setFrameShape(QFrame.Shape.HLine)
-        self.line_5.setFrameShadow(QFrame.Shadow.Sunken)
-
-        self.verticalLayout_7.addWidget(self.line_5)
-
-        self.hotkeys_label = QLabel(self.SettingsTab)
-        self.hotkeys_label.setObjectName(u"hotkeys_label")
-        self.hotkeys_label.setStyleSheet(u"font: 700 12pt \"Segoe UI\";")
-
-        self.verticalLayout_7.addWidget(self.hotkeys_label)
-
-        self.hotkeys = QLabel(self.SettingsTab)
-        self.hotkeys.setObjectName(u"hotkeys")
-        self.hotkeys.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
-
-        self.verticalLayout_7.addWidget(self.hotkeys)
-
-        self.line_6 = QFrame(self.SettingsTab)
-        self.line_6.setObjectName(u"line_6")
-        self.line_6.setFrameShape(QFrame.Shape.HLine)
-        self.line_6.setFrameShadow(QFrame.Shadow.Sunken)
-
-        self.verticalLayout_7.addWidget(self.line_6)
+        self.verticalLayout_15.addLayout(self.horizontalLayout_31)
 
         self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.verticalLayout_7.addItem(self.verticalSpacer_2)
+        self.verticalLayout_15.addItem(self.verticalSpacer_2)
+
+        self.settingsTabs.addTab(self.system_settings, "")
+
+        self.verticalLayout_16.addWidget(self.settingsTabs)
 
         self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
@@ -1356,7 +1821,7 @@ class Ui_SaveAs(object):
         self.horizontalLayout_9.addWidget(self.save_config_btn)
 
 
-        self.verticalLayout_7.addLayout(self.horizontalLayout_9)
+        self.verticalLayout_16.addLayout(self.horizontalLayout_9)
 
         self.saverTabs.addTab(self.SettingsTab, "")
 
@@ -1428,6 +1893,7 @@ class Ui_SaveAs(object):
         self.retranslateUi(SaveAs)
 
         self.saverTabs.setCurrentIndex(0)
+        self.settingsTabs.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(SaveAs)
@@ -1686,6 +2152,7 @@ class Ui_SaveAs(object):
         self.scene_ass_label.setText(QCoreApplication.translate("SaveAs", u"Scene Assembly", None))
         self.create_project_btn.setText(QCoreApplication.translate("SaveAs", u"Create Project", None))
         self.saverTabs.setTabText(self.saverTabs.indexOf(self.projectTab), QCoreApplication.translate("SaveAs", u"Project Settings", None))
+        self.show_settings_Label.setText(QCoreApplication.translate("SaveAs", u"Show Settings", None))
 #if QT_CONFIG(tooltip)
         self.showName_label.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>This is the name of the show.  </p><p>By default it is the same as the root folder name of the project, but can be changed to anything</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
@@ -1757,6 +2224,169 @@ class Ui_SaveAs(object):
 #if QT_CONFIG(tooltip)
         self.sceneScale.setToolTip(QCoreApplication.translate("SaveAs", u"The Scene Scale sets the default size of the \"One Meter Cube\" that gets injected into new model files created by the New Asset feature", None))
 #endif // QT_CONFIG(tooltip)
+        self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.show_settings), QCoreApplication.translate("SaveAs", u"Show Settings", None))
+        self.playblast_settings_label.setText(QCoreApplication.translate("SaveAs", u"Playblast Settings", None))
+        self.pb_scene_elements_label.setText(QCoreApplication.translate("SaveAs", u"Scene Elements", None))
+        self.pb_scene_elements.setItemText(0, QCoreApplication.translate("SaveAs", u"Geometry Only", None))
+        self.pb_scene_elements.setItemText(1, QCoreApplication.translate("SaveAs", u"Geometry and Splines", None))
+        self.pb_scene_elements.setItemText(2, QCoreApplication.translate("SaveAs", u"Geometry, Splines and Joints", None))
+        self.pb_scene_elements.setItemText(3, QCoreApplication.translate("SaveAs", u"Everything", None))
+
+        self.pb_wireframe.setText(QCoreApplication.translate("SaveAs", u"Wireframe on Shaded", None))
+        self.pb_textured.setText(QCoreApplication.translate("SaveAs", u"Textured", None))
+        self.pb_use_all_lights.setText(QCoreApplication.translate("SaveAs", u"Use All Lights", None))
+        self.pb_shadows.setText(QCoreApplication.translate("SaveAs", u"Shadows", None))
+        self.pb_ao.setText(QCoreApplication.translate("SaveAs", u"Ambient Occlusion", None))
+        self.pb_motionblur.setText(QCoreApplication.translate("SaveAs", u"Motion Blur", None))
+        self.pb_aa.setText(QCoreApplication.translate("SaveAs", u"Anti Aliasing", None))
+        self.pb_burnin.setText(QCoreApplication.translate("SaveAs", u"Burn In", None))
+        self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.playblast_settings), QCoreApplication.translate("SaveAs", u"Playblast Settings", None))
+        self.hotkeys_label.setText(QCoreApplication.translate("SaveAs", u"Hokeys", None))
+        self.hotkeys1.setText(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>These hotkeys can be changed to your preferences.<br/>However, it is recommended that you leave them at their defaults, because they are designed to take over certain Maya functions.<br/>If you decide to change them, understand that they won't take effect until you restart Maya.</p></body></html>", None))
+        self.hk_open_label.setText(QCoreApplication.translate("SaveAs", u"Open Sans Pipe", None))
+        self.hk_open_mod_1.setItemText(0, "")
+        self.hk_open_mod_1.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
+        self.hk_open_mod_1.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
+        self.hk_open_mod_1.setItemText(3, QCoreApplication.translate("SaveAs", u"Shift", None))
+        self.hk_open_mod_1.setItemText(4, QCoreApplication.translate("SaveAs", u"Esc", None))
+        self.hk_open_mod_1.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
+
+        self.hk_open_mod_1.setCurrentText("")
+        self.hk_open_mod_2.setItemText(0, "")
+        self.hk_open_mod_2.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
+        self.hk_open_mod_2.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
+        self.hk_open_mod_2.setItemText(3, QCoreApplication.translate("SaveAs", u"Shift", None))
+        self.hk_open_mod_2.setItemText(4, QCoreApplication.translate("SaveAs", u"Esc", None))
+        self.hk_open_mod_2.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
+
+        self.hk_open_mod_2.setCurrentText("")
+        self.hk_open_mod_3.setItemText(0, "")
+        self.hk_open_mod_3.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
+        self.hk_open_mod_3.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
+        self.hk_open_mod_3.setItemText(3, QCoreApplication.translate("SaveAs", u"Shift", None))
+        self.hk_open_mod_3.setItemText(4, QCoreApplication.translate("SaveAs", u"Esc", None))
+        self.hk_open_mod_3.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
+
+        self.hk_open_key.setText(QCoreApplication.translate("SaveAs", u"S", None))
+        self.hk_saveVUp_label.setText(QCoreApplication.translate("SaveAs", u"Save Version UP", None))
+        self.hk_savevup_mod_1.setItemText(0, "")
+        self.hk_savevup_mod_1.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
+        self.hk_savevup_mod_1.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
+        self.hk_savevup_mod_1.setItemText(3, QCoreApplication.translate("SaveAs", u"Shift", None))
+        self.hk_savevup_mod_1.setItemText(4, QCoreApplication.translate("SaveAs", u"Esc", None))
+        self.hk_savevup_mod_1.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
+
+        self.hk_savevup_mod_1.setCurrentText("")
+        self.hk_savevup_mod_2.setItemText(0, "")
+        self.hk_savevup_mod_2.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
+        self.hk_savevup_mod_2.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
+        self.hk_savevup_mod_2.setItemText(3, QCoreApplication.translate("SaveAs", u"Shift", None))
+        self.hk_savevup_mod_2.setItemText(4, QCoreApplication.translate("SaveAs", u"Esc", None))
+        self.hk_savevup_mod_2.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
+
+        self.hk_savevup_mod_2.setCurrentText("")
+        self.hk_savevup_mod_3.setItemText(0, "")
+        self.hk_savevup_mod_3.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
+        self.hk_savevup_mod_3.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
+        self.hk_savevup_mod_3.setItemText(3, QCoreApplication.translate("SaveAs", u"Shift", None))
+        self.hk_savevup_mod_3.setItemText(4, QCoreApplication.translate("SaveAs", u"Esc", None))
+        self.hk_savevup_mod_3.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
+
+        self.hk_savevup_key.setText(QCoreApplication.translate("SaveAs", u"V", None))
+        self.hk_snapshot_label.setText(QCoreApplication.translate("SaveAs", u"Snapshot", None))
+        self.hk_snapshot_mod_1.setItemText(0, "")
+        self.hk_snapshot_mod_1.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
+        self.hk_snapshot_mod_1.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
+        self.hk_snapshot_mod_1.setItemText(3, QCoreApplication.translate("SaveAs", u"Shift", None))
+        self.hk_snapshot_mod_1.setItemText(4, QCoreApplication.translate("SaveAs", u"Esc", None))
+        self.hk_snapshot_mod_1.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
+
+        self.hk_snapshot_mod_1.setCurrentText("")
+        self.hk_snapshot_mod_2.setItemText(0, "")
+        self.hk_snapshot_mod_2.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
+        self.hk_snapshot_mod_2.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
+        self.hk_snapshot_mod_2.setItemText(3, QCoreApplication.translate("SaveAs", u"Shift", None))
+        self.hk_snapshot_mod_2.setItemText(4, QCoreApplication.translate("SaveAs", u"Esc", None))
+        self.hk_snapshot_mod_2.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
+
+        self.hk_snapshot_mod_2.setCurrentText("")
+        self.hk_snapshot_mod_3.setItemText(0, "")
+        self.hk_snapshot_mod_3.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
+        self.hk_snapshot_mod_3.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
+        self.hk_snapshot_mod_3.setItemText(3, QCoreApplication.translate("SaveAs", u"Shift", None))
+        self.hk_snapshot_mod_3.setItemText(4, QCoreApplication.translate("SaveAs", u"Esc", None))
+        self.hk_snapshot_mod_3.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
+
+        self.hk_snapshot_key.setText(QCoreApplication.translate("SaveAs", u"S", None))
+        self.hk_publish_label.setText(QCoreApplication.translate("SaveAs", u"Publish", None))
+        self.hk_publish_mod_1.setItemText(0, "")
+        self.hk_publish_mod_1.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
+        self.hk_publish_mod_1.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
+        self.hk_publish_mod_1.setItemText(3, QCoreApplication.translate("SaveAs", u"Shift", None))
+        self.hk_publish_mod_1.setItemText(4, QCoreApplication.translate("SaveAs", u"Esc", None))
+        self.hk_publish_mod_1.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
+
+        self.hk_publish_mod_1.setCurrentText("")
+        self.hk_publish_mod_2.setItemText(0, "")
+        self.hk_publish_mod_2.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
+        self.hk_publish_mod_2.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
+        self.hk_publish_mod_2.setItemText(3, QCoreApplication.translate("SaveAs", u"Shift", None))
+        self.hk_publish_mod_2.setItemText(4, QCoreApplication.translate("SaveAs", u"Esc", None))
+        self.hk_publish_mod_2.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
+
+        self.hk_publish_mod_3.setItemText(0, "")
+        self.hk_publish_mod_3.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
+        self.hk_publish_mod_3.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
+        self.hk_publish_mod_3.setItemText(3, QCoreApplication.translate("SaveAs", u"Shift", None))
+        self.hk_publish_mod_3.setItemText(4, QCoreApplication.translate("SaveAs", u"Esc", None))
+        self.hk_publish_mod_3.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
+
+        self.hk_publish_key.setText(QCoreApplication.translate("SaveAs", u"P", None))
+        self.hk_close_label.setText(QCoreApplication.translate("SaveAs", u"Close", None))
+        self.hk_close_mod_1.setItemText(0, "")
+        self.hk_close_mod_1.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
+        self.hk_close_mod_1.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
+        self.hk_close_mod_1.setItemText(3, QCoreApplication.translate("SaveAs", u"Shift", None))
+        self.hk_close_mod_1.setItemText(4, QCoreApplication.translate("SaveAs", u"Esc", None))
+        self.hk_close_mod_1.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
+
+        self.hk_close_mod_1.setCurrentText("")
+        self.hk_close_mod_2.setItemText(0, "")
+        self.hk_close_mod_2.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
+        self.hk_close_mod_2.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
+        self.hk_close_mod_2.setItemText(3, QCoreApplication.translate("SaveAs", u"Shift", None))
+        self.hk_close_mod_2.setItemText(4, QCoreApplication.translate("SaveAs", u"Esc", None))
+        self.hk_close_mod_2.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
+
+        self.hk_close_mod_3.setItemText(0, "")
+        self.hk_close_mod_3.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
+        self.hk_close_mod_3.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
+        self.hk_close_mod_3.setItemText(3, QCoreApplication.translate("SaveAs", u"Shift", None))
+        self.hk_close_mod_3.setItemText(4, QCoreApplication.translate("SaveAs", u"Esc", None))
+        self.hk_close_mod_3.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
+
+        self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.hotkeys), QCoreApplication.translate("SaveAs", u"Hotkeys", None))
+        self.archiver_label.setText(QCoreApplication.translate("SaveAs", u"Super Archiver", None))
+        self.textEdit.setHtml(QCoreApplication.translate("SaveAs", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The Super Archiver works in a similar fashion to Maya's default &quot;Archive&quot; function, but with a few super elements added into the mix.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">1. The Super Archiver will allow you to select multiple files at once.<br />2. Each file will be analyzed and collected before the "
+                        "archival process begins.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">What this does for you:</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">By analyzing all of the selected scenes up front, any references or assets associated with the scenes can be collected only once, in this way an entire project can be minimally archived without the extra bulk, and without duplicating assets every time an archive is created.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Think of it this way.  If you have 10 scenes that all use the same character and the same environment, if you use the Maya archiver, each ZIP file will include a copy of the character and the environment, leaving you with 10 copies of each and very large ZIP files.  <span style=\" font-style:italic;\">However</sp"
+                        "an>, if you use the Super Archiver, each scene will be opened and collected, and then only one copy of the character and one copy of the environment will be included with your 10 scenes all into 1 ZIP file.</p></body></html>", None))
+#if QT_CONFIG(tooltip)
+        self.archiver_list.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>This list includes all of the scene files in your project, and mirrors the scene files in the Existing FIles list.<br/>You can CTRL or SHIFT select multiple files in order to process them for archiving.</p><p>Understand that this process can take a very long time, and can create a very large file.</p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.archiver_btn.setText(QCoreApplication.translate("SaveAs", u"Archive Selected", None))
+        self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.archiver), QCoreApplication.translate("SaveAs", u"Archiver", None))
+        self.system_settings_label.setText(QCoreApplication.translate("SaveAs", u"System Settings", None))
 #if QT_CONFIG(tooltip)
         self.recent_file_count_label.setToolTip(QCoreApplication.translate("SaveAs", u"This sets the number of Recent Files listed in the Recent File history", None))
 #endif // QT_CONFIG(tooltip)
@@ -1779,12 +2409,7 @@ class Ui_SaveAs(object):
 #if QT_CONFIG(tooltip)
         self.autosave_count.setToolTip(QCoreApplication.translate("SaveAs", u"Turns on Autosave for Maya and sets the time interval", None))
 #endif // QT_CONFIG(tooltip)
-        self.hotkeys_label.setText(QCoreApplication.translate("SaveAs", u"Hokeys", None))
-        self.hotkeys.setText(QCoreApplication.translate("SaveAs", u"Open Sans Pipe = Ctrl + Shift + S (Only if Auto Load on Startup is enabled)\n"
-"Save Version Up = Ctrl + Enter\n"
-"Snapshot Version = Ctrl + t\n"
-"Publish Version = Ctrl + p\n"
-"Close = Esc", None))
+        self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.system_settings), QCoreApplication.translate("SaveAs", u"System Settings", None))
         self.save_config_btn.setText(QCoreApplication.translate("SaveAs", u"Save Configuration", None))
         self.saverTabs.setTabText(self.saverTabs.indexOf(self.SettingsTab), QCoreApplication.translate("SaveAs", u"Settings - Configuration", None))
         self.messages.setText(QCoreApplication.translate("SaveAs", u"Errors", None))

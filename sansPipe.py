@@ -56,6 +56,8 @@ Version 1.3 Goals:
         a. Make playblast options more robust - Playblast tab.  MOV or PNG/JPG sequence?  HUD settings
         b. Tab for Hotkeys
         c. Tab for Things like default CSV file templates, or other goodies.
+        d. Tab for Show Settings.
+        e. Tab for Multi-File Archiving
     21. Multi-Select archiver.  The idea is that you could take a selection of file and zip them together all at once 
         without duplicating too many assets.  It would have to basically open each file, collect all the assets into a
         database, and then collect all those file and assets into one final zip file, maintaining the folder structure 
@@ -96,7 +98,11 @@ import csv
 import inspect
 import subprocess
 
-import sp_tools as sptk
+try:
+    import sp_tools as sptk
+except ImportError as e:
+    sptk = None
+    cmds.warning(f'Can not load the fucking toolkit for some dumb reason: {e}')
 from ui import ui_superSaver_UI as ssui
 
 
@@ -251,7 +257,50 @@ class sansPipe(QWidget):
         self.render_output = self.settings.value('render_output', None, type=str)
         self.auto_load_on_startup = self.settings.value('autoload', None, type=bool)
         self.artist = self.settings.value('artist_name', None, type=str)
+        # Reload and save hotkey settings.
+        self.hk_open_mod_1 = self.settings.value('hk_open_mod_1', None, type=str)
+        self.hk_open_mod_2 = self.settings.value('hk_open_mod_2', None, type=str)
+        self.hk_open_mod_3 = self.settings.value('hk_open_mod_3', None, type=str)
+        self.hk_open_key = self.settings.value('hk_open_key', None, type=str)
+        self.hk_savevup_mod_1 = self.settings.value('hk_savevup_mod_1', None, type=str)
+        self.hk_savevup_mod_2 = self.settings.value('hk_savevup_mod_2', None, type=str)
+        self.hk_savevup_mod_3 = self.settings.value('hk_savevup_mod_3', None, type=str)
+        self.hk_savevup_key = self.settings.value('hk_savevup_key', None, type=str)
+        self.hk_snapshot_mod_1 = self.settings.value('hk_snapshot_mod_1', None, type=str)
+        self.hk_snapshot_mod_2 = self.settings.value('hk_snapshot_mod_2', None, type=str)
+        self.hk_snapshot_mod_3 = self.settings.value('hk_snapshot_mod_3', None, type=str)
+        self.hk_snapshot_key = self.settings.value('hk_snapshot_key', None, type=str)
+        self.hk_publish_mod_1 = self.settings.value('hk_publish_mod_1', None, type=str)
+        self.hk_publish_mod_2 = self.settings.value('hk_publish_mod_2', None, type=str)
+        self.hk_publish_mod_3 = self.settings.value('hk_publish_mod_3', None, type=str)
+        self.hk_publish_key = self.settings.value('hk_publish_key', None, type=str)
+        self.hk_close_mod_1 = self.settings.value('hk_close_mod_1', None, type=str)
+        self.hk_close_mod_2 = self.settings.value('hk_close_mod_2', None, type=str)
+        self.hk_close_mod_3 = self.settings.value('hk_close_mod_3', None, type=str)
+        self.hk_close_key = self.settings.value('hk_close_key', None, type=str)
         self.restoreGeometry(self.position)
+
+        # Set up the Hotkeys in the UI
+        self.ui.hk_open_mod_1.setCurrentText(self.hk_open_mod_1)
+        self.ui.hk_open_mod_2.setCurrentText(self.hk_open_mod_2)
+        self.ui.hk_open_mod_3.setCurrentText(self.hk_open_mod_3)
+        self.ui.hk_open_key.setText(self.hk_open_key)
+        self.ui.hk_savevup_mod_1.setCurrentText(self.hk_savevup_mod_1)
+        self.ui.hk_savevup_mod_2.setCurrentText(self.hk_savevup_mod_2)
+        self.ui.hk_savevup_mod_3.setCurrentText(self.hk_savevup_mod_3)
+        self.ui.hk_savevup_key.setText(self.hk_savevup_key)
+        self.ui.hk_snapshot_mod_1.setCurrentText(self.hk_snapshot_mod_1)
+        self.ui.hk_snapshot_mod_2.setCurrentText(self.hk_snapshot_mod_2)
+        self.ui.hk_snapshot_mod_3.setCurrentText(self.hk_snapshot_mod_3)
+        self.ui.hk_snapshot_key.setText(self.hk_snapshot_key)
+        self.ui.hk_publish_mod_1.setCurrentText(self.hk_publish_mod_1)
+        self.ui.hk_publish_mod_2.setCurrentText(self.hk_publish_mod_2)
+        self.ui.hk_publish_mod_3.setCurrentText(self.hk_publish_mod_3)
+        self.ui.hk_publish_key.setText(self.hk_publish_key)
+        self.ui.hk_close_mod_1.setCurrentText(self.hk_close_mod_1)
+        self.ui.hk_close_mod_2.setCurrentText(self.hk_close_mod_2)
+        self.ui.hk_close_mod_3.setCurrentText(self.hk_close_mod_3)
+        self.ui.hk_close_key.setText(self.hk_close_key)
 
         # Create SP Tool Kit
         self.sptk = sptk.sp_toolkit()
@@ -529,13 +578,73 @@ class sansPipe(QWidget):
         """)
 
         # SETUP HOTKEYS
-        self.shortcut_save = QShortcut(QKeySequence('Ctrl+Return'), self)
+        savevup_hotkey = ''
+        if self.hk_savevup_mod_1:
+            savevup_hotkey += self.hk_savevup_mod_1
+        if self.hk_savevup_mod_2 and savevup_hotkey:
+            savevup_hotkey += f'+{self.hk_savevup_mod_2}'
+        elif self.hk_savevup_mod_2 and not savevup_hotkey:
+            savevup_hotkey += self.hk_savevup_mod_2
+        if self.hk_savevup_mod_3 and savevup_hotkey:
+            savevup_hotkey += f'+{self.hk_savevup_mod_3}'
+        elif self.hk_savevup_mod_3 and not savevup_hotkey:
+            savevup_hotkey += self.hk_savevup_mod_3
+        if self.hk_savevup_key and savevup_hotkey:
+            savevup_hotkey += f'+{str(self.hk_savevup_key).lower()}'
+        elif self.hk_savevup_key and not savevup_hotkey:
+            savevup_hotkey += str(self.hk_savevup_key).lower()
+        close_hotkey = ''
+        if self.hk_close_mod_1:
+            close_hotkey += self.hk_close_mod_1
+        if self.hk_close_mod_2 and close_hotkey:
+            close_hotkey += f'+{self.hk_close_mod_2}'
+        elif self.hk_close_mod_2 and not close_hotkey:
+            close_hotkey += self.hk_close_mod_2
+        if self.hk_close_mod_3 and close_hotkey:
+            close_hotkey += f'+{self.hk_close_mod_3}'
+        elif self.hk_close_mod_3 and not close_hotkey:
+            close_hotkey += self.hk_close_mod_3
+        if self.hk_close_key and close_hotkey:
+            close_hotkey += f'+{str(self.hk_close_key).lower()}'
+        elif self.hk_close_key and not close_hotkey:
+            close_hotkey += str(self.hk_close_key).lower()
+        publish_hotkey = ''
+        if self.hk_publish_mod_1:
+            publish_hotkey += self.hk_publish_mod_1
+        if self.hk_publish_mod_2 and publish_hotkey:
+            publish_hotkey += f'+{self.hk_publish_mod_2}'
+        elif self.hk_publish_mod_2 and not publish_hotkey:
+            publish_hotkey += self.hk_publish_mod_2
+        if self.hk_publish_mod_3 and publish_hotkey:
+            publish_hotkey += f'+{self.hk_publish_mod_3}'
+        elif self.hk_publish_mod_3 and not publish_hotkey:
+            publish_hotkey += self.hk_publish_mod_3
+        if self.hk_publish_key and publish_hotkey:
+            publish_hotkey += f'+{str(self.hk_publish_key).lower()}'
+        elif self.hk_publish_key and not publish_hotkey:
+            publish_hotkey += str(self.hk_publish_key).lower()
+        snapshot_hotkey = ''
+        if self.hk_snapshot_mod_1:
+            snapshot_hotkey += self.hk_snapshot_mod_1
+        if self.hk_snapshot_mod_2 and snapshot_hotkey:
+            snapshot_hotkey += f'+{self.hk_snapshot_mod_2}'
+        elif self.hk_snapshot_mod_2 and not snapshot_hotkey:
+            snapshot_hotkey += self.hk_snapshot_mod_2
+        if self.hk_snapshot_mod_3 and snapshot_hotkey:
+            snapshot_hotkey += f'+{self.hk_snapshot_mod_3}'
+        elif self.hk_snapshot_mod_3 and not snapshot_hotkey:
+            snapshot_hotkey += self.hk_snapshot_mod_3
+        if self.hk_snapshot_key and snapshot_hotkey:
+            snapshot_hotkey += f'+{str(self.hk_snapshot_key).lower()}'
+        elif self.hk_snapshot_key and not snapshot_hotkey:
+            snapshot_hotkey += str(self.hk_snapshot_key).lower()
+        self.shortcut_save = QShortcut(QKeySequence(savevup_hotkey), self)
         self.shortcut_save.activated.connect(self.run)
-        self.shortcut_exit = QShortcut(QKeySequence('Esc'), self)
+        self.shortcut_exit = QShortcut(QKeySequence(close_hotkey), self)
         self.shortcut_exit.activated.connect(self.close)
-        self.shortcut_publish = QShortcut(QKeySequence('Ctrl+p'), self)
+        self.shortcut_publish = QShortcut(QKeySequence(publish_hotkey), self)
         self.shortcut_publish.activated.connect(self.publish)
-        self.shortcut_snapshot = QShortcut(QKeySequence('Ctrl+t'), self)
+        self.shortcut_snapshot = QShortcut(QKeySequence(snapshot_hotkey), self)
         self.shortcut_snapshot.activated.connect(self.snapshot)
 
         # SETUP RIGHT-CLICK CONTEXT MENUS
@@ -3209,6 +3318,26 @@ References Imported and Cleaned:
         self.settings.setValue('render_output', self.ui.image_format.currentText())
         self.settings.setValue('autoload', self.ui.autoload.isChecked())
         self.settings.setValue('artist_name', self.ui.artistName.text())
+        self.settings.setValue('hk_open_mod_1', self.ui.hk_open_mod_1.currentText())
+        self.settings.setValue('hk_open_mod_2', self.ui.hk_open_mod_2.currentText())
+        self.settings.setValue('hk_open_mod_3', self.ui.hk_open_mod_3.currentText())
+        self.settings.setValue('hk_open_key', self.ui.hk_open_key.text())
+        self.settings.setValue('hk_savevup_mod_1', self.ui.hk_savevup_mod_1.currentText())
+        self.settings.setValue('hk_savevup_mod_2', self.ui.hk_savevup_mod_2.currentText())
+        self.settings.setValue('hk_savevup_mod_3', self.ui.hk_savevup_mod_3.currentText())
+        self.settings.setValue('hk_savevup_key', self.ui.hk_savevup_key.text())
+        self.settings.setValue('hk_snapshot_mod_1', self.ui.hk_snapshot_mod_1.currentText())
+        self.settings.setValue('hk_snapshot_mod_2', self.ui.hk_snapshot_mod_2.currentText())
+        self.settings.setValue('hk_snapshot_mod_3', self.ui.hk_snapshot_mod_3.currentText())
+        self.settings.setValue('hk_snapshot_key', self.ui.hk_snapshot_key.text())
+        self.settings.setValue('hk_publish_mod_1', self.ui.hk_publish_mod_1.currentText())
+        self.settings.setValue('hk_publish_mod_2', self.ui.hk_publish_mod_2.currentText())
+        self.settings.setValue('hk_publish_mod_3', self.ui.hk_publish_mod_3.currentText())
+        self.settings.setValue('hk_publish_key', self.ui.hk_publish_key.text())
+        self.settings.setValue('hk_close_mod_1', self.ui.hk_close_mod_1.currentText())
+        self.settings.setValue('hk_close_mod_2', self.ui.hk_close_mod_2.currentText())
+        self.settings.setValue('hk_close_mod_3', self.ui.hk_close_mod_3.currentText())
+        self.settings.setValue('hk_close_key', self.ui.hk_close_key.text())
 
 
 if __name__ == '__main__':

@@ -15,6 +15,10 @@ __author__ = 'Adam Benson'
 
 settings = QSettings(__author__, 'Sans Pipe Super Saver')
 autoload = settings.value('autoload', None, type=bool)
+hk_open_mod_1 =settings.value('hk_open_mod_1', None, type=str)
+hk_open_mod_2 =settings.value('hk_open_mod_2', None, type=str)
+hk_open_mod_3 =settings.value('hk_open_mod_3', None, type=str)
+hk_open_key = settings.value('hk_open_key', None, type=str)
 
 
 def load_sansPipe():
@@ -161,11 +165,23 @@ def setup_hotkey():
         is_locked = is_hotkey_set_locked()
         if is_locked or is_default:
             create_new_hotkey_set()
+        if hk_open_mod_1 == 'Ctrl' or hk_open_mod_2 == 'Ctrl' or hk_open_mod_3 == 'Ctrl':
+            ctrl = True
+        else:
+            ctrl = False
+        if hk_open_mod_1 == 'Alt' or hk_open_mod_2 == 'Alt' or hk_open_mod_3 == 'Alt':
+            alt = True
+        else:
+            alt = False
+        if hk_open_mod_1 == 'Shift' or hk_open_mod_2 == 'Shift' or hk_open_mod_3 == 'Shift':
+            shift = True
+        else:
+            shift = False
         cmds.nameCommand('customSaveAsCommand', ann='SansPipe Save As...', command='python("override_save_as()")')
-        cmds.hotkey(k='S', name='customSaveAsCommand', ctl=True, sht=True)
-        print('Hotkey Ctrl + Shift + S overridden')
+        cmds.hotkey(k=hk_open_key, name='customSaveAsCommand', ctl=ctrl, sht=shift, alt=alt)
+        print(f'Hotkey {hk_open_mod_1} + {hk_open_mod_2} + {hk_open_key} overridden')
     else:
-        cmds.hotkey(k='S', name='SaveSceneAsNameCommand', ctl=True, sht=True)
+        cmds.hotkey(k='S', name='SaveSceneAsNameCommand', ctl=True, sht=True, alt=False)
         # string $nameCommandCmd = "nameCommand -ann \"SaveSceneAsNameCommand\"
         # -command (\"SaveSceneAs\") SaveSceneAsNameCommand"; eval($nameCommandCmd);
 
