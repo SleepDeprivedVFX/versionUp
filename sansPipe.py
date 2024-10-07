@@ -56,6 +56,10 @@ Version 1.3 Goals:
         a. Make playblast options more robust - Playblast tab.  MOV or PNG/JPG sequence?  HUD settings
         b. Tab for Hotkeys
         c. Tab for Things like default CSV file templates, or other goodies.
+    21. Multi-Select archiver.  The idea is that you could take a selection of file and zip them together all at once 
+        without duplicating too many assets.  It would have to basically open each file, collect all the assets into a
+        database, and then collect all those file and assets into one final zip file, maintaining the folder structure 
+        and architecture.  That way collected files would not make duplicates of assets.
     
 KNOWN BUGS:
 1. Many features are not working in Versions of Maya before 2025.  I need to get that all debugged.
