@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIxGqVGX.ui'
+## Form generated from reading UI file 'superSaver_UIOOiywp.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -1570,7 +1570,7 @@ class Ui_SaveAs(object):
 #if QT_CONFIG(tooltip)
         self.cancel_btn.setToolTip(QCoreApplication.translate("SaveAs", u"Esc", None))
 #endif // QT_CONFIG(tooltip)
-        self.cancel_btn.setText(QCoreApplication.translate("SaveAs", u"Cancel", None))
+        self.cancel_btn.setText(QCoreApplication.translate("SaveAs", u"Close", None))
         self.saverTabs.setTabText(self.saverTabs.indexOf(self.MainTab), QCoreApplication.translate("SaveAs", u"Save - Publish - Snap", None))
         self.toolsGroup.setTitle(QCoreApplication.translate("SaveAs", u"Tools", None))
         self.bakeCam_btn.setText(QCoreApplication.translate("SaveAs", u"Bake Camera", None))

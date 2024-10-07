@@ -170,6 +170,7 @@ class sp_toolkit(object):
         """
         if not data:
             data = self.get_data()
+        print(f'data["root_name"]: {data["root_name"]}')
         cmds.inViewMessage(amg="Baking Camera...", pos='midCenter', fade=True)
         bake_camera = self.cam_bake(root_name=data['root_name'])
         if bake_camera:
@@ -213,6 +214,11 @@ class sp_toolkit(object):
         """
         cam_transform = None
         all_cams = cmds.ls(ca=True)
+        root_name = root_name.replace('\\', '/')
+        root_name = root_name.rstrip('/')
+        get_root = root_name.split('/')
+        root_name = get_root[-1]
+        print(f'root_name: {root_name}')
         for cam in all_cams:
             if self.bakeCamSceneName:
                 if root_name in cam:

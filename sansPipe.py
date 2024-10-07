@@ -51,7 +51,7 @@ Version 1.3 Goals:
                     16. Rework the Status notes to use the Notes window instead of the pop up.
                     17. Add right-click "Open without Status change"
                     18. Make v001 status "Ready" instead of "In Progress"
-    19. Increase font size of the tabs
+                    19. Increase font size of the tabs
     20. Make settings tabs for more and advanced settings, like:
         a. Make playblast options more robust - Playblast tab.  MOV or PNG/JPG sequence?  HUD settings
         b. Tab for Hotkeys
@@ -178,8 +178,15 @@ class sansPipe(QWidget):
         self.icons = os.path.join(self.plugin_folder, 'icons')
 
         # Initialize the UI
+        self.setObjectName('mainWindow')
         self.ui = ssui.Ui_SaveAs()
         self.ui.setupUi(self)
+        self.setStyleSheet("""
+        QWidget#mainWindow {
+            border: 2px solid chocolate;
+            border-radius: 15px;
+        }
+        """)
 
         # Get basic scene information - File path, Workspace, Scene and Asset folders.
         pth = cmds.file(q=True, sn=True)
@@ -513,6 +520,7 @@ class sansPipe(QWidget):
         }
         QTabBar::tab:hover {
             background-color: peachpuff;
+            color: darkgray;
         }
         """)
 
@@ -1870,7 +1878,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             self.ui.existingFile_list.scrollToItem(file_item)
                             self.ui.existingFile_list.itemClicked.emit(file_item, 0)
                             self.ui.existingFile_list.verticalScrollBar().setValue(
-                                self.ui.existingFile_list.verticalScrollBar().value() + 20
+                                self.ui.existingFile_list.verticalScrollBar().value()  # This used to have +20 behind it
                             )
 
     def populate_publish_assets(self, tree=None, root=None, current_directory=None):
