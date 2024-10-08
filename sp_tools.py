@@ -4,6 +4,10 @@
 This tool kit stores the functions that help run the SANS-PIPE UTILITY.  The idea here is that these tools can be used
 in or out of the pipeline system, with, or without the main UI.
 """
+
+__version__ = '1.3.8'
+__author__ = 'Adam Benson'
+
 import shutil
 
 from maya import cmds
@@ -26,10 +30,6 @@ except ImportError:
         print('PySide2 detected.')
     except ImportError:
         raise RuntimeError('Neither PySide 6 or PySide 2 detected!')
-
-__version__ = '1.3.8'
-__author__ = 'Adam Benson'
-
 
 class sp_toolkit(object):
     def __init__(self):

@@ -978,7 +978,6 @@ class sansPipe(QWidget):
 
             for copy in copies:
                 base_filename = os.path.basename(copy)
-                print(f'base_filename: {base_filename}')
                 cmds.file(copy, o=True, f=True)
 
                 if self.ui.import_references.isChecked():
