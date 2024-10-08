@@ -978,12 +978,30 @@ class sansPipe(QWidget):
 
                 # Relink the references
                 for reference in references:
-                    print(f'reference: {reference}')
-                    # This needs to do 3 things I think.
-                    # 1. find the reference_nodes where file_name == base_filename and reference == reference
-                    # 2. find the matching reference in the ref_copies path.  This might get tricky, because I need it
-                    #    to make sure it's the right sub folders as well: publish/Env/BeachSea/model/
-
+                    for this_file in reference_nodes:
+                        if this_file['file_name'] == base_filename:
+                            ref_node = this_file['node']
+                            break
+                    ext = os.path.splitext(reference)[1]
+                    if ext == '.ma':
+                        r_type = 'mayaAscii'
+                    elif ext == '.mb':
+                        r_type = 'mayaBinary'
+                    elif ext == '.fbx':
+                        r_type = 'FBX'
+                    elif ext == '.obj':
+                        r_type = 'OBJ'
+                    else:
+                        r_type = 'mayaAscii'
+                    updated_ref = None
+                    for copied_ref in ref_copies:
+                        if reference in copied_ref:
+                            updated_ref = copied_ref
+                            break
+                    if updated_ref:
+                        new_ref_path = os.path.join(self.workspace, updated_ref)
+                        new_ref_path = self.fix_path(new_ref_path)
+                        cmds.file(new_ref_path, loadReference=ref_node, type=r_type, options="v=0;")
 
                 # FIXME: This is where I think I'm going to leave off for tonight.
                 #  I suddenly started feeling sleepy and would like to test what I've done so far.
