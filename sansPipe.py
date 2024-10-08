@@ -709,10 +709,13 @@ class sansPipe(QWidget):
                               'Shift selected', ok=False, obj=self.ui.archiver_list)
             return False
 
+        # Ask for file save before action
+        do_save = self.create_new_file_with_prompt()
+        if not do_save:
+            return False
+
         # Create the new archive path
         archive_path = self.workspace
-        publish_path = self.publish_folder_path
-        archive_path = os.path.join(archive_path, publish_path)
         archive_path = os.path.join(archive_path, 'Archives')
         if not os.path.exists(archive_path):
             os.makedirs(archive_path)
@@ -837,6 +840,7 @@ class sansPipe(QWidget):
 
     def do_archive_collection(self, archive=None):
         if archive:
+            self.hide()
             # Get the archive data collection
             archive_db = self.open_db(folder=archive, db_name='archive_db.json')
             output_folder_path = archive_db['Notes']['rel_archive_path']
@@ -918,7 +922,8 @@ class sansPipe(QWidget):
                     # Create relative reference path for database
                     rel_reference_path = ref_archive_path.replace(self.workspace, '')
                     archive_db['Archive']['copied_references'].append(rel_reference_path)
-                    shutil.copy2(full_reference_path, ref_archive_path)
+                    if not self.ui.import_references.isChecked():
+                        shutil.copy2(full_reference_path, ref_archive_path)
 
             # Start sound processing
             for sound in sounds:
@@ -976,38 +981,100 @@ class sansPipe(QWidget):
                 print(f'base_filename: {base_filename}')
                 cmds.file(copy, o=True, f=True)
 
-                # Relink the references
-                for reference in references:
-                    for this_file in reference_nodes:
-                        if this_file['file_name'] == base_filename:
-                            ref_node = this_file['node']
-                            break
-                    ext = os.path.splitext(reference)[1]
-                    if ext == '.ma':
-                        r_type = 'mayaAscii'
-                    elif ext == '.mb':
-                        r_type = 'mayaBinary'
-                    elif ext == '.fbx':
-                        r_type = 'FBX'
-                    elif ext == '.obj':
-                        r_type = 'OBJ'
-                    else:
-                        r_type = 'mayaAscii'
-                    updated_ref = None
-                    for copied_ref in ref_copies:
-                        if reference in copied_ref:
-                            updated_ref = copied_ref
-                            break
-                    if updated_ref:
-                        new_ref_path = os.path.join(self.workspace, updated_ref)
-                        new_ref_path = self.fix_path(new_ref_path)
-                        cmds.file(new_ref_path, loadReference=ref_node, type=r_type, options="v=0;")
+                if self.ui.import_references.isChecked():
+                    # import the reference
+                    self.import_and_clean_references()
+                else:
+                    # Relink the references
+                    for reference in references:
+                        for this_file in reference_nodes:
+                            if this_file['file_name'] == base_filename and this_file['relative_path'] == reference:
+                                ref_node = this_file['node']
+                                break
+                        ext = os.path.splitext(reference)[1]
+                        if ext == '.ma':
+                            r_type = 'mayaAscii'
+                        elif ext == '.mb':
+                            r_type = 'mayaBinary'
+                        elif ext == '.fbx':
+                            r_type = 'FBX'
+                        elif ext == '.obj':
+                            r_type = 'OBJ'
+                        else:
+                            r_type = 'mayaAscii'
+                        updated_ref = None
+                        for copied_ref in ref_copies:
+                            if reference in copied_ref:
+                                updated_ref = copied_ref
+                                break
+                        if updated_ref:
+                            new_ref_path = os.path.join(self.workspace, updated_ref)
+                            new_ref_path = self.fix_path(new_ref_path)
+                            cmds.file(new_ref_path, loadReference=ref_node, type=r_type, options="v=0;")
 
-                # FIXME: This is where I think I'm going to leave off for tonight.
-                #  I suddenly started feeling sleepy and would like to test what I've done so far.
-                #  What I have to next is open each file, get the references, find the matching updated path and relink
-                #  them.  I have to do the same for the textures. I created a texture_node system to help me keep track
-                #  of what nodes had what files originally, and update them with their matching pair.
+                # Set the textures if possible
+                for texture_data in texture_nodes:
+                    if texture_data['master'] == base_filename:
+                        texture_node = texture_data['node']
+                        original_texture = texture_data['texture']
+                        new_tex_path = None
+                        for copied_tex in sourceimage_copies:
+                            if original_texture in copied_tex:
+                                new_tex_path = copied_tex
+                                break
+                        if new_tex_path:
+                            new_tex_path = os.path.join(self.workspace, new_tex_path)
+                            new_tex_path = self.fix_path(new_tex_path)
+                            try:
+                                cmds.setAttr(texture_node + '.fileTextureName', new_tex_path)
+                            except Exception as e:
+                                cmds.warning(f'Cannot update texture - probable reference issue: {e}')
+
+                # Repath the sound files
+                for copied_sound in sound_copies:
+                    if copied_sound['master'] == base_filename:
+                        audio_node = copied_sound['audio_node']
+                        rel_audio = copied_sound['rel_audio']
+                        full_audio_path = os.path.join(self.workspace, rel_audio)
+                        full_audio_path = self.fix_path(full_audio_path)
+                        try:
+                            cmds.setAttr(audio_node + '.audioFile', full_audio_path)
+                        except Exception as e:
+                            cmds.warning(f'Can not relink the audio path for {audio_node}: {e}')
+
+                # Save the file
+                cmds.file(s=True)
+            # Close all the files by opening a blank file
+            cmds.file(new=True, f=True)
+
+            # Zip the archive and delete the prep folder
+            self.do_zip_archive(archive=archive)
+
+    def do_zip_archive(self, archive=None):
+        if archive:
+            archive_db = self.open_db(folder=archive, db_name='archive_db.json')
+            get_output_folder = archive_db['Notes']['rel_archive_path']
+            output_folder = os.path.join(self.workspace, get_output_folder)
+            output_folder = self.fix_path(output_folder)
+            zip_folder = os.path.dirname(output_folder)
+            zip_file = output_folder + '.zip'
+            if not os.path.exists(output_folder):
+                raise FileNotFoundError(f'The folder {output_folder} does not exist!')
+            if os.path.exists(zip_file):
+                os.remove(zip_file)
+
+            shutil.make_archive(output_folder, 'zip', zip_folder)
+
+            if os.path.exists(zip_file) and os.path.getsize(zip_file) > 0:
+                self.show()
+                self.message(text=f'Zip file created! {zip_file}')
+                if platform.system() == 'Windows':
+                    subprocess.run(['explorer'], '/select', os.path.normpath(zip_file))
+                else:
+                    subprocess.run(['open', '-R', zip_file])
+            else:
+                self.show()
+                self.message(text='Having trouble creating the zip file automatically. Try creating manually', ok=False)
 
     def do_relink_from_archive(self, archive=None):
         """
@@ -3147,7 +3214,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             elif result == 'Cancel':
                 # Cancel the operation
                 self.show()
-                return
+                return False
             self.show()
 
         # Now create the new file

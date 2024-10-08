@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIfTqcaE.ui'
+## Form generated from reading UI file 'superSaver_UIIBbojk.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -1705,6 +1705,11 @@ class Ui_SaveAs(object):
 
         self.verticalLayout_17.addWidget(self.archiver_list)
 
+        self.import_references = QCheckBox(self.archiver)
+        self.import_references.setObjectName(u"import_references")
+
+        self.verticalLayout_17.addWidget(self.import_references)
+
         self.horizontalLayout_45 = QHBoxLayout()
         self.horizontalLayout_45.setObjectName(u"horizontalLayout_45")
         self.horizontalSpacer_29 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
@@ -2384,6 +2389,7 @@ class Ui_SaveAs(object):
 #if QT_CONFIG(tooltip)
         self.archiver_list.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>This list includes all of the scene files in your project, and mirrors the scene files in the Existing FIles list.<br/>You can CTRL or SHIFT select multiple files in order to process them for archiving.</p><p>Understand that this process can take a very long time, and can create a very large file.</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
+        self.import_references.setText(QCoreApplication.translate("SaveAs", u"Import References", None))
         self.archiver_btn.setText(QCoreApplication.translate("SaveAs", u"Archive Selected", None))
         self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.archiver), QCoreApplication.translate("SaveAs", u"Archiver", None))
         self.system_settings_label.setText(QCoreApplication.translate("SaveAs", u"System Settings", None))

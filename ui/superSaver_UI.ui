@@ -3109,6 +3109,13 @@ li.checked::marker { content: &quot;\2612&quot;; }
                 </widget>
                </item>
                <item>
+                <widget class="QCheckBox" name="import_references">
+                 <property name="text">
+                  <string>Import References</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_45">
                  <item>
                   <spacer name="horizontalSpacer_29">
