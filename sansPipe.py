@@ -381,9 +381,9 @@ class sansPipe(QWidget):
         elif workspace:
             save_path = os.path.join(workspace, scene_folder)
             if '\\' in workspace:
-                workspace = workspace.replace('\\', '/')
+                workspace = self.fix_path(workspace)
             if '\\' in save_path:
-                save_path = save_path.replace('\\', '/')
+                save_path = self.fix_path(save_path)
 
             if workspace.endswith('/'):
                 rem = -2
@@ -662,6 +662,16 @@ class sansPipe(QWidget):
         # Load up and show the UI.
         self.show()
 
+    def fix_path(self, path=None):
+        """
+        This removes backslashes \\
+        :param path:
+        :return: clean path
+        """
+        if path:
+            path = path.replace('\\', '/')
+        return path
+
     def enable_context_menu(self, widget=None, widget_name=None):
         """
         This function sets the Right-Click functionality for whichever list is run through it, allowing for the context
@@ -707,16 +717,20 @@ class sansPipe(QWidget):
         if not os.path.exists(archive_path):
             os.makedirs(archive_path)
         archive_name = self.ui.showName.text()
-        archive_name = archive_name.replace(' ', '_')
+        archive_name = archive_name.replace(' ', '')
         datetime_stamp = self.create_date_stamp()
         archive_name = archive_name + '_' + datetime_stamp
         archive_output_path = os.path.join(archive_path, archive_name)
-        archive_output_path = archive_output_path.replace('\\', '/')
+        archive_output_path = self.fix_path(archive_output_path)
+        rel_archive_output_path = archive_output_path.replace(self.workspace, '')
 
         # Create the database
         data_path = self.make_db_folder(folder=archive_output_path)
         archive_data = self.open_db(folder=data_path, db_name='archive_db.json')
-        archive_data['Notes'] = archive_output_path
+        archive_data['Notes'] = {
+            'original_archive_path': archive_output_path,
+            'rel_archive_path': rel_archive_output_path
+        }
         archive_data['Archive'] = {
             'sourceimages': [],
             'references': [],
@@ -735,13 +749,16 @@ class sansPipe(QWidget):
             if not file_name:
                 continue
             file_path = os.path.join(folder, file_name)
-            file_path = file_path.replace('\\', '/')
+            file_path = self.fix_path(file_path)
             if not os.path.exists(file_path):
                 continue
 
+            # Create relative path for database storage
+            rel_file_path = file_path.replace(self.workspace, '')
+
             # Open the file
-            if file_path not in archive_data['Archive']['master_files']:
-                archive_data['Archive']['master_files'].append(file_path)
+            if rel_file_path not in archive_data['Archive']['master_files']:
+                archive_data['Archive']['master_files'].append(rel_file_path)
             cmds.file(file_path, o=True, f=True)
 
             # Collect the references
@@ -756,14 +773,18 @@ class sansPipe(QWidget):
                     ref_namespace = cmds.referenceQuery(ref, namespace=True)
                     ref_namespace = str(ref_namespace).lstrip(':')
                     ref_node = cmds.referenceQuery(ref, rfn=True)
-                    if ref_path not in archive_data['Archive']['references']:
-                        archive_data['Archive']['references'].append(ref_path)
+
+                    # create relative path for database storage
+                    rel_ref_path = ref_path.replace(self.workspace, '')
+                    if rel_ref_path not in archive_data['Archive']['references']:
+                        archive_data['Archive']['references'].append(rel_ref_path)
 
                     archive_data['Archive']['reference_nodes'].append({
                         'node': ref_node,
                         'namespace': ref_namespace,
                         'reference': ref_path,
-                        'file_name': ref_name
+                        'file_name': ref_name,
+                        'relative_path': rel_ref_path
                     })
 
             # Collect all the texture files
@@ -773,7 +794,9 @@ class sansPipe(QWidget):
             if textures:
                 for texture in textures:
                     texture_path = cmds.getAttr(texture + '.fileTextureName')
-                    archive_data['Archive']['texture_nodes'].append({'node': texture, 'texture': texture_path,
+                    # create relative texture path for database storage
+                    rel_texture_path = texture_path.replace(self.workspace, '')
+                    archive_data['Archive']['texture_nodes'].append({'node': texture, 'texture': rel_texture_path,
                                                                      'master': os.path.basename(file_path)})
                     uv_tiling_mode = cmds.getAttr(texture + '.uvTilingMode')
                     is_sequence = cmds.getAttr(texture + '.useFrameExtension')
@@ -782,22 +805,29 @@ class sansPipe(QWidget):
                         texture_paths.extend(expanded_files)
                     else:
                         if os.path.exists(texture_path):
-                            texture_paths.append(texture_path)
+                            texture_paths.append(rel_texture_path)
 
             if texture_paths:
+                # Texture paths should all be relative paths now.
                 for texture_path in texture_paths:
                     if texture_path not in archive_data['Archive']['sourceimages']:
                         archive_data['Archive']['sourceimages'].append(texture_path)
 
             # Collect the audio files - if they exist
             audio_nodes = cmds.ls(type='timeEditorClip')
-            audio_paths = []
             if audio_nodes:
                 for audio_node in audio_nodes:
                     audio_path = cmds.getAttr(audio_node + '.audioFile')
                     if audio_path and os.path.exists(audio_path):
-                        if audio_path not in archive_data['Archive']['sounds']:
-                            archive_data['Archive']['sounds'].append(audio_path)
+                        # create relative audio path link
+                        rel_audio_path = audio_path.replace(self.workspace, '')
+                        audio_data = {
+                            'audio': rel_audio_path,
+                            'audio_node': audio_node,
+                            'master': os.path.basename(file_path)
+                        }
+                        if audio_data not in archive_data['Archive']['sounds']:
+                            archive_data['Archive']['sounds'].append(audio_data)
         self.save_db(folder=archive_output_path, data=archive_data, db_name='archive_db.json')
 
         self.show()
@@ -809,7 +839,9 @@ class sansPipe(QWidget):
         if archive:
             # Get the archive data collection
             archive_db = self.open_db(folder=archive, db_name='archive_db.json')
-            folder_path = archive_db['Notes']
+            output_folder_path = archive_db['Notes']['rel_archive_path']
+            output_folder_path = os.path.join(self.workspace, output_folder_path)
+            output_folder_path = self.fix_path(output_folder_path)
             master_files = archive_db['Archive']['master_files']
             references = archive_db['Archive']['references']
             sounds = archive_db['Archive']['sounds']
@@ -823,71 +855,101 @@ class sansPipe(QWidget):
 
             # Start processing the files
             for master in master_files:
-                if os.path.exists(master):
-                    if self.workspace in master:
-                        master_archive_path = master.replace(self.workspace, '')
-                        master_archive_path = os.path.join(folder_path, master_archive_path)
-                    else:
-                        get_filename = os.path.basename(master)
-                        master_archive_path = os.path.join(folder_path, self.scene_folder_path)
-                        master_archive_path = os.path.join(master_archive_path, get_filename)
-                    master_archive_path = master_archive_path.replace('\\', '/')
+                if self.workspace not in master and not os.path.isabs(master):
+                    full_master_path = os.path.join(self.workspace, master)
+                else:
+                    full_master_path = master
+                full_master_path = self.fix_path(full_master_path)
+                if os.path.exists(full_master_path):
+                    master_archive_path = os.path.join(output_folder_path, master)
+                    master_archive_path = self.fix_path(master_archive_path)
                     master_archive_folder = os.path.dirname(master_archive_path)
                     if not os.path.exists(master_archive_folder):
                         os.makedirs(master_archive_folder)
-                    archive_db['Archive']['copied_files'].append(master_archive_path)
-                    shutil.copy2(master, master_archive_path)
+                    # Make relative archive path for database storage
+                    rel_archive_path = master_archive_path.replace(self.workspace, '')
+                    archive_db['Archive']['copied_files'].append(rel_archive_path)
+                    shutil.copy2(full_master_path, master_archive_path)
 
             # Start processing the sourceimages
             for source in sourceimages:
-                if os.path.exists(source):
-                    if self.workspace in source:
-                        source_archive_path = source.replace(self.workspace, '')
-                        source_archive_path = os.path.join(folder_path, source_archive_path)
+                # Sources should all be relative paths at this point
+                if self.workspace not in source and not os.path.isabs(source):
+                    full_source_path = os.path.join(self.workspace, source)
+                else:
+                    full_source_path = source
+                full_source_path = self.fix_path(full_source_path)
+                if os.path.exists(full_source_path):
+                    if self.workspace in full_source_path:
+                        source_archive_path = os.path.join(output_folder_path, source)
                     else:
                         get_filename = os.path.basename(source)
-                        source_archive_path = os.path.join(folder_path, cmds.workspace(fre='sourceimages'))
+                        source_archive_path = os.path.join(output_folder_path, cmds.workspace(fre='sourceimages'))
                         source_archive_path = os.path.join(source_archive_path, get_filename)
-                    source_archive_path = source_archive_path.replace('\\', '/')
+                    source_archive_path = self.fix_path(source_archive_path)
                     source_archive_folder = os.path.dirname(source_archive_path)
+
                     if not os.path.exists(source_archive_folder):
                         os.makedirs(source_archive_folder)
-                    archive_db['Archive']['copied_sourceimages'].append(source_archive_path)
-                    shutil.copy2(source, source_archive_path)
+
+                    # create relative source path
+                    rel_source_archive_path = source_archive_path.replace(self.workspace, '')
+                    archive_db['Archive']['copied_sourceimages'].append(rel_source_archive_path)
+                    shutil.copy2(full_source_path, source_archive_path)
 
             # Start processing the references
             for reference in references:
-                if os.path.exists(reference):
-                    if self.workspace in reference:
-                        ref_archive_path = reference.replace(self.workspace, '')
-                        ref_archive_path = os.path.join(folder_path, ref_archive_path)
+                if self.workspace not in reference and not os.path.isabs(reference):
+                    full_reference_path = os.path.join(self.workspace, reference)
+                else:
+                    full_reference_path = reference
+                full_reference_path = self.fix_path(full_reference_path)
+                if os.path.exists(full_reference_path):
+                    if self.workspace in full_reference_path:
+                        ref_archive_path = os.path.join(output_folder_path, reference)
                     else:
                         get_filename = os.path.basename(reference)
-                        ref_archive_path = os.path.join(folder_path, self.publish_folder_path)
+                        ref_archive_path = os.path.join(output_folder_path, self.publish_folder_path)
                         ref_archive_path = os.path.join(ref_archive_path, get_filename)
-                    ref_archive_path = ref_archive_path.replace('\\', '/')
+                    ref_archive_path = self.fix_path(ref_archive_path)
                     ref_archive_folder = os.path.dirname(ref_archive_path)
                     if not os.path.exists(ref_archive_folder):
                         os.makedirs(ref_archive_folder)
-                    archive_db['Archive']['copied_references'].append(reference)
-                    shutil.copy2(reference, ref_archive_path)
+                    # Create relative reference path for database
+                    rel_reference_path = ref_archive_path.replace(self.workspace, '')
+                    archive_db['Archive']['copied_references'].append(rel_reference_path)
+                    shutil.copy2(full_reference_path, ref_archive_path)
 
             # Start sound processing
             for sound in sounds:
-                if os.path.exists(sound):
-                    if self.workspace in sound:
-                        sound_archive_path = sound.replace(self.workspace, '')
-                        sound_archive_path = os.path.join(folder_path, sound_archive_path)
+                audio = sound['audio']
+                if self.workspace not in audio and not os.path.isabs(audio):
+                    full_sound_path = os.path.join(self.workspace, audio)
+                else:
+                    full_sound_path = audio
+                full_sound_path = self.fix_path(full_sound_path)
+                if os.path.exists(full_sound_path):
+                    if self.workspace in full_sound_path:
+                        sound_archive_path = os.path.join(output_folder_path, audio)
                     else:
-                        get_filename = os.path.basename(sound)
-                        sound_archive_path = os.path.join(folder_path, cmds.workspace(fre='sound'))
+                        get_filename = os.path.basename(audio)
+                        sound_archive_path = os.path.join(output_folder_path, cmds.workspace(fre='sound'))
                         sound_archive_path = os.path.join(sound_archive_path, get_filename)
-                    sound_archive_path = sound_archive_path.replace('\\', '/')
+                    sound_archive_path = self.fix_path(sound_archive_path)
                     sound_archive_folder = os.path.dirname(sound_archive_path)
                     if not os.path.exists(sound_archive_folder):
                         os.makedirs(sound_archive_folder)
-                    archive_db['Archive']['copied_sounds'].append(sound_archive_path)
-                    shutil.copy2(sound, sound_archive_path)
+
+                    # create relative sound path
+                    rel_sound_archive_path = sound_archive_path.replace(self.workspace, '')
+                    sound_data = {
+                        'audio_node': sound['audio_node'],
+                        'master': sound['master'],
+                        'rel_audio': rel_sound_archive_path
+                    }
+                    if sound_data not in archive_db['Archive']['copied_sounds']:
+                        archive_db['Archive']['copied_sounds'].append(sound_data)
+                    shutil.copy2(full_sound_path, sound_archive_path)
 
             # Save the database
             self.save_db(folder=archive, data=archive_db, db_name='archive_db.json')
@@ -916,7 +978,11 @@ class sansPipe(QWidget):
 
                 # Relink the references
                 for reference in references:
-                    pass
+                    print(f'reference: {reference}')
+                    # This needs to do 3 things I think.
+                    # 1. find the reference_nodes where file_name == base_filename and reference == reference
+                    # 2. find the matching reference in the ref_copies path.  This might get tricky, because I need it
+                    #    to make sure it's the right sub folders as well: publish/Env/BeachSea/model/
 
 
                 # FIXME: This is where I think I'm going to leave off for tonight.
@@ -941,27 +1007,31 @@ class sansPipe(QWidget):
                 for udim in range(1001, 2000):
                     expanded_file = file_path.replace('<UDIM>', str(udim))
                     if os.path.exists(expanded_file):
-                        expanded_file = expanded_file.replace('\\', '/')
-                        expanded_files.append(expanded_file)
+                        expanded_file = self.fix_path(expanded_file)
+                        rel_expanded_file = expanded_file.replace(self.workspace, '')
+                        expanded_files.append(rel_expanded_file)
             elif re.findall(pattern, file_path):
                 udim_found = re.findall(pattern, file_path)
                 udim_found = udim_found[0].lstrip('_')
                 pattern = file_path.replace(udim_found, '[0-9]' * 4)
                 matching_files = glob.glob(pattern)
                 for matching_file in matching_files:
-                    matching_file = matching_file.replace('\\', '/')
-                    expanded_files.append(matching_file)
+                    matching_file = self.fix_path(matching_file)
+                    rel_matching_file = matching_file.replace(self.workspace, '')
+                    expanded_files.append(rel_matching_file)
 
         elif '#' in file_path:
             num_hashes = file_path.count('#')
             pattern = file_path.replace('#' * num_hashes, '[0-9]' * num_hashes)
             matching_files = glob.glob(pattern)
             for matching_file in matching_files:
-                matching_file = matching_file.replace('\\', '/')
-                expanded_files.append(matching_file)
+                matching_file = self.fix_path(matching_file)
+                rel_matching_file = matching_file.replace(self.workspace, '')
+                expanded_files.append(rel_matching_file)
         else:
             if os.path.exists(file_path):
-                expanded_files.append(file_path)
+                rel_file_path = file_path.replace(self.workspace, '')
+                expanded_files.append(rel_file_path)
         return expanded_files
 
     def create_date_stamp(self):
@@ -1053,7 +1123,7 @@ QComboBox {{
             filename = data['file']
 
             path = folder
-            path = path.replace('\\', '/')
+            path = self.fix_path(path)
             # path = os.path.dirname(path)
             db_path = os.path.join(path, 'db')
             file_path = os.path.join(folder, filename)
@@ -1405,7 +1475,7 @@ QComboBox {{
         # It can be overridden in the configuration file.
         show_code = None
         if path:
-            checked_path = path.replace('\\', '/')
+            checked_path = self.fix_path(path)
             split_path = checked_path.split('/')
             for seg in split_path:
                 if len(seg) == 3:
@@ -1430,7 +1500,7 @@ QComboBox {{
         :return:
         """
         workspace = cmds.workspace(q=True, act=True)
-        workspace = workspace.replace('\\', '/')
+        workspace = self.fix_path(workspace)
         split_ws = workspace.split('/')
         self.project_name = split_ws[-1]
         return self.project_name
@@ -1628,7 +1698,7 @@ QComboBox {{
 
             output_path = os.path.join(path, filename)
             if '\\' in output_path:
-                output_path = output_path.replace('\\', '/')
+                output_path = self.fix_path(output_path)
         return output_path
 
     def get_folder(self):
@@ -1749,7 +1819,7 @@ QComboBox {{
                     if this_version > version:
                         latest_file = file
             latest_file = os.path.join(root_folder, latest_file)
-            latest_file = latest_file.replace('\\', '/')
+            latest_file = self.fix_path(latest_file)
             return latest_file
 
     def collect_files(self, path=None):
@@ -2068,7 +2138,7 @@ NOTE: None
             if not existing_file or allow_file_copy:
                 if not filename:
                     new_path = os.path.join(folder_name, file_text)
-                    new_path = new_path.replace('\\', '/')
+                    new_path = self.fix_path(new_path)
                     new_file_name = self.build_path(path=new_path, rootName=file_text,
                                                     task=self.ui.taskType.currentText(), v_type='_v', version=1,
                                                     ext=self.ui.fileType.currentText(), show=self.ui.showCode.text(),
@@ -2267,7 +2337,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             continue
 
                         file_path = os.path.normpath(os.path.join(folder_name, file_name))
-                        file_path = file_path.replace('\\', '/')
+                        file_path = self.fix_path(file_path)
                         file_item = QTreeWidgetItem(folder_items[relative_folder_name])
                         file_item.setText(0, file_name)
                         file_item.setData(0, Qt.UserRole, {"folder": folder_name, "file": file_name})
@@ -2382,9 +2452,6 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                         # Check if the file is in an allowed folder ("assets" or "Publishes")
                         if any(allowed_folder in relative_folder_name.split(os.sep) for allowed_folder in
                                allowed_folders) or root in folder_name:
-                            file_path = os.path.normpath(os.path.join(folder_name, file_name))
-                            file_path = file_path.replace('\\', '/')
-
                             # Add the file to the tree if in allowed folders
                             file_item = QTreeWidgetItem(folder_items[relative_folder_name])
                             file_item.setText(0, file_name)
@@ -2629,7 +2696,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         for this_file in recent_files:
             filename = this_file['filename']
             file_path = this_file['path']
-            file_path = file_path.replace('\\', '/')
+            file_path = self.fix_path(file_path)
             new_entry = QListWidgetItem()
             new_entry.setText(filename)
             new_entry.setData(Qt.UserRole, file_path)
@@ -3414,7 +3481,7 @@ References Imported and Cleaned:
         file_name = data['file']
         file_root = os.path.splitext(file_name)[0]
         path = data['folder']
-        path = path.replace('\\', '/')
+        path = self.fix_path(path)
         file_path = os.path.join(path, file_name)
         if os.path.exists(file_path):
             if cmds.file(file_path, q=True, exists=True):
@@ -3440,7 +3507,7 @@ References Imported and Cleaned:
         file_name = data['file']
         file_root = os.path.splitext(file_name)[0]
         path = data['folder']
-        path = path.replace('\\', '/')
+        path = self.fix_path(path)
         file_path = os.path.join(path, file_name)
         if os.path.exists(file_path):
             if cmds.file(file_path, q=True, exists=True):
@@ -3597,7 +3664,7 @@ References Imported and Cleaned:
         if {'filename': '', 'path': ''} in self.recent_files:
             i = self.recent_files.index({'filename': '', 'path': ''})
             self.recent_files.pop(i)
-        self.current_file_path = self.current_file_path.replace('\\', '/')
+        self.current_file_path = self.fix_path(self.current_file_path)
         this_file_data = {
             'filename': os.path.basename(self.current_file_path),
             'path': self.current_file_path
@@ -3608,7 +3675,7 @@ References Imported and Cleaned:
         if len(self.recent_projects) >= 5:
             self.recent_projects.pop(4)
         current_project = cmds.workspace(q=True, act=True)
-        current_project = current_project.replace('\\', '/')
+        current_project = self.fix_path(current_project)
         if current_project not in self.recent_projects:
             self.recent_projects.insert(0, current_project)
         self.settings.setValue('recent_projects', self.recent_projects)
