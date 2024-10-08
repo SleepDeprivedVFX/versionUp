@@ -1026,7 +1026,7 @@ class sansPipe(QWidget):
                             new_tex_path = os.path.join(self.workspace, new_tex_path)
                             new_tex_path = self.fix_path(new_tex_path)
                             try:
-                                cmds.setAttr(texture_node + '.fileTextureName', new_tex_path)
+                                cmds.setAttr(texture_node + '.fileTextureName', new_tex_path, type='string')
                             except Exception as e:
                                 cmds.warning(f'Cannot update texture - probable reference issue: {e}')
 
@@ -1038,7 +1038,7 @@ class sansPipe(QWidget):
                         full_audio_path = os.path.join(self.workspace, rel_audio)
                         full_audio_path = self.fix_path(full_audio_path)
                         try:
-                            cmds.setAttr(audio_node + '.audioFile', full_audio_path)
+                            cmds.setAttr(audio_node + '.audioFile', full_audio_path, type='string')
                         except Exception as e:
                             cmds.warning(f'Can not relink the audio path for {audio_node}: {e}')
 
@@ -1069,9 +1069,13 @@ class sansPipe(QWidget):
                 self.show()
                 self.message(text=f'Zip file created! {zip_file}')
                 if platform.system() == 'Windows':
-                    subprocess.run(['explorer'], '/select', os.path.normpath(zip_file))
+                    subprocess.run(['explorer', '/select,', os.path.normpath(zip_file)])
                 else:
                     subprocess.run(['open', '-R', zip_file])
+                try:
+                    os.remove(output_folder)
+                except Exception as e:
+                    cmds.warning(f'Cannot delete the original collection folder. Delete it manually. {e}')
             else:
                 self.show()
                 self.message(text='Having trouble creating the zip file automatically. Try creating manually', ok=False)
