@@ -10,6 +10,9 @@ It saves notes and information with every file that is created.  It can also be 
 new assets and folder structures on the fly.
 """
 
+__version__ = '1.3.8'
+__author__ = 'Adam Benson'
+
 """
 Version 1.3 Goals:
     1. Create a dynamically loading toolset:
@@ -62,7 +65,8 @@ Version 1.3 Goals:
         without duplicating too many assets.  It would have to basically open each file, collect all the assets into a
         database, and then collect all those file and assets into one final zip file, maintaining the folder structure 
         and architecture.  That way collected files would not make duplicates of assets.
-    
+    22. Import an archive from a zip file.  This should basically "un-do" the archive setup from 21
+        
 KNOWN BUGS:
 1. Many features are not working in Versions of Maya before 2025.  I need to get that all debugged.
 
@@ -97,12 +101,10 @@ import configparser
 import csv
 import inspect
 import subprocess
+import glob
+import shutil
 
-try:
-    import sp_tools as sptk
-except ImportError as e:
-    sptk = None
-    cmds.warning(f'Can not load the fucking toolkit for some dumb reason: {e}')
+import sp_tools as sptk
 from ui import ui_superSaver_UI as ssui
 
 
@@ -121,9 +123,6 @@ def uninitializePlugin(mobject):
     except:
         om.MGlobal.displayError("Failed to deregister sansPipe plugin")
 
-
-__version__ = '1.3.8'
-__author__ = 'Adam Benson'
 
 if platform.system() == 'Windows':
     env_user = 'USERNAME'
@@ -472,7 +471,8 @@ class sansPipe(QWidget):
         self.ui.snapshots.itemDoubleClicked.connect(self.import_snapshot)
         self.ui.existingFile_list.itemDoubleClicked.connect(lambda: self.open_file(f=False))
         self.ui.existingFile_list.itemClicked.connect(self.show_file_selection_info)
-        self.populate_existing_files(current_directory=self.scene_folder_path)
+        self.populate_existing_files(tree=self.ui.archiver_list, current_directory=self.scene_folder_path)
+        self.populate_existing_files(tree=self.ui.existingFile_list, current_directory=self.scene_folder_path)
         self.populate_publish_assets(tree=self.ui.assetTree, root=self.ui.assets.text(),
                                      current_directory=self.asset_folder_path)
         self.populate_publish_assets(tree=self.ui.publishes_tree, root=self.ui.publish.text(),
@@ -508,6 +508,7 @@ class sansPipe(QWidget):
         self.ui.filename.textChanged.connect(self.update_ui)
         self.ui.showCode.textChanged.connect(self.update_ui)
         self.ui.artistName.textChanged.connect(self.update_ui)
+        self.ui.archiver_btn.clicked.connect(self.archiver)
         self.ui.open_btn.clicked.connect(self.open_file)
         self.ui.open_btn.setEnabled(False)
         self.ui.open_btn.setStyleSheet(
@@ -674,6 +675,309 @@ class sansPipe(QWidget):
             widget.customContextMenuRequested.connect(lambda position: self.create_tree_context_menu(widget,
                                                                                                      widget_name,
                                                                                                      position))
+
+    def archiver(self):
+        self.hide()
+        # Confirm you want to do this
+        result = cmds.confirmDialog(
+            title='Are you sure?',
+            message='The Archiver can take a very long time - VERY LONG - and it can create ginormous files! Are you '
+                    'sure you want to go ahead?',
+            button=['Yes - do it!', 'Cancel'],
+            defaultButton='Yes - do it!',
+            cancelButton='Cancel',
+            dismissString='Cancel'
+        )
+        if result != 'Yes - do it!':
+            self.show()
+            return False
+        self.show()
+        # Select the items in the list
+        selection = self.ui.archiver_list.selectedItems()
+        if not selection:
+            self.message(text='You must select at least 1 file in the Archiver List. Multiple files can be Ctrl or '
+                              'Shift selected', ok=False, obj=self.ui.archiver_list)
+            return False
+
+        # Create the new archive path
+        archive_path = self.workspace
+        publish_path = self.publish_folder_path
+        archive_path = os.path.join(archive_path, publish_path)
+        archive_path = os.path.join(archive_path, 'Archives')
+        if not os.path.exists(archive_path):
+            os.makedirs(archive_path)
+        archive_name = self.ui.showName.text()
+        archive_name = archive_name.replace(' ', '_')
+        datetime_stamp = self.create_date_stamp()
+        archive_name = archive_name + '_' + datetime_stamp
+        archive_output_path = os.path.join(archive_path, archive_name)
+        archive_output_path = archive_output_path.replace('\\', '/')
+
+        # Create the database
+        data_path = self.make_db_folder(folder=archive_output_path)
+        archive_data = self.open_db(folder=data_path, db_name='archive_db.json')
+        archive_data['Notes'] = archive_output_path
+        archive_data['Archive'] = {
+            'sourceimages': [],
+            'references': [],
+            'sounds': [],
+            'master_files': [],
+            'texture_nodes': [],
+            'reference_nodes': []
+        }
+
+        self.hide()
+        # Iterate through the selections
+        for item in selection:
+            data = item.data(0, Qt.UserRole)
+            folder = data['folder']
+            file_name = data['file']
+            if not file_name:
+                continue
+            file_path = os.path.join(folder, file_name)
+            file_path = file_path.replace('\\', '/')
+            if not os.path.exists(file_path):
+                continue
+
+            # Open the file
+            if file_path not in archive_data['Archive']['master_files']:
+                archive_data['Archive']['master_files'].append(file_path)
+            cmds.file(file_path, o=True, f=True)
+
+            # Collect the references
+            get_references = cmds.file(q=True, reference=True)
+            if get_references:
+                for ref in get_references:
+                    is_loaded = cmds.referenceQuery(ref, isLoaded=True)
+                    if not is_loaded:
+                        continue
+                    ref_path = cmds.referenceQuery(ref, filename=True, wcn=True)
+                    ref_name = os.path.basename(file_path)
+                    ref_namespace = cmds.referenceQuery(ref, namespace=True)
+                    ref_namespace = str(ref_namespace).lstrip(':')
+                    ref_node = cmds.referenceQuery(ref, rfn=True)
+                    if ref_path not in archive_data['Archive']['references']:
+                        archive_data['Archive']['references'].append(ref_path)
+
+                    archive_data['Archive']['reference_nodes'].append({
+                        'node': ref_node,
+                        'namespace': ref_namespace,
+                        'reference': ref_path,
+                        'file_name': ref_name
+                    })
+
+            # Collect all the texture files
+            textures = cmds.ls(type='file')
+            texture_paths = []
+
+            if textures:
+                for texture in textures:
+                    texture_path = cmds.getAttr(texture + '.fileTextureName')
+                    archive_data['Archive']['texture_nodes'].append({'node': texture, 'texture': texture_path,
+                                                                     'master': os.path.basename(file_path)})
+                    uv_tiling_mode = cmds.getAttr(texture + '.uvTilingMode')
+                    is_sequence = cmds.getAttr(texture + '.useFrameExtension')
+                    if is_sequence or uv_tiling_mode > 0:
+                        expanded_files = self.expand_image_sequence(file_path=texture_path)
+                        texture_paths.extend(expanded_files)
+                    else:
+                        if os.path.exists(texture_path):
+                            texture_paths.append(texture_path)
+
+            if texture_paths:
+                for texture_path in texture_paths:
+                    if texture_path not in archive_data['Archive']['sourceimages']:
+                        archive_data['Archive']['sourceimages'].append(texture_path)
+
+            # Collect the audio files - if they exist
+            audio_nodes = cmds.ls(type='timeEditorClip')
+            audio_paths = []
+            if audio_nodes:
+                for audio_node in audio_nodes:
+                    audio_path = cmds.getAttr(audio_node + '.audioFile')
+                    if audio_path and os.path.exists(audio_path):
+                        if audio_path not in archive_data['Archive']['sounds']:
+                            archive_data['Archive']['sounds'].append(audio_path)
+        self.save_db(folder=archive_output_path, data=archive_data, db_name='archive_db.json')
+
+        self.show()
+        time.sleep(3)
+        self.message(text='All objects collected!  Preparing to collect and compile')
+        self.do_archive_collection(archive=archive_output_path)
+
+    def do_archive_collection(self, archive=None):
+        if archive:
+            # Get the archive data collection
+            archive_db = self.open_db(folder=archive, db_name='archive_db.json')
+            folder_path = archive_db['Notes']
+            master_files = archive_db['Archive']['master_files']
+            references = archive_db['Archive']['references']
+            sounds = archive_db['Archive']['sounds']
+            sourceimages = archive_db['Archive']['sourceimages']
+
+            # Create archive database entries
+            archive_db['Archive']['copied_files'] = []
+            archive_db['Archive']['copied_references'] = []
+            archive_db['Archive']['copied_sourceimages'] = []
+            archive_db['Archive']['copied_sounds'] = []
+
+            # Start processing the files
+            for master in master_files:
+                if os.path.exists(master):
+                    if self.workspace in master:
+                        master_archive_path = master.replace(self.workspace, '')
+                        master_archive_path = os.path.join(folder_path, master_archive_path)
+                    else:
+                        get_filename = os.path.basename(master)
+                        master_archive_path = os.path.join(folder_path, self.scene_folder_path)
+                        master_archive_path = os.path.join(master_archive_path, get_filename)
+                    master_archive_path = master_archive_path.replace('\\', '/')
+                    master_archive_folder = os.path.dirname(master_archive_path)
+                    if not os.path.exists(master_archive_folder):
+                        os.makedirs(master_archive_folder)
+                    archive_db['Archive']['copied_files'].append(master_archive_path)
+                    shutil.copy2(master, master_archive_path)
+
+            # Start processing the sourceimages
+            for source in sourceimages:
+                if os.path.exists(source):
+                    if self.workspace in source:
+                        source_archive_path = source.replace(self.workspace, '')
+                        source_archive_path = os.path.join(folder_path, source_archive_path)
+                    else:
+                        get_filename = os.path.basename(source)
+                        source_archive_path = os.path.join(folder_path, cmds.workspace(fre='sourceimages'))
+                        source_archive_path = os.path.join(source_archive_path, get_filename)
+                    source_archive_path = source_archive_path.replace('\\', '/')
+                    source_archive_folder = os.path.dirname(source_archive_path)
+                    if not os.path.exists(source_archive_folder):
+                        os.makedirs(source_archive_folder)
+                    archive_db['Archive']['copied_sourceimages'].append(source_archive_path)
+                    shutil.copy2(source, source_archive_path)
+
+            # Start processing the references
+            for reference in references:
+                if os.path.exists(reference):
+                    if self.workspace in reference:
+                        ref_archive_path = reference.replace(self.workspace, '')
+                        ref_archive_path = os.path.join(folder_path, ref_archive_path)
+                    else:
+                        get_filename = os.path.basename(reference)
+                        ref_archive_path = os.path.join(folder_path, self.publish_folder_path)
+                        ref_archive_path = os.path.join(ref_archive_path, get_filename)
+                    ref_archive_path = ref_archive_path.replace('\\', '/')
+                    ref_archive_folder = os.path.dirname(ref_archive_path)
+                    if not os.path.exists(ref_archive_folder):
+                        os.makedirs(ref_archive_folder)
+                    archive_db['Archive']['copied_references'].append(reference)
+                    shutil.copy2(reference, ref_archive_path)
+
+            # Start sound processing
+            for sound in sounds:
+                if os.path.exists(sound):
+                    if self.workspace in sound:
+                        sound_archive_path = sound.replace(self.workspace, '')
+                        sound_archive_path = os.path.join(folder_path, sound_archive_path)
+                    else:
+                        get_filename = os.path.basename(sound)
+                        sound_archive_path = os.path.join(folder_path, cmds.workspace(fre='sound'))
+                        sound_archive_path = os.path.join(sound_archive_path, get_filename)
+                    sound_archive_path = sound_archive_path.replace('\\', '/')
+                    sound_archive_folder = os.path.dirname(sound_archive_path)
+                    if not os.path.exists(sound_archive_folder):
+                        os.makedirs(sound_archive_folder)
+                    archive_db['Archive']['copied_sounds'].append(sound_archive_path)
+                    shutil.copy2(sound, sound_archive_path)
+
+            # Save the database
+            self.save_db(folder=archive, data=archive_db, db_name='archive_db.json')
+
+            self.do_relink_to_archive(archive=archive)
+
+    def do_relink_to_archive(self, archive=None):
+        if archive:
+            archive_db = self.open_db(folder=archive, db_name='archive_db.json')
+            archive_data = archive_db['Archive']
+            masters = archive_data['master_files']
+            copies = archive_data['copied_files']
+            references = archive_data['references']
+            ref_copies = archive_data['copied_references']
+            reference_nodes = archive_data['reference_nodes']
+            texture_nodes = archive_data['texture_nodes']
+            sourceimages = archive_data['sourceimages']
+            sourceimage_copies = archive_data['copied_sourceimages']
+            sounds = archive_data['sounds']
+            sound_copies = archive_data['copied_sounds']
+
+            for copy in copies:
+                base_filename = os.path.basename(copy)
+                print(f'base_filename: {base_filename}')
+                cmds.file(copy, o=True, f=True)
+
+                # Relink the references
+                for reference in references:
+                    pass
+
+
+                # FIXME: This is where I think I'm going to leave off for tonight.
+                #  I suddenly started feeling sleepy and would like to test what I've done so far.
+                #  What I have to next is open each file, get the references, find the matching updated path and relink
+                #  them.  I have to do the same for the textures. I created a texture_node system to help me keep track
+                #  of what nodes had what files originally, and update them with their matching pair.
+
+    def do_relink_from_archive(self, archive=None):
+        """
+        This will relink a previously archived structure back into a proper Maya structure
+        :param archive:
+        :return:
+        """
+        pass
+
+    def expand_image_sequence(self, file_path=None):
+        expanded_files = []
+        pattern = r'(_\d+)'
+        if file_path:
+            if '<UDIM>' in file_path:
+                for udim in range(1001, 2000):
+                    expanded_file = file_path.replace('<UDIM>', str(udim))
+                    if os.path.exists(expanded_file):
+                        expanded_file = expanded_file.replace('\\', '/')
+                        expanded_files.append(expanded_file)
+            elif re.findall(pattern, file_path):
+                udim_found = re.findall(pattern, file_path)
+                udim_found = udim_found[0].lstrip('_')
+                pattern = file_path.replace(udim_found, '[0-9]' * 4)
+                matching_files = glob.glob(pattern)
+                for matching_file in matching_files:
+                    matching_file = matching_file.replace('\\', '/')
+                    expanded_files.append(matching_file)
+
+        elif '#' in file_path:
+            num_hashes = file_path.count('#')
+            pattern = file_path.replace('#' * num_hashes, '[0-9]' * num_hashes)
+            matching_files = glob.glob(pattern)
+            for matching_file in matching_files:
+                matching_file = matching_file.replace('\\', '/')
+                expanded_files.append(matching_file)
+        else:
+            if os.path.exists(file_path):
+                expanded_files.append(file_path)
+        return expanded_files
+
+    def create_date_stamp(self):
+        """
+        This simple method just creates a date-time stamp string
+        :return: datetime_stamp
+        """
+        date = str(datetime.date(datetime.now()))
+        date_stamp = date.replace('-', '')
+
+        hour = str(datetime.time(datetime.now()).hour)
+        minute = str(datetime.time(datetime.now()).minute)
+        second = str(datetime.time(datetime.now()).second)
+        time_stamp = hour + minute + second
+        datetime_stamp = date_stamp + time_stamp
+        return datetime_stamp
 
     def add_colored_item(self, task_statuses, model, text, text_color=None, background_color=None):
         """
@@ -1487,15 +1791,14 @@ QComboBox {{
         if folder:
             if not os.path.exists(folder):
                 data = {
-                    "Notes": [],
-                    "Status": None
+                    "Notes": []
                 }
                 save_data = json.dumps(data, indent=4)
                 with open(folder, 'w+') as save:
                     save.write(save_data)
                     save.close()
 
-    def open_db(self, folder=None):
+    def open_db(self, folder=None, db_name='notes_db.json'):
         """
         Opens a database file for a particular folder
         :param folder: The root folder for the asset/shot in question
@@ -1504,7 +1807,7 @@ QComboBox {{
         notes_db = None
         try:
             if folder:
-                notes_db_file = os.path.join(folder, 'notes_db.json')
+                notes_db_file = os.path.join(folder, db_name)
                 if not os.path.exists(notes_db_file):
                     # create an empty file
                     self.create_db(folder=notes_db_file)
@@ -1515,7 +1818,7 @@ QComboBox {{
             cmds.warning(f'Unable to open {notes_db_file} because {e}')
         return notes_db
 
-    def save_db(self, folder=None, data=None):
+    def save_db(self, folder=None, data=None, db_name='notes_db.json'):
         """
         Saves the database for a particular folder
         :param folder: The folder for the asset or shot in question
@@ -1523,7 +1826,7 @@ QComboBox {{
         :return:
         """
         if data and folder:
-            notes_file = os.path.join(folder, 'notes_db.json')
+            notes_file = os.path.join(folder, db_name)
             save_data = json.dumps(data, indent=4)
             with open(notes_file, 'w') as save:
                 save.write(save_data)
@@ -1877,13 +2180,15 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             self.populate_snapshots(item, column)
             self.ui.snapshots.scrollToBottom()
 
-    def populate_existing_files(self, current_directory=None):
+    def populate_existing_files(self, tree=None, current_directory=None):
         """
         This function populates the existing files list based on the folder structure and files found within.
         :param current_directory: Usually the root scenes directory for a project.
         :return:
         """
-        self.ui.existingFile_list.clear()
+        if not tree:
+            return False
+        tree.clear()
         allowed_extensions = ['ma', 'mb', 'obj', 'fbx', 'abc']
         excluded_folders = ['db', 'edits', '.mayaSwatches', 'snapshots', 'Publishes']
 
@@ -1904,9 +2209,9 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
 
                     # Determine the parent folder item
                     if relative_folder_name == ".":
-                        parent_item = self.ui.existingFile_list
+                        parent_item = tree
                     else:
-                        parent_item = folder_items.get(os.path.dirname(relative_folder_name), self.ui.existingFile_list)
+                        parent_item = folder_items.get(os.path.dirname(relative_folder_name), tree)
 
                     # Create a tree item for the current folder, avoid adding the same folder twice
                     if relative_folder_name not in folder_items:
@@ -1988,10 +2293,10 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                         if file_path == self.current_file_path:
                             file_item.setSelected(True)
                             folder_items[relative_folder_name].setExpanded(True)
-                            self.ui.existingFile_list.scrollToItem(file_item)
-                            self.ui.existingFile_list.itemClicked.emit(file_item, 0)
-                            self.ui.existingFile_list.verticalScrollBar().setValue(
-                                self.ui.existingFile_list.verticalScrollBar().value()  # This used to have +20 behind it
+                            tree.scrollToItem(file_item)
+                            tree.itemClicked.emit(file_item, 0)
+                            tree.verticalScrollBar().setValue(
+                                tree.verticalScrollBar().value()  # This used to have +20 behind it
                             )
 
     def populate_publish_assets(self, tree=None, root=None, current_directory=None):
@@ -2004,7 +2309,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         :return:
         """
         allowed_extensions = ['ma', 'mb', 'obj', 'fbx', 'abc']
-        excluded_folders = ['db', 'edits', '.mayaSwatches', 'snapshots']
+        excluded_folders = ['db', 'edits', '.mayaSwatches', 'snapshots', 'Archives']
         allowed_folders = ['assets', 'Publishes', self.ui.publish.text()]
 
         if current_directory and tree:
@@ -2217,14 +2522,8 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         snapshot_folder = os.path.join(current_root, 'snapshots')
         if not os.path.exists(snapshot_folder):
             os.makedirs(snapshot_folder)
-        date = str(datetime.date(datetime.now()))
-        date_stamp = date.replace('-', '')
 
-        hour = str(datetime.time(datetime.now()).hour)
-        minute = str(datetime.time(datetime.now()).minute)
-        second = str(datetime.time(datetime.now()).second)
-        time_stamp = hour + minute + second
-        datetime_stamp = date_stamp + time_stamp
+        datetime_stamp = self.create_date_stamp()
         snapshot_filename = '%s_%s%s' % (root_file_name, datetime_stamp, file_extention)
         if file_extention == '.mb':
             file_ext_text = 'mayaBinary'
