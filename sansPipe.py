@@ -10,7 +10,7 @@ It saves notes and information with every file that is created.  It can also be 
 new assets and folder structures on the fly.
 """
 
-__version__ = '1.3.8'
+__version__ = '1.3.9'
 __author__ = 'Adam Benson'
 
 """
