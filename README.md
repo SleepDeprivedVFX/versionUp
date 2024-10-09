@@ -151,7 +151,33 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 - The **Show Settings** sub-tab covers all the basic show specific settings like the name of the show, the three (3) letter code for the show, default render / camera resolution, the camera film-back, default render format and the scene scale.  Other features will be added in future versions of SansPipe.
 - Below is the breakdown for this tab
 ![Tab 4a Breakdown](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab4a.png)
-1. 
+1. **Show Name**.  By default, this uses the Maya Project folder name, however it can be changed to anything you like after the initial opening of SansPipe.  SansPipe creates a **showConfig.cfg** file at the root of your Maya project to store all of these project configurations, and thus is able to remember them later on.
+2. **Show Code**.  This is the primary three (3) letter code identifier for the project.  It gets appended as a prefix to anything that is done for the project in SansPipe.  This way, shots and assets are always tagged to a specific show, so, even if you use them in a different show, you know where they came from.  This three-letter code is automatically generated from the Maya Project folder name, however, it can be changed to anything you like later on.
+3. **Default Resolution**.  This sets both the default render output resolution as well as the playblast setting resolution.  The default setting is 2048x1152, but you can set it to anything you like for your project.
+4. **Default Filmback**.  This is important for your camera settings.  Many shows mirror live-action cameras, in which case, this setting is invaluable for maintaining proper cameras in your project.  Using the **Create Camera** tool here insures that the camera settings are correct.  This is also important, because focal lengths behave differently depending on the filmback settings of your camera.  For instance, a 50mm lens will look different on a camera that uses Academy Full Aperture vs. a camera that is using Super 8 Filmback.
+5. **Default Render Format**.  This sets the default render output for your project.  Future versions will include more settings to make render defaults more unified.
+6. **Scene Scale**.  This sets the default unit size for your project.  Under the hood, Maya's default units are 1/10th real world scale, thus 1 meter is actually 1 decimeter and 1 cm is actually 1 mm.  Here, the default setting of **10** scales things up so that 1 cm = 1 cm.  This affects the following settings in SansPipe:
+   1. **Create Camera** - Scales the camera up by this **Scene Scale**
+   2. **Create Asset / Shots** - the 1 meter cube created in the default *model* or *layout* files uses this setting to set its apparent scale in the Maya project.  In the future, this may also affect things like Nucleus physics and other settings that rely on scene scale.
+7. **Save Configuration** button.  Whenever you change anything in any of the **Settings - Configuration** tabs, it is important to hit the **Save Configuration** button as that triggers the saving of the *showConfig.cfg* file, and ultimately, your settings.
+8. **Sub Tabs** These are the sub-tabs that control the other settings.  Each section will be described below.
+
+## Playblast Settings
+ - These playblast settings override your default Maya settings and return your scene to their original state once the playblast is finished running.
+- Below is the breakdown for this tab
+![Tab 4b Breakdown](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab4b.png)
+1. **Scene Elements**.  This attempts to minimize how much thought has to be put into your playblast.  In Maya, you have much more control over this, but often its tedious just to get some basic things done.  This compiles those into a list of common playblast settings.  It breaks them down into the following:
+   1. **Geometry Only** - Only shows geometry
+   2. **Geometry and Splines** - Only shows Geometry and Spline Curves
+   3. **Geometry, Splines and Joints** - Keeps it minimal for rigging demos, showing geo, splines and joints.
+   4. **Everything** - Basically turns "All" on in Maya's viewport settings.
+2. This block of settings mirrors Maya's viewport settings and turns certain ones on by default to help pretty-up your playblasts.  You can change any of them at any time, just be sure to hit "Save Configuration".  There is one additional feature here that is not a part of Maya's default:
+   1. **Burn In** - This creates a rudimentary scene burn in, and makes sure some HUD elements are active.  It displays the Filename, Focal Length, Show Code, Time Code and other pertinent information.
+
+## Hotkeys
+- This section needs little description.  A few default hotkeys are set for SansPipe, however, any of these can be set and changed to whatever you like here.  They function separately from Maya's default hotkeys accept for one.
+- Below is the breakdown for this tab
+![Tab 4c Breakdown](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab4c.png)
  
 ## Prerequisites
 - **Autodesk Maya:** Designed for Maya 2025 but compatible with any Maya version that supports Python 3 and either PySide2 or PySide6.
