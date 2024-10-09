@@ -1009,7 +1009,11 @@ class sansPipe(QWidget):
                         if updated_ref:
                             new_ref_path = os.path.join(self.workspace, updated_ref)
                             new_ref_path = self.fix_path(new_ref_path)
-                            cmds.file(new_ref_path, loadReference=ref_node, type=r_type, options="v=0;")
+                            try:
+                                cmds.file(new_ref_path, loadReference=ref_node, type=r_type, options="v=0;")
+                            except Exception as e:
+                                cmds.warning(f'Could not repath reference {new_ref_path} on node {ref_node}')
+                                continue
 
                 # Set the textures if possible
                 for texture_data in texture_nodes:
