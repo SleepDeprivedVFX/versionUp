@@ -34,7 +34,8 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 
 ## Usage
   **User Interface**
-  - **Save - Publish - Snap** Tab.
+
+## Save - Publish - Snap Tab
   - The first tab of sansPipe is your main workflow utility.  While there are a lot of features on here, it is actually designed to be very minimalistic.  By default SansPipe should open when Maya opens, allowing you to start working right off the bat.  This feature can be turned off in the settings.
   - Here are the main sections of the first tab of SansPipe.
 ![Tab 1 Breakdown](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab1.png)
@@ -85,7 +86,7 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
    4. **Close** button.  Default Hotkey (Esc).  Does what you'd expect, but with the added benefit of saving out settings as it closes the tool.
 9. **SansPipe Tabs** These are the tabs that cycle through different sections of the SansPipe workflow. 
 
-- **Tools - References - Asset**
+## Tools - References - Asset
 - The second tab of SansPipe.  This tab contains a list of tools, is where you create assets and shots, where you reference in published assets or load in exported assets.
 - Below is the breakdown for this tab
 ![Tab 2 Breakdown](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab2.png)
@@ -133,6 +134,15 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
    3. If you have out of date assets, you can click the **Update Selected** button at the bottom of the section and it will update any referenced asset that still has the checkmark next to it.  Even if an up-to-date reference is checked, it will be ignored by this process.  Only out-of-date references will be updated.
 4. **Publishes**.  This section lists only items that are properly published through the SansPipe system.  You can manually add items to the *publishes* folder created by SansPipe and they will show up here as well, but it is designed to work with the publishing process.  With this tool you can reference in assets or import them into the scene.  Referencing is recommended as that allows for things to be updated on the fly, and it keeps smaller file sizes over-all, especially for snapshots.  The publishing section has a right-click context menu that mirrors the two buttons in its section.  The only kinds of files that show up here are Maya files.
 5. **Assets**.  This section works the same way as the **Publishes** section with the main difference being that it is looking at Maya's default *assets* folder and is primarily for giving you access to OBJ, FBX and ABC files, or anything else that has been exported, but not published.  It has the same right click functionality as the **Publishes** section, and any references with proper version numbers will be tracked in the **Loaded References** section.
+
+## Project Settings
+- **Project Settings** tab allows you to manage your Maya projects in the same way that you would using the default Maya project settings, except that it adds features that do not come with Maya by default, making it cleaner and more organized.
+- Below is the breakdown for this tab
+![Tab 3 Breakdown](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab3.png)
+1. **Recent Projects**.  This works like the **Recent Files** from the first tab.  It keeps a record of any recently used projects.  Double click any one of these to quickly change your projects.
+2. **Project**.  This section mirrors Maya's own "Set Project" feature.  You can browse to any existing project, whether it was created using SansPipe or not, and it will make that your current project and add it to the **Recent Projects** stack to the left.
+3. **New Project**.  This feature mostly mirrors Maya's default "Project Window" feature, with the added detail that it creates extra folders for Publishes and organizational folders for Assets and Shots.  This is a better way to organize your workflow in Maya.  It is recommended that new projects are created here in SansPipe.
+   1. The **Include Subfolders** checkbox is checked by default.  This is the feature that automatically creates Char, Prop, Veh, Env and Shots folders. 
  
 ## Prerequisites
 - **Autodesk Maya:** Designed for Maya 2025 but compatible with any Maya version that supports Python 3 and either PySide2 or PySide6.
