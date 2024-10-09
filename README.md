@@ -35,7 +35,7 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 ## Usage
   **User Interface**
   - The first tab of sansPipe is your main workflow utility.  While there are a lot of features on here, it is actually designed to be very minimalistic
-![Tab 1 Breakdown]()
+![Tab 1 Breakdown](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab1.png)
 
 ## Prerequisites
 - **Autodesk Maya:** Designed for Maya 2025 but compatible with any Maya version that supports Python 3 and either PySide2 or PySide6.
