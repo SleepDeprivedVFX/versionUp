@@ -90,7 +90,49 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 - Below is the breakdown for this tab
 ![Tab 2 Breakdown](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab2.png)
 1. **Tools**.  The Tools section holds a list of simple tools that correspond to other features within SansPipe.  These are designed to work with SansPipe and its organizational system.
-   1. 
+   1. **Bake Camera**.  This button and its associated checkbox "**Use Shot/Asset as Cam Name**" will take your current shot camera and bake it out for use in other software, or in other scenes, as an FBX stand-alone camera in world space.  If the "Use Shot/Asset as Cam Name" checkbox is activated, then it puts that information into the camera name so that it can be easily identified if there are multiple cameras imported into a scene.  This tool is usefull if you'll be using the cameras in Nuke, Unreal or some other DCC.  Baked Cameras are saved in a "Shot_Cams" sub folder under the Maya project's **assets** folder.
+   2. **Create Camera**.  This creates a standard Maya camera, but it does it with settings that are set in the SansPipe **Show Settings** sub-tab under the **Settings - Configuration** tab.  In that tab you can set things like standard camera film back, resolution, aspect ratio and scene scale.  This is useful to insure that all the cameras match a show's particular film style and live-action camera setup.
+   3. **Publish Selection as FBX**, **Publish Selection as OBJ** and **Publish Selection as Alembic** will export any selected object into Maya's **assets** folder.  If nothing is selected, they export the entire scene as either FBX, OBJ or ABC (Alembic) files.
+   4. **Playblaster**.  It is a good idea to use this option to playblast your files, instead of the Maya default playblaster for a few good reasons.
+      1. It makes sure that the playblast name is correct and associates it with whatever scene file has created it.  This allows it to be access in the **Existing Files** tree by right-clicking and chosing "View Playblast".
+      2. It uses the **Show Settings** from the **Show Settings** sub-tab in the **Settings - Configuration** tab to put everything in a consistent format.
+      3. The advanced playblast features can add burn ins that accentuate each playblast with better details than you'll get out of a standard playblast.
+   5. **Build Default Folders**.  This feature simply creates a default folder set for Maya.  It does not create the entire project folder structure, however. What it does is generate the basic Char, Cams, Props, Veh, Env and Shots folders.  All of these are created automatically if you're using the **Create Asset/Shot** sections of this tab, or if you're creating your initial project in the **Project Settings** tab.
+   6. **Blow Away Snapshots**.  This is the same feature as the right-click **Blow Away Snapshots** from the **Existing Files** tree, except it deletes all snapshots from the entire project.  This is a feature that's best reserved for when you're totally done, and you're ready to archive your entire project.
+2. **Create Asset / Shot**.  This section is for the clean creation of new assets or shots.  It is very simple, but has powerful functionality.  Individual assets or shots can be created, or an entire list of shots and assets can be created by browsing for a specifically formatted CSV file.  Here's how it all breaks down:
+   1. To create a new Shot or Asset first pick the **Type** from the drop-down.  The options are:
+      1. Char (Character)
+      2. Env (Environment)
+      3. Prop
+      4. Ven (Vehicle)
+      5. Cam (Camera)
+      6. Shots
+   2. Then give it a simple name: Harry, Wanda, Gun, Rowboat, Shot_0010, 0020, ShotCam
+   3. Push **Make Asset/Shot**
+   4. Using this feature will create all the task folders into the proper structure for their type: Shots in Shots, Chars in Chars, so forth and so on.  Furthermore, using this feature will do the following:
+      1. For Non-Shot assets they will receive asset task folders, and for shots, they will receive shot tasks
+      2. The Asset types will automatically create a **model** file and create a standard 1 meter cube based on the scene scale set in the SansPipe **Show Settings**.  Shots types will get the same 1 meter cube, but in a **layout** file.
+      3. The new files statuses will be set to "Ready".
+   5. If, on the other hand, you use the **Bulk Add from CSV** feature, then everything above in this section gets ignored and all of the shots/assets are created from the CSV file.  Here's how this works:
+      1. Create a CSV file in Excel, or even in Notepad - remember CSV stands for "Comma Separated Values", so as long as there are commas and new lines in the document, this should work.  Excel is your best bet though as you can build your document there and then export it as a CSV.
+      2. The CSV file can ONLY have two columns in each row!
+      3. There should be NO HEADER!  It should look like this:
+         1. Harry, Char 
+         2. Rowboat, Veh
+         3. Shot_0010, Shots
+         4. Shot_0020, Shots
+         5. Hammer, Prop
+         6. Castle, Env
+      4. It should use the same **Type** abbreviations as the main system.  It will still work if you use anything else, it will just create those as folders and track it as such.  You could create a "type" called *Hamburger, Food* and you would end up with a *food* folder with the asset hamburger under it, and SansPipe would track it the same way it does anything else, but ew...  Keep it clean.  That's what this tool is all about.
+3. **Loaded References**.  This area tracks any references that you have in your scene file.  This works best if you use the Publishing system on the first tab, and load assets in using the **Publishes** section of this tab.  Here are some details about this:
+   1. This section looks for asset/reference version numbers.  If a version number is out of date it does the following:
+      1. SansPipe automatically opens to this tab to show you that you have out of date assets
+      2. It highlights the out of date references RED and puts a check mark next to its name.
+      3. You can uncheck assets that you don't want to update.
+   2. Assets that are up-to-date are highlighted green and the SansPipe window will open to the first tab.
+   3. If you have out of date assets, you can click the **Update Selected** button at the bottom of the section and it will update any referenced asset that still has the checkmark next to it.  Even if an up-to-date reference is checked, it will be ignored by this process.  Only out-of-date references will be updated.
+4. **Publishes**.  This section lists only items that are properly published through the SansPipe system.  You can manually add items to the *publishes* folder created by SansPipe and they will show up here as well, but it is designed to work with the publishing process.  With this tool you can reference in assets or import them into the scene.  Referencing is recommended as that allows for things to be updated on the fly, and it keeps smaller file sizes over-all, especially for snapshots.  The publishing section has a right-click context menu that mirrors the two buttons in its section.  The only kinds of files that show up here are Maya files.
+5. **Assets**.  This section works the same way as the **Publishes** section with the main difference being that it is looking at Maya's default *assets* folder and is primarily for giving you access to OBJ, FBX and ABC files, or anything else that has been exported, but not published.  It has the same right click functionality as the **Publishes** section, and any references with proper version numbers will be tracked in the **Loaded References** section.
  
 ## Prerequisites
 - **Autodesk Maya:** Designed for Maya 2025 but compatible with any Maya version that supports Python 3 and either PySide2 or PySide6.
