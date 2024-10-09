@@ -1689,1399 +1689,61 @@ color: rgb(220, 220, 220);</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_16">
        <item>
-        <widget class="QTabWidget" name="settingsTabs">
-         <property name="tabPosition">
-          <enum>QTabWidget::TabPosition::West</enum>
-         </property>
-         <property name="currentIndex">
-          <number>0</number>
-         </property>
-         <widget class="QWidget" name="show_settings">
-          <attribute name="title">
-           <string>Show Settings</string>
-          </attribute>
-          <layout class="QVBoxLayout" name="verticalLayout_7">
-           <item>
-            <widget class="QLabel" name="show_settings_Label">
-             <property name="styleSheet">
-              <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
-             </property>
-             <property name="text">
-              <string>Show Settings</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <item>
+          <widget class="QTabWidget" name="settingsTabs">
+           <property name="tabPosition">
+            <enum>QTabWidget::TabPosition::West</enum>
+           </property>
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <widget class="QWidget" name="show_settings">
+            <attribute name="title">
+             <string>Show Settings</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_7">
              <item>
-              <widget class="QLabel" name="showName_label">
-               <property name="toolTip">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This is the name of the show.  &lt;/p&gt;&lt;p&gt;By default it is the same as the root folder name of the project, but can be changed to anything&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <widget class="QLabel" name="show_settings_Label">
+               <property name="styleSheet">
+                <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
                </property>
                <property name="text">
-                <string>Show Name</string>
-               </property>
-               <property name="buddy">
-                <cstring>showName</cstring>
+                <string>Show Settings</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="showName">
-               <property name="toolTip">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This is the name of the show.  &lt;/p&gt;&lt;p&gt;By default it is the same as the root folder name of the project, but can be changed to anything&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_10">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_5">
-             <item>
-              <widget class="QLabel" name="showCodeSet_label">
-               <property name="toolTip">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The Show Code is a 3 letter code that is generated automatically and becomes the prefix for all files.  &lt;/p&gt;&lt;p&gt;It can be changed here to anything you like&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="text">
-                <string>Show Code</string>
-               </property>
-               <property name="buddy">
-                <cstring>showCodeSet</cstring>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="showCodeSet">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="toolTip">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The Show Code is a 3 letter code that is generated automatically and becomes the prefix for all files.  &lt;/p&gt;&lt;p&gt;It can be changed here to anything you like&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_5">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="Line" name="line_3">
-             <property name="orientation">
-              <enum>Qt::Orientation::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_6">
-             <item>
-              <widget class="QLabel" name="defaultResolution_label">
-               <property name="toolTip">
-                <string>The default rendering resolution for the project.  Setting it here also sets your render settings in the project</string>
-               </property>
-               <property name="text">
-                <string>Default Resolution:  </string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="resolutionWidth_label">
-               <property name="toolTip">
-                <string>The default rendering resolution for the project.  Setting it here also sets your render settings in the project</string>
-               </property>
-               <property name="text">
-                <string>Width</string>
-               </property>
-               <property name="buddy">
-                <cstring>resolutionWidth</cstring>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="resolutionWidth">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="toolTip">
-                <string>The default rendering resolution for the project.  Setting it here also sets your render settings in the project</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="resolutionHeight_label">
-               <property name="toolTip">
-                <string>The default rendering resolution for the project.  Setting it here also sets your render settings in the project</string>
-               </property>
-               <property name="text">
-                <string>Height</string>
-               </property>
-               <property name="buddy">
-                <cstring>resolutionHeight</cstring>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="resolutionHeight">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="toolTip">
-                <string>The default rendering resolution for the project.  Setting it here also sets your render settings in the project</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_6">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_7">
-             <item>
-              <widget class="QLabel" name="filmbackLabel">
-               <property name="toolTip">
-                <string>The default camera film back for new cameras.  Setting this here will automatically set your new cameras to this setting if the new camera button on the Tools tab is used</string>
-               </property>
-               <property name="text">
-                <string>Default Filmback:  </string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="filmback_width_label">
-               <property name="toolTip">
-                <string>The default camera film back for new cameras.  Setting this here will automatically set your new cameras to this setting if the new camera button on the Tools tab is used</string>
-               </property>
-               <property name="text">
-                <string>width (mm)</string>
-               </property>
-               <property name="buddy">
-                <cstring>filmback_width</cstring>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="filmback_width">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="toolTip">
-                <string>The default camera film back for new cameras.  Setting this here will automatically set your new cameras to this setting if the new camera button on the Tools tab is used</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="filmback_height_label">
-               <property name="toolTip">
-                <string>The default camera film back for new cameras.  Setting this here will automatically set your new cameras to this setting if the new camera button on the Tools tab is used</string>
-               </property>
-               <property name="text">
-                <string>height (mm)</string>
-               </property>
-               <property name="buddy">
-                <cstring>filmback_height</cstring>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="filmback_height">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="toolTip">
-                <string>The default camera film back for new cameras.  Setting this here will automatically set your new cameras to this setting if the new camera button on the Tools tab is used</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_7">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_32">
-             <item>
-              <widget class="QLabel" name="image_format_label">
-               <property name="toolTip">
-                <string>This sets the default render output file type</string>
-               </property>
-               <property name="text">
-                <string>Default Render Format</string>
-               </property>
-               <property name="buddy">
-                <cstring>image_format</cstring>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="image_format">
-               <property name="toolTip">
-                <string>This sets the default render output file type</string>
-               </property>
-               <item>
-                <property name="text">
-                 <string>jpeg</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>png</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>deepexr</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>tif</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>exr</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>maya</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_18">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_8">
-             <item>
-              <widget class="QLabel" name="SceneScale_Label">
-               <property name="toolTip">
-                <string>The Scene Scale sets the default size of the &quot;One Meter Cube&quot; that gets injected into new model files created by the New Asset feature</string>
-               </property>
-               <property name="text">
-                <string>Scene Scale</string>
-               </property>
-               <property name="buddy">
-                <cstring>sceneScale</cstring>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="sceneScale">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="toolTip">
-                <string>The Scene Scale sets the default size of the &quot;One Meter Cube&quot; that gets injected into new model files created by the New Asset feature</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_8">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_6">
-             <property name="orientation">
-              <enum>Qt::Orientation::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="playblast_settings">
-          <attribute name="title">
-           <string>Playblast Settings</string>
-          </attribute>
-          <layout class="QVBoxLayout" name="verticalLayout_20">
-           <item>
-            <widget class="QLabel" name="playblast_settings_label">
-             <property name="styleSheet">
-              <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
-             </property>
-             <property name="text">
-              <string>Playblast Settings</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="Line" name="line_5">
-             <property name="orientation">
-              <enum>Qt::Orientation::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_47">
-             <item>
-              <widget class="QLabel" name="pb_scene_elements_label">
-               <property name="text">
-                <string>Scene Elements</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="pb_scene_elements">
-               <item>
-                <property name="text">
-                 <string>Geometry Only</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Geometry and Splines</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Geometry, Splines and Joints</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Everything</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_30">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="pb_wireframe">
-             <property name="text">
-              <string>Wireframe on Shaded</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="pb_textured">
-             <property name="text">
-              <string>Textured</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="pb_use_all_lights">
-             <property name="text">
-              <string>Use All Lights</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="pb_shadows">
-             <property name="text">
-              <string>Shadows</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="pb_ao">
-             <property name="text">
-              <string>Ambient Occlusion</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="pb_motionblur">
-             <property name="text">
-              <string>Motion Blur</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="pb_aa">
-             <property name="text">
-              <string>Anti Aliasing</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="pb_burnin">
-             <property name="text">
-              <string>Burn In</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_8">
-             <property name="orientation">
-              <enum>Qt::Orientation::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="hotkeys">
-          <attribute name="title">
-           <string>Hotkeys</string>
-          </attribute>
-          <layout class="QVBoxLayout" name="verticalLayout_14">
-           <item>
-            <widget class="QLabel" name="hotkeys_label">
-             <property name="styleSheet">
-              <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
-             </property>
-             <property name="text">
-              <string>Hokeys</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="hotkeys">
-             <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;These hotkeys can be changed to your preferences.&lt;br/&gt;However, it is recommended that you leave them at their defaults, because they are designed to take over certain Maya functions.&lt;br/&gt;If you decide to change them, understand that they won't take effect until you restart Maya.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="Line" name="line_4">
-             <property name="orientation">
-              <enum>Qt::Orientation::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_40">
-             <item>
-              <widget class="QLabel" name="hk_open_label">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Open Sans Pipe</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="hk_open_mod_1">
-               <property name="currentText">
-                <string/>
-               </property>
-               <item>
-                <property name="text">
-                 <string/>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Ctrl</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Alt</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Shift</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Esc</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Return</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="hk_open_mod_2">
-               <property name="currentText">
-                <string/>
-               </property>
-               <item>
-                <property name="text">
-                 <string/>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Ctrl</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Alt</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Shift</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Esc</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Return</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="hk_open_mod_3">
-               <item>
-                <property name="text">
-                 <string/>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Ctrl</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Alt</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Shift</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Esc</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Return</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="hk_open_key">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>S</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_24">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_41">
-             <item>
-              <widget class="QLabel" name="hk_saveVUp_label">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Save Version UP</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="hk_savevup_mod_1">
-               <property name="currentText">
-                <string/>
-               </property>
-               <item>
-                <property name="text">
-                 <string/>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Ctrl</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Alt</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Shift</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Esc</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Return</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="hk_savevup_mod_2">
-               <property name="currentText">
-                <string/>
-               </property>
-               <item>
-                <property name="text">
-                 <string/>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Ctrl</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Alt</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Shift</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Esc</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Return</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="hk_savevup_mod_3">
-               <item>
-                <property name="text">
-                 <string/>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Ctrl</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Alt</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Shift</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Esc</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Return</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="hk_savevup_key">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>V</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_25">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_42">
-             <item>
-              <widget class="QLabel" name="hk_snapshot_label">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Snapshot</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="hk_snapshot_mod_1">
-               <property name="currentText">
-                <string/>
-               </property>
-               <item>
-                <property name="text">
-                 <string/>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Ctrl</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Alt</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Shift</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Esc</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Return</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="hk_snapshot_mod_2">
-               <property name="currentText">
-                <string/>
-               </property>
-               <item>
-                <property name="text">
-                 <string/>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Ctrl</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Alt</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Shift</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Esc</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Return</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="hk_snapshot_mod_3">
-               <item>
-                <property name="text">
-                 <string/>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Ctrl</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Alt</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Shift</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Esc</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Return</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="hk_snapshot_key">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>S</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_26">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_43">
-             <item>
-              <widget class="QLabel" name="hk_publish_label">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Publish</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="hk_publish_mod_1">
-               <property name="currentText">
-                <string/>
-               </property>
-               <item>
-                <property name="text">
-                 <string/>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Ctrl</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Alt</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Shift</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Esc</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Return</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="hk_publish_mod_2">
-               <item>
-                <property name="text">
-                 <string/>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Ctrl</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Alt</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Shift</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Esc</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Return</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="hk_publish_mod_3">
-               <item>
-                <property name="text">
-                 <string/>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Ctrl</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Alt</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Shift</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Esc</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Return</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="hk_publish_key">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>P</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_27">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_44">
-             <item>
-              <widget class="QLabel" name="hk_close_label">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Close</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="hk_close_mod_1">
-               <property name="currentText">
-                <string/>
-               </property>
-               <item>
-                <property name="text">
-                 <string/>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Ctrl</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Alt</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Shift</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Esc</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Return</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="hk_close_mod_2">
-               <item>
-                <property name="text">
-                 <string/>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Ctrl</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Alt</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Shift</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Esc</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Return</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="hk_close_mod_3">
-               <item>
-                <property name="text">
-                 <string/>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Ctrl</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Alt</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Shift</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Esc</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Return</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="hk_close_key">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_28">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_5">
-             <property name="orientation">
-              <enum>Qt::Orientation::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="archiver">
-          <attribute name="title">
-           <string>Archiver</string>
-          </attribute>
-          <layout class="QVBoxLayout" name="verticalLayout_19">
-           <item>
-            <widget class="QLabel" name="archiver_label">
-             <property name="styleSheet">
-              <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
-             </property>
-             <property name="text">
-              <string>Super Archiver</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_46">
-             <item>
-              <layout class="QVBoxLayout" name="verticalLayout_18">
-               <item>
-                <widget class="QTextEdit" name="textEdit">
-                 <property name="readOnly">
-                  <bool>true</bool>
+              <layout class="QHBoxLayout" name="horizontalLayout_4">
+               <item>
+                <widget class="QLabel" name="showName_label">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This is the name of the show.  &lt;/p&gt;&lt;p&gt;By default it is the same as the root folder name of the project, but can be changed to anything&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
-                 <property name="html">
-                  <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The Super Archiver works in a similar fashion to Maya's default &amp;quot;Archive&amp;quot; function, but with a few super elements added into the mix.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;1. The Super Archiver will allow you to select multiple files at once.&lt;br /&gt;2. Each file will be analyzed and collected before the archival process begins.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;What this does for you:&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;By analyzing all of the selected scenes up front, any references or assets associated with the scenes can be collected only once, in this way an entire project can be minimally archived without the extra bulk, and without duplicating assets every time an archive is created.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Think of it this way.  If you have 10 scenes that all use the same character and the same environment, if you use the Maya archiver, each ZIP file will include a copy of the character and the environment, leaving you with 10 copies of each and very large ZIP files.  &lt;span style=&quot; font-style:italic;&quot;&gt;However&lt;/span&gt;, if you use the Super Archiver, each scene will be opened and collected, and then only one copy of the character and one copy of the environment will be included with your 10 scenes all into 1 ZIP file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <property name="text">
+                  <string>Show Name</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>showName</cstring>
                  </property>
                 </widget>
                </item>
                <item>
-                <spacer name="verticalSpacer_7">
+                <widget class="QLineEdit" name="showName">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This is the name of the show.  &lt;/p&gt;&lt;p&gt;By default it is the same as the root folder name of the project, but can be changed to anything&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_10">
                  <property name="orientation">
-                  <enum>Qt::Orientation::Vertical</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
-                   <width>20</width>
-                   <height>40</height>
+                   <width>40</width>
+                   <height>20</height>
                   </size>
                  </property>
                 </spacer>
@@ -3089,159 +1751,419 @@ li.checked::marker { content: &quot;\2612&quot;; }
               </layout>
              </item>
              <item>
-              <layout class="QVBoxLayout" name="verticalLayout_17">
+              <layout class="QHBoxLayout" name="horizontalLayout_5">
                <item>
-                <widget class="QTreeWidget" name="archiver_list">
+                <widget class="QLabel" name="showCodeSet_label">
                  <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This list includes all of the scene files in your project, and mirrors the scene files in the Existing FIles list.&lt;br/&gt;You can CTRL or SHIFT select multiple files in order to process them for archiving.&lt;/p&gt;&lt;p&gt;Understand that this process can take a very long time, and can create a very large file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The Show Code is a 3 letter code that is generated automatically and becomes the prefix for all files.  &lt;/p&gt;&lt;p&gt;It can be changed here to anything you like&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
-                 <property name="selectionMode">
-                  <enum>QAbstractItemView::SelectionMode::MultiSelection</enum>
-                 </property>
-                 <property name="headerHidden">
-                  <bool>true</bool>
-                 </property>
-                 <column>
-                  <property name="text">
-                   <string notr="true">1</string>
-                  </property>
-                 </column>
-                </widget>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="import_references">
                  <property name="text">
-                  <string>Import References</string>
+                  <string>Show Code</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>showCodeSet</cstring>
                  </property>
                 </widget>
                </item>
                <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_45">
-                 <item>
-                  <spacer name="horizontalSpacer_29">
-                   <property name="orientation">
-                    <enum>Qt::Orientation::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="archiver_btn">
-                   <property name="text">
-                    <string>Archive Selected</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
+                <widget class="QLineEdit" name="showCodeSet">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The Show Code is a 3 letter code that is generated automatically and becomes the prefix for all files.  &lt;/p&gt;&lt;p&gt;It can be changed here to anything you like&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_5">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
                </item>
               </layout>
              </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="system_settings">
-          <attribute name="title">
-           <string>System Settings</string>
-          </attribute>
-          <layout class="QVBoxLayout" name="verticalLayout_15">
-           <item>
-            <widget class="QLabel" name="system_settings_label">
-             <property name="styleSheet">
-              <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
-             </property>
-             <property name="text">
-              <string>System Settings</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_10">
              <item>
-              <widget class="QLabel" name="recent_file_count_label">
-               <property name="toolTip">
-                <string>This sets the number of Recent Files listed in the Recent File history</string>
-               </property>
-               <property name="text">
-                <string>Recent File Count</string>
-               </property>
-               <property name="buddy">
-                <cstring>recent_file_count</cstring>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="recent_file_count">
-               <property name="toolTip">
-                <string>This sets the number of Recent Files listed in the Recent File history</string>
-               </property>
-               <property name="buttonSymbols">
-                <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_11">
+              <widget class="Line" name="line_3">
                <property name="orientation">
                 <enum>Qt::Orientation::Horizontal</enum>
                </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_6">
+               <item>
+                <widget class="QLabel" name="defaultResolution_label">
+                 <property name="toolTip">
+                  <string>The default rendering resolution for the project.  Setting it here also sets your render settings in the project</string>
+                 </property>
+                 <property name="text">
+                  <string>Default Resolution:  </string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="resolutionWidth_label">
+                 <property name="toolTip">
+                  <string>The default rendering resolution for the project.  Setting it here also sets your render settings in the project</string>
+                 </property>
+                 <property name="text">
+                  <string>Width</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>resolutionWidth</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="resolutionWidth">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="toolTip">
+                  <string>The default rendering resolution for the project.  Setting it here also sets your render settings in the project</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="resolutionHeight_label">
+                 <property name="toolTip">
+                  <string>The default rendering resolution for the project.  Setting it here also sets your render settings in the project</string>
+                 </property>
+                 <property name="text">
+                  <string>Height</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>resolutionHeight</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="resolutionHeight">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="toolTip">
+                  <string>The default rendering resolution for the project.  Setting it here also sets your render settings in the project</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_6">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_7">
+               <item>
+                <widget class="QLabel" name="filmbackLabel">
+                 <property name="toolTip">
+                  <string>The default camera film back for new cameras.  Setting this here will automatically set your new cameras to this setting if the new camera button on the Tools tab is used</string>
+                 </property>
+                 <property name="text">
+                  <string>Default Filmback:  </string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="filmback_width_label">
+                 <property name="toolTip">
+                  <string>The default camera film back for new cameras.  Setting this here will automatically set your new cameras to this setting if the new camera button on the Tools tab is used</string>
+                 </property>
+                 <property name="text">
+                  <string>width (mm)</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>filmback_width</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="filmback_width">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="toolTip">
+                  <string>The default camera film back for new cameras.  Setting this here will automatically set your new cameras to this setting if the new camera button on the Tools tab is used</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="filmback_height_label">
+                 <property name="toolTip">
+                  <string>The default camera film back for new cameras.  Setting this here will automatically set your new cameras to this setting if the new camera button on the Tools tab is used</string>
+                 </property>
+                 <property name="text">
+                  <string>height (mm)</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>filmback_height</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="filmback_height">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="toolTip">
+                  <string>The default camera film back for new cameras.  Setting this here will automatically set your new cameras to this setting if the new camera button on the Tools tab is used</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_7">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_32">
+               <item>
+                <widget class="QLabel" name="image_format_label">
+                 <property name="toolTip">
+                  <string>This sets the default render output file type</string>
+                 </property>
+                 <property name="text">
+                  <string>Default Render Format</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>image_format</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="image_format">
+                 <property name="toolTip">
+                  <string>This sets the default render output file type</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>jpeg</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>png</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>deepexr</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>tif</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>exr</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>maya</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_18">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_8">
+               <item>
+                <widget class="QLabel" name="SceneScale_Label">
+                 <property name="toolTip">
+                  <string>The Scene Scale sets the default size of the &quot;One Meter Cube&quot; that gets injected into new model files created by the New Asset feature</string>
+                 </property>
+                 <property name="text">
+                  <string>Scene Scale</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>sceneScale</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="sceneScale">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="toolTip">
+                  <string>The Scene Scale sets the default size of the &quot;One Meter Cube&quot; that gets injected into new model files created by the New Asset feature</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_8">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_6">
+               <property name="orientation">
+                <enum>Qt::Orientation::Vertical</enum>
+               </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>40</width>
-                 <height>20</height>
+                 <width>20</width>
+                 <height>40</height>
                 </size>
                </property>
               </spacer>
              </item>
             </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_12">
+           </widget>
+           <widget class="QWidget" name="playblast_settings">
+            <attribute name="title">
+             <string>Playblast Settings</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_20">
              <item>
-              <widget class="QCheckBox" name="autoload">
-               <property name="toolTip">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Auto Load on Startup makes Sans Pipe open when Maya opens and replaces the default Ctrl + Shift + S hotkey command with the Sans Pipe version up utility.  &lt;/p&gt;&lt;p&gt;Unchecking this resets the hotkey to its default setting&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="layoutDirection">
-                <enum>Qt::LayoutDirection::RightToLeft</enum>
+              <widget class="QLabel" name="playblast_settings_label">
+               <property name="styleSheet">
+                <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
                </property>
                <property name="text">
-                <string>Auto Load on Startup</string>
+                <string>Playblast Settings</string>
                </property>
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer_13">
+              <widget class="Line" name="line_5">
                <property name="orientation">
                 <enum>Qt::Orientation::Horizontal</enum>
                </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
+              </widget>
              </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_31">
              <item>
-              <widget class="QCheckBox" name="autosaver">
-               <property name="toolTip">
-                <string>Turns on Autosave for Maya and sets the time interval</string>
-               </property>
-               <property name="layoutDirection">
-                <enum>Qt::LayoutDirection::RightToLeft</enum>
-               </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_47">
+               <item>
+                <widget class="QLabel" name="pb_scene_elements_label">
+                 <property name="text">
+                  <string>Scene Elements</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="pb_scene_elements">
+                 <item>
+                  <property name="text">
+                   <string>Geometry Only</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Geometry and Splines</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Geometry, Splines and Joints</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Everything</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_30">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="pb_wireframe">
                <property name="text">
-                <string>Autosave</string>
+                <string>Wireframe on Shaded</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="pb_textured">
+               <property name="text">
+                <string>Textured</string>
                </property>
                <property name="checked">
                 <bool>true</bool>
@@ -3249,71 +2171,1203 @@ li.checked::marker { content: &quot;\2612&quot;; }
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="iterations_label">
-               <property name="toolTip">
-                <string>Turns on Autosave for Maya and sets the time interval</string>
-               </property>
+              <widget class="QCheckBox" name="pb_use_all_lights">
                <property name="text">
-                <string>Interval</string>
-               </property>
-               <property name="buddy">
-                <cstring>autosave_count</cstring>
+                <string>Use All Lights</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="autosave_count">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
+              <widget class="QCheckBox" name="pb_shadows">
+               <property name="text">
+                <string>Shadows</string>
                </property>
-               <property name="toolTip">
-                <string>Turns on Autosave for Maya and sets the time interval</string>
-               </property>
-               <property name="layoutDirection">
-                <enum>Qt::LayoutDirection::LeftToRight</enum>
-               </property>
-               <property name="buttonSymbols">
-                <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
+               <property name="checked">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer_17">
+              <widget class="QCheckBox" name="pb_ao">
+               <property name="text">
+                <string>Ambient Occlusion</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="pb_motionblur">
+               <property name="text">
+                <string>Motion Blur</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="pb_aa">
+               <property name="text">
+                <string>Anti Aliasing</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="pb_burnin">
+               <property name="text">
+                <string>Burn In</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_8">
                <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
+                <enum>Qt::Orientation::Vertical</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>40</width>
-                 <height>20</height>
+                 <width>20</width>
+                 <height>40</height>
                 </size>
                </property>
               </spacer>
              </item>
             </layout>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Orientation::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </widget>
-        </widget>
+           </widget>
+           <widget class="QWidget" name="hotkeys">
+            <attribute name="title">
+             <string>Hotkeys</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_14">
+             <item>
+              <widget class="QLabel" name="hotkeys_label">
+               <property name="styleSheet">
+                <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
+               </property>
+               <property name="text">
+                <string>Hokeys</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="hotkeys">
+               <property name="text">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;These hotkeys can be changed to your preferences.&lt;br/&gt;However, it is recommended that you leave them at their defaults, because they are designed to take over certain Maya functions.&lt;br/&gt;If you decide to change them, understand that they won't take effect until you restart Maya.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="Line" name="line_4">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_40">
+               <item>
+                <widget class="QLabel" name="hk_open_label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Open Sans Pipe</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="hk_open_mod_1">
+                 <property name="currentText">
+                  <string/>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Ctrl</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Alt</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Shift</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Esc</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Return</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="hk_open_mod_2">
+                 <property name="currentText">
+                  <string/>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Ctrl</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Alt</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Shift</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Esc</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Return</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="hk_open_mod_3">
+                 <item>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Ctrl</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Alt</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Shift</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Esc</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Return</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="hk_open_key">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>S</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_24">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_41">
+               <item>
+                <widget class="QLabel" name="hk_saveVUp_label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Save Version UP</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="hk_savevup_mod_1">
+                 <property name="currentText">
+                  <string/>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Ctrl</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Alt</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Shift</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Esc</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Return</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="hk_savevup_mod_2">
+                 <property name="currentText">
+                  <string/>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Ctrl</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Alt</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Shift</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Esc</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Return</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="hk_savevup_mod_3">
+                 <item>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Ctrl</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Alt</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Shift</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Esc</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Return</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="hk_savevup_key">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>V</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_25">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_42">
+               <item>
+                <widget class="QLabel" name="hk_snapshot_label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Snapshot</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="hk_snapshot_mod_1">
+                 <property name="currentText">
+                  <string/>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Ctrl</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Alt</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Shift</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Esc</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Return</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="hk_snapshot_mod_2">
+                 <property name="currentText">
+                  <string/>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Ctrl</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Alt</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Shift</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Esc</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Return</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="hk_snapshot_mod_3">
+                 <item>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Ctrl</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Alt</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Shift</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Esc</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Return</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="hk_snapshot_key">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>S</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_26">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_43">
+               <item>
+                <widget class="QLabel" name="hk_publish_label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Publish</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="hk_publish_mod_1">
+                 <property name="currentText">
+                  <string/>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Ctrl</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Alt</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Shift</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Esc</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Return</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="hk_publish_mod_2">
+                 <item>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Ctrl</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Alt</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Shift</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Esc</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Return</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="hk_publish_mod_3">
+                 <item>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Ctrl</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Alt</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Shift</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Esc</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Return</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="hk_publish_key">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>P</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_27">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_44">
+               <item>
+                <widget class="QLabel" name="hk_close_label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Close</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="hk_close_mod_1">
+                 <property name="currentText">
+                  <string/>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Ctrl</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Alt</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Shift</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Esc</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Return</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="hk_close_mod_2">
+                 <item>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Ctrl</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Alt</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Shift</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Esc</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Return</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="hk_close_mod_3">
+                 <item>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Ctrl</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Alt</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Shift</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Esc</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Return</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="hk_close_key">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_28">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Orientation::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="archiver">
+            <attribute name="title">
+             <string>Archiver</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_19">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_46">
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout_18">
+                 <item>
+                  <widget class="QTextEdit" name="textEdit">
+                   <property name="readOnly">
+                    <bool>true</bool>
+                   </property>
+                   <property name="html">
+                    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Zip Archive&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The Super Archiver works in a similar fashion to Maya's default &amp;quot;Archive&amp;quot; function, but with a few super elements added into the mix.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;1. The Super Archiver will allow you to select multiple files at once.&lt;br /&gt;2. Each file will be analyzed and collected before the archival process begins.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;What this does for you:&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;By analyzing all of the selected scenes up front, any references or assets associated with the scenes can be collected only once, in this way an entire project can be minimally archived without the extra bulk, and without duplicating assets every time an archive is created.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Think of it this way.  If you have 10 scenes that all use the same character and the same environment, if you use the Maya archiver, each ZIP file will include a copy of the character and the environment, leaving you with 10 copies of each and very large ZIP files.  &lt;span style=&quot; font-style:italic;&quot;&gt;However&lt;/span&gt;, if you use the Super Archiver, each scene will be opened and collected, and then only one copy of the character and one copy of the environment will be included with your 10 scenes all into 1 ZIP file.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;Unzip Archive&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;IF (and only if) SansPipe generated a ZIP archive, then it can be &amp;quot;reversed&amp;quot; using this system.  This tool will take a previously compressed archive and attempt to replace it back into the main pipeline.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="verticalSpacer_7">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_48">
+                   <item>
+                    <widget class="QLabel" name="unarchive_label">
+                     <property name="text">
+                      <string>Unarchive Zip File</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="unarchive"/>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="unarchive_browse_btn">
+                     <property name="text">
+                      <string>...</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_49">
+                   <item>
+                    <spacer name="horizontalSpacer_31">
+                     <property name="orientation">
+                      <enum>Qt::Orientation::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="unarchive_btn">
+                     <property name="text">
+                      <string>Unarchive</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout_17">
+                 <item>
+                  <widget class="QTreeWidget" name="archiver_list">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This list includes all of the scene files in your project, and mirrors the scene files in the Existing FIles list.&lt;br/&gt;You can CTRL or SHIFT select multiple files in order to process them for archiving.&lt;/p&gt;&lt;p&gt;Understand that this process can take a very long time, and can create a very large file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="selectionMode">
+                    <enum>QAbstractItemView::SelectionMode::MultiSelection</enum>
+                   </property>
+                   <property name="headerHidden">
+                    <bool>true</bool>
+                   </property>
+                   <column>
+                    <property name="text">
+                     <string notr="true">1</string>
+                    </property>
+                   </column>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="import_references">
+                   <property name="text">
+                    <string>Import References</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_45">
+                   <item>
+                    <spacer name="horizontalSpacer_29">
+                     <property name="orientation">
+                      <enum>Qt::Orientation::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="archiver_btn">
+                     <property name="text">
+                      <string>Archive Selected</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QLabel" name="archiver_label">
+               <property name="styleSheet">
+                <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
+               </property>
+               <property name="text">
+                <string>Super Archiver</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="system_settings">
+            <attribute name="title">
+             <string>System Settings</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_15">
+             <item>
+              <widget class="QLabel" name="system_settings_label">
+               <property name="styleSheet">
+                <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
+               </property>
+               <property name="text">
+                <string>System Settings</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_10">
+               <item>
+                <widget class="QLabel" name="recent_file_count_label">
+                 <property name="toolTip">
+                  <string>This sets the number of Recent Files listed in the Recent File history</string>
+                 </property>
+                 <property name="text">
+                  <string>Recent File Count</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>recent_file_count</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="recent_file_count">
+                 <property name="toolTip">
+                  <string>This sets the number of Recent Files listed in the Recent File history</string>
+                 </property>
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_11">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_12">
+               <item>
+                <widget class="QCheckBox" name="autoload">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Auto Load on Startup makes Sans Pipe open when Maya opens and replaces the default Ctrl + Shift + S hotkey command with the Sans Pipe version up utility.  &lt;/p&gt;&lt;p&gt;Unchecking this resets the hotkey to its default setting&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                 <property name="layoutDirection">
+                  <enum>Qt::LayoutDirection::RightToLeft</enum>
+                 </property>
+                 <property name="text">
+                  <string>Auto Load on Startup</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_13">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_31">
+               <item>
+                <widget class="QCheckBox" name="autosaver">
+                 <property name="toolTip">
+                  <string>Turns on Autosave for Maya and sets the time interval</string>
+                 </property>
+                 <property name="layoutDirection">
+                  <enum>Qt::LayoutDirection::RightToLeft</enum>
+                 </property>
+                 <property name="text">
+                  <string>Autosave</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="iterations_label">
+                 <property name="toolTip">
+                  <string>Turns on Autosave for Maya and sets the time interval</string>
+                 </property>
+                 <property name="text">
+                  <string>Interval</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>autosave_count</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="autosave_count">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="toolTip">
+                  <string>Turns on Autosave for Maya and sets the time interval</string>
+                 </property>
+                 <property name="layoutDirection">
+                  <enum>Qt::LayoutDirection::LeftToRight</enum>
+                 </property>
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_17">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Orientation::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_9">
+        <layout class="QHBoxLayout" name="horizontalLayout_50">
          <item>
           <spacer name="horizontalSpacer_9">
            <property name="orientation">

@@ -18,53 +18,22 @@ Version 1.3 Goals:
     1. Create a dynamically loading toolset:
         This would add buttons to the tools, menu and shelf based on tools added to either A) a sansPipe_tools.py script
         or B) by searching for and dynamically adding tools added to a bin folder.
-                    2. Split all existing tools into a separate file that could be accessed either by the UI or by the shelf or menu.
-                    3. Add Playblast record keeping, and perhaps organize playblasts into their own folder.
-                        It would also be great if these could be played from a specific shot.
-                    4. May want to add task folders to better organize how each section is delineated.
-                        Scenes > Char > CharacterName > Model
-                        Scenes > Char > CharacterName > LookDev
-                        Scenes > Char > CharacterName > Rig
     5. Add some Project Level collection system.  
         This would go through the root project, look for database JSON files and output an Excel sheet that would list
         all existing projects and their current statuses.
-                    6. Add task statuses.
-                        This could be a really good one to add.
-                    6.5. Add an "Add Note" button, or a feature that would request a note on task change, if it was triggered by the 
-                        button.  This way a note would accompany a revision.  The system should probably archive the previous database 
-                        entry with a flag of some sort (Filename_v001_RR1) or something like that, where RR# would be like saying 
-                        "Revision Required Version 1" -> RR1.  Each version would get its own number RR2, RR3.
     7. UI enhancements (Related to some of the above):
-                         a. Add Task Statuses
-                         b. Add a Playblasts section to... somewhere.
         c. Add a reports section.
+            i. Current status of all asset/shots and tasks
     8. Make the UI stay opened if references are out of date on a recently opened file
     9. Filtering on trees:
         Task filtering for both Existing File and Publishes. Only show Chars.  Only show Rigs
-                    10. Rework #6 Task statuses.  Needs to be in the note and not a separate tag.  Each save as should have it's own 
-                        note and be tallied up by that instead of an overall tag.
-                    11. Add a "Blow away Snapshots" function for project cleanup.  The button would exist on the settings page, and 
-                        there could also be a right-click context for individual elements
-                    12. Rearrange the Tasks and Publishes.  Put publishes in their own folder either in the root of Scenes, or outside
-                        of the scene folder.  TBD
     13. Move the system from a JSON database setup to a SQL database - either per asset - like the JSONs, or as a global
         database for everything.
     14. Make sure there are both Mac and Windows hotkeys
     15. Improve playblast settings.  Adjust what the viewport sees and try to put some burn-ins on there.
-                    16. Rework the Status notes to use the Notes window instead of the pop up.
-                    17. Add right-click "Open without Status change"
-                    18. Make v001 status "Ready" instead of "In Progress"
-                    19. Increase font size of the tabs
     20. Make settings tabs for more and advanced settings, like:
         a. Make playblast options more robust - Playblast tab.  MOV or PNG/JPG sequence?  HUD settings
-        b. Tab for Hotkeys
         c. Tab for Things like default CSV file templates, or other goodies.
-        d. Tab for Show Settings.
-        e. Tab for Multi-File Archiving
-    21. Multi-Select archiver.  The idea is that you could take a selection of file and zip them together all at once 
-        without duplicating too many assets.  It would have to basically open each file, collect all the assets into a
-        database, and then collect all those file and assets into one final zip file, maintaining the folder structure 
-        and architecture.  That way collected files would not make duplicates of assets.
     22. Import an archive from a zip file.  This should basically "un-do" the archive setup from 21
         
 KNOWN BUGS:

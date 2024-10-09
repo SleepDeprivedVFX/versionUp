@@ -1,45 +1,26 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIIBbojk.ui'
+## Form generated from reading UI file 'superSaver_UIbNlGcm.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-try:
-    from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                                QMetaObject, QObject, QPoint, QRect,
-                                QSize, QTime, QUrl, Qt)
-    from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-                               QFont, QFontDatabase, QGradient, QIcon,
-                               QImage, QKeySequence, QLinearGradient, QPainter,
-                               QPalette, QPixmap, QRadialGradient, QTransform)
-    from PySide6.QtWidgets import (QAbstractItemView, QAbstractSpinBox, QApplication, QCheckBox,
-                                   QComboBox, QFrame, QGroupBox, QHBoxLayout,
-                                   QHeaderView, QLabel, QLineEdit, QListWidget,
-                                   QListWidgetItem, QPushButton, QRadioButton, QSizePolicy,
-                                   QSpacerItem, QSpinBox, QTabWidget, QTextEdit,
-                                   QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
-except ImportError:
-    try:
-        from PySide2.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                                    QMetaObject, QObject, QPoint, QRect,
-                                    QSize, QTime, QUrl, Qt)
-        from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-                                   QFont, QFontDatabase, QGradient, QIcon,
-                                   QImage, QKeySequence, QLinearGradient, QPainter,
-                                   QPalette, QPixmap, QRadialGradient, QTransform)
-        from PySide2.QtWidgets import (QAbstractItemView, QAbstractSpinBox, QApplication, QCheckBox,
-                                       QComboBox, QFrame, QGroupBox, QHBoxLayout,
-                                       QHeaderView, QLabel, QLineEdit, QListWidget,
-                                       QListWidgetItem, QPushButton, QRadioButton, QSizePolicy,
-                                       QSpacerItem, QSpinBox, QTabWidget, QTextEdit,
-                                       QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
-    except ImportError:
-        raise RuntimeError("Neither PySide6 nor PySide2 could be imported. Please ensure one of them is installed.")
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QAbstractItemView, QAbstractSpinBox, QApplication, QCheckBox,
+    QComboBox, QFrame, QGroupBox, QHBoxLayout,
+    QHeaderView, QLabel, QLineEdit, QListWidget,
+    QListWidgetItem, QPushButton, QRadioButton, QSizePolicy,
+    QSpacerItem, QSpinBox, QTabWidget, QTextEdit,
+    QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_SaveAs(object):
     def setupUi(self, SaveAs):
@@ -1071,6 +1052,8 @@ class Ui_SaveAs(object):
         self.SettingsTab.setObjectName(u"SettingsTab")
         self.verticalLayout_16 = QVBoxLayout(self.SettingsTab)
         self.verticalLayout_16.setObjectName(u"verticalLayout_16")
+        self.horizontalLayout_9 = QHBoxLayout()
+        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
         self.settingsTabs = QTabWidget(self.SettingsTab)
         self.settingsTabs.setObjectName(u"settingsTabs")
         self.settingsTabs.setTabPosition(QTabWidget.TabPosition.West)
@@ -1670,12 +1653,6 @@ class Ui_SaveAs(object):
         self.archiver.setObjectName(u"archiver")
         self.verticalLayout_19 = QVBoxLayout(self.archiver)
         self.verticalLayout_19.setObjectName(u"verticalLayout_19")
-        self.archiver_label = QLabel(self.archiver)
-        self.archiver_label.setObjectName(u"archiver_label")
-        self.archiver_label.setStyleSheet(u"font: 700 12pt \"Segoe UI\";")
-
-        self.verticalLayout_19.addWidget(self.archiver_label)
-
         self.horizontalLayout_46 = QHBoxLayout()
         self.horizontalLayout_46.setObjectName(u"horizontalLayout_46")
         self.verticalLayout_18 = QVBoxLayout()
@@ -1689,6 +1666,40 @@ class Ui_SaveAs(object):
         self.verticalSpacer_7 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_18.addItem(self.verticalSpacer_7)
+
+        self.horizontalLayout_48 = QHBoxLayout()
+        self.horizontalLayout_48.setObjectName(u"horizontalLayout_48")
+        self.unarchive_label = QLabel(self.archiver)
+        self.unarchive_label.setObjectName(u"unarchive_label")
+
+        self.horizontalLayout_48.addWidget(self.unarchive_label)
+
+        self.unarchive = QLineEdit(self.archiver)
+        self.unarchive.setObjectName(u"unarchive")
+
+        self.horizontalLayout_48.addWidget(self.unarchive)
+
+        self.unarchive_browse_btn = QPushButton(self.archiver)
+        self.unarchive_browse_btn.setObjectName(u"unarchive_browse_btn")
+
+        self.horizontalLayout_48.addWidget(self.unarchive_browse_btn)
+
+
+        self.verticalLayout_18.addLayout(self.horizontalLayout_48)
+
+        self.horizontalLayout_49 = QHBoxLayout()
+        self.horizontalLayout_49.setObjectName(u"horizontalLayout_49")
+        self.horizontalSpacer_31 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_49.addItem(self.horizontalSpacer_31)
+
+        self.unarchive_btn = QPushButton(self.archiver)
+        self.unarchive_btn.setObjectName(u"unarchive_btn")
+
+        self.horizontalLayout_49.addWidget(self.unarchive_btn)
+
+
+        self.verticalLayout_18.addLayout(self.horizontalLayout_49)
 
 
         self.horizontalLayout_46.addLayout(self.verticalLayout_18)
@@ -1729,6 +1740,12 @@ class Ui_SaveAs(object):
 
 
         self.verticalLayout_19.addLayout(self.horizontalLayout_46)
+
+        self.archiver_label = QLabel(self.archiver)
+        self.archiver_label.setObjectName(u"archiver_label")
+        self.archiver_label.setStyleSheet(u"font: 700 12pt \"Segoe UI\";")
+
+        self.verticalLayout_19.addWidget(self.archiver_label)
 
         self.settingsTabs.addTab(self.archiver, "")
         self.system_settings = QWidget()
@@ -1812,21 +1829,24 @@ class Ui_SaveAs(object):
 
         self.settingsTabs.addTab(self.system_settings, "")
 
-        self.verticalLayout_16.addWidget(self.settingsTabs)
+        self.horizontalLayout_9.addWidget(self.settingsTabs)
 
-        self.horizontalLayout_9 = QHBoxLayout()
-        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+
+        self.verticalLayout_16.addLayout(self.horizontalLayout_9)
+
+        self.horizontalLayout_50 = QHBoxLayout()
+        self.horizontalLayout_50.setObjectName(u"horizontalLayout_50")
         self.horizontalSpacer_9 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_9.addItem(self.horizontalSpacer_9)
+        self.horizontalLayout_50.addItem(self.horizontalSpacer_9)
 
         self.save_config_btn = QPushButton(self.SettingsTab)
         self.save_config_btn.setObjectName(u"save_config_btn")
 
-        self.horizontalLayout_9.addWidget(self.save_config_btn)
+        self.horizontalLayout_50.addWidget(self.save_config_btn)
 
 
-        self.verticalLayout_16.addLayout(self.horizontalLayout_9)
+        self.verticalLayout_16.addLayout(self.horizontalLayout_50)
 
         self.saverTabs.addTab(self.SettingsTab, "")
 
@@ -2371,7 +2391,6 @@ class Ui_SaveAs(object):
         self.hk_close_mod_3.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
 
         self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.hotkeys), QCoreApplication.translate("SaveAs", u"Hotkeys", None))
-        self.archiver_label.setText(QCoreApplication.translate("SaveAs", u"Super Archiver", None))
         self.textEdit.setHtml(QCoreApplication.translate("SaveAs", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -2379,18 +2398,28 @@ class Ui_SaveAs(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:700;\">Zip Archive</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The Super Archiver works in a similar fashion to Maya's default &quot;Archive&quot; function, but with a few super elements added into the mix.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">1. The Super Archiver will allow you to select multiple files at once.<br />2. Each file will be analyzed and collected before the "
-                        "archival process begins.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-"
+                        "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">1. The Super Archiver will allow you to select multiple files at once.<br />2. Each file will be analyzed and collected before the archival process begins.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">What this does for you:</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">By analyzing all of the selected scenes up front, any references or assets associated with the scenes can be collected only once, in this way an entire project can be minimally archived without the extra bulk, and without duplicating assets every time an archive is created.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Think of it this way.  If you have 10 scenes that all use the same character and the same environment, if you use the Maya archiver, each ZIP file will include a copy of the character and the environment, leaving you with 10 copies of each and very large ZIP files.  <span style=\" font-style:italic;\">However</sp"
-                        "an>, if you use the Super Archiver, each scene will be opened and collected, and then only one copy of the character and one copy of the environment will be included with your 10 scenes all into 1 ZIP file.</p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Think of it this way.  If you have 10 scenes that all use the same character and the same environment, if you use th"
+                        "e Maya archiver, each ZIP file will include a copy of the character and the environment, leaving you with 10 copies of each and very large ZIP files.  <span style=\" font-style:italic;\">However</span>, if you use the Super Archiver, each scene will be opened and collected, and then only one copy of the character and one copy of the environment will be included with your 10 scenes all into 1 ZIP file.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:700;\">Unzip Archive</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">IF (and only if) SansPipe generated a ZIP archive, then it can be &quot;reversed&quot; using this system.  This tool will take a p"
+                        "reviously compressed archive and attempt to replace it back into the main pipeline.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
+        self.unarchive_label.setText(QCoreApplication.translate("SaveAs", u"Unarchive Zip File", None))
+        self.unarchive_browse_btn.setText(QCoreApplication.translate("SaveAs", u"...", None))
+        self.unarchive_btn.setText(QCoreApplication.translate("SaveAs", u"Unarchive", None))
 #if QT_CONFIG(tooltip)
         self.archiver_list.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>This list includes all of the scene files in your project, and mirrors the scene files in the Existing FIles list.<br/>You can CTRL or SHIFT select multiple files in order to process them for archiving.</p><p>Understand that this process can take a very long time, and can create a very large file.</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.import_references.setText(QCoreApplication.translate("SaveAs", u"Import References", None))
         self.archiver_btn.setText(QCoreApplication.translate("SaveAs", u"Archive Selected", None))
+        self.archiver_label.setText(QCoreApplication.translate("SaveAs", u"Super Archiver", None))
         self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.archiver), QCoreApplication.translate("SaveAs", u"Archiver", None))
         self.system_settings_label.setText(QCoreApplication.translate("SaveAs", u"System Settings", None))
 #if QT_CONFIG(tooltip)
