@@ -8,6 +8,7 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 - **Snapshot Taking:** Captures file snapshots for incremental backups or version comparison.
 - **Publishing Tools:** Simplifies the process of publishing files for production.
 - **Reference Tracking:** Ensures all references are up-to-date and correct.
+- **Project Archiving:** Package only what you need and zip it into one light weight super archive!
 - **Camera Baking:** Tools for baking out camera movements for export or further processing.
 - **Asset and Shot Creation:** Facilitates the creation and organization of assets and shots within Maya.
 - **Playblasting:** Integrated playblasting tools for previewing animations directly within Maya.
