@@ -184,7 +184,30 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 - The **Super Archiver** is exactly that!  This is a replacement for Maya's "Archive Scene" tool, and it really is one bad-ass archiver.
 - Below is the breakdown for this tab
 ![Super Archiver](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab4d.png)
+- The **Super Archiver** was designed to handle one conundrum.  Let's say you've got 100 scenes and you have to send them to a client, a vendor, or another artist.  In those scenes you've got 3 environments that are very heavy, and 2 characters that are being refrenced in to each one of those 100 scenes.  Each one of these characters and environments have two dozen sourceimages files that make up the textures and every scene has a sound file that's associated with it for lip sync.
+- Traditionally, if you just tried to package up your entire show, you're getting a lot of cruft, you get every version of every file from every stage of development and you end up with 10 Terabytes of wasted storage space being compressed and shipped off.
+- Or, if you went through every scene one at a time and used Maya's "Archive Scene" feature then every one of those files would include a copy of the heavy environments, the characters and all the sourceimages as well - and the sound files wouldn't even be included.  At the end, each one of those zip files becomes very heavy as you have copy after copy of all the assets included with your archives.
+- Hello!  **Super Archiver**!
+- The **Super Archiver** allows you to select the files you want to send from the folder tree of existing files in your project and compress them all into one carefully prepared zip file.  It does this by doing the following:
+  1. Opens every file and takes a collection of what's inside, references, sounds, images.  It creates an inventory of what's being asked.
+  2. Then it copies only the necessary files to an "Archives" folder with a date stamped folder with the show name: YourShow_10092024, and mirrors the file structure originally used in your scenes folders.
+  3. After that it goes through each of the copied files and re-links them to the archived versions of your files with relative paths.
+  4. Finally, it zips the minimized archive.  Leaving you with all of your 100 scene files along with 1 copy of the textures, 1 copy of the references and 1 copy of the necessary sound files.
+- Doing this generates much smaller archives that can easily be moved around without additional cleanup needed!
+- Let's discuss the basic features shown above.
+1. **The file tree**. This is the file tree where you will select the files you want to archive.  Folders are ignored.  Only files are recorded.  You can select as many as you like.  If you are selecting shot files with things referenced in, there is no need to select the references.  The system will handle that for you.
+2. **Import References** check box.  Once in a while, you may want to just skip the whole referencing thing and import them into the scene files.  This feature is here if you want it, but it will create heavier archives, since every copy of your reference will be imported into all your 100 scene files.  There if you need it, but it's not recommended.
+3. **Archive Selected** button.  This does what you expect it to.  It starts your archive.  These kinds of archives can take a very long time, so it will ask you to confirm that you do, in fact, want to step away from your computer for a while, but in the end, you get a much nicer package out of it, so it is worth the wait.
+- **FUTURE UPDATE**
+- There is a plan in place to build an "Un-Archiver" that would take a previously Super Archived file and undo it, putting the files back into the production folder for you, basically reversing the process of the super archive.  It's not built yet, but it's on the books.
 
+## System Settings
+- The System Settings handle very little currently, but may be expanded in the future
+- Below is the breakdown for this tab
+![System Settings](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab4e.png)
+1. **Recent File Count**.  This controls how many recent files are show in the **Recent Files** window on the **Save - Publish - Snap** main tab.
+2. **Autoload on Startup**.  This feature makes SansPipe open when Maya does.  It also forces the replacement of the "Save As..." (Ctrl + Shift + s) hot key to make SansPipe open instead of the "Save As..." dialog box.  To turn this on or off, check or uncheck it.  Press "Save Configuration" and then re-start Maya.
+3. **Autosave** & **Interval**.  This forces Maya's Autosave feature and sets the interval for you.  It is on by default and is a good way to protect yourself from accidental loss by Maya Crash.  **Snapshots** are another great way to keep yourself safe!.
  
 ## Prerequisites
 - **Autodesk Maya:** Designed for Maya 2025 but compatible with any Maya version that supports Python 3 and either PySide2 or PySide6.
