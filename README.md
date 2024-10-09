@@ -13,20 +13,29 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 - **Playblasting:** Integrated playblasting tools for previewing animations directly within Maya.
 
 ## Installation
-1. **Prepare the Installation Directory:** Navigate to your Maya plugins directory, typically found at: /Users/[YourUsername]/Documents/maya/2025/plug-ins/  Create a new folder named `sansPipe` within this directory.
+1. **Prepare the Installation Directory:** 
+- Navigate to your Maya plugins directory, typically found at: 
+  ``` 
+  /Users/[YourUsername]/Documents/maya/20XX/plug-ins/
+  ```  
+2. Create a new folder named `sansPipe` within this directory and drag the contents of the SansPipe folder into that folder.  There should only be one sansPipe folder.  Alternately, you could drag the sansPipe folder into your `plug-ins` folder and then move the `userSetup.py` to the same location as in step 3.
 
-2. **Copy Files:** Except for `userSetup.py`, copy all files from the provided package into the `sansPipe` folder you just created.
+3. **Copy Files:**
+- Except for `userSetup.py`, copy all files from the provided package into the `sansPipe` folder you just created.
 
-3. **Setup User Scripts:**
+4. **Setup User Scripts:**
 - Copy the `userSetup.py` file to your Maya scripts folder, usually located at:
   ```
   /Users/[YourUsername]/Documents/maya/scripts/
   ```
 
-4. **Restart Maya:** Close and reopen Maya to complete the setup.
+5. **Restart Maya:** 
+- Close and reopen Maya to complete the setup.
 
 ## Usage
-[Detailed instructions on how to use the various features. Discuss the interface and any commands or panels specific to the utility.]
+  **User Interface**
+  - The first tab of sansPipe is your main workflow utility.  While there are a lot of features on here, it is actually designed to be very minimalistic
+![Tab 1 Breakdown]()
 
 ## Prerequisites
 - **Autodesk Maya:** Designed for Maya 2025 but compatible with any Maya version that supports Python 3 and either PySide2 or PySide6.
