@@ -54,7 +54,12 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
    1. Items are color coded based on their **Task Status**
    2. A Camera icon appears if there is a Playblast associated with that shot.
    3. Right-Click options become available on files in the tree.  The options are:
-      1.  
+      1. ![Existing File Right Click](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_EF_RightClick_1.png)  
+      2. Open
+      3. Open No Status Change
+      4. View Playblast
+      5. Blow Away Snapshots.
+   4. Each of these
  
 
 ## Prerequisites
