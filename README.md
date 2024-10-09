@@ -35,7 +35,8 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 ## Usage
   **User Interface**
   - **Save - Publish - Snap** Tab.
-  - The first tab of sansPipe is your main workflow utility.  While there are a lot of features on here, it is actually designed to be very minimalistic
+  - The first tab of sansPipe is your main workflow utility.  While there are a lot of features on here, it is actually designed to be very minimalistic.  By default SansPipe should open when Maya opens, allowing you to start working right off the bat.  This feature can be turned off in the settings.
+  - Here are the main sections of the first tab of SansPipe.
 ![Tab 1 Breakdown](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab1.png)
 1. This is what sansPipe is *going* to save your next file as.  By default, this is a "version up" tool, and this is it's primary feature
 2. This controls how the automatic naming convention works.  99% of the time, you'll never have to deal with this, and it is recommended that you leave it on "Auto".
@@ -63,11 +64,11 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
    4. The **Task Status** drop down sits at the top of the **Existing Files** tree.  It updates based on the current selection in the tree.  By manually changing it (You must add a note to do this) it will change the status of the selected file and record that into the version notes.
    5. If you are using the **Allow File Copy From --> To** feature in the *Section 2* Naming convention form, this is where that takes place.  By first clicking that checkbox, and then selecting an asset or shot name (top folder of that stack, for instance, select "BDD_Shot_0020") and it will rename your file to that, but only if that checkbox is selected first.
 6. **Snapshots**.  Snapshots are wonderful things!  You should create Snapshots often instead of saving a version up.  **Snapshots** are basically versioning up a file, without versioning up a file.  They require a *Note* to be saved.  Here's some cool stuff about **Snapshots**:
-   1. A Snapshot saves where you're at right now with a working file, let's call it BDD_Shot_0010_anim_v001.  You can start with your initial import of objects and do a quick Snapshot.  Add a note like, "Importing the assets" then hit the **Snapshot** button or use the hotkey **Ctrl + Alt + S**  (Command + Option + S on Mac). A snapshot is created and will show up with a date stamp in the **Snapshots** stack.
-   2. Now, you do some blocking animation, really basic stuff, no finesse.  Do another snapshot.  Put in a note like "Basic blocking" and the hit **Snapshot**.  A new Date stamped file shows up in the stack.
+   1. A Snapshot saves where you're at right now with a working file, let's call it BDD_Shot_0010_anim_v001.  You can start with your initial import of objects and do a quick Snapshot.  Add a note like, "Importing the assets" then hit the **Snapshot** button or use the hotkey **Alt + S**  (Option + S on Mac). A snapshot is created and will show up with a date stamp in the **Snapshots** stack.
+   2. Now, you do some blocking animation, really basic stuff, no finesse.  Do another snapshot.  Put in a note like "Basic blocking" and then hit **Snapshot**.  A new Date stamped file shows up in the stack.
    3. One more **snapshot**, "First pass animation".  Now let's say that you hate it, and want to go back to that initial import...
-   4. Drop down that first snapshot in your stack and you'll see your first "Importing the assets" note.  Double click that note and suddenly your file will go back to its initial state.  If you have unsaved changes in your current file, it will pop up a message asking if you'd like to Snapshot your current place.  Do it - it can't hurt.
-   5. Now your file is back to your initial import and you can do another pass at blocking, animation, or whatever it is you want to redo.
+   4. Drop down that first snapshot in your stack, and you'll see your first "Importing the assets" note.  Double click that note and suddenly your file will go back to its initial state.  If you have unsaved changes in your current file, it will pop up a message asking if you'd like to Snapshot your current place.  Do it - it can't hurt.
+   5. Now your file is back to your initial import, and you can do another pass at blocking, animation, or whatever it is you want to redo.
    6. Now, if you decide that it was better the first time, simply go to your "First Pass Animation" snapshot and double click it.  It will return your file to that state.
    7. All of this and you never left version 1!  **Snapshots** are your friend!  USE THEM!
    8. That being said, they do take up space.  If you decide you're done with your snapshots, go to that right-click menu in the **Existing Files** tree and right click and chose "Blow Away Snapshots" and they will be deleted.
@@ -83,6 +84,10 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
    3. **Save V Up** button.  Default Hotkey (Ctrl + Shift + v).  Saves the next version up for your file using the filename from section 1 of this tab.
    4. **Close** button.  Default Hotkey (Esc).  Does what you'd expect, but with the added benefit of saving out settings as it closes the tool.
 9. **SansPipe Tabs** These are the tabs that cycle through different sections of the SansPipe workflow. 
+
+- **Tools - References - Asset**
+- The second tab of SansPipe.  This tab contains a list of tools, is where you create assets and shots, where you reference in published assets or load in exported assets.
+- Below is the breakdown for this tab
  
 ## Prerequisites
 - **Autodesk Maya:** Designed for Maya 2025 but compatible with any Maya version that supports Python 3 and either PySide2 or PySide6.
