@@ -143,6 +143,15 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 2. **Project**.  This section mirrors Maya's own "Set Project" feature.  You can browse to any existing project, whether it was created using SansPipe or not, and it will make that your current project and add it to the **Recent Projects** stack to the left.
 3. **New Project**.  This feature mostly mirrors Maya's default "Project Window" feature, with the added detail that it creates extra folders for Publishes and organizational folders for Assets and Shots.  This is a better way to organize your workflow in Maya.  It is recommended that new projects are created here in SansPipe.
    1. The **Include Subfolders** checkbox is checked by default.  This is the feature that automatically creates Char, Prop, Veh, Env and Shots folders. 
+
+## Settings - Configuration
+**Sub Tabs**
+- The system settings are broken down into a series of Sub-Tabs that separate out all the different function of SansPipe
+## Show Settings
+- The **Show Settings** sub-tab covers all the basic show specific settings like the name of the show, the three (3) letter code for the show, default render / camera resolution, the camera film-back, default render format and the scene scale.  Other features will be added in future versions of SansPipe.
+- Below is the breakdown for this tab
+![Tab 4a Breakdown](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab4a.png)
+1. 
  
 ## Prerequisites
 - **Autodesk Maya:** Designed for Maya 2025 but compatible with any Maya version that supports Python 3 and either PySide2 or PySide6.
