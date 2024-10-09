@@ -96,9 +96,15 @@ def uninitializePlugin(mobject):
 if platform.system() == 'Windows':
     env_user = 'USERNAME'
     computername = 'COMPUTERNAME'
+    ctrl = 'Ctrl'
+    alt = 'Alt'
+    command = 'Win'
 else:
     env_user = 'USER'
     computername = 'HOSTNAME'
+    ctrl = 'Ctrl'
+    alt = 'option'
+    command = 'cmd'
 
 
 def natural_sort_key(s):
@@ -247,6 +253,28 @@ class sansPipe(QWidget):
         self.hk_close_mod_3 = self.settings.value('hk_close_mod_3', None, type=str)
         self.hk_close_key = self.settings.value('hk_close_key', None, type=str)
         self.restoreGeometry(self.position)
+
+        # Set default hotkeys if there are none.
+        if not self.hk_open_mod_1:
+            self.hk_open_mod_1 = ctrl
+        if not self.hk_open_mod_2:
+            self.hk_open_mod_2 = 'Shift'
+        if not self.hk_open_key:
+            self.hk_open_key = 's'
+        if not self.hk_savevup_mod_1:
+            self.hk_savevup_mod_1 = ctrl
+        if not self.hk_savevup_mod_2:
+            self.hk_savevup_mod_2 = 'Shift'
+        if not self.hk_savevup_key:
+            self.hk_savevup_key = 'v'
+        if not self.hk_snapshot_mod_1:
+            self.hk_snapshot_mod_1 = alt
+        if not self.hk_snapshot_key:
+            self.hk_snapshot_key = 's'
+        if not self.hk_publish_mod_1:
+            self.hk_publish_mod_1 = ctrl
+        if not self.hk_publish_key:
+            self.hk_publish_key = 'p'
 
         # Set up the Hotkeys in the UI
         self.ui.hk_open_mod_1.setCurrentText(self.hk_open_mod_1)
