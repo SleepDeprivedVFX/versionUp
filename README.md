@@ -34,6 +34,7 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 
 ## Usage
   **User Interface**
+  - **Save - Publish - Snap** Tab.
   - The first tab of sansPipe is your main workflow utility.  While there are a lot of features on here, it is actually designed to be very minimalistic
 ![Tab 1 Breakdown](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab1.png)
 1. This is what sansPipe is *going* to save your next file as.  By default, this is a "version up" tool, and this is it's primary feature
@@ -55,11 +56,12 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
    2. A Camera icon appears if there is a Playblast associated with that shot.
    3. Right-Click options become available on files in the tree.  The options are:
       1. ![Existing File Right Click](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_EF_RightClick_1.png)  
-      2. Open
-      3. Open No Status Change
-      4. View Playblast
-      5. Blow Away Snapshots.
-   4. Each of these
+      2. **Open** does what you would expect, however, when you open a file from here, whether using the right-click option or by double clicking the file itself, it opens the file, but also sets the **Task Status** to "In Progress".
+      3. **Open No Status Update** works the same way as open, except it does not change the current **Task Status**.  This is useful if you have a file marked "Needs Revision", "Done", or "For Review" and you want to leave that task status as is.
+      4. **View Playblast** only works if there is an associated playblast, indicated by the Camera Icon ![Camera Icon](https://github.com/SleepDeprivedVFX/versionUp/blob/master/icons/cam_icon.png)
+      5. **Blow Away Snapshots** is a tool for deleting all the **Snapshots** associated with a particular file.  Snapshots are simply date-stamped copies of your working file, and thus take up space.  If you are sure you are through with your Snapshots, you can delete them for a given task by using this feature.  More about this later.
+   4. The **Task Status** drop down sits at the top of the **Existing Files** tree.  It updates based on the current selection in the tree.  By manually changing it (You must add a note to do this) it will change the status of the selected file and record that into the version notes.
+6. **Snapshots**.  Snapshots are wonderful things!  You should create Snapshots often instead of saving a version up.  **Snapshots** are basically versioning up a file, without versioning up a file.  They require a *Note* to be saved. 
  
 
 ## Prerequisites
