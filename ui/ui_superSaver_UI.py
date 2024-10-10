@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIQCROFZ.ui'
+## Form generated from reading UI file 'superSaver_UIopmjbi.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -45,7 +45,7 @@ class Ui_SaveAs(object):
     def setupUi(self, SaveAs):
         if not SaveAs.objectName():
             SaveAs.setObjectName(u"SaveAs")
-        SaveAs.resize(969, 698)
+        SaveAs.resize(1055, 730)
         SaveAs.setMinimumSize(QSize(969, 629))
         SaveAs.setStyleSheet(u"background-color: rgb(110, 110, 110);\n"
 "color: rgb(220, 220, 220);")
@@ -55,19 +55,26 @@ class Ui_SaveAs(object):
         self.saverTabs.setObjectName(u"saverTabs")
         self.MainTab = QWidget()
         self.MainTab.setObjectName(u"MainTab")
-        self.verticalLayout_2 = QVBoxLayout(self.MainTab)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout_21 = QVBoxLayout(self.MainTab)
+        self.verticalLayout_21.setObjectName(u"verticalLayout_21")
         self.Title = QLabel(self.MainTab)
         self.Title.setObjectName(u"Title")
         self.Title.setStyleSheet(u"font: 16pt \"MS Shell Dlg 2\";")
 
-        self.verticalLayout_2.addWidget(self.Title)
+        self.verticalLayout_21.addWidget(self.Title)
 
         self.output_filename = QLabel(self.MainTab)
         self.output_filename.setObjectName(u"output_filename")
         self.output_filename.setStyleSheet(u"font: 10pt \"MS Shell Dlg 2\";")
 
-        self.verticalLayout_2.addWidget(self.output_filename)
+        self.verticalLayout_21.addWidget(self.output_filename)
+
+        self.notes_seperator = QFrame(self.MainTab)
+        self.notes_seperator.setObjectName(u"notes_seperator")
+        self.notes_seperator.setFrameShape(QFrame.Shape.HLine)
+        self.notes_seperator.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.verticalLayout_21.addWidget(self.notes_seperator)
 
         self.horizontalLayout_38 = QHBoxLayout()
         self.horizontalLayout_38.setObjectName(u"horizontalLayout_38")
@@ -90,21 +97,21 @@ class Ui_SaveAs(object):
         self.horizontalLayout_38.addItem(self.horizontalSpacer_23)
 
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout_38)
+        self.verticalLayout_21.addLayout(self.horizontalLayout_38)
 
-        self.sideBySide_layout = QHBoxLayout()
-        self.sideBySide_layout.setObjectName(u"sideBySide_layout")
-        self.saveAs_Layout = QVBoxLayout()
-        self.saveAs_Layout.setObjectName(u"saveAs_Layout")
+        self.horizontalLayout_51 = QHBoxLayout()
+        self.horizontalLayout_51.setObjectName(u"horizontalLayout_51")
+        self.verticalLayout_2 = QVBoxLayout()
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.name_layout = QVBoxLayout()
         self.name_layout.setObjectName(u"name_layout")
+        self.naming_layout = QHBoxLayout()
+        self.naming_layout.setObjectName(u"naming_layout")
         self.naming_label = QLabel(self.MainTab)
         self.naming_label.setObjectName(u"naming_label")
 
-        self.name_layout.addWidget(self.naming_label)
+        self.naming_layout.addWidget(self.naming_label)
 
-        self.naming_layout = QHBoxLayout()
-        self.naming_layout.setObjectName(u"naming_layout")
         self.autoNaming = QRadioButton(self.MainTab)
         self.autoNaming.setObjectName(u"autoNaming")
         self.autoNaming.setChecked(True)
@@ -120,27 +127,38 @@ class Ui_SaveAs(object):
 
         self.naming_layout.addItem(self.naming_spacer)
 
-        self.version_label = QLabel(self.MainTab)
-        self.version_label.setObjectName(u"version_label")
+        self.taksType_label = QLabel(self.MainTab)
+        self.taksType_label.setObjectName(u"taksType_label")
 
-        self.naming_layout.addWidget(self.version_label)
+        self.naming_layout.addWidget(self.taksType_label)
 
-        self.version = QSpinBox(self.MainTab)
-        self.version.setObjectName(u"version")
+        self.taskType = QComboBox(self.MainTab)
+        self.taskType.addItem("")
+        self.taskType.addItem("")
+        self.taskType.addItem("")
+        self.taskType.addItem("")
+        self.taskType.addItem("")
+        self.taskType.addItem("")
+        self.taskType.addItem("")
+        self.taskType.addItem("")
+        self.taskType.addItem("")
+        self.taskType.addItem("")
+        self.taskType.addItem("")
+        self.taskType.setObjectName(u"taskType")
 
-        self.naming_layout.addWidget(self.version)
+        self.naming_layout.addWidget(self.taskType)
 
 
         self.name_layout.addLayout(self.naming_layout)
 
 
-        self.saveAs_Layout.addLayout(self.name_layout)
+        self.verticalLayout_2.addLayout(self.name_layout)
 
         self.allowFileCopy = QCheckBox(self.MainTab)
         self.allowFileCopy.setObjectName(u"allowFileCopy")
         self.allowFileCopy.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
 
-        self.saveAs_Layout.addWidget(self.allowFileCopy)
+        self.verticalLayout_2.addWidget(self.allowFileCopy)
 
         self.folder_layout = QHBoxLayout()
         self.folder_layout.setObjectName(u"folder_layout")
@@ -160,31 +178,10 @@ class Ui_SaveAs(object):
         self.folder_layout.addWidget(self.folder_btn)
 
 
-        self.saveAs_Layout.addLayout(self.folder_layout)
+        self.verticalLayout_2.addLayout(self.folder_layout)
 
         self.taskType_layout = QHBoxLayout()
         self.taskType_layout.setObjectName(u"taskType_layout")
-        self.taksType_label = QLabel(self.MainTab)
-        self.taksType_label.setObjectName(u"taksType_label")
-
-        self.taskType_layout.addWidget(self.taksType_label)
-
-        self.taskType = QComboBox(self.MainTab)
-        self.taskType.addItem("")
-        self.taskType.addItem("")
-        self.taskType.addItem("")
-        self.taskType.addItem("")
-        self.taskType.addItem("")
-        self.taskType.addItem("")
-        self.taskType.addItem("")
-        self.taskType.addItem("")
-        self.taskType.addItem("")
-        self.taskType.addItem("")
-        self.taskType.addItem("")
-        self.taskType.setObjectName(u"taskType")
-
-        self.taskType_layout.addWidget(self.taskType)
-
         self.taksType_spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.taskType_layout.addItem(self.taksType_spacer)
@@ -201,8 +198,18 @@ class Ui_SaveAs(object):
 
         self.taskType_layout.addWidget(self.fileType)
 
+        self.version_label = QLabel(self.MainTab)
+        self.version_label.setObjectName(u"version_label")
 
-        self.saveAs_Layout.addLayout(self.taskType_layout)
+        self.taskType_layout.addWidget(self.version_label)
+
+        self.version = QSpinBox(self.MainTab)
+        self.version.setObjectName(u"version")
+
+        self.taskType_layout.addWidget(self.version)
+
+
+        self.verticalLayout_2.addLayout(self.taskType_layout)
 
         self.filename_layout = QHBoxLayout()
         self.filename_layout.setObjectName(u"filename_layout")
@@ -222,7 +229,7 @@ class Ui_SaveAs(object):
         self.filename_layout.addWidget(self.overwrite)
 
 
-        self.saveAs_Layout.addLayout(self.filename_layout)
+        self.verticalLayout_2.addLayout(self.filename_layout)
 
         self.showArtist_layout = QHBoxLayout()
         self.showArtist_layout.setObjectName(u"showArtist_layout")
@@ -258,14 +265,7 @@ class Ui_SaveAs(object):
         self.showArtist_layout.addWidget(self.artistName)
 
 
-        self.saveAs_Layout.addLayout(self.showArtist_layout)
-
-        self.notes_seperator = QFrame(self.MainTab)
-        self.notes_seperator.setObjectName(u"notes_seperator")
-        self.notes_seperator.setFrameShape(QFrame.Shape.HLine)
-        self.notes_seperator.setFrameShadow(QFrame.Shadow.Sunken)
-
-        self.saveAs_Layout.addWidget(self.notes_seperator)
+        self.verticalLayout_2.addLayout(self.showArtist_layout)
 
         self.notes_layout = QVBoxLayout()
         self.notes_layout.setObjectName(u"notes_layout")
@@ -308,13 +308,11 @@ class Ui_SaveAs(object):
         self.notes_layout.addLayout(self.horizontalLayout_11)
 
 
-        self.saveAs_Layout.addLayout(self.notes_layout)
+        self.verticalLayout_2.addLayout(self.notes_layout)
 
 
-        self.sideBySide_layout.addLayout(self.saveAs_Layout)
+        self.horizontalLayout_51.addLayout(self.verticalLayout_2)
 
-        self.existingStack_layout = QVBoxLayout()
-        self.existingStack_layout.setObjectName(u"existingStack_layout")
         self.existingFile_layout = QVBoxLayout()
         self.existingFile_layout.setObjectName(u"existingFile_layout")
         self.existingFile_label = QLabel(self.MainTab)
@@ -359,10 +357,7 @@ class Ui_SaveAs(object):
         self.existingFile_layout.addLayout(self.open_btn_layout)
 
 
-        self.existingStack_layout.addLayout(self.existingFile_layout)
-
-
-        self.sideBySide_layout.addLayout(self.existingStack_layout)
+        self.horizontalLayout_51.addLayout(self.existingFile_layout)
 
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -402,10 +397,10 @@ class Ui_SaveAs(object):
         self.verticalLayout.addWidget(self.existing_notes)
 
 
-        self.sideBySide_layout.addLayout(self.verticalLayout)
+        self.horizontalLayout_51.addLayout(self.verticalLayout)
 
 
-        self.verticalLayout_2.addLayout(self.sideBySide_layout)
+        self.verticalLayout_21.addLayout(self.horizontalLayout_51)
 
         self.buttons_layout = QHBoxLayout()
         self.buttons_layout.setObjectName(u"buttons_layout")
@@ -434,7 +429,7 @@ class Ui_SaveAs(object):
         self.buttons_layout.addWidget(self.cancel_btn)
 
 
-        self.verticalLayout_2.addLayout(self.buttons_layout)
+        self.verticalLayout_21.addLayout(self.buttons_layout)
 
         self.saverTabs.addTab(self.MainTab, "")
         self.ToolsTab = QWidget()
@@ -1882,9 +1877,9 @@ class Ui_SaveAs(object):
 
 #if QT_CONFIG(shortcut)
         self.naming_label.setBuddy(self.autoNaming)
-        self.version_label.setBuddy(self.version)
-        self.folder_label.setBuddy(self.folder)
         self.taksType_label.setBuddy(self.taskType)
+        self.folder_label.setBuddy(self.folder)
+        self.version_label.setBuddy(self.version)
         self.filename_label.setBuddy(self.filename)
         self.showCode_label.setBuddy(self.showCode)
         self.artistName_label.setBuddy(self.artistName)
@@ -1927,11 +1922,9 @@ class Ui_SaveAs(object):
 #endif // QT_CONFIG(shortcut)
         QWidget.setTabOrder(self.notes, self.save_btn)
         QWidget.setTabOrder(self.save_btn, self.folder_btn)
-        QWidget.setTabOrder(self.folder_btn, self.taskType)
-        QWidget.setTabOrder(self.taskType, self.autoNaming)
+        QWidget.setTabOrder(self.folder_btn, self.autoNaming)
         QWidget.setTabOrder(self.autoNaming, self.customNaming)
-        QWidget.setTabOrder(self.customNaming, self.version)
-        QWidget.setTabOrder(self.version, self.overwrite)
+        QWidget.setTabOrder(self.customNaming, self.overwrite)
         QWidget.setTabOrder(self.overwrite, self.cancel_btn)
         QWidget.setTabOrder(self.cancel_btn, self.folder)
         QWidget.setTabOrder(self.folder, self.filename)
@@ -1963,28 +1956,6 @@ class Ui_SaveAs(object):
 #endif // QT_CONFIG(tooltip)
         self.customNaming.setText(QCoreApplication.translate("SaveAs", u"Custom", None))
 #if QT_CONFIG(tooltip)
-        self.version_label.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>Sets the version number</p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.version_label.setText(QCoreApplication.translate("SaveAs", u"Version", None))
-#if QT_CONFIG(tooltip)
-        self.version.setToolTip(QCoreApplication.translate("SaveAs", u"File Version Number", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.allowFileCopy.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>This function overrides the default file naming. </p><p>By checking this option you make it so that the current file can be &quot;saved as&quot; another asset or shot. </p><p>Check this box to copy the current file to a new asset or shot by also selecting the folder you want to save it to in the Existing FIles list</p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.allowFileCopy.setText(QCoreApplication.translate("SaveAs", u"Allow File Copy From --> To", None))
-#if QT_CONFIG(tooltip)
-        self.folder_label.setToolTip(QCoreApplication.translate("SaveAs", u"This is the folder that the file will be saved into", None))
-#endif // QT_CONFIG(tooltip)
-        self.folder_label.setText(QCoreApplication.translate("SaveAs", u"Save to Folder", None))
-#if QT_CONFIG(tooltip)
-        self.folder.setToolTip(QCoreApplication.translate("SaveAs", u"This is the folder that the file will be saved into", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.folder_btn.setToolTip(QCoreApplication.translate("SaveAs", u"Browse for a file location", None))
-#endif // QT_CONFIG(tooltip)
-        self.folder_btn.setText(QCoreApplication.translate("SaveAs", u"Browse...", None))
-#if QT_CONFIG(tooltip)
         self.taksType_label.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>Choose the task type for the file.  This will be appended to the filename.  </p><p>Changing this at any time will rename the file to the latest version of that Task Type</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.taksType_label.setText(QCoreApplication.translate("SaveAs", u"Task Type", None))
@@ -2004,6 +1975,21 @@ class Ui_SaveAs(object):
         self.taskType.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>Choose the task type for the file.  This will be appended to the filename.  </p><p>Changing this at any time will rename the file to the latest version of that Task Type</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
+        self.allowFileCopy.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>This function overrides the default file naming. </p><p>By checking this option you make it so that the current file can be &quot;saved as&quot; another asset or shot. </p><p>Check this box to copy the current file to a new asset or shot by also selecting the folder you want to save it to in the Existing FIles list</p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.allowFileCopy.setText(QCoreApplication.translate("SaveAs", u"Allow File Copy From --> To", None))
+#if QT_CONFIG(tooltip)
+        self.folder_label.setToolTip(QCoreApplication.translate("SaveAs", u"This is the folder that the file will be saved into", None))
+#endif // QT_CONFIG(tooltip)
+        self.folder_label.setText(QCoreApplication.translate("SaveAs", u"Save to Folder", None))
+#if QT_CONFIG(tooltip)
+        self.folder.setToolTip(QCoreApplication.translate("SaveAs", u"This is the folder that the file will be saved into", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.folder_btn.setToolTip(QCoreApplication.translate("SaveAs", u"Browse for a file location", None))
+#endif // QT_CONFIG(tooltip)
+        self.folder_btn.setText(QCoreApplication.translate("SaveAs", u"Browse...", None))
+#if QT_CONFIG(tooltip)
         self.fileType_label.setToolTip(QCoreApplication.translate("SaveAs", u"Maya file type.  Either Ascii or Binary", None))
 #endif // QT_CONFIG(tooltip)
         self.fileType_label.setText(QCoreApplication.translate("SaveAs", u"File Type", None))
@@ -2012,6 +1998,13 @@ class Ui_SaveAs(object):
 
 #if QT_CONFIG(tooltip)
         self.fileType.setToolTip(QCoreApplication.translate("SaveAs", u"Maya file type.  Either Ascii or Binary", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.version_label.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>Sets the version number</p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.version_label.setText(QCoreApplication.translate("SaveAs", u"Version", None))
+#if QT_CONFIG(tooltip)
+        self.version.setToolTip(QCoreApplication.translate("SaveAs", u"File Version Number", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
         self.filename_label.setToolTip(QCoreApplication.translate("SaveAs", u"The base name is typically the asset or shot name", None))

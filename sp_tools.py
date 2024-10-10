@@ -23,12 +23,15 @@ import math
 
 try:
     from PySide6.QtCore import QSettings
+    pyside_version = 6
     print('PySide6 detected.')
 except ImportError:
     try:
         from PySide2.QtCore import QSettings
+        pyside_version = 2
         print('PySide2 detected.')
     except ImportError:
+        pyside_version = 0
         raise RuntimeError('Neither PySide 6 or PySide 2 detected!')
 
 class sp_toolkit(object):
@@ -154,7 +157,7 @@ class sp_toolkit(object):
             return False
 
         new_cam = cmds.camera(vfa=mult_fb_h, hfa=mult_fb_w, ar=aspect_ratio, fl=focal_length, coi=5, lsr=1, hfo=0,
-                              vfo=0, ff='Fill', ovr=1, mb=0, sa=144, ncp=1, fcp=10000000, o=False, ow=30, pze=False,
+                              vfo=0, ff='Fill', ovr=1, mb=0, sa=144, ncp=1, fcp=100000000, o=False, ow=30, pze=False,
                               hpn=0, vpn=0, zom=1)
         new_cam_parent = cmds.listRelatives(new_cam, p=True)
         cmds.select(new_cam_parent, r=True)
@@ -343,10 +346,16 @@ class sp_toolkit(object):
         # burn_in_text = self.create_burn_in(camera=current_camera, filename=filename, version=version,
         #                                    time_code=current_frame, frame_number=current_frame,
         #                                    focal_length=focal_length)
+        if pyside_version == 6:
+            cmds.playblast(format='qt', filename=output, sequenceTime=0, clearCache=1, viewer=1, showOrnaments=1, fp=4,
+                           percent=100, compression='PNG', quality=70, widthHeight=(res_width, res_height), exposure=0,
+                           gamma=1, fo=True)
+        elif pyside_version == 2:
+            cmds.playblast(format='qt', filename=output, sequenceTime=0, clearCache=1, viewer=1, showOrnaments=1, fp=4,
+                           percent=100, compression='PNG', quality=70, widthHeight=(res_width, res_height), fo=True)
+        else:
+            cmds.error('Unable to playblast.  Sorry.')
 
-        cmds.playblast(format='qt', filename=output, sequenceTime=0, clearCache=1, viewer=1, showOrnaments=1, fp=4,
-                       percent=100, compression='PNG', quality=70, widthHeight=(res_width, res_height), exposure=0,
-                       gamma=1, fo=True)
 
         # cmds.delete(burn_in_text)
 

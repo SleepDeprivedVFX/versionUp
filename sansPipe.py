@@ -53,14 +53,17 @@ try:
     from PySide6.QtGui import *
     from shiboken6 import wrapInstance
     print('PySide6 detected.')
+    pyside_version = 6
 except ImportError:
     try:
         from PySide2.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
         from PySide2.QtWidgets import *
         from PySide2.QtGui import *
         from shiboken2 import wrapInstance
+        pyside_version = 2
         print('PySide2 detected.')
     except ImportError:
+        pyside_version = 0
         raise RuntimeError('Neither PySide 6 or PySide 2 detected!')
 import os
 import sys
@@ -141,8 +144,17 @@ class CustomMessageBox(QMessageBox):
             self.button(QMessageBox.Ok).setEnabled(False)
 
     def get_input(self):
-        if self.exec() == QMessageBox.Ok:
-            return self.text_input.text()
+        try:
+            if pyside_version == 6:
+                if self.exec() == QMessageBox.Ok:
+                    return self.text_input.text()
+        except AttributeError as e:
+            try:
+                if pyside_version == 2:
+                    if self.exec_() == QMessageBox.Ok:
+                        return  self.text_input.text()
+            except AttributeError as e2:
+                print(f'Can not execute this: {e}, {e2}')
         return None
 
 
@@ -1244,7 +1256,10 @@ QComboBox {{
             file_path = os.path.join(folder, filename)
             try:
                 get_db = self.open_db(db_path)
-                notes = get_db['Notes']
+                if get_db and 'Notes' in get_db.keys():
+                    notes = get_db['Notes']
+                else:
+                    return False
                 if filename:
                     found_note = False
                     for note in notes:
@@ -1423,7 +1438,15 @@ QComboBox {{
             context_menu.addAction(ref_action)
             context_menu.addAction(import_action)
 
-        context_menu.exec(widget.mapToGlobal(position))
+        try:
+            if pyside_version == 6:
+                context_menu.exec(widget.mapToGlobal(position))
+        except AttributeError:
+            try:
+                if pyside_version == 2:
+                    context_menu.exec_(widget.mapToGlobal(position))
+            except AttributeError as e:
+                print(f'Unable to run: {e}')
 
     def open_file(self, f=False, status_update=True):
         """
@@ -1466,7 +1489,15 @@ QComboBox {{
                     pop_up.setText('Unsaved Changes detected!  Save before opening a new file?')
                     pop_up.setStandardButtons(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
                     pop_up.setDefaultButton(QMessageBox.Yes)
-                    ret = pop_up.exec()
+                    try:
+                        if pyside_version == 6:
+                            ret = pop_up.exec()
+                    except AttributeError:
+                        try:
+                            if pyside_version == 2:
+                                ret = pop_up.exec_()
+                        except AttributeError as e:
+                            print(f'Unable to run: {e}')
                     if ret == QMessageBox.Yes:
                         cmds.file(s=True)
                         self.open_file(f=False, status_update=status_update)
@@ -1736,20 +1767,46 @@ QComboBox {{
         auto = self.ui.autoNaming.isChecked()
         if auto:
             self.ui.filename.setEnabled(False)
+            self.ui.filename.hide()
+            self.ui.filename_label.hide()
             self.ui.version.setEnabled(False)
+            self.ui.version.hide()
+            self.ui.version_label.hide()
             self.ui.fileType.setEnabled(False)
+            self.ui.fileType.hide()
+            self.ui.fileType_label.hide()
             self.ui.folder.setEnabled(False)
+            self.ui.folder.hide()
+            self.ui.folder_label.hide()
             self.ui.folder_btn.setEnabled(False)
+            self.ui.folder_btn.hide()
             self.ui.showCode.setEnabled(False)
+            self.ui.showCode.hide()
+            self.ui.showCode_label.hide()
             self.ui.artistName.setEnabled(False)
+            self.ui.artistName.hide()
+            self.ui.artistName_label.hide()
         else:
             self.ui.filename.setEnabled(True)
+            self.ui.filename.show()
+            self.ui.filename_label.show()
             self.ui.version.setEnabled(True)
+            self.ui.version.show()
+            self.ui.version_label.show()
             self.ui.fileType.setEnabled(True)
+            self.ui.fileType.show()
+            self.ui.fileType_label.show()
             self.ui.folder.setEnabled(True)
+            self.ui.folder.show()
+            self.ui.folder_label.show()
             self.ui.folder_btn.setEnabled(True)
+            self.ui.folder_btn.show()
             self.ui.showCode.setEnabled(True)
+            self.ui.showCode.show()
+            self.ui.showCode_label.show()
             self.ui.artistName.setEnabled(True)
+            self.ui.artistName.show()
+            self.ui.artistName_label.show()
 
     def build_path(self, path=None, rootName=None, task=None, v_type='_v', v_len=3, version=0, ext=None, show='',
                    artist=None):
@@ -2792,7 +2849,15 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             pop_up.setText('Unsaved Changes detected!  Save before opening a new file?')
             pop_up.setStandardButtons(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
             pop_up.setDefaultButton(QMessageBox.Yes)
-            ret = pop_up.exec_()
+            try:
+                if pyside_version == 6:
+                    ret = pop_up.exec()
+            except AttributeError:
+                try:
+                    if pyside_version == 2:
+                        ret = pop_up.exec_()
+                except AttributeError as e:
+                    print(f'Unable to run! {e}')
             if ret == QMessageBox.Yes:
                 cmds.file(s=True)
                 self.open_recent_file(f=False)
@@ -3299,7 +3364,15 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             message.setText('Do you want to snapshot your current file?')
             message.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
             message.setDefaultButton(QMessageBox.Yes)
-            get_message = message.exec()
+            try:
+                if pyside_version == 6:
+                    get_message = message.exec()
+            except AttributeError:
+                try:
+                    if pyside_version == 2:
+                        get_message = message.exec_()
+                except AttributeError as e:
+                    print(f'Unable to run: {e}')
             if get_message == QMessageBox.Yes:
                 self.snapshot(note='AUTO')
                 self.show()
