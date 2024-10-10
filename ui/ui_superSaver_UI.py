@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIbNlGcm.ui'
+## Form generated from reading UI file 'superSaver_UIICbNTi.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -1653,6 +1653,12 @@ class Ui_SaveAs(object):
         self.archiver.setObjectName(u"archiver")
         self.verticalLayout_19 = QVBoxLayout(self.archiver)
         self.verticalLayout_19.setObjectName(u"verticalLayout_19")
+        self.archiver_label = QLabel(self.archiver)
+        self.archiver_label.setObjectName(u"archiver_label")
+        self.archiver_label.setStyleSheet(u"font: 700 12pt \"Segoe UI\";")
+
+        self.verticalLayout_19.addWidget(self.archiver_label)
+
         self.horizontalLayout_46 = QHBoxLayout()
         self.horizontalLayout_46.setObjectName(u"horizontalLayout_46")
         self.verticalLayout_18 = QVBoxLayout()
@@ -1662,10 +1668,6 @@ class Ui_SaveAs(object):
         self.textEdit.setReadOnly(True)
 
         self.verticalLayout_18.addWidget(self.textEdit)
-
-        self.verticalSpacer_7 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_18.addItem(self.verticalSpacer_7)
 
         self.horizontalLayout_48 = QHBoxLayout()
         self.horizontalLayout_48.setObjectName(u"horizontalLayout_48")
@@ -1740,12 +1742,6 @@ class Ui_SaveAs(object):
 
 
         self.verticalLayout_19.addLayout(self.horizontalLayout_46)
-
-        self.archiver_label = QLabel(self.archiver)
-        self.archiver_label.setObjectName(u"archiver_label")
-        self.archiver_label.setStyleSheet(u"font: 700 12pt \"Segoe UI\";")
-
-        self.verticalLayout_19.addWidget(self.archiver_label)
 
         self.settingsTabs.addTab(self.archiver, "")
         self.system_settings = QWidget()
@@ -2268,7 +2264,7 @@ class Ui_SaveAs(object):
         self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.playblast_settings), QCoreApplication.translate("SaveAs", u"Playblast Settings", None))
         self.hotkeys_label.setText(QCoreApplication.translate("SaveAs", u"Hokeys", None))
         self.hotkeys1.setText(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>These hotkeys can be changed to your preferences.<br/>However, it is recommended that you leave them at their defaults, because they are designed to take over certain Maya functions.<br/>If you decide to change them, understand that they won't take effect until you restart Maya.</p></body></html>", None))
-        self.hk_open_label.setText(QCoreApplication.translate("SaveAs", u"Open Sans Pipe", None))
+        self.hk_open_label.setText(QCoreApplication.translate("SaveAs", u"Open Sans Pipe    ", None))
         self.hk_open_mod_1.setItemText(0, "")
         self.hk_open_mod_1.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
         self.hk_open_mod_1.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
@@ -2293,7 +2289,7 @@ class Ui_SaveAs(object):
         self.hk_open_mod_3.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
 
         self.hk_open_key.setText(QCoreApplication.translate("SaveAs", u"S", None))
-        self.hk_saveVUp_label.setText(QCoreApplication.translate("SaveAs", u"Save Version UP", None))
+        self.hk_saveVUp_label.setText(QCoreApplication.translate("SaveAs", u"Save Version UP   ", None))
         self.hk_savevup_mod_1.setItemText(0, "")
         self.hk_savevup_mod_1.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
         self.hk_savevup_mod_1.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
@@ -2318,7 +2314,7 @@ class Ui_SaveAs(object):
         self.hk_savevup_mod_3.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
 
         self.hk_savevup_key.setText(QCoreApplication.translate("SaveAs", u"V", None))
-        self.hk_snapshot_label.setText(QCoreApplication.translate("SaveAs", u"Snapshot", None))
+        self.hk_snapshot_label.setText(QCoreApplication.translate("SaveAs", u"Snapshot              ", None))
         self.hk_snapshot_mod_1.setItemText(0, "")
         self.hk_snapshot_mod_1.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
         self.hk_snapshot_mod_1.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
@@ -2343,7 +2339,7 @@ class Ui_SaveAs(object):
         self.hk_snapshot_mod_3.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
 
         self.hk_snapshot_key.setText(QCoreApplication.translate("SaveAs", u"S", None))
-        self.hk_publish_label.setText(QCoreApplication.translate("SaveAs", u"Publish", None))
+        self.hk_publish_label.setText(QCoreApplication.translate("SaveAs", u"Publish                 ", None))
         self.hk_publish_mod_1.setItemText(0, "")
         self.hk_publish_mod_1.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
         self.hk_publish_mod_1.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
@@ -2367,7 +2363,7 @@ class Ui_SaveAs(object):
         self.hk_publish_mod_3.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
 
         self.hk_publish_key.setText(QCoreApplication.translate("SaveAs", u"P", None))
-        self.hk_close_label.setText(QCoreApplication.translate("SaveAs", u"Close", None))
+        self.hk_close_label.setText(QCoreApplication.translate("SaveAs", u"Close                    ", None))
         self.hk_close_mod_1.setItemText(0, "")
         self.hk_close_mod_1.setItemText(1, QCoreApplication.translate("SaveAs", u"Ctrl", None))
         self.hk_close_mod_1.setItemText(2, QCoreApplication.translate("SaveAs", u"Alt", None))
@@ -2391,6 +2387,7 @@ class Ui_SaveAs(object):
         self.hk_close_mod_3.setItemText(5, QCoreApplication.translate("SaveAs", u"Return", None))
 
         self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.hotkeys), QCoreApplication.translate("SaveAs", u"Hotkeys", None))
+        self.archiver_label.setText(QCoreApplication.translate("SaveAs", u"Super Archiver", None))
         self.textEdit.setHtml(QCoreApplication.translate("SaveAs", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -2419,7 +2416,6 @@ class Ui_SaveAs(object):
 #endif // QT_CONFIG(tooltip)
         self.import_references.setText(QCoreApplication.translate("SaveAs", u"Import References", None))
         self.archiver_btn.setText(QCoreApplication.translate("SaveAs", u"Archive Selected", None))
-        self.archiver_label.setText(QCoreApplication.translate("SaveAs", u"Super Archiver", None))
         self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.archiver), QCoreApplication.translate("SaveAs", u"Archiver", None))
         self.system_settings_label.setText(QCoreApplication.translate("SaveAs", u"System Settings", None))
 #if QT_CONFIG(tooltip)

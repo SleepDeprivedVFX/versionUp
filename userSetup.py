@@ -2,6 +2,7 @@ import maya.cmds as cmds
 import maya.mel as mel
 import os
 import sys
+import platform
 try:
     from PySide6.QtCore import QSettings
 except ImportError:
@@ -15,10 +16,24 @@ __author__ = 'Adam Benson'
 
 settings = QSettings(__author__, 'Sans Pipe Super Saver')
 autoload = settings.value('autoload', None, type=bool)
-hk_open_mod_1 =settings.value('hk_open_mod_1', None, type=str)
-hk_open_mod_2 =settings.value('hk_open_mod_2', None, type=str)
-hk_open_mod_3 =settings.value('hk_open_mod_3', None, type=str)
+hk_open_mod_1 = settings.value('hk_open_mod_1', None, type=str)
+hk_open_mod_2 = settings.value('hk_open_mod_2', None, type=str)
+hk_open_mod_3 = settings.value('hk_open_mod_3', None, type=str)
 hk_open_key = settings.value('hk_open_key', None, type=str)
+
+# Set OS differences.
+if platform.system() == 'Windows':
+    env_user = 'USERNAME'
+    computername = 'COMPUTERNAME'
+    ctrl = 'Ctrl'
+    alt = 'Alt'
+    command = 'Win'
+else:
+    env_user = 'USER'
+    computername = 'HOSTNAME'
+    ctrl = 'Ctrl'
+    alt = 'option'
+    command = 'cmd'
 
 
 def load_sansPipe():
@@ -66,7 +81,7 @@ def load_sansPipe():
 def override_save_as(*args):
     try:
         import sansPipe
-        sansPipe.sansPipe()
+        sansPipe.show_sans_pipe()
         # run.sansPipe()
     except Exception as e:
         cmds.error(f'failed to run sansPipe: {e}')
@@ -165,20 +180,20 @@ def setup_hotkey():
         is_locked = is_hotkey_set_locked()
         if is_locked or is_default:
             create_new_hotkey_set()
-        if hk_open_mod_1 == 'Ctrl' or hk_open_mod_2 == 'Ctrl' or hk_open_mod_3 == 'Ctrl':
-            ctrl = True
+        if hk_open_mod_1 == ctrl or hk_open_mod_2 == ctrl or hk_open_mod_3 == ctrl:
+            ctrl_ = True
         else:
-            ctrl = False
-        if hk_open_mod_1 == 'Alt' or hk_open_mod_2 == 'Alt' or hk_open_mod_3 == 'Alt':
-            alt = True
+            ctrl_ = False
+        if hk_open_mod_1 == alt or hk_open_mod_2 == alt or hk_open_mod_3 == alt:
+            alt_ = True
         else:
-            alt = False
+            alt_ = False
         if hk_open_mod_1 == 'Shift' or hk_open_mod_2 == 'Shift' or hk_open_mod_3 == 'Shift':
-            shift = True
+            shift_ = True
         else:
-            shift = False
+            shift_ = False
         cmds.nameCommand('customSaveAsCommand', ann='SansPipe Save As...', command='python("override_save_as()")')
-        cmds.hotkey(k=hk_open_key, name='customSaveAsCommand', ctl=ctrl, sht=shift, alt=alt)
+        cmds.hotkey(k=hk_open_key, name='customSaveAsCommand', ctl=ctrl_, sht=shift_, alt=alt_)
         print(f'Hotkey {hk_open_mod_1} + {hk_open_mod_2} + {hk_open_key} overridden')
     else:
         cmds.hotkey(k='S', name='SaveSceneAsNameCommand', ctl=True, sht=True, alt=False)

@@ -45,17 +45,20 @@ from maya import cmds
 import maya.OpenMaya as om_old  # Old API for MObject
 import maya.OpenMayaMPx as om_mpx  # Old API for MFnPlugin
 import maya.api.OpenMaya as om  # New API for other operations
+import maya.OpenMayaUI as omui
 
 try:
     from PySide6.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
     from PySide6.QtWidgets import *
     from PySide6.QtGui import *
+    from shiboken6 import wrapInstance
     print('PySide6 detected.')
 except ImportError:
     try:
         from PySide2.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
         from PySide2.QtWidgets import *
         from PySide2.QtGui import *
+        from shiboken2 import wrapInstance
         print('PySide2 detected.')
     except ImportError:
         raise RuntimeError('Neither PySide 6 or PySide 2 detected!')
@@ -93,6 +96,12 @@ def uninitializePlugin(mobject):
         om.MGlobal.displayError("Failed to deregister sansPipe plugin")
 
 
+def maya_main_window():
+    main_window_ptr = omui.MQtUtil.mainWindow()
+    return wrapInstance(int(main_window_ptr), QWidget) if main_window_ptr else None
+
+
+# Set OS differences.
 if platform.system() == 'Windows':
     env_user = 'USERNAME'
     computername = 'COMPUTERNAME'
@@ -138,17 +147,24 @@ class CustomMessageBox(QMessageBox):
 
 
 class sansPipe(QWidget):
+    instance = None
     """
     Main SansPipe utility.  This class runs all the functions of the SansPipe utility.
     """
-    def __init__(self, parent=None):
+    def __init__(self, parent=maya_main_window()):
         """
         Initialize the tool.  This runs all the basic setup and has most of the functionality created here.
         :param parent:
         """
         # Initialize the QWidget
-        QWidget.__init__(self, parent)
-        self.setWindowFlags(Qt.WindowStaysOnTopHint)
+        super(sansPipe, self).__init__(parent)
+
+        if sansPipe.instance:
+            sansPipe.instance.raise_()
+            sansPipe.instance.activateWindow()
+
+        sansPipe.instance = self
+        self.setWindowFlags(Qt.Tool)
         self.pattern = r'(_v\d+)|(_V\d+)'
 
         # Initialize the root and task variables
@@ -297,6 +313,16 @@ class sansPipe(QWidget):
         self.ui.hk_close_mod_2.setCurrentText(self.hk_close_mod_2)
         self.ui.hk_close_mod_3.setCurrentText(self.hk_close_mod_3)
         self.ui.hk_close_key.setText(self.hk_close_key)
+        self.ui.hk_open_label.setMinimumWidth(100)
+        self.ui.hk_open_key.setMaxLength(1)
+        self.ui.hk_snapshot_label.setMinimumWidth(100)
+        self.ui.hk_snapshot_key.setMaxLength(1)
+        self.ui.hk_saveVUp_label.setMinimumWidth(100)
+        self.ui.hk_savevup_key.setMaxLength(1)
+        self.ui.hk_publish_label.setMinimumWidth(100)
+        self.ui.hk_publish_key.setMaxLength(1)
+        self.ui.hk_close_label.setMinimumWidth(100)
+        self.ui.hk_close_key.setMaxLength(1)
 
         # Create SP Tool Kit
         self.sptk = sptk.sp_toolkit()
@@ -3794,6 +3820,18 @@ References Imported and Cleaned:
         self.settings.setValue('hk_close_mod_3', self.ui.hk_close_mod_3.currentText())
         self.settings.setValue('hk_close_key', self.ui.hk_close_key.text())
 
+        sansPipe.instance = None
+        super(sansPipe, self).closeEvent(event)
 
+
+def show_sans_pipe():
+    if sansPipe.instance is None:
+        sansPipe()
+    else:
+        sansPipe.instance.raise_()
+        sansPipe.instance.activateWindow()
+
+
+app = QApplication.instance() if QApplication.instance() else QApplication([])
 if __name__ == '__main__':
     saveas = sansPipe()
