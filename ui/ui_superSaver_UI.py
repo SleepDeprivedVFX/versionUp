@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIdiwGfX.ui'
+## Form generated from reading UI file 'superSaver_UIQCROFZ.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -1842,11 +1842,11 @@ class Ui_SaveAs(object):
 
         self.verticalLayout_15.addItem(self.verticalSpacer_2)
 
-        self.about = QTextEdit(self.system_settings)
-        self.about.setObjectName(u"about")
-        self.about.setReadOnly(True)
+        self.label = QLabel(self.system_settings)
+        self.label.setObjectName(u"label")
+        self.label.setTextFormat(Qt.TextFormat.RichText)
 
-        self.verticalLayout_15.addWidget(self.about)
+        self.verticalLayout_15.addWidget(self.label)
 
         self.settingsTabs.addTab(self.system_settings, "")
 
@@ -2465,25 +2465,7 @@ class Ui_SaveAs(object):
 #if QT_CONFIG(tooltip)
         self.autosave_count.setToolTip(QCoreApplication.translate("SaveAs", u"Turns on Autosave for Maya and sets the time interval", None))
 #endif // QT_CONFIG(tooltip)
-        self.about.setHtml(QCoreApplication.translate("SaveAs", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">sansPipe - Light Pipeline Utility</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Developed By:</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Adam Benson</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin"
-                        "-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://www.AdamDBenson.com/programming\"><span style=\" text-decoration: underline; color:#f7630c;\">www.AdamDBenson.com</span></a></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#f7630c;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Email:</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"mailto:Adam@AdamDBenson.com\"><span style=\" text-decoration: underline; color:#f7630c;\">Adam@AdamDBenson.com</span></a></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0p"
-                        "x; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#f7630c;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copyright 2024</p></body></html>", None))
+        self.label.setText(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>sansPipe - Light Pipeline Utility</p><p>Developed By:<br/>Adam Benson<br/><a href=\"https://www.AdamDBenson.com/programming\"><span style=\" text-decoration: underline; color:#f7630c;\">www.AdamDBenson.com</span></a></p><p>Email:<br/><a href=\"mailto:Adam@AdamDBenson.com\"><span style=\" text-decoration: underline; color:#f7630c;\">Adam@AdamDBenson.com</span></a></p><p>Copyright 2024</p></body></html>", None))
         self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.system_settings), QCoreApplication.translate("SaveAs", u"System Settings", None))
         self.save_config_btn.setText(QCoreApplication.translate("SaveAs", u"Save Configuration", None))
         self.saverTabs.setTabText(self.saverTabs.indexOf(self.SettingsTab), QCoreApplication.translate("SaveAs", u"Settings - Configuration", None))
