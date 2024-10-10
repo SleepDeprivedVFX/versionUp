@@ -1,26 +1,45 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIICbNTi.ui'
+## Form generated from reading UI file 'superSaver_UIdiwGfX.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QAbstractSpinBox, QApplication, QCheckBox,
-    QComboBox, QFrame, QGroupBox, QHBoxLayout,
-    QHeaderView, QLabel, QLineEdit, QListWidget,
-    QListWidgetItem, QPushButton, QRadioButton, QSizePolicy,
-    QSpacerItem, QSpinBox, QTabWidget, QTextEdit,
-    QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
+try:
+    from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+                                QMetaObject, QObject, QPoint, QRect,
+                                QSize, QTime, QUrl, Qt)
+    from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+                               QFont, QFontDatabase, QGradient, QIcon,
+                               QImage, QKeySequence, QLinearGradient, QPainter,
+                               QPalette, QPixmap, QRadialGradient, QTransform)
+    from PySide6.QtWidgets import (QAbstractItemView, QAbstractSpinBox, QApplication, QCheckBox,
+                                   QComboBox, QFrame, QGroupBox, QHBoxLayout,
+                                   QHeaderView, QLabel, QLineEdit, QListWidget,
+                                   QListWidgetItem, QPushButton, QRadioButton, QSizePolicy,
+                                   QSpacerItem, QSpinBox, QTabWidget, QTextEdit,
+                                   QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
+except ImportError:
+    try:
+        from PySide2.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+                                    QMetaObject, QObject, QPoint, QRect,
+                                    QSize, QTime, QUrl, Qt)
+        from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+                                   QFont, QFontDatabase, QGradient, QIcon,
+                                   QImage, QKeySequence, QLinearGradient, QPainter,
+                                   QPalette, QPixmap, QRadialGradient, QTransform)
+        from PySide2.QtWidgets import (QAbstractItemView, QAbstractSpinBox, QApplication, QCheckBox,
+                                       QComboBox, QFrame, QGroupBox, QHBoxLayout,
+                                       QHeaderView, QLabel, QLineEdit, QListWidget,
+                                       QListWidgetItem, QPushButton, QRadioButton, QSizePolicy,
+                                       QSpacerItem, QSpinBox, QTabWidget, QTextEdit,
+                                       QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
+    except ImportError:
+        raise RuntimeError("Neither PySide6 nor PySide2 could be imported. Please ensure one of them is installed.")
+
 
 class Ui_SaveAs(object):
     def setupUi(self, SaveAs):
@@ -1823,6 +1842,12 @@ class Ui_SaveAs(object):
 
         self.verticalLayout_15.addItem(self.verticalSpacer_2)
 
+        self.about = QTextEdit(self.system_settings)
+        self.about.setObjectName(u"about")
+        self.about.setReadOnly(True)
+
+        self.verticalLayout_15.addWidget(self.about)
+
         self.settingsTabs.addTab(self.system_settings, "")
 
         self.horizontalLayout_9.addWidget(self.settingsTabs)
@@ -2440,6 +2465,25 @@ class Ui_SaveAs(object):
 #if QT_CONFIG(tooltip)
         self.autosave_count.setToolTip(QCoreApplication.translate("SaveAs", u"Turns on Autosave for Maya and sets the time interval", None))
 #endif // QT_CONFIG(tooltip)
+        self.about.setHtml(QCoreApplication.translate("SaveAs", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">sansPipe - Light Pipeline Utility</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Developed By:</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Adam Benson</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin"
+                        "-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://www.AdamDBenson.com/programming\"><span style=\" text-decoration: underline; color:#f7630c;\">www.AdamDBenson.com</span></a></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#f7630c;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Email:</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"mailto:Adam@AdamDBenson.com\"><span style=\" text-decoration: underline; color:#f7630c;\">Adam@AdamDBenson.com</span></a></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0p"
+                        "x; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline; color:#f7630c;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Copyright 2024</p></body></html>", None))
         self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.system_settings), QCoreApplication.translate("SaveAs", u"System Settings", None))
         self.save_config_btn.setText(QCoreApplication.translate("SaveAs", u"Save Configuration", None))
         self.saverTabs.setTabText(self.saverTabs.indexOf(self.SettingsTab), QCoreApplication.translate("SaveAs", u"Settings - Configuration", None))
