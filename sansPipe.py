@@ -82,6 +82,20 @@ import shutil
 import sp_tools as sptk
 from ui import ui_superSaver_UI as ssui
 
+# Set OS differences.
+if platform.system() == 'Windows':
+    env_user = 'USERNAME'
+    computername = 'COMPUTERNAME'
+    ctrl = 'Ctrl'
+    alt = 'Alt'
+    command = 'Win'
+else:
+    env_user = 'USER'
+    computername = 'HOSTNAME'
+    ctrl = 'Ctrl'
+    alt = 'option'
+    command = 'cmd'
+
 
 def initializePlugin(mobject):
     mplugin = om_mpx.MFnPlugin(mobject)  # Use MFnPlugin from maya.OpenMayaMPx
@@ -102,21 +116,6 @@ def uninitializePlugin(mobject):
 def maya_main_window():
     main_window_ptr = omui.MQtUtil.mainWindow()
     return wrapInstance(int(main_window_ptr), QWidget) if main_window_ptr else None
-
-
-# Set OS differences.
-if platform.system() == 'Windows':
-    env_user = 'USERNAME'
-    computername = 'COMPUTERNAME'
-    ctrl = 'Ctrl'
-    alt = 'Alt'
-    command = 'Win'
-else:
-    env_user = 'USER'
-    computername = 'HOSTNAME'
-    ctrl = 'Ctrl'
-    alt = 'option'
-    command = 'cmd'
 
 
 def natural_sort_key(s):
@@ -145,14 +144,12 @@ class CustomMessageBox(QMessageBox):
 
     def get_input(self):
         try:
-            if pyside_version == 6:
-                if self.exec() == QMessageBox.Ok:
-                    return self.text_input.text()
+            if self.exec() == QMessageBox.Ok:
+                return self.text_input.text()
         except AttributeError as e:
             try:
-                if pyside_version == 2:
-                    if self.exec_() == QMessageBox.Ok:
-                        return  self.text_input.text()
+                if self.exec_() == QMessageBox.Ok:
+                    return  self.text_input.text()
             except AttributeError as e2:
                 print(f'Can not execute this: {e}, {e2}')
         return None
@@ -173,6 +170,7 @@ class sansPipe(QWidget):
 
         if sansPipe.instance:
             sansPipe.instance.raise_()
+            self.show()
             sansPipe.instance.activateWindow()
 
         sansPipe.instance = self
@@ -1439,12 +1437,10 @@ QComboBox {{
             context_menu.addAction(import_action)
 
         try:
-            if pyside_version == 6:
-                context_menu.exec(widget.mapToGlobal(position))
+            context_menu.exec(widget.mapToGlobal(position))
         except AttributeError:
             try:
-                if pyside_version == 2:
-                    context_menu.exec_(widget.mapToGlobal(position))
+                context_menu.exec_(widget.mapToGlobal(position))
             except AttributeError as e:
                 print(f'Unable to run: {e}')
 
@@ -1490,13 +1486,12 @@ QComboBox {{
                     pop_up.setStandardButtons(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
                     pop_up.setDefaultButton(QMessageBox.Yes)
                     try:
-                        if pyside_version == 6:
-                            ret = pop_up.exec()
+                        ret = pop_up.exec()
                     except AttributeError:
                         try:
-                            if pyside_version == 2:
-                                ret = pop_up.exec_()
+                            ret = pop_up.exec_()
                         except AttributeError as e:
+                            ret = None
                             print(f'Unable to run: {e}')
                     if ret == QMessageBox.Yes:
                         cmds.file(s=True)
@@ -2850,13 +2845,12 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             pop_up.setStandardButtons(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
             pop_up.setDefaultButton(QMessageBox.Yes)
             try:
-                if pyside_version == 6:
-                    ret = pop_up.exec()
+                ret = pop_up.exec()
             except AttributeError:
                 try:
-                    if pyside_version == 2:
-                        ret = pop_up.exec_()
+                    ret = pop_up.exec_()
                 except AttributeError as e:
+                    ret = None
                     print(f'Unable to run! {e}')
             if ret == QMessageBox.Yes:
                 cmds.file(s=True)
@@ -2920,12 +2914,27 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             sub_file = QTreeWidgetItem(base_snap)
                             sub_file.setText(0, filename)
                             sub_file.setData(0, Qt.UserRole, snapshot_path)
+                            sub_file.setToolTip(0, f"""
+                            <p style='white-space: normal; width: 150px;'>
+                            Snapshot Filename: {filename}
+                            </p>
+                            """)
                             sub_orig = QTreeWidgetItem(base_snap)
                             sub_orig.setText(0, short_original_file)
                             sub_orig.setData(0, Qt.UserRole, snapshot_path)
+                            sub_orig.setToolTip(0, f"""
+                            <p style='white-space: normal; width: 150px;'>
+                            Original Filename: {short_original_file}
+                            </p>
+                            """)
                             sub_notes = QTreeWidgetItem(base_snap)
                             sub_notes.setText(0, notes)
                             sub_notes.setData(0, Qt.UserRole, snapshot_path)
+                            sub_notes.setToolTip(0, f"""
+                            <p style='white-space: normal; width: 150px;'>
+                            {notes}
+                            </p>
+                            """)
 
                             last_item = base_snap  # Keep track of the last item created
 
@@ -3365,13 +3374,12 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             message.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
             message.setDefaultButton(QMessageBox.Yes)
             try:
-                if pyside_version == 6:
-                    get_message = message.exec()
+                get_message = message.exec()
             except AttributeError:
                 try:
-                    if pyside_version == 2:
-                        get_message = message.exec_()
+                    get_message = message.exec_()
                 except AttributeError as e:
+                    get_message = None
                     print(f'Unable to run: {e}')
             if get_message == QMessageBox.Yes:
                 self.snapshot(note='AUTO')
