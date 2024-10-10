@@ -40,7 +40,7 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 ## Save - Publish - Snap Tab
   - The first tab of sansPipe is your main workflow utility.  While there are a lot of features on here, it is actually designed to be very minimalistic.  By default SansPipe should open when Maya opens, allowing you to start working right off the bat.  This feature can be turned off in the settings.
   - Here are the main sections of the first tab of SansPipe.
-![Save - Publish - Snap](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab1.png)
+![Save - Publish - Snap](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab1.png?raw=true)
 1. This is what sansPipe is *going* to save your next file as.  By default, this is a "version up" tool, and this is it's primary feature
 2. This controls how the automatic naming convention works.  99% of the time, you'll never have to deal with this, and it is recommended that you leave it on "Auto".
    1. The simplest way to change tasks, i.e. Previs to Animation, is to simply change the **Task Type** drop-down menu from **previs** to **anim**.  SansPipe will automatically change the **Save As...** output to the correct task path and version number.
@@ -59,10 +59,10 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
    1. Items are color coded based on their **Task Status**
    2. A Camera icon appears if there is a Playblast associated with that shot.
    3. Right-Click options become available on files in the tree.  The options are:
-      1. ![Existing File Right Click](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_EF_RightClick_1.png)  
+      1. ![Existing File Right Click](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_EF_RightClick_1.png?raw=true)  
       2. **Open** does what you would expect, however, when you open a file from here, whether using the right-click option or by double clicking the file itself, it opens the file, but also sets the **Task Status** to "In Progress".
       3. **Open No Status Update** works the same way as open, except it does not change the current **Task Status**.  This is useful if you have a file marked "Needs Revision", "Done", or "For Review" and you want to leave that task status as is.
-      4. **View Playblast** only works if there is an associated playblast, indicated by the Camera Icon ![Camera Icon](https://github.com/SleepDeprivedVFX/versionUp/blob/master/icons/cam_icon.png)
+      4. **View Playblast** only works if there is an associated playblast, indicated by the Camera Icon ![Camera Icon](https://github.com/SleepDeprivedVFX/versionUp/blob/master/icons/cam_icon.png?raw=true)
       5. **Blow Away Snapshots** is a tool for deleting all the **Snapshots** associated with a particular file.  Snapshots are simply date-stamped copies of your working file, and thus take up space.  If you are sure you are through with your Snapshots, you can delete them for a given task by using this feature.  More about this later.
    4. The **Task Status** drop down sits at the top of the **Existing Files** tree.  It updates based on the current selection in the tree.  By manually changing it (You must add a note to do this) it will change the status of the selected file and record that into the version notes.
    5. If you are using the **Allow File Copy From --> To** feature in the *Section 2* Naming convention form, this is where that takes place.  By first clicking that checkbox, and then selecting an asset or shot name (top folder of that stack, for instance, select "BDD_Shot_0020") and it will rename your file to that, but only if that checkbox is selected first.
@@ -91,7 +91,7 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 ## Tools - References - Asset
 - The second tab of SansPipe.  This tab contains a list of tools, is where you create assets and shots, where you reference in published assets or load in exported assets.
 - Below is the breakdown for this tab
-![Tools - References - Assets](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab2.png)
+![Tools - References - Assets](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab2.png?raw=true)
 1. **Tools**.  The Tools section holds a list of simple tools that correspond to other features within SansPipe.  These are designed to work with SansPipe and its organizational system.
    1. **Bake Camera**.  This button and its associated checkbox "**Use Shot/Asset as Cam Name**" will take your current shot camera and bake it out for use in other software, or in other scenes, as an FBX stand-alone camera in world space.  If the "Use Shot/Asset as Cam Name" checkbox is activated, then it puts that information into the camera name so that it can be easily identified if there are multiple cameras imported into a scene.  This tool is usefull if you'll be using the cameras in Nuke, Unreal or some other DCC.  Baked Cameras are saved in a "Shot_Cams" sub folder under the Maya project's **assets** folder.
    2. **Create Camera**.  This creates a standard Maya camera, but it does it with settings that are set in the SansPipe **Show Settings** sub-tab under the **Settings - Configuration** tab.  In that tab you can set things like standard camera film back, resolution, aspect ratio and scene scale.  This is useful to insure that all the cameras match a show's particular film style and live-action camera setup.
@@ -140,7 +140,7 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 ## Project Settings
 - **Project Settings** tab allows you to manage your Maya projects in the same way that you would using the default Maya project settings, except that it adds features that do not come with Maya by default, making it cleaner and more organized.
 - Below is the breakdown for this tab
-![Project Settings](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab3.png)
+![Project Settings](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab3.png?raw=true)
 1. **Recent Projects**.  This works like the **Recent Files** from the first tab.  It keeps a record of any recently used projects.  Double click any one of these to quickly change your projects.
 2. **Project**.  This section mirrors Maya's own "Set Project" feature.  You can browse to any existing project, whether it was created using SansPipe or not, and it will make that your current project and add it to the **Recent Projects** stack to the left.
 3. **New Project**.  This feature mostly mirrors Maya's default "Project Window" feature, with the added detail that it creates extra folders for Publishes and organizational folders for Assets and Shots.  This is a better way to organize your workflow in Maya.  It is recommended that new projects are created here in SansPipe.
@@ -152,7 +152,7 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 ## Show Settings
 - The **Show Settings** sub-tab covers all the basic show specific settings like the name of the show, the three (3) letter code for the show, default render / camera resolution, the camera film-back, default render format and the scene scale.  Other features will be added in future versions of SansPipe.
 - Below is the breakdown for this tab
-![Show Settings](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab4a.png)
+![Show Settings](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab4a.png?raw=true)
 1. **Show Name**.  By default, this uses the Maya Project folder name, however it can be changed to anything you like after the initial opening of SansPipe.  SansPipe creates a **showConfig.cfg** file at the root of your Maya project to store all of these project configurations, and thus is able to remember them later on.
 2. **Show Code**.  This is the primary three (3) letter code identifier for the project.  It gets appended as a prefix to anything that is done for the project in SansPipe.  This way, shots and assets are always tagged to a specific show, so, even if you use them in a different show, you know where they came from.  This three-letter code is automatically generated from the Maya Project folder name, however, it can be changed to anything you like later on.
 3. **Default Resolution**.  This sets both the default render output resolution as well as the playblast setting resolution.  The default setting is 2048x1152, but you can set it to anything you like for your project.
@@ -167,7 +167,7 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 ## Playblast Settings
  - These playblast settings override your default Maya settings and return your scene to their original state once the playblast is finished running.
 - Below is the breakdown for this tab
-![Playblast Settings](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab4b.png)
+![Playblast Settings](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab4b.png?raw=true)
 1. **Scene Elements**.  This attempts to minimize how much thought has to be put into your playblast.  In Maya, you have much more control over this, but often its tedious just to get some basic things done.  This compiles those into a list of common playblast settings.  It breaks them down into the following:
    1. **Geometry Only** - Only shows geometry
    2. **Geometry and Splines** - Only shows Geometry and Spline Curves
@@ -179,13 +179,13 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 ## Hotkeys
 - This section needs little description.  A few default hotkeys are set for SansPipe, however, any of these can be set and changed to whatever you like here.  They function separately from Maya's default hotkeys accept for one.
 - Below is the breakdown for this tab
-![Hotkeys](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab4c.png)
+![Hotkeys](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab4c.png?raw=true)
 1. The first hotkey, **Open Sans Pipe** is designed to ***replace*** Maya's default "Save As..." feature.  It is recommended that you leave this one at its default.  The reason for this is simple.  The "Save As..." feature in Maya is designed to let you manually version up, or copy a file to another scene file, which is exactly what SansPipe was built to do.  As such, it is meant to be a replacement for Maya's default "Save As...".  You can change this setting if you like, but it really is meant to take over and make your life easier in Maya.  The rest are up to you.
 
 ## Archiver
 - The **Super Archiver** is exactly that!  This is a replacement for Maya's "Archive Scene" tool, and it really is one bad-ass archiver.
 - Below is the breakdown for this tab
-![Super Archiver](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab4d.png)
+![Super Archiver](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab4d.png?raw=true)
 - The **Super Archiver** was designed to handle one conundrum.  Let's say you've got 100 scenes and you have to send them to a client, a vendor, or another artist.  In those scenes you've got 3 environments that are very heavy, and 2 characters that are being refrenced in to each one of those 100 scenes.  Each one of these characters and environments have two dozen sourceimages files that make up the textures and every scene has a sound file that's associated with it for lip sync.
 - Traditionally, if you just tried to package up your entire show, you're getting a lot of cruft, you get every version of every file from every stage of development and you end up with 10 Terabytes of wasted storage space being compressed and shipped off.
 - Or, if you went through every scene one at a time and used Maya's "Archive Scene" feature then every one of those files would include a copy of the heavy environments, the characters and all the sourceimages as well - and the sound files wouldn't even be included.  At the end, each one of those zip files becomes very heavy as you have copy after copy of all the assets included with your archives.
@@ -206,7 +206,7 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 ## System Settings
 - The System Settings handle very little currently, but may be expanded in the future
 - Below is the breakdown for this tab
-![System Settings](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab4e.png)
+![System Settings](https://github.com/SleepDeprivedVFX/versionUp/blob/master/images/sansPipe_Tab4e.png?raw=true)
 1. **Recent File Count**.  This controls how many recent files are show in the **Recent Files** window on the **Save - Publish - Snap** main tab.
 2. **Autoload on Startup**.  This feature makes SansPipe open when Maya does.  It also forces the replacement of the "Save As..." (Ctrl + Shift + s) hot key to make SansPipe open instead of the "Save As..." dialog box.  To turn this on or off, check or uncheck it.  Press "Save Configuration" and then re-start Maya.
 3. **Autosave** & **Interval**.  This forces Maya's Autosave feature and sets the interval for you.  It is on by default and is a good way to protect yourself from accidental loss by Maya Crash.  **Snapshots** are another great way to keep yourself safe!.
