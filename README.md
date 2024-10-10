@@ -32,6 +32,7 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 
 5. **Restart Maya:** 
 - Close and reopen Maya to complete the setup.
+- Make sure the plug-in is loaded in your Maya Plug-Ins Manager
 
 ## Usage
   **User Interface**
