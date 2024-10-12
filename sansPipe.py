@@ -2915,7 +2915,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             sub_file.setText(0, filename)
                             sub_file.setData(0, Qt.UserRole, snapshot_path)
                             sub_file.setToolTip(0, f"""
-                            <p style='white-space: normal; width: 150px;'>
+                            <p style='white-space: normal; width: 225px;'>
                             Snapshot Filename: {filename}
                             </p>
                             """)
@@ -2923,7 +2923,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             sub_orig.setText(0, short_original_file)
                             sub_orig.setData(0, Qt.UserRole, snapshot_path)
                             sub_orig.setToolTip(0, f"""
-                            <p style='white-space: normal; width: 150px;'>
+                            <p style='white-space: normal; width: 225px;'>
                             Original Filename: {short_original_file}
                             </p>
                             """)
@@ -2931,7 +2931,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
                             sub_notes.setText(0, notes)
                             sub_notes.setData(0, Qt.UserRole, snapshot_path)
                             sub_notes.setToolTip(0, f"""
-                            <p style='white-space: normal; width: 150px;'>
+                            <p style='white-space: normal; width: 225px;'>
                             {notes}
                             </p>
                             """)
@@ -3441,8 +3441,11 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         pub_name = root_name + '_PUB' + v + end_name
 
         publish_folder = self.ui.publish.text()
+        print(f'publish_folder: {publish_folder}')
         scene_folder = self.ui.scenes.text()
+        print(f'scenes_folder: {scene_folder}')
         pub_folder = root_path.replace(scene_folder, publish_folder)
+        print(f'pub_folder: {pub_folder}')
         if not os.path.exists(pub_folder):
             os.makedirs(pub_folder)
 
@@ -3906,13 +3909,21 @@ References Imported and Cleaned:
 
 
 def show_sans_pipe():
+    splash_pix = QPixmap('sansPipe/ui/sanspipe_splash.png')
+    splash = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
+    splash.setMask(splash_pix.mask())
+    splash.show()
+    app.processEvents()
     if sansPipe.instance is None:
-        sansPipe()
+        tool = sansPipe()
+        splash.finish(tool)
     else:
         sansPipe.instance.raise_()
         sansPipe.instance.activateWindow()
 
-
+os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
 app = QApplication.instance() if QApplication.instance() else QApplication([])
-if __name__ == '__main__':
-    saveas = sansPipe()
+
+
+# if __name__ == '__main__':
+#     saveas = sansPipe()
