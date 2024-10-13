@@ -710,6 +710,9 @@ class sansPipe(QWidget):
         except RuntimeError as e:
             cmds.warning(f'Cannot load render settings: {e}')
 
+        # lastly, hide future features that are not built yet.
+        self.hide_future()
+
         # Load up and show the UI.
         self.show()
 
@@ -722,6 +725,28 @@ class sansPipe(QWidget):
         if path:
             path = path.replace('\\', '/')
         return path
+
+    def hide_future(self):
+        """
+        Temporary function to hide future features that haven't been built yet.
+        :return:
+        """
+        # Hide the unarchive future feature
+        self.ui.unarchive_label.hide()
+        self.ui.unarchive.hide()
+        self.ui.unarchive_browse_btn.hide()
+        self.ui.unarchive_btn.hide()
+        # Hide the playblast future features.
+        self.ui.pb_scene_elements_label.hide()
+        self.ui.pb_scene_elements.hide()
+        self.ui.pb_wireframe.hide()
+        self.ui.pb_textured.hide()
+        self.ui.pb_use_all_lights.hide()
+        self.ui.pb_shadows.hide()
+        self.ui.pb_ao.hide()
+        self.ui.pb_motionblur.hide()
+        self.ui.pb_aa.hide()
+        self.ui.pb_burnin.hide()
 
     def enable_context_menu(self, widget=None, widget_name=None):
         """
