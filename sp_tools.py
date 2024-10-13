@@ -11,6 +11,8 @@ __author__ = 'Adam Benson'
 import shutil
 
 from maya import cmds
+from maya import mel
+
 import os
 import sys
 import re
@@ -39,6 +41,10 @@ class sp_toolkit(object):
         """
         Processing the global setups for the overall system
         """
+        # Get the Maya version year dynamically
+        maya_version = mel.eval("getApplicationVersionAsFloat();")
+        maya_version_year = str(int(maya_version))
+
         # Get the configuration and variables files for the project
         self.workspace = cmds.workspace(q=True, rd=True)
         self.config_path = os.path.join(self.workspace, 'show_config.cfg')
@@ -76,7 +82,7 @@ class sp_toolkit(object):
         self.cameraAttributes = globVars['cameraAttributes']
 
         # Get the QSettings from the Super Saver
-        self.settings = QSettings(__author__, 'Sans Pipe Super Saver')
+        self.settings = QSettings(__author__, f'Sans Pipe Super Saver {maya_version_year}')
         self.appendartist = self.settings.value('appendArtist', None, type=bool)
         self.bakeCamSceneName = self.settings.value('bake_cam_scene_name', None, type=bool)
         self.artist_name = self.settings.value('artist_name', None, type=str)

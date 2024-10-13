@@ -42,6 +42,7 @@ KNOWN BUGS:
 """
 
 from maya import cmds
+import maya.mel as mel
 import maya.OpenMaya as om_old  # Old API for MObject
 import maya.OpenMayaMPx as om_mpx  # Old API for MFnPlugin
 import maya.api.OpenMaya as om  # New API for other operations
@@ -211,7 +212,7 @@ class sansPipe(QWidget):
         self.asset_folder_path = os.path.join(workspace, asset_folder)
 
         # Set window title
-        self.setWindowTitle('SansPipe Light Pipeline Utility - v%s' % __version__)
+        self.setWindowTitle(f'SansPipe Light Pipeline Utility - v{__version__}')
 
         # Check for and load config file.  Build one if it does not exist.
         self.config_path = os.path.join(workspace, 'show_config.cfg')
@@ -245,17 +246,30 @@ class sansPipe(QWidget):
         artist = first_initials + last_name
         self.ui.artistName.setText(artist)
 
+        # Get the Maya version year dynamically
+        maya_version = mel.eval("getApplicationVersionAsFloat();")
+        maya_version_year = str(int(maya_version))
+        print(f'sp: Maya Version Year {maya_version_year}')
+
         # Create the QSettings for information storage.  This information gets accessed by the userSetup.py as well.
-        self.settings = QSettings(__author__, 'Sans Pipe Super Saver')
+        self.settings = QSettings(__author__, f'Sans Pipe Super Saver {maya_version_year}')
         self.position = self.settings.value('geometry', None)
-        self.appendartist = self.settings.value('appendArtist', None, type=bool)
-        self.recent_files = self.settings.value('recent_files', [], type=list)
-        self.recent_projects = self.settings.value('recent_projects', [], type=list)
-        self.bakeCamSceneName = self.settings.value('bake_cam_scene_name', None, type=bool)
-        self.autosave = self.settings.value('autosave', None, type=bool)
+        self.appendartist = self.settings.value('appendArtist', False, type=bool)
+        if pyside_version == 2:
+            recent_files_json = self.settings.value('recent_files', '[]')
+            self.recent_files = json.loads(recent_files_json)
+            recent_projects_json = self.settings.value('recent_projects', '[]')
+            self.recent_projects = json.loads(recent_projects_json)
+        else:
+            self.recent_files = self.settings.value('recent_files', [], type=list)
+            self.recent_projects = self.settings.value('recent_projects', [], type=list)
+        print(f'__init__: raw test: {self.settings.value("recent_files", type=list)}')
+        print(f'__init__: recent_projects: {self.recent_projects}')
+        self.bakeCamSceneName = self.settings.value('bake_cam_scene_name', True, type=bool)
+        self.autosave = self.settings.value('autosave', True, type=bool)
         self.asset_shot_type = self.settings.value('asset_shot', None, type=str)
         self.render_output = self.settings.value('render_output', None, type=str)
-        self.auto_load_on_startup = self.settings.value('autoload', None, type=bool)
+        self.auto_load_on_startup = self.settings.value('autoload', True, type=bool)
         self.artist = self.settings.value('artist_name', None, type=str)
         # Reload and save hotkey settings.
         self.hk_open_mod_1 = self.settings.value('hk_open_mod_1', None, type=str)
@@ -339,8 +353,10 @@ class sansPipe(QWidget):
 
         # Populate the Recent Files list
         if self.recent_files:
+            print(f'__init__: self.recent files exist: {self.recent_files}')
             self.populate_recent_files()
         else:
+            print('__init__: self.recent files do not exist.  making blank []')
             self.recent_files = []
 
         # Populate the recent projects list
@@ -2867,6 +2883,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         :return:
         """
         recent_files = self.recent_files
+        print(f'prf: recent_files: {recent_files}')
         for this_file in recent_files:
             filename = this_file['filename']
             file_path = this_file['path']
@@ -3858,6 +3875,7 @@ References Imported and Cleaned:
         # self.settings.setValue('showcode', self.ui.showCode.text())
         self.settings.setValue('bake_cam_scene_name', self.ui.bakeCamSceneName.isChecked())
         self.settings.setValue('geometry', self.saveGeometry())
+        print(f'close: len(recent_files): {len(self.recent_files)} == recent_files_count: {self.recent_file_count}')
         if len(self.recent_files) >= self.recent_file_count:
             self.recent_files.pop(self.recent_file_count - 1)
         if {'filename': '', 'path': ''} in self.recent_files:
@@ -3870,14 +3888,23 @@ References Imported and Cleaned:
         }
         if this_file_data not in self.recent_files and this_file_data != {'filename': '', 'path': ''}:
             self.recent_files.insert(0, this_file_data)
-        self.settings.setValue('recent_files', self.recent_files)
+        print(f'recent_files data type: {type(self.recent_files)}')
+        if pyside_version == 2:
+            self.settings.setValue('recent_files', json.dumps(self.recent_files))
+        else:
+            self.settings.setValue('recent_files', self.recent_files)
+        print(f'settings status: {self.settings.status()}')
+        print(f'close: set value: recent_files: {self.recent_files}')
         if len(self.recent_projects) >= 5:
             self.recent_projects.pop(4)
         current_project = cmds.workspace(q=True, act=True)
         current_project = self.fix_path(current_project)
         if current_project not in self.recent_projects:
             self.recent_projects.insert(0, current_project)
-        self.settings.setValue('recent_projects', self.recent_projects)
+        if pyside_version == 2:
+            self.settings.setValue('recent_projects', json.dumps(self.recent_projects))
+        else:
+            self.settings.setValue('recent_projects', self.recent_projects)
         self.settings.setValue('autosave', self.ui.autosaver.isChecked())
         self.settings.setValue('asset_shot', self.ui.assetShot_type.currentText())
         self.settings.setValue('render_output', self.ui.image_format.currentText())
@@ -3903,6 +3930,9 @@ References Imported and Cleaned:
         self.settings.setValue('hk_close_mod_2', self.ui.hk_close_mod_2.currentText())
         self.settings.setValue('hk_close_mod_3', self.ui.hk_close_mod_3.currentText())
         self.settings.setValue('hk_close_key', self.ui.hk_close_key.text())
+
+        self.settings.sync()
+        print(f'close: recent_files new value: {self.settings.value("recent_files", type=str)}')
 
         sansPipe.instance = None
         super(sansPipe, self).closeEvent(event)
