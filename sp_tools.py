@@ -5,7 +5,7 @@ This tool kit stores the functions that help run the SANS-PIPE UTILITY.  The ide
 in or out of the pipeline system, with, or without the main UI.
 """
 
-__version__ = '1.3.9'
+__version__ = '1.3.10'
 __author__ = 'Adam Benson'
 
 import shutil

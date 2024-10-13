@@ -1,4 +1,4 @@
-# Sans Pipe - Light Pipeline Utility for Maya version 1.3.9
+# Sans Pipe - Light Pipeline Utility for Maya version 1.3.10
 
 ## Description
 Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at enhancing project organization and efficiency. It provides a robust set of tools that streamline project workflows, including file versioning with notes, snapshot taking, file publishing, reference tracking, camera baking, asset and shot creation, playblasting animations, and asset exporting.
