@@ -249,7 +249,6 @@ class sansPipe(QWidget):
         # Get the Maya version year dynamically
         maya_version = mel.eval("getApplicationVersionAsFloat();")
         maya_version_year = str(int(maya_version))
-        print(f'sp: Maya Version Year {maya_version_year}')
 
         # Create the QSettings for information storage.  This information gets accessed by the userSetup.py as well.
         self.settings = QSettings(__author__, f'Sans Pipe Super Saver {maya_version_year}')
@@ -263,8 +262,6 @@ class sansPipe(QWidget):
         else:
             self.recent_files = self.settings.value('recent_files', [], type=list)
             self.recent_projects = self.settings.value('recent_projects', [], type=list)
-        print(f'__init__: raw test: {self.settings.value("recent_files", type=list)}')
-        print(f'__init__: recent_projects: {self.recent_projects}')
         self.bakeCamSceneName = self.settings.value('bake_cam_scene_name', True, type=bool)
         self.autosave = self.settings.value('autosave', True, type=bool)
         self.asset_shot_type = self.settings.value('asset_shot', None, type=str)
@@ -353,10 +350,8 @@ class sansPipe(QWidget):
 
         # Populate the Recent Files list
         if self.recent_files:
-            print(f'__init__: self.recent files exist: {self.recent_files}')
             self.populate_recent_files()
         else:
-            print('__init__: self.recent files do not exist.  making blank []')
             self.recent_files = []
 
         # Populate the recent projects list
@@ -2883,7 +2878,6 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         :return:
         """
         recent_files = self.recent_files
-        print(f'prf: recent_files: {recent_files}')
         for this_file in recent_files:
             filename = this_file['filename']
             file_path = this_file['path']
@@ -3458,11 +3452,8 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         pub_name = root_name + '_PUB' + v + end_name
 
         publish_folder = self.ui.publish.text()
-        print(f'publish_folder: {publish_folder}')
         scene_folder = self.ui.scenes.text()
-        print(f'scenes_folder: {scene_folder}')
         pub_folder = root_path.replace(scene_folder, publish_folder)
-        print(f'pub_folder: {pub_folder}')
         if not os.path.exists(pub_folder):
             os.makedirs(pub_folder)
 
@@ -3875,7 +3866,6 @@ References Imported and Cleaned:
         # self.settings.setValue('showcode', self.ui.showCode.text())
         self.settings.setValue('bake_cam_scene_name', self.ui.bakeCamSceneName.isChecked())
         self.settings.setValue('geometry', self.saveGeometry())
-        print(f'close: len(recent_files): {len(self.recent_files)} == recent_files_count: {self.recent_file_count}')
         if len(self.recent_files) >= self.recent_file_count:
             self.recent_files.pop(self.recent_file_count - 1)
         if {'filename': '', 'path': ''} in self.recent_files:
@@ -3888,13 +3878,10 @@ References Imported and Cleaned:
         }
         if this_file_data not in self.recent_files and this_file_data != {'filename': '', 'path': ''}:
             self.recent_files.insert(0, this_file_data)
-        print(f'recent_files data type: {type(self.recent_files)}')
         if pyside_version == 2:
             self.settings.setValue('recent_files', json.dumps(self.recent_files))
         else:
             self.settings.setValue('recent_files', self.recent_files)
-        print(f'settings status: {self.settings.status()}')
-        print(f'close: set value: recent_files: {self.recent_files}')
         if len(self.recent_projects) >= 5:
             self.recent_projects.pop(4)
         current_project = cmds.workspace(q=True, act=True)
@@ -3932,7 +3919,6 @@ References Imported and Cleaned:
         self.settings.setValue('hk_close_key', self.ui.hk_close_key.text())
 
         self.settings.sync()
-        print(f'close: recent_files new value: {self.settings.value("recent_files", type=str)}')
 
         sansPipe.instance = None
         super(sansPipe, self).closeEvent(event)
