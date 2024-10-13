@@ -3925,7 +3925,19 @@ References Imported and Cleaned:
 
 
 def show_sans_pipe():
-    splash_pix = QPixmap('sansPipe/ui/sanspipe_splash.png')
+    # Get the Maya version year dynamically
+    maya_version = mel.eval("getApplicationVersionAsFloat();")
+    maya_version_year = str(int(maya_version))
+    wd = cmds.internalVar(userAppDir=True)
+    wd = os.path.join(wd, maya_version_year, 'plug-ins', 'sansPipe')
+    wd = os.path.join(wd, 'ui', 'sanspipe_splash.png')
+    wd = wd.replace('\\', '/')
+    if not os.path.exists(wd):
+        print('There ain\'t nothing there!!')
+    print(f'wd: {wd}')
+    splash_pix = QPixmap(wd)
+    if splash_pix.isNull():
+        cmds.warning('Could not load splash screen!')
     splash = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
     splash.setMask(splash_pix.mask())
     splash.show()
