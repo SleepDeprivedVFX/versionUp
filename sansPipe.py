@@ -522,8 +522,8 @@ class sansPipe(QWidget):
         self.populate_publish_assets(tree=self.ui.publishes_tree, root=self.ui.publish.text(),
                                      current_directory=self.publish_folder_path)
         self.ui.recentFilesList.itemDoubleClicked.connect(lambda: self.open_recent_file(f=False))
-        self.ui.recent_projects.itemDoubleClicked.connect(lambda: self.set_project(btn=False))
-        self.ui.set_proejct_btn.clicked.connect(lambda: self.set_project(btn=True))
+        self.ui.recent_projects.itemDoubleClicked.connect(lambda: self.setproject(btn=False))
+        self.ui.set_proejct_btn.clicked.connect(lambda: self.setproject(btn=True))
         self.ui.new_project_folder_btn.clicked.connect(self.get_project_folder)
         self.reference_tracker()
 
@@ -3010,7 +3010,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         self.ui.autosave.setText(autosave)
         self.ui.scene_ass.setText(scene_assembly)
 
-    def set_project(self, btn=False):
+    def setproject(self, btn=False):
         """
         Mirrors Maya's set project feature and sets the current project.
         :param btn: If the btn is true, it hides the UI while the set project window is opened.
