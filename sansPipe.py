@@ -13,6 +13,8 @@ new assets and folder structures on the fly.
 __version__ = '1.3.10'
 __author__ = 'Adam Benson'
 
+from asyncio import all_tasks
+
 """
 Version 1.3 Goals:
     1. Create a dynamically loading toolset:
@@ -496,8 +498,13 @@ class sansPipe(QWidget):
         self.ui.version.setValue(next_version)
 
         # Create the file output path for the next save function.
+        if 'shots' in save_path or 'shot' in save_path:
+            is_shot = True
+        else:
+            is_shot = False
         new_path = self.build_path(path=save_path, rootName=self.root_name, task=self.task, v_type=v_type,
-                                   v_len=v_len, version=next_version, ext=extension, show=show_code, artist=artist)
+                                   v_len=v_len, version=next_version, ext=extension, show=show_code, artist=artist,
+                                   isshot=is_shot)
 
         self.ui.output_filename.setText(new_path)
 
@@ -1701,12 +1708,17 @@ QComboBox {{
         show_code = self.ui.showCode.text()
         artist = self.ui.artistName.text()
 
+        if 'shots' in path or 'shot' in path:
+            is_shot = True
+        else:
+            is_shot = False
+
         if show_code:
             if not show_code.endswith('_'):
                 show_code = '{show_code}_'.format(show_code=show_code)
 
         new_output_file = self.build_path(path=path, rootName=root_name, task=task, v_type='_v', v_len=3,
-                                          version=version, ext=ext, show=show_code, artist=artist)
+                                          version=version, ext=ext, show=show_code, artist=artist, isshot=is_shot)
         if new_output_file:
             self.ui.output_filename.setText(new_output_file)
             # self.reset_version(v=version)
@@ -1815,7 +1827,7 @@ QComboBox {{
             self.ui.artistName_label.show()
 
     def build_path(self, path=None, rootName=None, task=None, v_type='_v', v_len=3, version=0, ext=None, show='',
-                   artist=None):
+                   artist=None, isshot=False):
         """
         This function builds the proper path and filename for an object
         :param path: The base path, usually starts with the Maya project scene file.
@@ -1843,8 +1855,10 @@ QComboBox {{
             elif show.startswith('_'):
                 show = show.lstrip('_')
             if task:
-                # FIXME: Adding the task path here is problematic.  NOTE: Why?  Why did I leave this note?
-                all_tasks = self.shot_tasks + self.asset_tasks
+                if isshot:
+                    all_tasks = self.shot_tasks
+                else:
+                    all_tasks = self.asset_tasks
                 for task_type in all_tasks:
                     if task_type in path and task not in path:
                         path = path.replace(task_type, task)
@@ -2312,6 +2326,12 @@ NOTE: None
             allow_file_copy = self.ui.allowFileCopy.isChecked()
             # Check if the file is saved or not
             existing_file = cmds.file(q=True, sn=True)
+
+            # find shot
+            if 'shots' in existing_file or 'shot' in existing_file:
+                is_shot = True
+            else:
+                is_shot = False
             # Build and update the scene file name
             if not existing_file or allow_file_copy:
                 if not filename:
@@ -2320,7 +2340,7 @@ NOTE: None
                     new_file_name = self.build_path(path=new_path, rootName=file_text,
                                                     task=self.ui.taskType.currentText(), v_type='_v', version=1,
                                                     ext=self.ui.fileType.currentText(), show=self.ui.showCode.text(),
-                                                    artist=self.ui.artistName.text())
+                                                    artist=self.ui.artistName.text(), isshot=is_shot)
                     if new_file_name:
                         save_file = os.path.basename(new_file_name)
                         get_basename = save_file.split('_v')[0]
@@ -3103,7 +3123,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         subfolders = [
             'Char',
             'Env',
-            'Props',
+            'Prop',
             'Shots',
             'Veh',
             'Cams'
@@ -3162,7 +3182,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         Cams = Cameras - this is for specialty camera rigs.
         Char = Characters
         Env = Environments
-        Props = Props
+        Prop = Props
         Shots = Shots
         Veh = Vehicles
 
@@ -3236,8 +3256,8 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             message_type = 'Character'
         elif _type == 'Env':
             message_type = 'Environment'
-        elif _type == 'Props':
-            message_type = 'Props'
+        elif _type == 'Prop':
+            message_type = 'Prop'
         elif _type == 'Veh':
             message_type = 'Vehicle'
         else:
@@ -3278,11 +3298,15 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         if close_previous:
             if message_type == 'Shots':
                 task_type = 'layout'
+                is_shot = True
+                self.ui.taskType.setCurrentText(task_type)
             else:
                 task_type = 'model'
+                is_shot = False
+                self.ui.taskType.setCurrentText(task_type)
             file_name = self.build_path(path=path, rootName=asset_shot_name, task=task_type,
                                         ext=self.ui.fileType.currentText(), show=self.ui.showCode.text(),
-                                        artist=self.ui.artistName.text(), version=1)
+                                        artist=self.ui.artistName.text(), version=1, isshot=is_shot)
             scale = float(self.ui.sceneScale.text())
             scale_mult = scale * 10
             cmds.polyCube(n='_SCENE_SCALE_1_MeterCube', sx=scale, sy=scale, sz=scale, w=scale_mult, d=scale_mult,
