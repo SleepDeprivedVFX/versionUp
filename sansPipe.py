@@ -10,8 +10,10 @@ It saves notes and information with every file that is created.  It can also be 
 new assets and folder structures on the fly.
 """
 
-__version__ = '1.3.9'
+__version__ = '1.3.10'
 __author__ = 'Adam Benson'
+
+from asyncio import all_tasks
 
 """
 Version 1.3 Goals:
@@ -42,6 +44,7 @@ KNOWN BUGS:
 """
 
 from maya import cmds
+import maya.mel as mel
 import maya.OpenMaya as om_old  # Old API for MObject
 import maya.OpenMayaMPx as om_mpx  # Old API for MFnPlugin
 import maya.api.OpenMaya as om  # New API for other operations
@@ -211,7 +214,7 @@ class sansPipe(QWidget):
         self.asset_folder_path = os.path.join(workspace, asset_folder)
 
         # Set window title
-        self.setWindowTitle('SansPipe Light Pipeline Utility - v%s' % __version__)
+        self.setWindowTitle(f'SansPipe Light Pipeline Utility - v{__version__}')
 
         # Check for and load config file.  Build one if it does not exist.
         self.config_path = os.path.join(workspace, 'show_config.cfg')
@@ -245,17 +248,27 @@ class sansPipe(QWidget):
         artist = first_initials + last_name
         self.ui.artistName.setText(artist)
 
+        # Get the Maya version year dynamically
+        maya_version = mel.eval("getApplicationVersionAsFloat();")
+        maya_version_year = str(int(maya_version))
+
         # Create the QSettings for information storage.  This information gets accessed by the userSetup.py as well.
-        self.settings = QSettings(__author__, 'Sans Pipe Super Saver')
+        self.settings = QSettings(__author__, f'Sans Pipe Super Saver {maya_version_year}')
         self.position = self.settings.value('geometry', None)
-        self.appendartist = self.settings.value('appendArtist', None, type=bool)
-        self.recent_files = self.settings.value('recent_files', [], type=list)
-        self.recent_projects = self.settings.value('recent_projects', [], type=list)
-        self.bakeCamSceneName = self.settings.value('bake_cam_scene_name', None, type=bool)
-        self.autosave = self.settings.value('autosave', None, type=bool)
+        self.appendartist = self.settings.value('appendArtist', False, type=bool)
+        if pyside_version == 2:
+            recent_files_json = self.settings.value('recent_files', '[]')
+            self.recent_files = json.loads(recent_files_json)
+            recent_projects_json = self.settings.value('recent_projects', '[]')
+            self.recent_projects = json.loads(recent_projects_json)
+        else:
+            self.recent_files = self.settings.value('recent_files', [], type=list)
+            self.recent_projects = self.settings.value('recent_projects', [], type=list)
+        self.bakeCamSceneName = self.settings.value('bake_cam_scene_name', True, type=bool)
+        self.autosave = self.settings.value('autosave', True, type=bool)
         self.asset_shot_type = self.settings.value('asset_shot', None, type=str)
         self.render_output = self.settings.value('render_output', None, type=str)
-        self.auto_load_on_startup = self.settings.value('autoload', None, type=bool)
+        self.auto_load_on_startup = self.settings.value('autoload', True, type=bool)
         self.artist = self.settings.value('artist_name', None, type=str)
         # Reload and save hotkey settings.
         self.hk_open_mod_1 = self.settings.value('hk_open_mod_1', None, type=str)
@@ -485,8 +498,13 @@ class sansPipe(QWidget):
         self.ui.version.setValue(next_version)
 
         # Create the file output path for the next save function.
+        if 'shots' in save_path or 'shot' in save_path:
+            is_shot = True
+        else:
+            is_shot = False
         new_path = self.build_path(path=save_path, rootName=self.root_name, task=self.task, v_type=v_type,
-                                   v_len=v_len, version=next_version, ext=extension, show=show_code, artist=artist)
+                                   v_len=v_len, version=next_version, ext=extension, show=show_code, artist=artist,
+                                   isshot=is_shot)
 
         self.ui.output_filename.setText(new_path)
 
@@ -511,8 +529,8 @@ class sansPipe(QWidget):
         self.populate_publish_assets(tree=self.ui.publishes_tree, root=self.ui.publish.text(),
                                      current_directory=self.publish_folder_path)
         self.ui.recentFilesList.itemDoubleClicked.connect(lambda: self.open_recent_file(f=False))
-        self.ui.recent_projects.itemDoubleClicked.connect(lambda: self.set_project(btn=False))
-        self.ui.set_proejct_btn.clicked.connect(lambda: self.set_project(btn=True))
+        self.ui.recent_projects.itemDoubleClicked.connect(lambda: self.setproject(btn=False))
+        self.ui.set_proejct_btn.clicked.connect(lambda: self.setproject(btn=True))
         self.ui.new_project_folder_btn.clicked.connect(self.get_project_folder)
         self.reference_tracker()
 
@@ -692,6 +710,9 @@ class sansPipe(QWidget):
         except RuntimeError as e:
             cmds.warning(f'Cannot load render settings: {e}')
 
+        # lastly, hide future features that are not built yet.
+        self.hide_future()
+
         # Load up and show the UI.
         self.show()
 
@@ -704,6 +725,28 @@ class sansPipe(QWidget):
         if path:
             path = path.replace('\\', '/')
         return path
+
+    def hide_future(self):
+        """
+        Temporary function to hide future features that haven't been built yet.
+        :return:
+        """
+        # Hide the unarchive future feature
+        self.ui.unarchive_label.hide()
+        self.ui.unarchive.hide()
+        self.ui.unarchive_browse_btn.hide()
+        self.ui.unarchive_btn.hide()
+        # Hide the playblast future features.
+        self.ui.pb_scene_elements_label.hide()
+        self.ui.pb_scene_elements.hide()
+        self.ui.pb_wireframe.hide()
+        self.ui.pb_textured.hide()
+        self.ui.pb_use_all_lights.hide()
+        self.ui.pb_shadows.hide()
+        self.ui.pb_ao.hide()
+        self.ui.pb_motionblur.hide()
+        self.ui.pb_aa.hide()
+        self.ui.pb_burnin.hide()
 
     def enable_context_menu(self, widget=None, widget_name=None):
         """
@@ -1690,12 +1733,17 @@ QComboBox {{
         show_code = self.ui.showCode.text()
         artist = self.ui.artistName.text()
 
+        if 'shots' in path or 'shot' in path:
+            is_shot = True
+        else:
+            is_shot = False
+
         if show_code:
             if not show_code.endswith('_'):
                 show_code = '{show_code}_'.format(show_code=show_code)
 
         new_output_file = self.build_path(path=path, rootName=root_name, task=task, v_type='_v', v_len=3,
-                                          version=version, ext=ext, show=show_code, artist=artist)
+                                          version=version, ext=ext, show=show_code, artist=artist, isshot=is_shot)
         if new_output_file:
             self.ui.output_filename.setText(new_output_file)
             # self.reset_version(v=version)
@@ -1804,7 +1852,7 @@ QComboBox {{
             self.ui.artistName_label.show()
 
     def build_path(self, path=None, rootName=None, task=None, v_type='_v', v_len=3, version=0, ext=None, show='',
-                   artist=None):
+                   artist=None, isshot=False):
         """
         This function builds the proper path and filename for an object
         :param path: The base path, usually starts with the Maya project scene file.
@@ -1832,8 +1880,10 @@ QComboBox {{
             elif show.startswith('_'):
                 show = show.lstrip('_')
             if task:
-                # FIXME: Adding the task path here is problematic.  NOTE: Why?  Why did I leave this note?
-                all_tasks = self.shot_tasks + self.asset_tasks
+                if isshot:
+                    all_tasks = self.shot_tasks
+                else:
+                    all_tasks = self.asset_tasks
                 for task_type in all_tasks:
                     if task_type in path and task not in path:
                         path = path.replace(task_type, task)
@@ -2301,6 +2351,12 @@ NOTE: None
             allow_file_copy = self.ui.allowFileCopy.isChecked()
             # Check if the file is saved or not
             existing_file = cmds.file(q=True, sn=True)
+
+            # find shot
+            if 'shots' in existing_file or 'shot' in existing_file:
+                is_shot = True
+            else:
+                is_shot = False
             # Build and update the scene file name
             if not existing_file or allow_file_copy:
                 if not filename:
@@ -2309,7 +2365,7 @@ NOTE: None
                     new_file_name = self.build_path(path=new_path, rootName=file_text,
                                                     task=self.ui.taskType.currentText(), v_type='_v', version=1,
                                                     ext=self.ui.fileType.currentText(), show=self.ui.showCode.text(),
-                                                    artist=self.ui.artistName.text())
+                                                    artist=self.ui.artistName.text(), isshot=is_shot)
                     if new_file_name:
                         save_file = os.path.basename(new_file_name)
                         get_basename = save_file.split('_v')[0]
@@ -2999,7 +3055,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         self.ui.autosave.setText(autosave)
         self.ui.scene_ass.setText(scene_assembly)
 
-    def set_project(self, btn=False):
+    def setproject(self, btn=False):
         """
         Mirrors Maya's set project feature and sets the current project.
         :param btn: If the btn is true, it hides the UI while the set project window is opened.
@@ -3092,7 +3148,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         subfolders = [
             'Char',
             'Env',
-            'Props',
+            'Prop',
             'Shots',
             'Veh',
             'Cams'
@@ -3151,7 +3207,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         Cams = Cameras - this is for specialty camera rigs.
         Char = Characters
         Env = Environments
-        Props = Props
+        Prop = Props
         Shots = Shots
         Veh = Vehicles
 
@@ -3225,8 +3281,8 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
             message_type = 'Character'
         elif _type == 'Env':
             message_type = 'Environment'
-        elif _type == 'Props':
-            message_type = 'Props'
+        elif _type == 'Prop':
+            message_type = 'Prop'
         elif _type == 'Veh':
             message_type = 'Vehicle'
         else:
@@ -3267,11 +3323,15 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         if close_previous:
             if message_type == 'Shots':
                 task_type = 'layout'
+                is_shot = True
+                self.ui.taskType.setCurrentText(task_type)
             else:
                 task_type = 'model'
+                is_shot = False
+                self.ui.taskType.setCurrentText(task_type)
             file_name = self.build_path(path=path, rootName=asset_shot_name, task=task_type,
                                         ext=self.ui.fileType.currentText(), show=self.ui.showCode.text(),
-                                        artist=self.ui.artistName.text(), version=1)
+                                        artist=self.ui.artistName.text(), version=1, isshot=is_shot)
             scale = float(self.ui.sceneScale.text())
             scale_mult = scale * 10
             cmds.polyCube(n='_SCENE_SCALE_1_MeterCube', sx=scale, sy=scale, sz=scale, w=scale_mult, d=scale_mult,
@@ -3394,6 +3454,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         cmds.file(snapshot_path, open=True)
         cmds.file(rename=current_file_path)
         cmds.file(save=True, type=ext)
+        self.show()
 
     def publish(self):
         """
@@ -3441,11 +3502,8 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         pub_name = root_name + '_PUB' + v + end_name
 
         publish_folder = self.ui.publish.text()
-        print(f'publish_folder: {publish_folder}')
         scene_folder = self.ui.scenes.text()
-        print(f'scenes_folder: {scene_folder}')
         pub_folder = root_path.replace(scene_folder, publish_folder)
-        print(f'pub_folder: {pub_folder}')
         if not os.path.exists(pub_folder):
             os.makedirs(pub_folder)
 
@@ -3870,14 +3928,20 @@ References Imported and Cleaned:
         }
         if this_file_data not in self.recent_files and this_file_data != {'filename': '', 'path': ''}:
             self.recent_files.insert(0, this_file_data)
-        self.settings.setValue('recent_files', self.recent_files)
+        if pyside_version == 2:
+            self.settings.setValue('recent_files', json.dumps(self.recent_files))
+        else:
+            self.settings.setValue('recent_files', self.recent_files)
         if len(self.recent_projects) >= 5:
             self.recent_projects.pop(4)
         current_project = cmds.workspace(q=True, act=True)
         current_project = self.fix_path(current_project)
         if current_project not in self.recent_projects:
             self.recent_projects.insert(0, current_project)
-        self.settings.setValue('recent_projects', self.recent_projects)
+        if pyside_version == 2:
+            self.settings.setValue('recent_projects', json.dumps(self.recent_projects))
+        else:
+            self.settings.setValue('recent_projects', self.recent_projects)
         self.settings.setValue('autosave', self.ui.autosaver.isChecked())
         self.settings.setValue('asset_shot', self.ui.assetShot_type.currentText())
         self.settings.setValue('render_output', self.ui.image_format.currentText())
@@ -3904,12 +3968,26 @@ References Imported and Cleaned:
         self.settings.setValue('hk_close_mod_3', self.ui.hk_close_mod_3.currentText())
         self.settings.setValue('hk_close_key', self.ui.hk_close_key.text())
 
+        self.settings.sync()
+
         sansPipe.instance = None
         super(sansPipe, self).closeEvent(event)
 
 
 def show_sans_pipe():
-    splash_pix = QPixmap('sansPipe/ui/sanspipe_splash.png')
+    # Get the Maya version year dynamically
+    maya_version = mel.eval("getApplicationVersionAsFloat();")
+    maya_version_year = str(int(maya_version))
+    wd = cmds.internalVar(userAppDir=True)
+    wd = os.path.join(wd, maya_version_year, 'plug-ins', 'sansPipe')
+    wd = os.path.join(wd, 'ui', 'sanspipe_splash.png')
+    wd = wd.replace('\\', '/')
+    if not os.path.exists(wd):
+        print('There ain\'t nothing there!!')
+    print(f'wd: {wd}')
+    splash_pix = QPixmap(wd)
+    if splash_pix.isNull():
+        cmds.warning('Could not load splash screen!')
     splash = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
     splash.setMask(splash_pix.mask())
     splash.show()
@@ -3920,6 +3998,7 @@ def show_sans_pipe():
     else:
         sansPipe.instance.raise_()
         sansPipe.instance.activateWindow()
+        sansPipe.show()
 
 os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
 app = QApplication.instance() if QApplication.instance() else QApplication([])

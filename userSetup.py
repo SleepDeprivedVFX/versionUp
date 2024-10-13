@@ -11,10 +11,16 @@ except ImportError:
     except ImportError:
         raise RuntimeError('No PySide6 or PySide2 detected!')
 
-__version__ = '1.3.9'
+__version__ = '1.3.10'
 __author__ = 'Adam Benson'
 
-settings = QSettings(__author__, 'Sans Pipe Super Saver')
+user_app_dir = cmds.internalVar(userAppDir=True)
+
+# Get the Maya version year dynamically
+maya_version = mel.eval("getApplicationVersionAsFloat();")
+maya_version_year = str(int(maya_version))
+
+settings = QSettings(__author__, f'Sans Pipe Super Saver {maya_version_year}')
 autoload = settings.value('autoload', None, type=bool)
 hk_open_mod_1 = settings.value('hk_open_mod_1', None, type=str)
 hk_open_mod_2 = settings.value('hk_open_mod_2', None, type=str)
