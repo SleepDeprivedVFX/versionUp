@@ -3405,6 +3405,7 @@ NOTE: {details}""".format(filename=filename, user=user, computer=computer, date=
         cmds.file(snapshot_path, open=True)
         cmds.file(rename=current_file_path)
         cmds.file(save=True, type=ext)
+        self.show()
 
     def publish(self):
         """
@@ -3948,6 +3949,7 @@ def show_sans_pipe():
     else:
         sansPipe.instance.raise_()
         sansPipe.instance.activateWindow()
+        sansPipe.show()
 
 os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
 app = QApplication.instance() if QApplication.instance() else QApplication([])
