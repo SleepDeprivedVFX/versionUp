@@ -776,6 +776,8 @@ class sansPipe(QWidget):
         self.ui.pb_motionblur.hide()
         self.ui.pb_aa.hide()
         self.ui.pb_burnin.hide()
+        self.ui.playblast_format.hide()
+        self.ui.plablast_format_label.hide()
 
     def enable_context_menu(self, widget=None, widget_name=None):
         """
