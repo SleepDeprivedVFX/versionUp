@@ -633,6 +633,30 @@ class sansPipe(QWidget):
         }
         """)
 
+        # Set Tab Icons.
+        main_tab_icon = os.path.join(script_path, 'icons', 'SavePubSnap.png')
+        print(f'main_tab_icon: {main_tab_icon}')
+        tools_tab_icon = os.path.join(script_path, 'icons', 'ToolsRefsImports.png')
+        proj_tab_icon = os.path.join(script_path, 'icons', 'Projects.png')
+        settings_tab_icon = os.path.join(script_path, 'icons', 'SettingsPlus.png')
+        icon_size = QSize(108, 36)
+        self.ui.saverTabs.setTabIcon(0, QIcon(main_tab_icon))
+        self.ui.saverTabs.setIconSize(icon_size)
+        self.ui.saverTabs.setTabIcon(1, QIcon(tools_tab_icon))
+        self.ui.saverTabs.setTabIcon(2, QIcon(proj_tab_icon))
+        self.ui.saverTabs.setTabIcon(3, QIcon(settings_tab_icon))
+
+        # Set Tab names to blank
+        self.ui.saverTabs.setTabText(0, '')
+        self.ui.saverTabs.setTabText(1, '')
+        self.ui.saverTabs.setTabText(2, '')
+        self.ui.saverTabs.setTabText(3, '')
+
+        # Set Tab Tool Tips
+        self.ui.saverTabs.setTabToolTip(0, 'Save Version up, Publish, Snapshot')
+        self.ui.saverTabs.setTabToolTip(1, 'Tools, References, Assets Loading')
+        self.ui.saverTabs.setTabToolTip(2, 'Project Settings')
+        self.ui.saverTabs.setTabToolTip(3, 'Settings Plus')
 
         # SETUP HOTKEYS
         savevup_hotkey = ''
@@ -3999,7 +4023,7 @@ def show_sans_pipe():
         sansPipe.instance.activateWindow()
         sansPipe.show()
 
-# os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
 app = QApplication.instance() if QApplication.instance() else QApplication([])
 
 
