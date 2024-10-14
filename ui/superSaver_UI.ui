@@ -1696,7 +1696,7 @@ color: rgb(220, 220, 220);</string>
            </property>
            <widget class="QWidget" name="show_settings">
             <attribute name="title">
-             <string>Show Settings</string>
+             <string>Show</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_7">
              <item>
@@ -2081,7 +2081,7 @@ color: rgb(220, 220, 220);</string>
            </widget>
            <widget class="QWidget" name="playblast_settings">
             <attribute name="title">
-             <string>Playblast Settings</string>
+             <string>Playblast</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_20">
              <item>
@@ -3209,7 +3209,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </widget>
            <widget class="QWidget" name="system_settings">
             <attribute name="title">
-             <string>System Settings</string>
+             <string>System</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_15">
              <item>
