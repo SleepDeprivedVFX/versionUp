@@ -13,8 +13,6 @@ new assets and folder structures on the fly.
 __version__ = '1.3.10'
 __author__ = 'Adam Benson'
 
-from asyncio import all_tasks
-
 """
 Version 1.3 Goals:
     1. Create a dynamically loading toolset:
@@ -59,7 +57,7 @@ try:
     pyside_version = 6
 except ImportError:
     try:
-        from PySide2.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
+        from PySide2.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer, QRect)
         from PySide2.QtWidgets import *
         from PySide2.QtGui import *
         from shiboken2 import wrapInstance
@@ -4000,7 +3998,7 @@ def show_sans_pipe():
         sansPipe.instance.activateWindow()
         sansPipe.show()
 
-os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+# os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
 app = QApplication.instance() if QApplication.instance() else QApplication([])
 
 
