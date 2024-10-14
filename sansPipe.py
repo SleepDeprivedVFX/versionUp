@@ -97,6 +97,12 @@ else:
     alt = 'option'
     command = 'cmd'
 
+# Get the Maya script path
+maya_version = mel.eval("getApplicationVersionAsFloat();")
+maya_version_year = str(int(maya_version))
+maya_root_path = cmds.internalVar(userAppDir=True)
+script_path = os.path.join(maya_root_path, maya_version_year, 'plug-ins', 'sansPipe')
+
 
 def initializePlugin(mobject):
     mplugin = om_mpx.MFnPlugin(mobject)  # Use MFnPlugin from maya.OpenMayaMPx
@@ -626,6 +632,7 @@ class sansPipe(QWidget):
             color: darkgray;
         }
         """)
+
 
         # SETUP HOTKEYS
         savevup_hotkey = ''
@@ -3973,16 +3980,10 @@ References Imported and Cleaned:
 
 
 def show_sans_pipe():
-    # Get the Maya version year dynamically
-    maya_version = mel.eval("getApplicationVersionAsFloat();")
-    maya_version_year = str(int(maya_version))
-    wd = cmds.internalVar(userAppDir=True)
-    wd = os.path.join(wd, maya_version_year, 'plug-ins', 'sansPipe')
-    wd = os.path.join(wd, 'ui', 'sanspipe_splash.png')
+    wd = os.path.join(script_path, 'ui', 'sanspipe_splash.png')
     wd = wd.replace('\\', '/')
     if not os.path.exists(wd):
         print('There ain\'t nothing there!!')
-    print(f'wd: {wd}')
     splash_pix = QPixmap(wd)
     if splash_pix.isNull():
         cmds.warning('Could not load splash screen!')
