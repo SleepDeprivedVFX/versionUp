@@ -1,45 +1,26 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIopmjbi.ui'
+## Form generated from reading UI file 'superSaver_UIwJuwNn.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-try:
-    from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                                QMetaObject, QObject, QPoint, QRect,
-                                QSize, QTime, QUrl, Qt)
-    from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-                               QFont, QFontDatabase, QGradient, QIcon,
-                               QImage, QKeySequence, QLinearGradient, QPainter,
-                               QPalette, QPixmap, QRadialGradient, QTransform)
-    from PySide6.QtWidgets import (QAbstractItemView, QAbstractSpinBox, QApplication, QCheckBox,
-                                   QComboBox, QFrame, QGroupBox, QHBoxLayout,
-                                   QHeaderView, QLabel, QLineEdit, QListWidget,
-                                   QListWidgetItem, QPushButton, QRadioButton, QSizePolicy,
-                                   QSpacerItem, QSpinBox, QTabWidget, QTextEdit,
-                                   QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
-except ImportError:
-    try:
-        from PySide2.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                                    QMetaObject, QObject, QPoint, QRect,
-                                    QSize, QTime, QUrl, Qt)
-        from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-                                   QFont, QFontDatabase, QGradient, QIcon,
-                                   QImage, QKeySequence, QLinearGradient, QPainter,
-                                   QPalette, QPixmap, QRadialGradient, QTransform)
-        from PySide2.QtWidgets import (QAbstractItemView, QAbstractSpinBox, QApplication, QCheckBox,
-                                       QComboBox, QFrame, QGroupBox, QHBoxLayout,
-                                       QHeaderView, QLabel, QLineEdit, QListWidget,
-                                       QListWidgetItem, QPushButton, QRadioButton, QSizePolicy,
-                                       QSpacerItem, QSpinBox, QTabWidget, QTextEdit,
-                                       QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
-    except ImportError:
-        raise RuntimeError("Neither PySide6 nor PySide2 could be imported. Please ensure one of them is installed.")
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QAbstractItemView, QAbstractSpinBox, QApplication, QCheckBox,
+    QComboBox, QFrame, QGroupBox, QHBoxLayout,
+    QHeaderView, QLabel, QLineEdit, QListWidget,
+    QListWidgetItem, QPushButton, QRadioButton, QSizePolicy,
+    QSpacerItem, QSpinBox, QTabWidget, QTextEdit,
+    QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_SaveAs(object):
     def setupUi(self, SaveAs):
@@ -1298,6 +1279,25 @@ class Ui_SaveAs(object):
 
         self.verticalLayout_20.addLayout(self.horizontalLayout_47)
 
+        self.horizontalLayout_52 = QHBoxLayout()
+        self.horizontalLayout_52.setObjectName(u"horizontalLayout_52")
+        self.plablast_format_label = QLabel(self.playblast_settings)
+        self.plablast_format_label.setObjectName(u"plablast_format_label")
+
+        self.horizontalLayout_52.addWidget(self.plablast_format_label)
+
+        self.playblast_format = QComboBox(self.playblast_settings)
+        self.playblast_format.setObjectName(u"playblast_format")
+
+        self.horizontalLayout_52.addWidget(self.playblast_format)
+
+        self.horizontalSpacer_32 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_52.addItem(self.horizontalSpacer_32)
+
+
+        self.verticalLayout_20.addLayout(self.horizontalLayout_52)
+
         self.pb_wireframe = QCheckBox(self.playblast_settings)
         self.pb_wireframe.setObjectName(u"pb_wireframe")
 
@@ -1344,9 +1344,9 @@ class Ui_SaveAs(object):
 
         self.verticalLayout_20.addWidget(self.pb_burnin)
 
-        self.verticalSpacer_8 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalSpacer_7 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.verticalLayout_20.addItem(self.verticalSpacer_8)
+        self.verticalLayout_20.addItem(self.verticalSpacer_7)
 
         self.settingsTabs.addTab(self.playblast_settings, "")
         self.hotkeys = QWidget()
@@ -2076,7 +2076,7 @@ class Ui_SaveAs(object):
         self.cancel_btn.setToolTip(QCoreApplication.translate("SaveAs", u"Esc", None))
 #endif // QT_CONFIG(tooltip)
         self.cancel_btn.setText(QCoreApplication.translate("SaveAs", u"Close", None))
-        self.saverTabs.setTabText(self.saverTabs.indexOf(self.MainTab), QCoreApplication.translate("SaveAs", u"Save - Publish - Snap", None))
+        self.saverTabs.setTabText(self.saverTabs.indexOf(self.MainTab), QCoreApplication.translate("SaveAs", u"Main", None))
         self.toolsGroup.setTitle(QCoreApplication.translate("SaveAs", u"Tools", None))
         self.bakeCam_btn.setText(QCoreApplication.translate("SaveAs", u"Bake Camera", None))
 #if QT_CONFIG(tooltip)
@@ -2150,7 +2150,7 @@ class Ui_SaveAs(object):
 #endif // QT_CONFIG(tooltip)
         self.loadRef_2_btn.setText(QCoreApplication.translate("SaveAs", u"Load Ref", None))
         self.import_2_btn.setText(QCoreApplication.translate("SaveAs", u"Import", None))
-        self.saverTabs.setTabText(self.saverTabs.indexOf(self.ToolsTab), QCoreApplication.translate("SaveAs", u"Tools - Reference - Assets", None))
+        self.saverTabs.setTabText(self.saverTabs.indexOf(self.ToolsTab), QCoreApplication.translate("SaveAs", u"Assets", None))
 #if QT_CONFIG(tooltip)
         self.recent_project_label.setToolTip(QCoreApplication.translate("SaveAs", u"A list of recently opened projects.  Double click a project to make it the default project.", None))
 #endif // QT_CONFIG(tooltip)
@@ -2190,7 +2190,7 @@ class Ui_SaveAs(object):
         self.Autosave_labe.setText(QCoreApplication.translate("SaveAs", u"AutoSave", None))
         self.scene_ass_label.setText(QCoreApplication.translate("SaveAs", u"Scene Assembly", None))
         self.create_project_btn.setText(QCoreApplication.translate("SaveAs", u"Create Project", None))
-        self.saverTabs.setTabText(self.saverTabs.indexOf(self.projectTab), QCoreApplication.translate("SaveAs", u"Project Settings", None))
+        self.saverTabs.setTabText(self.saverTabs.indexOf(self.projectTab), QCoreApplication.translate("SaveAs", u"Projects", None))
         self.show_settings_Label.setText(QCoreApplication.translate("SaveAs", u"Show Settings", None))
 #if QT_CONFIG(tooltip)
         self.showName_label.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>This is the name of the show.  </p><p>By default it is the same as the root folder name of the project, but can be changed to anything</p></body></html>", None))
@@ -2271,6 +2271,7 @@ class Ui_SaveAs(object):
         self.pb_scene_elements.setItemText(2, QCoreApplication.translate("SaveAs", u"Geometry, Splines and Joints", None))
         self.pb_scene_elements.setItemText(3, QCoreApplication.translate("SaveAs", u"Everything", None))
 
+        self.plablast_format_label.setText(QCoreApplication.translate("SaveAs", u"Format", None))
         self.pb_wireframe.setText(QCoreApplication.translate("SaveAs", u"Wireframe on Shaded", None))
         self.pb_textured.setText(QCoreApplication.translate("SaveAs", u"Textured", None))
         self.pb_use_all_lights.setText(QCoreApplication.translate("SaveAs", u"Use All Lights", None))
@@ -2461,7 +2462,7 @@ class Ui_SaveAs(object):
         self.label.setText(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>sansPipe - Light Pipeline Utility</p><p>Developed By:<br/>Adam Benson<br/><a href=\"https://www.AdamDBenson.com/programming\"><span style=\" text-decoration: underline; color:#f7630c;\">www.AdamDBenson.com</span></a></p><p>Email:<br/><a href=\"mailto:Adam@AdamDBenson.com\"><span style=\" text-decoration: underline; color:#f7630c;\">Adam@AdamDBenson.com</span></a></p><p>Copyright 2024</p></body></html>", None))
         self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.system_settings), QCoreApplication.translate("SaveAs", u"System Settings", None))
         self.save_config_btn.setText(QCoreApplication.translate("SaveAs", u"Save Configuration", None))
-        self.saverTabs.setTabText(self.saverTabs.indexOf(self.SettingsTab), QCoreApplication.translate("SaveAs", u"Settings - Configuration", None))
+        self.saverTabs.setTabText(self.saverTabs.indexOf(self.SettingsTab), QCoreApplication.translate("SaveAs", u"Settings", None))
         self.messages.setText(QCoreApplication.translate("SaveAs", u"Errors", None))
     # retranslateUi
 
