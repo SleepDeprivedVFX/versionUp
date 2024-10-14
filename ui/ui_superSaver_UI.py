@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIwJuwNn.ui'
+## Form generated from reading UI file 'superSaver_UIEqGsRo.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -2282,7 +2282,7 @@ class Ui_SaveAs(object):
 #if QT_CONFIG(tooltip)
         self.sceneScale.setToolTip(QCoreApplication.translate("SaveAs", u"The Scene Scale sets the default size of the \"One Meter Cube\" that gets injected into new model files created by the New Asset feature", None))
 #endif // QT_CONFIG(tooltip)
-        self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.show_settings), QCoreApplication.translate("SaveAs", u"Show Settings", None))
+        self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.show_settings), QCoreApplication.translate("SaveAs", u"Show", None))
         self.playblast_settings_label.setText(QCoreApplication.translate("SaveAs", u"Playblast Settings", None))
         self.pb_scene_elements_label.setText(QCoreApplication.translate("SaveAs", u"Scene Elements", None))
         self.pb_scene_elements.setItemText(0, QCoreApplication.translate("SaveAs", u"Geometry Only", None))
@@ -2299,7 +2299,7 @@ class Ui_SaveAs(object):
         self.pb_motionblur.setText(QCoreApplication.translate("SaveAs", u"Motion Blur", None))
         self.pb_aa.setText(QCoreApplication.translate("SaveAs", u"Anti Aliasing", None))
         self.pb_burnin.setText(QCoreApplication.translate("SaveAs", u"Burn In", None))
-        self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.playblast_settings), QCoreApplication.translate("SaveAs", u"Playblast Settings", None))
+        self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.playblast_settings), QCoreApplication.translate("SaveAs", u"Playblast", None))
         self.hotkeys_label.setText(QCoreApplication.translate("SaveAs", u"Hokeys", None))
         self.hotkeys1.setText(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>These hotkeys can be changed to your preferences.<br/>However, it is recommended that you leave them at their defaults, because they are designed to take over certain Maya functions.<br/>If you decide to change them, understand that they won't take effect until you restart Maya.</p></body></html>", None))
         self.hk_open_label.setText(QCoreApplication.translate("SaveAs", u"Open Sans Pipe    ", None))
@@ -2479,7 +2479,7 @@ class Ui_SaveAs(object):
         self.autosave_count.setToolTip(QCoreApplication.translate("SaveAs", u"Turns on Autosave for Maya and sets the time interval", None))
 #endif // QT_CONFIG(tooltip)
         self.label.setText(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>sansPipe - Light Pipeline Utility</p><p>Developed By:<br/>Adam Benson<br/><a href=\"https://www.AdamDBenson.com/programming\"><span style=\" text-decoration: underline; color:#f7630c;\">www.AdamDBenson.com</span></a></p><p>Email:<br/><a href=\"mailto:Adam@AdamDBenson.com\"><span style=\" text-decoration: underline; color:#f7630c;\">Adam@AdamDBenson.com</span></a></p><p>Copyright 2024</p></body></html>", None))
-        self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.system_settings), QCoreApplication.translate("SaveAs", u"System Settings", None))
+        self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.system_settings), QCoreApplication.translate("SaveAs", u"System", None))
         self.save_config_btn.setText(QCoreApplication.translate("SaveAs", u"Save Configuration", None))
         self.saverTabs.setTabText(self.saverTabs.indexOf(self.SettingsTab), QCoreApplication.translate("SaveAs", u"Settings", None))
         self.messages.setText(QCoreApplication.translate("SaveAs", u"Errors", None))
