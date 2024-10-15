@@ -215,6 +215,12 @@ Sans Pipe is a light pipeline utility designed specifically for Maya 2022 and ab
 2. **Autoload on Startup**.  This feature makes SansPipe open when Maya does.  It also forces the replacement of the "Save As..." (Ctrl + Shift + s) hot key to make SansPipe open instead of the "Save As..." dialog box.  To turn this on or off, check or uncheck it.  Press "Save Configuration" and then re-start Maya.
 3. **Autosave** & **Interval**.  This forces Maya's Autosave feature and sets the interval for you.  It is on by default and is a good way to protect yourself from accidental loss by Maya Crash.  **Snapshots** are another great way to keep yourself safe!.
 
+## The Future
+- There are a number of features coming to SansPipe now that are already in production:
+1. Improved Playblast functions
+2. Un-Archive Feature
+3. Advanced render settings
+
 ## Contributions
 Currently, Sans Pipe is a solo project and is not open to direct contributions. However, feedback and suggestions are always welcome.
 
