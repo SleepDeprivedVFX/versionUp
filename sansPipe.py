@@ -2309,6 +2309,7 @@ STATUS REPLY:
                     root_name = get_root_name[0]
                     root_path = cmds.workspace(q=True, rd=True)
                     movies_folder = cmds.workspace(fre='movie')
+                    # FIXME: This will need to get updated for the new playblast system
                     movie_path = os.path.join(root_path, movies_folder)
                     if os.path.exists(movie_path):
                         movie_filename = root_name + '.mov'
@@ -3925,7 +3926,22 @@ References Imported and Cleaned:
 
         viewer = self.sptk.viewer_setup(elements=elements, wf=wf, tx=tx, ual=ual, sh=sh, ao=ao, mb=mb, aa=aa)
 
-        playblast = self.sptk.basic_playblast(fmt=fmt, codec=codec, slate=slate, burn=burn, data=viewer)
+        base_playblast = self.sptk.basic_playblast(fmt=fmt, codec=codec, slate=slate, burn=burn, data=viewer)
+
+        if base_playblast:
+            with open(base_playblast, 'r') as pb_data:
+                playblast_data = json.load(pb_data)
+                pb_data.close()
+            if burn or slate:
+                fmt = playblast_data['format']
+                codec = playblast_data['codec']
+                raw_pb = playblast_data['raw_playblast']
+                final = playblast_data['final_playblast']
+
+                playblast = self.sptk.compile_playblast(data=viewer, fmt=fmt, codec=codec, raw_pb=raw_pb, final=final)
+            else:
+                playblast = playblast_data['final_playblast']
+
         self.close()
 
     def render_settings(self):

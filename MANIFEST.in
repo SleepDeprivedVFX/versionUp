@@ -1,0 +1,21 @@
+# Include all FFmpeg binaries
+include bin/*
+
+# Include all icons
+include icons/*
+
+# Include all UI files
+include ui/*
+
+# Include README files
+include README.md
+include README.pdf
+
+# Include other necessary Python files and JSON files
+include sansPipe.py
+include sp_global_vars.json
+include sp_tools.py
+include userSetup.py
+
+# Optionally include __init__.py files if they're necessary
+recursive-include * __init__.py

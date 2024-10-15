@@ -465,6 +465,12 @@ class sp_toolkit(object):
         folder.
         :return:
         """
+        res_width = int(self.res_width)
+        res_height = int(self.res_height)
+        movies_folder = cmds.workspace(fre='movie')
+        filename = cmds.file(q=True, sn=True, shn=True)
+        basename = os.path.splitext(filename)[0]
+
         if slate or burn:
             pass_fmt = fmt
             pass_codec = codec
@@ -480,17 +486,29 @@ class sp_toolkit(object):
                 ext = '.avi'
             else:
                 ext = f'.{codec}'
-
-        res_width = int(self.res_width)
-        res_height = int(self.res_height)
-        movies_folder = cmds.workspace(fre='movie')
-        filename = cmds.file(q=True, sn=True, shn=True)
-        basename = os.path.splitext(filename)[0]
         filename = basename + ext
-        output = os.path.join(movies_folder, basename, 'temp', filename)
-        final_output = os.path.join(movies_folder, filename)
+        tracking_db = os.path.join(movies_folder, basename, 'db')
+        if not os.path.exists(tracking_db):
+            os.makedirs(tracking_db)
+        tracking_db = os.path.join(tracking_db, f'{basename}_db.json')
+        tracking_data = {}
+        if slate or burn:
+            output = os.path.join(movies_folder, basename, 'temp')
+            if not os.path.exists(output):
+                os.makedirs(output)
+            output = os.path.join(output, filename)
+            final_output = os.path.join(movies_folder, basename, filename)
+        else:
+            output = os.path.join(movies_folder, basename)
+            if not os.path.exists(output):
+                os.makedirs(output)
+            output = os.path.join(output, filename)
+            final_output = output
+        output = output.replace('\\', '/')
+        final_output = final_output.replace('\\', '/')
+
         if pyside_version == 6:
-            cmds.playblast(
+            pb = cmds.playblast(
                 format=fmt,
                 filename=output,
                 sequenceTime=0,
@@ -506,8 +524,9 @@ class sp_toolkit(object):
                 gamma=1,
                 fo=True
             )
+
         elif pyside_version == 2:
-            cmds.playblast(
+            pb = cmds.playblast(
                 format=fmt,
                 filename=output,
                 sequenceTime=0,
@@ -523,6 +542,22 @@ class sp_toolkit(object):
             )
         else:
             cmds.error('Unable to playblast.  Sorry.')
+            return False
+        with open(tracking_db, 'w') as tracking:
+            tracking_data = {
+                'raw_playblast': pb,
+                'format': pass_fmt,
+                'codec': pass_codec,
+                'final_playblast': final_output
+            }
+            tracking_out = json.dumps(tracking_data, indent=4)
+            tracking.write(tracking_out)
+            tracking.close()
+
+        return tracking_db
+
+    def compile_playblast(self, data=None, fmt=None, codec=None, raw_pb=None, final=None):
+        pass
 
     def db_seek_and_repair(self):
         """
