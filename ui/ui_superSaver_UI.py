@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIopmjbi.ui'
+## Form generated from reading UI file 'superSaver_UIEqGsRo.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
@@ -1298,6 +1298,25 @@ class Ui_SaveAs(object):
 
         self.verticalLayout_20.addLayout(self.horizontalLayout_47)
 
+        self.horizontalLayout_52 = QHBoxLayout()
+        self.horizontalLayout_52.setObjectName(u"horizontalLayout_52")
+        self.plablast_format_label = QLabel(self.playblast_settings)
+        self.plablast_format_label.setObjectName(u"plablast_format_label")
+
+        self.horizontalLayout_52.addWidget(self.plablast_format_label)
+
+        self.playblast_format = QComboBox(self.playblast_settings)
+        self.playblast_format.setObjectName(u"playblast_format")
+
+        self.horizontalLayout_52.addWidget(self.playblast_format)
+
+        self.horizontalSpacer_32 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_52.addItem(self.horizontalSpacer_32)
+
+
+        self.verticalLayout_20.addLayout(self.horizontalLayout_52)
+
         self.pb_wireframe = QCheckBox(self.playblast_settings)
         self.pb_wireframe.setObjectName(u"pb_wireframe")
 
@@ -1344,9 +1363,9 @@ class Ui_SaveAs(object):
 
         self.verticalLayout_20.addWidget(self.pb_burnin)
 
-        self.verticalSpacer_8 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.verticalSpacer_7 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.verticalLayout_20.addItem(self.verticalSpacer_8)
+        self.verticalLayout_20.addItem(self.verticalSpacer_7)
 
         self.settingsTabs.addTab(self.playblast_settings, "")
         self.hotkeys = QWidget()
@@ -2076,7 +2095,7 @@ class Ui_SaveAs(object):
         self.cancel_btn.setToolTip(QCoreApplication.translate("SaveAs", u"Esc", None))
 #endif // QT_CONFIG(tooltip)
         self.cancel_btn.setText(QCoreApplication.translate("SaveAs", u"Close", None))
-        self.saverTabs.setTabText(self.saverTabs.indexOf(self.MainTab), QCoreApplication.translate("SaveAs", u"Save - Publish - Snap", None))
+        self.saverTabs.setTabText(self.saverTabs.indexOf(self.MainTab), QCoreApplication.translate("SaveAs", u"Main", None))
         self.toolsGroup.setTitle(QCoreApplication.translate("SaveAs", u"Tools", None))
         self.bakeCam_btn.setText(QCoreApplication.translate("SaveAs", u"Bake Camera", None))
 #if QT_CONFIG(tooltip)
@@ -2150,7 +2169,7 @@ class Ui_SaveAs(object):
 #endif // QT_CONFIG(tooltip)
         self.loadRef_2_btn.setText(QCoreApplication.translate("SaveAs", u"Load Ref", None))
         self.import_2_btn.setText(QCoreApplication.translate("SaveAs", u"Import", None))
-        self.saverTabs.setTabText(self.saverTabs.indexOf(self.ToolsTab), QCoreApplication.translate("SaveAs", u"Tools - Reference - Assets", None))
+        self.saverTabs.setTabText(self.saverTabs.indexOf(self.ToolsTab), QCoreApplication.translate("SaveAs", u"Assets", None))
 #if QT_CONFIG(tooltip)
         self.recent_project_label.setToolTip(QCoreApplication.translate("SaveAs", u"A list of recently opened projects.  Double click a project to make it the default project.", None))
 #endif // QT_CONFIG(tooltip)
@@ -2190,7 +2209,7 @@ class Ui_SaveAs(object):
         self.Autosave_labe.setText(QCoreApplication.translate("SaveAs", u"AutoSave", None))
         self.scene_ass_label.setText(QCoreApplication.translate("SaveAs", u"Scene Assembly", None))
         self.create_project_btn.setText(QCoreApplication.translate("SaveAs", u"Create Project", None))
-        self.saverTabs.setTabText(self.saverTabs.indexOf(self.projectTab), QCoreApplication.translate("SaveAs", u"Project Settings", None))
+        self.saverTabs.setTabText(self.saverTabs.indexOf(self.projectTab), QCoreApplication.translate("SaveAs", u"Projects", None))
         self.show_settings_Label.setText(QCoreApplication.translate("SaveAs", u"Show Settings", None))
 #if QT_CONFIG(tooltip)
         self.showName_label.setToolTip(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>This is the name of the show.  </p><p>By default it is the same as the root folder name of the project, but can be changed to anything</p></body></html>", None))
@@ -2263,7 +2282,7 @@ class Ui_SaveAs(object):
 #if QT_CONFIG(tooltip)
         self.sceneScale.setToolTip(QCoreApplication.translate("SaveAs", u"The Scene Scale sets the default size of the \"One Meter Cube\" that gets injected into new model files created by the New Asset feature", None))
 #endif // QT_CONFIG(tooltip)
-        self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.show_settings), QCoreApplication.translate("SaveAs", u"Show Settings", None))
+        self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.show_settings), QCoreApplication.translate("SaveAs", u"Show", None))
         self.playblast_settings_label.setText(QCoreApplication.translate("SaveAs", u"Playblast Settings", None))
         self.pb_scene_elements_label.setText(QCoreApplication.translate("SaveAs", u"Scene Elements", None))
         self.pb_scene_elements.setItemText(0, QCoreApplication.translate("SaveAs", u"Geometry Only", None))
@@ -2271,6 +2290,7 @@ class Ui_SaveAs(object):
         self.pb_scene_elements.setItemText(2, QCoreApplication.translate("SaveAs", u"Geometry, Splines and Joints", None))
         self.pb_scene_elements.setItemText(3, QCoreApplication.translate("SaveAs", u"Everything", None))
 
+        self.plablast_format_label.setText(QCoreApplication.translate("SaveAs", u"Format", None))
         self.pb_wireframe.setText(QCoreApplication.translate("SaveAs", u"Wireframe on Shaded", None))
         self.pb_textured.setText(QCoreApplication.translate("SaveAs", u"Textured", None))
         self.pb_use_all_lights.setText(QCoreApplication.translate("SaveAs", u"Use All Lights", None))
@@ -2279,7 +2299,7 @@ class Ui_SaveAs(object):
         self.pb_motionblur.setText(QCoreApplication.translate("SaveAs", u"Motion Blur", None))
         self.pb_aa.setText(QCoreApplication.translate("SaveAs", u"Anti Aliasing", None))
         self.pb_burnin.setText(QCoreApplication.translate("SaveAs", u"Burn In", None))
-        self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.playblast_settings), QCoreApplication.translate("SaveAs", u"Playblast Settings", None))
+        self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.playblast_settings), QCoreApplication.translate("SaveAs", u"Playblast", None))
         self.hotkeys_label.setText(QCoreApplication.translate("SaveAs", u"Hokeys", None))
         self.hotkeys1.setText(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>These hotkeys can be changed to your preferences.<br/>However, it is recommended that you leave them at their defaults, because they are designed to take over certain Maya functions.<br/>If you decide to change them, understand that they won't take effect until you restart Maya.</p></body></html>", None))
         self.hk_open_label.setText(QCoreApplication.translate("SaveAs", u"Open Sans Pipe    ", None))
@@ -2459,9 +2479,9 @@ class Ui_SaveAs(object):
         self.autosave_count.setToolTip(QCoreApplication.translate("SaveAs", u"Turns on Autosave for Maya and sets the time interval", None))
 #endif // QT_CONFIG(tooltip)
         self.label.setText(QCoreApplication.translate("SaveAs", u"<html><head/><body><p>sansPipe - Light Pipeline Utility</p><p>Developed By:<br/>Adam Benson<br/><a href=\"https://www.AdamDBenson.com/programming\"><span style=\" text-decoration: underline; color:#f7630c;\">www.AdamDBenson.com</span></a></p><p>Email:<br/><a href=\"mailto:Adam@AdamDBenson.com\"><span style=\" text-decoration: underline; color:#f7630c;\">Adam@AdamDBenson.com</span></a></p><p>Copyright 2024</p></body></html>", None))
-        self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.system_settings), QCoreApplication.translate("SaveAs", u"System Settings", None))
+        self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.system_settings), QCoreApplication.translate("SaveAs", u"System", None))
         self.save_config_btn.setText(QCoreApplication.translate("SaveAs", u"Save Configuration", None))
-        self.saverTabs.setTabText(self.saverTabs.indexOf(self.SettingsTab), QCoreApplication.translate("SaveAs", u"Settings - Configuration", None))
+        self.saverTabs.setTabText(self.saverTabs.indexOf(self.SettingsTab), QCoreApplication.translate("SaveAs", u"Settings", None))
         self.messages.setText(QCoreApplication.translate("SaveAs", u"Errors", None))
     # retranslateUi
 

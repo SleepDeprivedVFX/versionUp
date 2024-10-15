@@ -13,8 +13,6 @@ new assets and folder structures on the fly.
 __version__ = '1.3.10'
 __author__ = 'Adam Benson'
 
-from asyncio import all_tasks
-
 """
 Version 1.3 Goals:
     1. Create a dynamically loading toolset:
@@ -59,7 +57,7 @@ try:
     pyside_version = 6
 except ImportError:
     try:
-        from PySide2.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer)
+        from PySide2.QtCore import (QCoreApplication, QMetaObject, QSize, Qt, QSettings, QTimer, QRect)
         from PySide2.QtWidgets import *
         from PySide2.QtGui import *
         from shiboken2 import wrapInstance
@@ -98,6 +96,12 @@ else:
     ctrl = 'Ctrl'
     alt = 'option'
     command = 'cmd'
+
+# Get the Maya script path
+maya_version = mel.eval("getApplicationVersionAsFloat();")
+maya_version_year = str(int(maya_version))
+maya_root_path = cmds.internalVar(userAppDir=True)
+script_path = os.path.join(maya_root_path, maya_version_year, 'plug-ins', 'sansPipe')
 
 
 def initializePlugin(mobject):
@@ -629,6 +633,31 @@ class sansPipe(QWidget):
         }
         """)
 
+        # Set Tab Icons.
+        main_tab_icon = os.path.join(script_path, 'icons', 'SavePubSnap.png')
+        print(f'main_tab_icon: {main_tab_icon}')
+        tools_tab_icon = os.path.join(script_path, 'icons', 'ToolsRefsImports.png')
+        proj_tab_icon = os.path.join(script_path, 'icons', 'Projects.png')
+        settings_tab_icon = os.path.join(script_path, 'icons', 'SettingsPlus.png')
+        icon_size = QSize(108, 36)
+        self.ui.saverTabs.setTabIcon(0, QIcon(main_tab_icon))
+        self.ui.saverTabs.setIconSize(icon_size)
+        self.ui.saverTabs.setTabIcon(1, QIcon(tools_tab_icon))
+        self.ui.saverTabs.setTabIcon(2, QIcon(proj_tab_icon))
+        self.ui.saverTabs.setTabIcon(3, QIcon(settings_tab_icon))
+
+        # Set Tab names to blank
+        self.ui.saverTabs.setTabText(0, '')
+        self.ui.saverTabs.setTabText(1, '')
+        self.ui.saverTabs.setTabText(2, '')
+        self.ui.saverTabs.setTabText(3, '')
+
+        # Set Tab Tool Tips
+        self.ui.saverTabs.setTabToolTip(0, 'Save Version up, Publish, Snapshot')
+        self.ui.saverTabs.setTabToolTip(1, 'Tools, References, Assets Loading')
+        self.ui.saverTabs.setTabToolTip(2, 'Project Settings')
+        self.ui.saverTabs.setTabToolTip(3, 'Settings Plus')
+
         # SETUP HOTKEYS
         savevup_hotkey = ''
         if self.hk_savevup_mod_1:
@@ -747,6 +776,8 @@ class sansPipe(QWidget):
         self.ui.pb_motionblur.hide()
         self.ui.pb_aa.hide()
         self.ui.pb_burnin.hide()
+        self.ui.playblast_format.hide()
+        self.ui.plablast_format_label.hide()
 
     def enable_context_menu(self, widget=None, widget_name=None):
         """
@@ -3975,16 +4006,10 @@ References Imported and Cleaned:
 
 
 def show_sans_pipe():
-    # Get the Maya version year dynamically
-    maya_version = mel.eval("getApplicationVersionAsFloat();")
-    maya_version_year = str(int(maya_version))
-    wd = cmds.internalVar(userAppDir=True)
-    wd = os.path.join(wd, maya_version_year, 'plug-ins', 'sansPipe')
-    wd = os.path.join(wd, 'ui', 'sanspipe_splash.png')
+    wd = os.path.join(script_path, 'ui', 'sanspipe_splash.png')
     wd = wd.replace('\\', '/')
     if not os.path.exists(wd):
         print('There ain\'t nothing there!!')
-    print(f'wd: {wd}')
     splash_pix = QPixmap(wd)
     if splash_pix.isNull():
         cmds.warning('Could not load splash screen!')

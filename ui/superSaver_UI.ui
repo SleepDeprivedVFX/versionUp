@@ -31,7 +31,7 @@ color: rgb(220, 220, 220);</string>
      </property>
      <widget class="QWidget" name="MainTab">
       <attribute name="title">
-       <string>Save - Publish - Snap</string>
+       <string>Main</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_21">
        <item>
@@ -746,7 +746,7 @@ color: rgb(220, 220, 220);</string>
      </widget>
      <widget class="QWidget" name="ToolsTab">
       <attribute name="title">
-       <string>Tools - Reference - Assets</string>
+       <string>Assets</string>
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_37">
        <item>
@@ -1214,7 +1214,7 @@ color: rgb(220, 220, 220);</string>
      </widget>
      <widget class="QWidget" name="projectTab">
       <attribute name="title">
-       <string>Project Settings</string>
+       <string>Projects</string>
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_39">
        <item>
@@ -1681,7 +1681,7 @@ color: rgb(220, 220, 220);</string>
      </widget>
      <widget class="QWidget" name="SettingsTab">
       <attribute name="title">
-       <string>Settings - Configuration</string>
+       <string>Settings</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_16">
        <item>
@@ -1696,7 +1696,7 @@ color: rgb(220, 220, 220);</string>
            </property>
            <widget class="QWidget" name="show_settings">
             <attribute name="title">
-             <string>Show Settings</string>
+             <string>Show</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_7">
              <item>
@@ -2081,7 +2081,7 @@ color: rgb(220, 220, 220);</string>
            </widget>
            <widget class="QWidget" name="playblast_settings">
             <attribute name="title">
-             <string>Playblast Settings</string>
+             <string>Playblast</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_20">
              <item>
@@ -2136,6 +2136,33 @@ color: rgb(220, 220, 220);</string>
                </item>
                <item>
                 <spacer name="horizontalSpacer_30">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_52">
+               <item>
+                <widget class="QLabel" name="plablast_format_label">
+                 <property name="text">
+                  <string>Format</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="playblast_format"/>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_32">
                  <property name="orientation">
                   <enum>Qt::Orientation::Horizontal</enum>
                  </property>
@@ -2224,7 +2251,7 @@ color: rgb(220, 220, 220);</string>
               </widget>
              </item>
              <item>
-              <spacer name="verticalSpacer_8">
+              <spacer name="verticalSpacer_7">
                <property name="orientation">
                 <enum>Qt::Orientation::Vertical</enum>
                </property>
@@ -3182,7 +3209,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </widget>
            <widget class="QWidget" name="system_settings">
             <attribute name="title">
-             <string>System Settings</string>
+             <string>System</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_15">
              <item>
