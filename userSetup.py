@@ -11,7 +11,7 @@ except ImportError:
     except ImportError:
         raise RuntimeError('No PySide6 or PySide2 detected!')
 
-__version__ = '1.3.10'
+__version__ = '1.3.11'
 __author__ = 'Adam Benson'
 
 user_app_dir = cmds.internalVar(userAppDir=True)
