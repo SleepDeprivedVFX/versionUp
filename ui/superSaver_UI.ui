@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1055</width>
-    <height>730</height>
+    <width>1051</width>
+    <height>722</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -27,7 +27,7 @@ color: rgb(220, 220, 220);</string>
    <item>
     <widget class="QTabWidget" name="saverTabs">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="MainTab">
       <attribute name="title">
@@ -1692,7 +1692,7 @@ color: rgb(220, 220, 220);</string>
             <enum>QTabWidget::TabPosition::West</enum>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>1</number>
            </property>
            <widget class="QWidget" name="show_settings">
             <attribute name="title">
@@ -2159,7 +2159,23 @@ color: rgb(220, 220, 220);</string>
                 </widget>
                </item>
                <item>
-                <widget class="QComboBox" name="playblast_format"/>
+                <widget class="QComboBox" name="playblast_format">
+                 <item>
+                  <property name="text">
+                   <string>image</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>qt</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>avi</string>
+                  </property>
+                 </item>
+                </widget>
                </item>
                <item>
                 <spacer name="horizontalSpacer_32">
@@ -2175,6 +2191,40 @@ color: rgb(220, 220, 220);</string>
                 </spacer>
                </item>
               </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_53">
+               <item>
+                <widget class="QLabel" name="playblast_codec_label">
+                 <property name="text">
+                  <string>Codec</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="playblast_codec"/>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_33">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="pb_show_ornaments">
+               <property name="text">
+                <string>Show Ornaments</string>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="pb_wireframe">
@@ -2234,6 +2284,33 @@ color: rgb(220, 220, 220);</string>
               <widget class="QCheckBox" name="pb_aa">
                <property name="text">
                 <string>Anti Aliasing</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="Line" name="line_6">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="pb_adv_label">
+               <property name="styleSheet">
+                <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;</string>
+               </property>
+               <property name="text">
+                <string>Advanced Playblast Settings</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="pb_slate">
+               <property name="text">
+                <string>Slate Frame at Head</string>
                </property>
                <property name="checked">
                 <bool>true</bool>

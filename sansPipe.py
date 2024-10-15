@@ -36,9 +36,6 @@ Version 1.3 Goals:
         c. Tab for Things like default CSV file templates, or other goodies.
     22. Import an archive from a zip file.  This should basically "un-do" the archive setup from 21
         
-KNOWN BUGS:
-1. Many features are not working in Versions of Maya before 2025.  I need to get that all debugged.
-
 """
 
 from maya import cmds
@@ -3913,8 +3910,22 @@ References Imported and Cleaned:
         :return:
         """
         self.hide()
-        # FIXME: Add some viewer functionality here.  Like, removing all but the GEO
-        playblast = self.sptk.playblast()
+        elements = self.ui.pb_scene_elements.currentText()
+        fmt = self.ui.playblast_format.currentText()
+        codec = self.ui.playblast_codec.currentText()
+        wf = self.ui.pb_wireframe.isChecked()
+        tx = self.ui.pb_textured.isChecked()
+        ual = self.ui.pb_use_all_lights.isChecked()
+        sh = self.ui.pb_shadows.isChecked()
+        ao = self.ui.pb_ao.isChecked()
+        mb = self.ui.pb_motionblur.isChecked()
+        aa = self.ui.pb_aa.isChecked()
+        slate = self.ui.pb_slate.isChecked()
+        burn = self.ui.pb_burnin.isChecked()
+
+        viewer = self.sptk.viewer_setup(elements=elements, wf=wf, tx=tx, ual=ual, sh=sh, ao=ao, mb=mb, aa=aa)
+
+        playblast = self.sptk.basic_playblast(fmt=fmt, codec=codec, slate=slate, burn=burn, data=viewer)
         self.close()
 
     def render_settings(self):

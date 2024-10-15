@@ -22,6 +22,7 @@ from datetime import datetime
 import configparser
 import inspect
 import math
+import subprocess
 
 try:
     from PySide6.QtCore import QSettings
@@ -303,67 +304,225 @@ class sp_toolkit(object):
             return dup_cam
         return False
 
-    def create_burn_in(self, camera=None, filename=None, version=None, time_code=None, frame_number=None,
-                       focal_length=None):
-        burn_in_text = cmds.textCurves(ch=False, f='Arial', t=f'Filename: {filename}\nVersion: {version}\nTime Code: '
-                                                              f'{time_code}\nFrame: {frame_number}\nFocal Length: '
-                                                              f'{focal_length}')
-        cmds.parent(burn_in_text[0], camera)
-        cmds.move(0, 0, 1, burn_in_text, r=True)
+    def viewer_setup(self, elements=None, wf=False, tx=True, ual=False, sh=True, ao=True, mb=True, aa=True):
+        # Get the active viewer
+        viewport = cmds.getPanel(wf=True)
 
-        aspect_ratio = cmds.getAttr(camera + '.filmAspectRatio')
-        sensor_width = cmds.getAttr(camera + '.horizontalFilmAperture') * 25.4  # Convert from inches to mm
-        fov_degrees = cmds.getAttr(camera + '.focalLength') / sensor_width * 2 * math.degrees(math.atan(sensor_width / (2 * focal_length)))
+        # Collect all the current settings.
+        nurbsCurves = cmds.modelEditor(viewport, q=True, nurbsCurves=True)
+        nurbsSurfaces = cmds.modelEditor(viewport, q=True, nurbsSurfaces=True)
+        cv = cmds.modelEditor(viewport, q=True, cv=True)
+        hulls = cmds.modelEditor(viewport, q=True, hulls=True)
+        polymeshes = cmds.modelEditor(viewport, q=True, polymeshes=True)
+        hos = cmds.modelEditor(viewport, q=True, hos=True)
+        subdivSurfaces = cmds.modelEditor(viewport, q=True, subdivSurfaces=True)
+        planes = cmds.modelEditor(viewport, q=True, planes=True)
+        lights = cmds.modelEditor(viewport, q=True, lights=True)
+        cameras = cmds.modelEditor(viewport, q=True, cameras=True)
+        imagePlane = cmds.modelEditor(viewport, q=True, imagePlane=True)
+        joints = cmds.modelEditor(viewport, q=True, joints=True)
+        ikHandles = cmds.modelEditor(viewport, q=True, ikHandles=True)
+        deformers = cmds.modelEditor(viewport, q=True, deformers=True)
+        dynamics = cmds.modelEditor(viewport, q=True, dynamics=True)
+        particleInstancers = cmds.modelEditor(viewport, q=True, particleInstancers=True)
+        fluids = cmds.modelEditor(viewport, q=True, fluids=True)
+        hairSystems = cmds.modelEditor(viewport, q=True, hairSystems=True)
+        follicles = cmds.modelEditor(viewport, q=True, follicles=True)
+        nCloths = cmds.modelEditor(viewport, q=True, nCloths=True)
+        nParticles = cmds.modelEditor(viewport, q=True, nParticles=True)
+        nRigids = cmds.modelEditor(viewport, q=True, nRigids=True)
+        dynamicConstraints = cmds.modelEditor(viewport, q=True, dynamicConstraints=True)
+        locators = cmds.modelEditor(viewport, q=True, locators=True)
+        dimensions = cmds.modelEditor(viewport, q=True, dimensions=True)
+        pivots = cmds.modelEditor(viewport, q=True, pivots=True)
+        handles = cmds.modelEditor(viewport, q=True, handles=True)
+        textures = cmds.modelEditor(viewport, q=True, textures=True)
+        strokes = cmds.modelEditor(viewport, q=True, strokes=True)
+        motionTrails = cmds.modelEditor(viewport, q=True, motionTrails=True)
+        pluginShapes = cmds.modelEditor(viewport, q=True, pluginShapes=True)
+        clipGhosts = cmds.modelEditor(viewport, q=True, clipGhosts=True)
+        greasePencils = cmds.modelEditor(viewport, q=True, greasePencils=True)
+        displayAppearance = cmds.modelEditor(viewport, q=True, displayAppearance=True)
+        displayTextures = cmds.modelEditor(viewport, q=True, displayTextures=True)
+        fogging = cmds.modelEditor(viewport, q=True, fogging=True)
+        ssaoEnable = cmds.getAttr("hardwareRenderingGlobals.ssaoEnable")
+        ssaoAmount = cmds.getAttr("hardwareRenderingGlobals.ssaoAmount")
+        multiSampleEnable = cmds.getAttr("hardwareRenderingGlobals.multiSampleEnable")
+        motionBlurEnable = cmds.getAttr("hardwareRenderingGlobals.motionBlurEnable")
+        shadows = cmds.modelEditor(viewport, q=True, shadows=True)
+        wireframeOnShaded = cmds.modelEditor(viewport, q=True, wireframeOnShaded=True)
+        controllers = cmds.modelEditor(viewport, q=True, controllers=True)
+        # lighting_mode returns either "default", "all", "active", "flat" or "none"
+        displayLights = cmds.modelEditor(viewport, query=True, displayLights=True)
 
-        # Calculate width and scale text based on the FOV
-        # Assuming FOV in degrees
-        burn_in_width = 2 * math.tan(math.radians(fov_degrees / 2)) * 1  # 1 unit away
-        scale_factor = burn_in_width / cmds.getAttr(burn_in_text[0] + '.boundingBox')[1][0]  # Scale to fit in width
+        # Create data
+        data = {
+            'UserViewportSettings': {
+                'nurbsCurves': nurbsCurves,
+                'nurbsSurfaces': nurbsSurfaces,
+                'cv': cv,
+                'hulls': hulls,
+                'polymeshes': polymeshes,
+                'hos': hos,
+                'subdivSurfaces': subdivSurfaces,
+                'planes': planes,
+                'lights': lights,
+                'cameras': cameras,
+                'imagePlane': imagePlane,
+                'joints': joints,
+                'ikHandles': ikHandles,
+                'deformers': deformers,
+                'dynamics': dynamics,
+                'particleInstancers': particleInstancers,
+                'fluids': fluids,
+                'hairSystems': hairSystems,
+                'follicles': follicles,
+                'nCloths': nCloths,
+                'nParticles': nParticles,
+                'nRigids': nRigids,
+                'dynamicConstraints': dynamicConstraints,
+                'locators': locators,
+                'dimensions': dimensions,
+                'pivots': pivots,
+                'handles': handles,
+                'textures': textures,
+                'strokes': strokes,
+                'motionTrails': motionTrails,
+                'pluginShapes': pluginShapes,
+                'clipGhosts': clipGhosts,
+                'greasePencils': greasePencils,
+                'displayAppearance': displayAppearance,
+                'displayTextures': displayTextures,
+                'fogging': fogging,
+                'shadows': shadows,
+                'wireframeOnShaded': wireframeOnShaded,
+                'controllers': controllers
+            },
+            'UserHardwareSettings': {
+                'ssaoEnable': ssaoEnable,
+                'ssaoAmount': ssaoAmount,
+                'multiSampleEnable': multiSampleEnable,
+                'motionBlurEnable': motionBlurEnable
+            },
+            'UserLightsSettings': {
+                'displayLights': displayLights
+            }
+        }
 
-        cmds.scale(scale_factor, scale_factor, scale_factor, burn_in_text)
+        # Make display adjustments.
+        attributes = data['UserViewportSettings']
+        user_lights = data['UserLightsSettings']
+        hardware = data['UserHardwareSettings']
+        if elements == 'Geometry Only':
+            for attr, val in attributes.items():
+                if (attr is not 'polymeshes' or attr is not 'nurbsSurfaces' or attr is not 'subdivSurfaces' or
+                        attr is not 'planes'):
+                    cmds.modelEditor(viewport, edit=True, **{attr: False})
+                else:
+                    cmds.modelEditor(viewport, edit=True, **{attr: True})
+        elif elements == 'Geometry and Splines':
+            for attr, val in attributes.items():
+                if (attr is not 'polymeshes' or attr is not 'nurbsSurfaces' or attr is not 'subdivSurfaces' or
+                        attr is not 'planes' or attr is not 'nurbsCurves' or attr is not 'controllers'):
+                    cmds.modelEditor(viewport, edit=True, **{attr: False})
+                else:
+                    cmds.modelEditor(viewport, edit=True, **{attr: True})
+        elif elements == 'Geometry, Splines and Joints':
+            for attr, val in attributes.items():
+                if (attr is not 'polymeshes' or attr is not 'nurbsSurfaces' or attr is not 'subdivSurfaces' or
+                        attr is not 'planes' or attr is not 'nurbsCurves' or attr is not 'controllers' or
+                        attr is not 'joints' or attr is not 'ikHandles' or attr is not 'dimensions'):
+                    cmds.modelEditor(viewport, edit=True, **{attr: False})
+                else:
+                    cmds.modelEditor(viewport, edit=True, **{attr: True})
+        else:
+            for attr, val in attributes.items():
+                cmds.modelEditor(viewport, edit=True, **{attr: True})
 
-        # Set visibility and other attributes as needed
-        cmds.setAttr(burn_in_text[0] + '.overrideEnabled', 1)
-        cmds.setAttr(burn_in_text[0] + '.overrideColor', 17)  # Change color as needed (17 is red)
+        # Set user playblast render settings
+        if wf:
+            cmds.modelEditor(viewport, edit=True, wireframeOnShaded=True)
+        if tx:
+            cmds.modelEditor(viewport, edit=True, displayTextures=True)
+        if ual:
+            cmds.modelEditor(viewport, edit=True, displayLights='all')
+        if sh:
+            cmds.modelEditor(viewport, edit=True, shadows=True)
+        if ao:
+            cmds.setAttr('hardwareRenderingGlobals.ssaoEnable', True)
+            cmds.setAttr('hardwareRenderingGlobals.ssaoAmount', float(hardware['ssaoAmount']))
+        if mb:
+            cmds.setAttr('hardwareRenderingGlobals.motionBlurEnable', True)
+        if aa:
+            cmds.setAttr('hardwareRenderingGlobals.multiSampleEnable', True)
 
-        return burn_in_text
+        # Send the collected data back
+        return data
 
-    def playblast(self):
+    def basic_playblast(self, fmt=None, codec=None, so=False, slate=True, burn=True, data=None):
         """
         Creates a playblast based on the UI Project settings and saves it with the current filename into the Movies
         folder.
         :return:
         """
+        if slate or burn:
+            pass_fmt = fmt
+            pass_codec = codec
+            fmt = 'image'
+            codec = 'png'
+            ext = '.png'
+        else:
+            pass_fmt = fmt
+            pass_codec = codec
+            if fmt == 'qt':
+                ext = '.mov'
+            elif fmt == 'avi':
+                ext = '.avi'
+            else:
+                ext = f'.{codec}'
+
         res_width = int(self.res_width)
         res_height = int(self.res_height)
         movies_folder = cmds.workspace(fre='movie')
         filename = cmds.file(q=True, sn=True, shn=True)
         basename = os.path.splitext(filename)[0]
-        filename = basename + '.mov'
-        # print(f'basename: {basename}')
-        # pattern = r'(_v|_V)\d+'
-        # version = re.findall(pattern, basename)
-        # print(f'version: {version}')
-        output = os.path.join(movies_folder, filename)
-        # current_frame = cmds.currentTime(query=True)
-        # current_camera = cmds.modelEditor('modelPanel4', q=True, camera=True)
-        # focal_length = cmds.getAttr(current_camera + '.focalLength')
-        #
-        # burn_in_text = self.create_burn_in(camera=current_camera, filename=filename, version=version,
-        #                                    time_code=current_frame, frame_number=current_frame,
-        #                                    focal_length=focal_length)
+        filename = basename + ext
+        output = os.path.join(movies_folder, basename, 'temp', filename)
+        final_output = os.path.join(movies_folder, filename)
         if pyside_version == 6:
-            cmds.playblast(format='qt', filename=output, sequenceTime=0, clearCache=1, viewer=1, showOrnaments=1, fp=4,
-                           percent=100, compression='PNG', quality=70, widthHeight=(res_width, res_height), exposure=0,
-                           gamma=1, fo=True)
+            cmds.playblast(
+                format=fmt,
+                filename=output,
+                sequenceTime=0,
+                clearCache=1,
+                viewer=0,
+                showOrnaments=so,
+                fp=4,
+                percent=100,
+                compression=codec,
+                quality=80,
+                widthHeight=(res_width, res_height),
+                exposure=0,
+                gamma=1,
+                fo=True
+            )
         elif pyside_version == 2:
-            cmds.playblast(format='qt', filename=output, sequenceTime=0, clearCache=1, viewer=1, showOrnaments=1, fp=4,
-                           percent=100, compression='PNG', quality=70, widthHeight=(res_width, res_height), fo=True)
+            cmds.playblast(
+                format=fmt,
+                filename=output,
+                sequenceTime=0,
+                clearCache=1,
+                viewer=0,
+                showOrnaments=so,
+                fp=4,
+                percent=100,
+                compression=codec,
+                quality=80,
+                widthHeight=(res_width, res_height),
+                fo=True
+            )
         else:
             cmds.error('Unable to playblast.  Sorry.')
-
-
-        # cmds.delete(burn_in_text)
 
     def db_seek_and_repair(self):
         """

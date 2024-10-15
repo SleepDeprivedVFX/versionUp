@@ -1,51 +1,32 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'superSaver_UIpnPpMY.ui'
+## Form generated from reading UI file 'superSaver_UITOHOuU.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.7.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-try:
-    from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                                QMetaObject, QObject, QPoint, QRect,
-                                QSize, QTime, QUrl, Qt)
-    from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-                               QFont, QFontDatabase, QGradient, QIcon,
-                               QImage, QKeySequence, QLinearGradient, QPainter,
-                               QPalette, QPixmap, QRadialGradient, QTransform)
-    from PySide6.QtWidgets import (QAbstractItemView, QAbstractSpinBox, QApplication, QCheckBox,
-                                   QComboBox, QFrame, QGroupBox, QHBoxLayout,
-                                   QHeaderView, QLabel, QLineEdit, QListWidget,
-                                   QListWidgetItem, QPushButton, QRadioButton, QSizePolicy,
-                                   QSpacerItem, QSpinBox, QTabWidget, QTextEdit,
-                                   QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
-except ImportError:
-    try:
-        from PySide2.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                                    QMetaObject, QObject, QPoint, QRect,
-                                    QSize, QTime, QUrl, Qt)
-        from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-                                   QFont, QFontDatabase, QGradient, QIcon,
-                                   QImage, QKeySequence, QLinearGradient, QPainter,
-                                   QPalette, QPixmap, QRadialGradient, QTransform)
-        from PySide2.QtWidgets import (QAbstractItemView, QAbstractSpinBox, QApplication, QCheckBox,
-                                       QComboBox, QFrame, QGroupBox, QHBoxLayout,
-                                       QHeaderView, QLabel, QLineEdit, QListWidget,
-                                       QListWidgetItem, QPushButton, QRadioButton, QSizePolicy,
-                                       QSpacerItem, QSpinBox, QTabWidget, QTextEdit,
-                                       QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
-    except ImportError:
-        raise RuntimeError("Neither PySide6 nor PySide2 could be imported. Please ensure one of them is installed.")
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QAbstractItemView, QAbstractSpinBox, QApplication, QCheckBox,
+    QComboBox, QFrame, QGroupBox, QHBoxLayout,
+    QHeaderView, QLabel, QLineEdit, QListWidget,
+    QListWidgetItem, QPushButton, QRadioButton, QSizePolicy,
+    QSpacerItem, QSpinBox, QTabWidget, QTextEdit,
+    QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_SaveAs(object):
     def setupUi(self, SaveAs):
         if not SaveAs.objectName():
             SaveAs.setObjectName(u"SaveAs")
-        SaveAs.resize(1055, 730)
+        SaveAs.resize(1051, 722)
         SaveAs.setMinimumSize(QSize(969, 629))
         SaveAs.setStyleSheet(u"background-color: rgb(110, 110, 110);\n"
 "color: rgb(220, 220, 220);")
@@ -1317,6 +1298,30 @@ class Ui_SaveAs(object):
 
         self.verticalLayout_20.addLayout(self.horizontalLayout_52)
 
+        self.horizontalLayout_53 = QHBoxLayout()
+        self.horizontalLayout_53.setObjectName(u"horizontalLayout_53")
+        self.playblast_codec_label = QLabel(self.playblast_settings)
+        self.playblast_codec_label.setObjectName(u"playblast_codec_label")
+
+        self.horizontalLayout_53.addWidget(self.playblast_codec_label)
+
+        self.playblast_codec = QComboBox(self.playblast_settings)
+        self.playblast_codec.setObjectName(u"playblast_codec")
+
+        self.horizontalLayout_53.addWidget(self.playblast_codec)
+
+        self.horizontalSpacer_33 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_53.addItem(self.horizontalSpacer_33)
+
+
+        self.verticalLayout_20.addLayout(self.horizontalLayout_53)
+
+        self.pb_show_ornaments = QCheckBox(self.playblast_settings)
+        self.pb_show_ornaments.setObjectName(u"pb_show_ornaments")
+
+        self.verticalLayout_20.addWidget(self.pb_show_ornaments)
+
         self.pb_wireframe = QCheckBox(self.playblast_settings)
         self.pb_wireframe.setObjectName(u"pb_wireframe")
 
@@ -1356,6 +1361,25 @@ class Ui_SaveAs(object):
         self.pb_aa.setChecked(True)
 
         self.verticalLayout_20.addWidget(self.pb_aa)
+
+        self.line_6 = QFrame(self.playblast_settings)
+        self.line_6.setObjectName(u"line_6")
+        self.line_6.setFrameShape(QFrame.Shape.HLine)
+        self.line_6.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.verticalLayout_20.addWidget(self.line_6)
+
+        self.pb_adv_label = QLabel(self.playblast_settings)
+        self.pb_adv_label.setObjectName(u"pb_adv_label")
+        self.pb_adv_label.setStyleSheet(u"font: 700 12pt \"Segoe UI\";")
+
+        self.verticalLayout_20.addWidget(self.pb_adv_label)
+
+        self.pb_slate = QCheckBox(self.playblast_settings)
+        self.pb_slate.setObjectName(u"pb_slate")
+        self.pb_slate.setChecked(True)
+
+        self.verticalLayout_20.addWidget(self.pb_slate)
 
         self.pb_burnin = QCheckBox(self.playblast_settings)
         self.pb_burnin.setObjectName(u"pb_burnin")
@@ -2291,6 +2315,8 @@ class Ui_SaveAs(object):
         self.pb_scene_elements.setItemText(3, QCoreApplication.translate("SaveAs", u"Everything", None))
 
         self.plablast_format_label.setText(QCoreApplication.translate("SaveAs", u"Format", None))
+        self.playblast_codec_label.setText(QCoreApplication.translate("SaveAs", u"Codec", None))
+        self.pb_show_ornaments.setText(QCoreApplication.translate("SaveAs", u"Show Ornaments", None))
         self.pb_wireframe.setText(QCoreApplication.translate("SaveAs", u"Wireframe on Shaded", None))
         self.pb_textured.setText(QCoreApplication.translate("SaveAs", u"Textured", None))
         self.pb_use_all_lights.setText(QCoreApplication.translate("SaveAs", u"Use All Lights", None))
@@ -2298,6 +2324,8 @@ class Ui_SaveAs(object):
         self.pb_ao.setText(QCoreApplication.translate("SaveAs", u"Ambient Occlusion", None))
         self.pb_motionblur.setText(QCoreApplication.translate("SaveAs", u"Motion Blur", None))
         self.pb_aa.setText(QCoreApplication.translate("SaveAs", u"Anti Aliasing", None))
+        self.pb_adv_label.setText(QCoreApplication.translate("SaveAs", u"Advanced Playblast Settings", None))
+        self.pb_slate.setText(QCoreApplication.translate("SaveAs", u"Slate Frame at Head", None))
         self.pb_burnin.setText(QCoreApplication.translate("SaveAs", u"Burn In", None))
         self.settingsTabs.setTabText(self.settingsTabs.indexOf(self.playblast_settings), QCoreApplication.translate("SaveAs", u"Playblast", None))
         self.hotkeys_label.setText(QCoreApplication.translate("SaveAs", u"Hokeys", None))
