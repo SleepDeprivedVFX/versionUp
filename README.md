@@ -1,7 +1,7 @@
 # Sans Pipe - Light Pipeline Utility for Maya version 1.3.10
 
 ## Description
-Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at enhancing project organization and efficiency. It provides a robust set of tools that streamline project workflows, including file versioning with notes, snapshot taking, file publishing, reference tracking, camera baking, asset and shot creation, playblasting animations, and asset exporting.
+Sans Pipe is a light pipeline utility designed specifically for Maya 2022 and above, aimed at enhancing project organization and efficiency. It provides a robust set of tools that streamline project workflows, including file versioning with notes, snapshot taking, file publishing, reference tracking, camera baking, asset and shot creation, playblasting animations, and asset exporting.
 
 ## Features
 - **Version Control:** Automatically versions up Maya files with accompanying notes for better tracking.
@@ -12,6 +12,10 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 - **Camera Baking:** Tools for baking out camera movements for export or further processing.
 - **Asset and Shot Creation:** Facilitates the creation and organization of assets and shots within Maya.
 - **Playblasting:** Integrated playblasting tools for previewing animations directly within Maya.
+
+## Prerequisites
+- **Autodesk Maya**: Designed for **Maya 2025**, but is compatible with **Maya 2022** and above.
+- Requires Python 3 and PySide2 or PySide 6 (preferred)
 
 ## Installation
 1. **Prepare the Installation Directory:** 
@@ -210,9 +214,6 @@ Sans Pipe is a light pipeline utility designed specifically for Maya, aimed at e
 1. **Recent File Count**.  This controls how many recent files are show in the **Recent Files** window on the **Save - Publish - Snap** main tab.
 2. **Autoload on Startup**.  This feature makes SansPipe open when Maya does.  It also forces the replacement of the "Save As..." (Ctrl + Shift + s) hot key to make SansPipe open instead of the "Save As..." dialog box.  To turn this on or off, check or uncheck it.  Press "Save Configuration" and then re-start Maya.
 3. **Autosave** & **Interval**.  This forces Maya's Autosave feature and sets the interval for you.  It is on by default and is a good way to protect yourself from accidental loss by Maya Crash.  **Snapshots** are another great way to keep yourself safe!.
- 
-## Prerequisites
-- **Autodesk Maya:** Designed for Maya 2025 but compatible with any Maya version that supports Python 3 and either PySide2 or PySide6.
 
 ## Contributions
 Currently, Sans Pipe is a solo project and is not open to direct contributions. However, feedback and suggestions are always welcome.
