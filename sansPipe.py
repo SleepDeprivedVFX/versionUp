@@ -159,6 +159,39 @@ class CustomMessageBox(QMessageBox):
         return None
 
 
+class CustomNotesBox(QMessageBox):
+    def __init__(self, parent=None, max_chars=250):
+        super().__init__(parent)
+
+        self.setWindowTitle('Status Update Note')
+        self.setText('Why are you changing the status?  Leave a note!')
+        self.text_input = QPlainTextEdit(self)
+        self.max_chars = max_chars
+        self.text_input.textChanged.connect(self.set_max_chars)
+        self.layout().addWidget(self.text_input, 1, 1)
+        self.addButton(QMessageBox.Ok)
+        self.addButton(QMessageBox.Cancel)
+        self.button(QMessageBox.Ok).setEnabled(False)
+        self.text_input.textChanged.connect(self.validate_input)
+
+    def set_max_chars(self):
+        text = self.text_input.toPlainText()
+        if len(text) > self.max_chars:
+            self.text_input.setPlainText(text[:self.max_chars])
+            self.text_input.moveCursor(self.text_input.textCursor().End)
+
+    def validate_input(self):
+        if len(self.text_input.toPlainText()) > 10:
+            self.button(QMessageBox.Ok).setEnabled(True)
+        else:
+            self.button(QMessageBox.Ok).setEnabled(False)
+
+    def get_input(self):
+        if self.exec() == QMessageBox.Ok:
+            return self.text_input.toPlainText()
+        return None
+
+
 class sansPipe(QWidget):
     instance = None
     """
@@ -763,18 +796,18 @@ class sansPipe(QWidget):
         self.ui.unarchive_browse_btn.hide()
         self.ui.unarchive_btn.hide()
         # Hide the playblast future features.
-        self.ui.pb_scene_elements_label.hide()
-        self.ui.pb_scene_elements.hide()
-        self.ui.pb_wireframe.hide()
-        self.ui.pb_textured.hide()
-        self.ui.pb_use_all_lights.hide()
-        self.ui.pb_shadows.hide()
-        self.ui.pb_ao.hide()
-        self.ui.pb_motionblur.hide()
-        self.ui.pb_aa.hide()
-        self.ui.pb_burnin.hide()
-        self.ui.playblast_format.hide()
-        self.ui.plablast_format_label.hide()
+        # self.ui.pb_scene_elements_label.hide()
+        # self.ui.pb_scene_elements.hide()
+        # self.ui.pb_wireframe.hide()
+        # self.ui.pb_textured.hide()
+        # self.ui.pb_use_all_lights.hide()
+        # self.ui.pb_shadows.hide()
+        # self.ui.pb_ao.hide()
+        # self.ui.pb_motionblur.hide()
+        # self.ui.pb_aa.hide()
+        # self.ui.pb_burnin.hide()
+        # self.ui.playblast_format.hide()
+        # self.ui.plablast_format_label.hide()
 
     def enable_context_menu(self, widget=None, widget_name=None):
         """
@@ -3911,6 +3944,8 @@ References Imported and Cleaned:
         :return:
         """
         self.hide()
+        current_file = cmds.file(q=True, sn=True)
+        current_file_folder = os.path.dirname(current_file)
         elements = self.ui.pb_scene_elements.currentText()
         fmt = self.ui.playblast_format.currentText()
         codec = self.ui.playblast_codec.currentText()
@@ -3932,17 +3967,24 @@ References Imported and Cleaned:
             with open(base_playblast, 'r') as pb_data:
                 playblast_data = json.load(pb_data)
                 pb_data.close()
-            if burn or slate:
-                fmt = playblast_data['format']
-                codec = playblast_data['codec']
-                raw_pb = playblast_data['raw_playblast']
-                final = playblast_data['final_playblast']
 
-                playblast = self.sptk.compile_playblast(data=viewer, fmt=fmt, codec=codec, raw_pb=raw_pb, final=final)
+            if burn or slate:
+                if slate:
+                    slate_notes = CustomNotesBox(max_chars=100)
+                else:
+                    slate_notes = None
+                notes = self.open_db(folder=current_file_folder)
+
+                playblast = self.sptk.compile_playblast(viewer_data=viewer, playblast_data=playblast_data, notes=notes,
+                                                        slate=slate, slate_notes=slate_notes, burn=burn)
             else:
                 playblast = playblast_data['final_playblast']
 
-        self.close()
+            # Play the playblast here and then close
+            self.close()
+        else:
+            self.show()
+            self.message(text='Could not create the playblast!', ok=False)
 
     def render_settings(self):
         """

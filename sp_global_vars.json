@@ -216,5 +216,33 @@
         "fx",
         "cloth",
         "prototype"
-    ]
+    ],
+    "frame_rate_map": {
+        "game": 15,
+        "film": 24,
+        "pal": 25,
+        "ntsc": 30,
+        "show": 48,
+        "palf": 50,
+        "ntscf": 60,
+        "2fps": 2,
+        "3fps": 3,
+        "4fps": 4,
+        "5fps": 5,
+        "6fps": 6,
+        "8fps": 8,
+        "10fps": 10,
+        "12fps": 12,
+        "16fps": 16,
+        "20fps": 20,
+        "40fps": 40,
+        "75fps": 75,
+        "80fps": 80,
+        "100fps": 100,
+        "120fps": 120,
+        "125fps": 125,
+        "150fps": 150,
+        "200fps": 200,
+        "240fps": 240
+    }
 }
